@@ -1,0 +1,42 @@
+.content .container-fluid #newPatientCard {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .insuranceCompany {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .schemeName {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .principalMemberName {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .principalMemberPhone {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .principalMemberWorkplace {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .insuranceCardNumber {
+  display: none;
+}
+.content .container-fluid #patientPaymentDetailsCard .hospitalClientNumber {
+  display: none;
+}
+.content .card .card-body .lensPowerDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .card .card-body .lensPrescriptionDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .card .card-body .frameCodesDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .approvalCard {
+  display: none;
+}

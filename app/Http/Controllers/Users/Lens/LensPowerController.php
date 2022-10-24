@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Http\Controllers\Users\Lens;
+
+use App\Http\Controllers\Controller;
+use App\Models\Clinic;
+use Illuminate\Http\Request;
+use App\Models\Diagnosis;
+use App\Models\LensPower;
+use Illuminate\Support\Facades\Validator;
+
+class LensPowerController extends Controller
+{
+    //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function store(Request $request)
+    {
+        # code...
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'diagnosis_id' => 'required|integer|exists:diagnoses,id',
+            'right_sphere' => 'required|string|max:255',
+            'right_cylinder' => 'required|string|max:255',
+            'right_axis' => 'required|string|max:255',
+            'right_add' => 'required|string|max:255',
+            'left_sphere' => 'required|string|max:255',
+            'left_cylinder' => 'required|string|max:255',
+            'left_axis' => 'required|string|max:255',
+            'left_add' => 'required|string|max:255',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $diagnosis = Diagnosis::findOrFail($data['diagnosis_id']);
+
+        $lens_power = $diagnosis->lens_power()->create([
+            'patient_id' => $diagnosis->patient_id,
+            'appointment_id' => $diagnosis->appointment_id,
+            'schedule_id' => $diagnosis->schedule_id,
+            'diagnoisis_id' => $diagnosis->id,
+            'right_sphere' => $data['right_sphere'],
+            'right_cylinder' => $data['right_cylinder'],
+            'right_axis' => $data['right_axis'],
+            'right_add' => $data['right_add'],
+            'left_sphere' => $data['left_sphere'],
+            'left_cylinder' => $data['left_cylinder'],
+            'left_axis' => $data['left_axis'],
+            'left_add' => $data['left_add'],
+            'notes' => $data['notes'],
+        ]);
+
+        $clinic = $diagnosis->clinic;
+
+        $report_id = $diagnosis->appointment->report_id;
+
+        $report = $clinic->report()->findOrFail($report_id);
+
+        $report->update([
+            'power_id' => $lens_power->id,
+        ]);
+
+        $response['status'] = true;
+        $response['power_id'] = $diagnosis->lens_power->id;
+        $response['message'] = 'You have success created lens power for a patient';
+
+        return response()->json($response, 200);
+    }
+
+    public function show(Request $request)
+    {
+        # code...
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'power_id' => 'required|integer|exists:lens_powers,id',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $power = LensPower::findOrFail($data['power_id']);
+        $response['status'] = true;
+        $response['data'] = $power;
+        return response()->json($response, 200);
+    }
+}

@@ -1,0 +1,58 @@
+// Variables
+@import 'variables';
+
+.content{
+    .container-fluid{
+        #newPatientCard{
+            display: none;
+        }
+        #patientPaymentDetailsCard{
+            display: none;
+            .insuranceCompany{
+                display: none;
+            }
+            .schemeName{
+                display: none;
+            }
+            .principalMemberName{
+                display: none;
+            }
+            .principalMemberPhone{
+                display: none;
+            }
+            .principalMemberWorkplace{
+                display: none;
+            }
+            .insuranceCardNumber{
+                display: none;
+            }
+            .hospitalClientNumber{
+                display: none;
+            }
+        }
+    }
+    .card{
+        .card-body{
+            .lensPowerDiv{
+                margin-bottom: 1rem;
+                display: none;
+            }
+
+            .lensPrescriptionDiv {
+                margin-bottom: 1rem;
+                display: none;
+            }
+
+            .frameCodesDiv{
+                margin-bottom: 1rem;
+                display: none;
+            }
+        }
+    }
+    .approvalCard{
+        display: none;
+    }
+}
+
+
+

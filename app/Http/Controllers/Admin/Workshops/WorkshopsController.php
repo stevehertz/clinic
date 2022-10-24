@@ -1,0 +1,239 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Workshops;
+
+use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\Workshop;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
+
+class WorkshopsController extends Controller
+{
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        //
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
+        if($request->ajax()){
+            $data = $organization->workshop->sortBy('created_at', SORT_DESC);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('logo', function($row){
+                    $logo = '<img src="'.asset('storage/workshops/'.$row->logo).'" alt="'.$row->name.'" class="img-circle img-size-32 mr-2"/>';
+                    return $logo;
+                })
+                ->addColumn('action', function($data){
+                    $button = '<button type="button" name="edit" data-id="'.$data->id.'" class="edit btn btn-tool btn-sm editWorkshopBtn"><i class="fa fa-edit"></i></button>';
+                    $button .= '&nbsp;&nbsp;';
+                    $button .= '<button type="button" name="delete" data-id="'.$data->id.'" class="delete btn btn-tool btn-sm deleteWorkshopBtn"><i class="fa fa-trash"></i></button>';
+                    return $button;
+                })
+                ->rawColumns(['action', 'logo'])
+                ->make(true);
+        }
+
+        $page_title = 'Workshops';
+        return view('admin.workshops.index', compact('page_title', 'organization'));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'organization_id' => 'required|integer|exists:organizations,id',
+            'name' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'phone' => 'required|numeric|min:10',
+            'email' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        if($request->hasFile('logo')){
+            // file name with extension
+            $logoNameWithExt = $request->file('logo')->getClientOriginalName();
+
+            // Get Filename
+            $logoName = pathinfo($logoNameWithExt, PATHINFO_FILENAME);
+
+            // Get just Extension
+            $extension = $request->file('logo')->getClientOriginalExtension();
+
+            // Filename To store
+            $logoNameToStore = $logoName . '_' . time() . '.' . $extension;
+
+            // Upload Image
+            $path = $request->file('logo')->storeAs('public/workshops', $logoNameToStore);
+        }
+        else{
+            $logoNameToStore = 'noimage.png';
+        }
+
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
+        $organization->workshop()->create([
+            'name' => $data['name'],
+            'logo' => $logoNameToStore,
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'address' => $data['address'],
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'Workshop created successfully';
+
+        return response()->json($response, 200);
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'workshop_id' => 'required|integer|exists:workshops,id',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $workshop = Workshop::findOrFail($data['workshop_id']);
+        $response['status'] = true;
+        $response['data'] = $workshop;
+        return response()->json($response, 200);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'workshop_id' => 'required|integer|exists:workshops,id',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        if($request->hasFile('logo')){
+
+            // file name with extension
+            $logoNameWithExt = $request->file('logo')->getClientOriginalName();
+
+            // Get Filename
+            $logoName = pathinfo($logoNameWithExt, PATHINFO_FILENAME);
+
+            // Get just Extension
+            $extension = $request->file('logo')->getClientOriginalExtension();
+
+            // Filename To store
+            $logoNameToStore = $logoName . '_' . time() . '.' . $extension;
+
+            // Upload Image
+            $path = $request->file('logo')->storeAs('public/workshops', $logoNameToStore);
+        }
+
+        $workshop = Workshop::findOrFail($data['workshop_id']);
+
+        if($request->hasFile('logo')){
+            $workshop->logo = $logoNameToStore;
+        }
+
+        $workshop->name = $data['name'];
+        $workshop->phone = $data['phone'];
+        $workshop->email = $data['email'];
+        $workshop->address = $data['address'];
+        $workshop->save();
+
+        $response['status'] = true;
+        $response['message'] = 'Workshop updated successfully';
+        return response()->json($response, 200);
+
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'workshop_id' => 'required|integer|exists:workshops,id',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $workshop = Workshop::findOrFail($data['workshop_id']);
+        $workshop->delete();
+
+        $response['status'] = true;
+        $response['message'] = 'Workshop deleted successfully';
+        return response()->json($response, 200);
+    }
+}
