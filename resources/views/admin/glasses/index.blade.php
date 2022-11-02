@@ -64,7 +64,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -583,6 +582,8 @@
                             $('#newSunGlassForm')[0].reset();
                             $('#newSunGlassModal').modal('hide');
                             $('#sunGlassesData').DataTable().ajax.reload();
+                            $('#sunGlassesStocks').DataTable().ajax.reload();
+                            location.reload();
                         }
                     },
                     error: function(data) {
@@ -658,6 +659,8 @@
                             $('#updateSunGlassForm')[0].reset();
                             $('#updateSunGlassModal').modal('hide');
                             $('#sunGlassesData').DataTable().ajax.reload();
+                            $('#sunGlassesStocks').DataTable().ajax.reload();
+                            location.reload();
                         }
                     },
                     error: function(data) {
@@ -860,11 +863,6 @@
                     }
                 });
             });
-
-
-
-
-
         });
     </script>
 @endsection

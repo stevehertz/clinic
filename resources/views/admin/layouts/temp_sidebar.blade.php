@@ -158,40 +158,42 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ route('admin.frames.index', $clinic->id) }}" class="nav-link">
+                                <i class="nav-icon fa fa-circle"></i>
+                                <p>
+                                    Frames
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sun.glasses.index', $clinic->id) }}" class="nav-link">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>Sun glasses</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-database"></i>
+                        <p>
+                            Assets
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
                             <a href="{{ route('admin.assets.index', $clinic->id) }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Assets</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a href="{{ route('admin.asset.tranfer.index', $clinic->id) }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Transfered Assets</p>
                             </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    Inventory
-                                    <i class="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.frames.index', $clinic->id) }}" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Frames</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.sun.glasses.index', $clinic->id) }}" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Sun glasses</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </li>
