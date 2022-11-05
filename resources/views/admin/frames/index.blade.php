@@ -41,6 +41,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-success">
@@ -54,6 +55,24 @@
                         </div>
                         <a href="#" class="small-box-footer newFrameStockBtn">
                             New Frame <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $num_stocks }}</h3>
+
+                            <p>Stock Purchases</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-briefcase"></i>
+                        </div>
+                        <a href="#" class="small-box-footer purchaseStockBtn">
+                            Purchase Stock <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
