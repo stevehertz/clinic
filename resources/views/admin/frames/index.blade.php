@@ -81,13 +81,15 @@
 
             <div class="row">
                 <div class="col-12">
+
                     <div class="card card-primary card-outline card-outline-tabs">
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
                                         href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
-                                        aria-selected="true">Frames
+                                        aria-selected="true">
+                                        Frames
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -97,13 +99,26 @@
                                         Frame Stocks
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-messages" role="tab"
+                                        aria-controls="custom-tabs-four-messages" aria-selected="false">
+                                        Stock Purchases
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-settings" role="tab"
+                                        aria-controls="custom-tabs-four-settings" aria-selected="false">Settings</a>
+                                </li>
                             </ul>
                         </div>
-                        <!--.card-header -->
+                        <!---.card-header p-0 border-bottom-0-->
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
                                 <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-home-tab">
+
                                     <div class="table-responsive">
                                         <table id="framesData" class="table table-striped table-hover">
                                             <thead>
@@ -123,11 +138,12 @@
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
-                                <!--.tab-pane -->
+
                                 <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-profile-tab">
-                                    <br>
+
                                     <div class="table-responsive">
                                         <table id="frameStocksData" class="table table-striped table-hover">
                                             <thead>
@@ -150,14 +166,46 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
+
                                 </div>
-                                <!--.tab-pane -->
+
+                                <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-messages-tab">
+                                    <div class="table-responsive">
+                                        <table id="purchasedStocks" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Receipt #</th>
+                                                    <th>Frame Code</th>
+                                                    <th>Gender</th>
+                                                    <th>Color</th>
+                                                    <th>Shape</th>
+                                                    <th>Units</th>
+                                                    <th>Price </th>
+                                                    <th>Total Price</th>
+                                                    <th>Supplier</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-settings-tab">
+                                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus
+                                    turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis
+                                    vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum
+                                    pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget
+                                    aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac
+                                    habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                </div>
                             </div>
-                            <!--.tab-content -->
+                            <!--.tab-content-->
                         </div>
-                        <!--.card-body -->
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+                    <!--.card card-primary card-outline card-outline-tabs -->
+
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -529,7 +577,8 @@
                                             </option>
                                             @forelse ($clinic_frames as $clinic_frame)
                                                 <option value="{{ $clinic_frame->id }}">
-                                                    {{ $clinic_frame->code }} - {{ $clinic_frame->frame_brand->title }}
+                                                    {{ $clinic_frame->code }} -
+                                                    {{ $clinic_frame->frame_brand->title }}
                                                 </option>
                                             @empty
                                                 <option disabled="disabled">No Frame Code Found..</option>
