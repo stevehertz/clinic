@@ -70,7 +70,8 @@ class FramesController extends Controller
         $frame_shapes = $organization->frame_shape->sortBy('created_at', SORT_DESC);
         $clinic_frames = $clinic->frame->sortBy('created_at', SORT_DESC);
         $num_frames = $clinic->frame->count();
-        $num_frame_stocks = $clinic->frame_stock->count();
+        $num_frame_stocks = $clinic->frame_stock->count(); // number of frame stocks 
+        $stocks = $clinic->frame_stock->sortBy('created_at', SORT_DESC); //Load all stocks to get entered stock frame code for purchase
         $page_title = 'Frames';
         return view('admin.frames.index', [
             'page_title' => $page_title,
@@ -86,6 +87,7 @@ class FramesController extends Controller
             'clinic_frames' => $clinic_frames,
             'num_frames' => $num_frames,
             'num_stocks' => $num_frame_stocks,
+            'stocks' => $stocks,
         ]);
     }
 

@@ -26,4 +26,10 @@ class FrameColor extends Model
         # code...
         return $this->hasMany(FrameStock::class, 'color_id', 'id');
     }
+
+    public function frame_purchase()
+    {
+        # code...
+        return $this->hasMany(FramePurchase::class, 'color_id', 'id');
+    }
 }

@@ -53,4 +53,10 @@ class Frame extends Model
         # code...
         return $this->hasMany(FrameStock::class, 'frame_id', 'id');
     }
+
+    public function frame_purchase()
+    {
+        # code...
+        return $this->hasMany(FramePurchase::class, 'frame_id', 'id');
+    }
 }

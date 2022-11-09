@@ -121,7 +121,16 @@
                     }else{
                         console.log(data);
                     }
-                }
+                },
+                error: function(data){
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
             });
         });
     });

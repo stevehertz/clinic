@@ -8,6 +8,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
+
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
@@ -149,6 +150,7 @@
                 </li>
 
                 <li class="nav-item has-treeview">
+
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-balance-scale"></i>
                         <p>
@@ -172,9 +174,11 @@
                             </a>
                         </li>
                     </ul>
+
                 </li>
 
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview"> 
+
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-database"></i>
                         <p>
@@ -182,6 +186,7 @@
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
+
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.assets.index', $clinic->id) }}" class="nav-link">
@@ -196,7 +201,10 @@
                             </a>
                         </li>
                     </ul>
+
                 </li>
+
+
 
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -249,6 +257,10 @@
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
+
+
     </div>
-    <!-- /.sidebar -->
+    <!--.sidebar-->
+
+
 </aside>

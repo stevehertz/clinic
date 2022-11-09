@@ -24,7 +24,6 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-
             <div class="row">
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -171,6 +170,7 @@
 
                                 <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-messages-tab">
+
                                     <div class="table-responsive">
                                         <table id="purchasedStocks" class="table table-striped table-hover">
                                             <thead>
@@ -188,6 +188,7 @@
                                             </thead>
                                         </table>
                                     </div>
+
                                 </div>
 
                                 <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
@@ -726,6 +727,102 @@
         </div>
         <!-- /.modal -->
 
+        <!-- Purchase Stock -->
+        <div class="modal fade" id="purchasedStockModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Purchase Stock
+                        </h4>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="purchasedStockForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <small class="text-center" style="text-align: center;">Make Purchases based on the available stocks</small>
+                                        <input type="hidden" class="form-control" name="clinic_id" value="{{ $clinic->id }}" />
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="purchasedStockId">Frame Stock Code</label>
+                                        <select name="stock_id" id="purchasedStockId" class="form-control select2"
+                                            style="width: 100%;">
+                                            <option disabled='disabled' selected="selected">
+                                                Choose from available stocks Stock
+                                            </option>
+                                            @forelse ($stocks as $stock)
+                                                <option value="{{ $stock->id }}">
+                                                    {{ $stock->frame->code }} -
+                                                    {{ $stock->gender }} - {{ $stock->frame_color->color }} - {{ $stock->frame_shape->shape }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">No Stocks Available</option>
+                                                <option>
+                                                    <a href="#" class="btn btn-link">
+                                                        <i class="fa fa-plus"></i> Add Stock
+                                                    </a>
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="purchasedStockUnits">
+                                            Units
+                                        </label>
+                                        <input type="number" id="purchasedStockUnits" name="units"
+                                            class="form-control" placeholder="Number of units purchased" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="purchasedStockSupplier">
+                                            Supplier
+                                        </label>
+                                        <input type="text" id="purchasedStockSupplier" name="supplier"
+                                            class="form-control" placeholder="Enter Supplier" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <!-- /.col-md-6 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="purchasedStockSubmitBtn" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--.modal -->
+
     </section><!-- /.content -->
 @endsection
 
@@ -1058,6 +1155,12 @@
                         Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
+            });
+
+            // Stock Purchases 
+            $(document).on('click', '.purchaseStockBtn', function(e){
+                e.preventDefault();
+                $('#purchasedStockModal').modal('show');
             });
         });
     </script>

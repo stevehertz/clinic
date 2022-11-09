@@ -27,4 +27,10 @@ class FrameShape extends Model
         # code...
         return $this->hasMany(FrameStock::class, 'shape_id', 'id');
     }
+
+    public function frame_purchase()
+    {
+        # code...
+        return $this->hasMany(FramePurchase::class, 'shape_id', 'id');
+    }
 }
