@@ -114,4 +114,53 @@ class FramePurchasesController extends Controller
         }
         // return "Store Frame Purchase";
     }
+
+    public function destroy(Request $request)
+    {
+        # code...
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+            'purchase_id' => 'required|integer|exists:frame_purchases,id'
+        ]);
+
+        if($validator->fails())
+        {
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $frame_purchase = FramePurchase::findOrFail($data['purchase_id']);
+
+        $frame_stock = $frame_purchase->frame_stock;
+
+        $purchased_stocks = $frame_stock->purchase_stock;
+
+        $quantity = $frame_purchase->quantity;
+
+        $remaining_stock = $purchased_stocks - $quantity;
+
+        $frame_stock->opening_stock = $frame_stock->opening_stock;
+
+        $frame_stock->purchase_stock = $remaining_stock;
+
+        $frame_stock->total_stock = $frame_stock->opening_stock + $frame_stock->purchase_stock;
+
+        $frame_stock->sold_stock = $frame_stock->sold_stock;
+
+        $frame_stock->closing_stock = $frame_stock->total_stock - $frame_stock->sold_stock;
+
+        if($frame_stock->save()){
+
+            $frame_purchase->delete();
+
+            $response['status'] = true;
+            $response['message'] = 'Frame Purchase Deleted Successfully';
+            return response()->json($response, 200);
+
+        }
+
+    }
 }

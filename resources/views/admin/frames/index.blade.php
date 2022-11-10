@@ -1209,6 +1209,7 @@
             // Stock Purchases 
             // view all purchases
             find_all_purchases();
+
             function find_all_purchases() {
                 var path = '{{ route('admin.frame.purchases.index', $clinic->id) }}';
                 $('#purchasedStocks').DataTable({
@@ -1268,7 +1269,7 @@
                 $('#purchasedStockModal').modal('show');
             });
 
-            $('#purchasedStockForm').submit(function(e){
+            $('#purchasedStockForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
@@ -1279,16 +1280,15 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    beforeSend:function(){
+                    beforeSend: function() {
                         $('#purchasedStockSubmitBtn').html(
                             '<i class="fa fa-spinner fa-spin"></i>'
                         );
                         $('#purchasedStockSubmitBtn').attr('disabled', true);
                     },
-                    complete:function()
-                    {
+                    complete: function() {
                         $('#purchasedStockSubmitBtn').html('Save');
-                        $('#purchasedStockSubmitBtn').attr('disabled', false);   
+                        $('#purchasedStockSubmitBtn').attr('disabled', false);
                     },
                     success: function(data) {
                         if (data['status']) {
@@ -1311,6 +1311,42 @@
                         }
                     }
                 });
+            });
+
+            $(document).on('click', '.deleteFramePurchase', function(e) {
+                e.preventDefault();
+                var purchase_id = $(this).data('id');
+                var token = "{{ csrf_token() }}";
+                var path = "{{ route('admin.frame.purchases.delete') }}";
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                                purchase_id: purchase_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#purchasedStocks').DataTable().ajax.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+
             });
         });
     </script>

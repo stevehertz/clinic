@@ -534,6 +534,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         ->group(function () {
             Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
             Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
+            Route::delete('/delete', [FramePurchasesController::class, 'destroy'])->name('delete');
         });
 
     // Sun glasses
