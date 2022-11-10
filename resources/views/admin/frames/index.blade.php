@@ -108,7 +108,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
                                         href="#custom-tabs-four-settings" role="tab"
-                                        aria-controls="custom-tabs-four-settings" aria-selected="false">Settings</a>
+                                        aria-controls="custom-tabs-four-settings" aria-selected="false">Transfer Stocks</a>
                                 </li>
                             </ul>
                         </div>
@@ -869,6 +869,9 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+        <!--.modal -->
+
+        <!-- Transfer Stock -->
         <!--.modal -->
 
     </section><!-- /.content -->

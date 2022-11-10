@@ -312,7 +312,7 @@
                                 <label for="closeBillInvoiceNumber">
                                     Invoice Number
                                 </label>
-                                <input type="number" name="invoice_number" class="form-control"
+                                <input type="text" name="invoice_number" class="form-control"
                                     id="closeBillInvoiceNumber" placeholder="Enter Bill Invoice Number">
                             </div>
 
@@ -320,7 +320,7 @@
                                 <label for="closeBillLPONumber">
                                     LPO Number
                                 </label>
-                                <input type="number" name="lpo_number" class="form-control"
+                                <input type="text" name="lpo_number" class="form-control"
                                     id="closeBillLPONumber" placeholder="Enter Bill LPO Number">
                             </div>
 
