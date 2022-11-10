@@ -141,4 +141,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(Size::class, 'organization_id', 'id');
     }
+
+    public function frame_purchase()
+    {
+        # code...
+        return $this->hasMany(FramePurchase::class, 'organization_id', 'id');
+    }
 }

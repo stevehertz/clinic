@@ -121,4 +121,10 @@ class Clinic extends Model
         # code...
         return $this->hasMany(Report::class, 'clinic_id', 'id');
     }
+
+    public function frame_purchase()
+    {
+        # code...
+        return $this->hasMany(FramePurchase::class, 'clinic_id', 'id');
+    }
 }

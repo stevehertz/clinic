@@ -63,7 +63,7 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $num_stocks }}</h3>
+                            <h3>{{ $num_purchases }}</h3>
 
                             <p>Stock Purchases</p>
                         </div>
@@ -184,6 +184,7 @@
                                                     <th>Price </th>
                                                     <th>Total Price</th>
                                                     <th>Supplier</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -746,12 +747,14 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <small class="text-center" style="text-align: center;">Make Purchases based on the available stocks</small>
-                                        <input type="hidden" class="form-control" name="clinic_id" value="{{ $clinic->id }}" />
+                                        <small class="text-center" style="text-align: center;">Make Purchases based on the
+                                            available stocks</small>
+                                        <input type="hidden" class="form-control" name="clinic_id"
+                                            value="{{ $clinic->id }}" />
                                     </div>
                                 </div>
                             </div>
-                    
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -764,7 +767,8 @@
                                             @forelse ($stocks as $stock)
                                                 <option value="{{ $stock->id }}">
                                                     {{ $stock->frame->code }} -
-                                                    {{ $stock->gender }} - {{ $stock->frame_color->color }} - {{ $stock->frame_shape->shape }}
+                                                    {{ $stock->gender }} - {{ $stock->frame_color->color }} -
+                                                    {{ $stock->frame_shape->shape }}
                                                 </option>
                                             @empty
                                                 <option disabled="disabled">No Stocks Available</option>
@@ -783,15 +787,59 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label for="purchasedStockDate">
+                                            Purchase Date
+                                        </label>
+                                        <input type="text" id="purchasedStockDate" name="purchase_date"
+                                            class="form-control datepicker" placeholder="Purchased Date" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="purchasedStockReceiptNumber">
+                                            Receipt Number
+                                        </label>
+                                        <input type="text" id="purchasedStockReceiptNumber" name="receipt_number"
+                                            class="form-control" placeholder="Receipt Number" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label for="purchasedStockUnits">
                                             Units
                                         </label>
-                                        <input type="number" id="purchasedStockUnits" name="units"
+                                        <input type="number" id="purchasedStockUnits" name="quantity"
                                             class="form-control" placeholder="Number of units purchased" />
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
                             </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="purchasedStockPrice">
+                                            Price
+                                        </label>
+                                        <input type="number" id="purchasedStockPrice" name="price"
+                                            class="form-control" placeholder="Price per unit" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -1148,6 +1196,7 @@
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
                                     $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#purchasedStocks').DataTable().ajax.reload();
                                 }
                             }
                         });
@@ -1158,9 +1207,110 @@
             });
 
             // Stock Purchases 
-            $(document).on('click', '.purchaseStockBtn', function(e){
+            // view all purchases
+            find_all_purchases();
+            function find_all_purchases() {
+                var path = '{{ route('admin.frame.purchases.index', $clinic->id) }}';
+                $('#purchasedStocks').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'receipt_number',
+                            name: 'receipt_number'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'total',
+                            name: 'total'
+                        },
+                        {
+                            data: 'supplier',
+                            name: 'supplier'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            }
+
+            $(document).on('click', '.purchaseStockBtn', function(e) {
                 e.preventDefault();
                 $('#purchasedStockModal').modal('show');
+            });
+
+            $('#purchasedStockForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('admin.frame.purchases.store') }}';
+                $.ajax({
+                    url: path,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend:function(){
+                        $('#purchasedStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#purchasedStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete:function()
+                    {
+                        $('#purchasedStockSubmitBtn').html('Save');
+                        $('#purchasedStockSubmitBtn').attr('disabled', false);   
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#purchasedStockForm')[0].reset();
+                            $('#purchasedStockModal').modal('hide');
+                            $('#purchasedStocks').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#framesData').DataTable().ajax.reload();
+                        }
+                    },
+                    error: function(error) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, error) {
+                                toastr.error(error);
+                            });
+                        } else {
+                            toastr.error(error.responseJSON.message);
+                        }
+                    }
+                });
             });
         });
     </script>

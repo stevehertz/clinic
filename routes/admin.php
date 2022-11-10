@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
 use App\Http\Controllers\Admin\Frames\FrameColorsController;
 use App\Http\Controllers\Admin\Frames\FrameMaterialsController;
+use App\Http\Controllers\Admin\Frames\FramePurchasesController;
 use App\Http\Controllers\Admin\Frames\FramesController;
 use App\Http\Controllers\Admin\Frames\FrameShapesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
@@ -526,6 +527,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::delete('/delete', [FramesStocksController::class, 'destroy'])->name('delete');
     });
+
+    // frame purchases
+    Route::prefix('frame/purchases')
+        ->name('frame.purchases.')
+        ->group(function () {
+            Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
+            Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
+        });
 
     // Sun glasses
     Route::prefix('sun/glasses')->name('sun.glasses.')->group(function () {

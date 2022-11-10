@@ -10,6 +10,8 @@ class FramePurchase extends Model
     use HasFactory;
 
     protected $fillable = [
+        'organization_id',
+        'clinic_id',
         'stock_id',
         'frame_id',
         'code',
@@ -23,6 +25,18 @@ class FramePurchase extends Model
         'total',
         'supplier',
     ];
+
+    public function organization()
+    {
+        # code...
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
+
+    public function clinic()
+    {
+        # code...
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+    }
 
     public function frame_stock()
     {
