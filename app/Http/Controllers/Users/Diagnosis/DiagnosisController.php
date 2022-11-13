@@ -95,4 +95,46 @@ class DiagnosisController extends Controller
         $response['data'] = $diagnosis;
         return response()->json($response, 200);
     }
+
+    public function update(Request $request)
+    {
+        # code...
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+            'clinic_id' => 'required|integer|exists:clinics,id',
+            'diagnosis_id' => 'required|integer|exists:diagnoses,id',
+            'signs' => 'required|string',
+            'symptoms' => 'required|string',
+            'diagnosis' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $clinic = Clinic::findOrFail($data['clinic_id']);
+
+        $diagnosis = $clinic->diagnosis()->findOrFail($data['diagnosis_id']);
+
+        $diagnosis->id = $diagnosis->id;
+        $diagnosis->clinic_id = $diagnosis->clinic_id;
+        $diagnosis->user_id = $diagnosis->user_id;
+        $diagnosis->patient_id = $diagnosis->patient_id;
+        $diagnosis->appointment_id = $diagnosis->appointment_id;
+        $diagnosis->schedule_id = $diagnosis->schedule_id;
+        $diagnosis->signs = $data['signs'];
+        $diagnosis->symptoms = $data['symptoms'];
+        $diagnosis->diagnosis = $data['diagnosis'];
+
+        $diagnosis->save();
+
+        $response['status'] = true;
+        $response['message'] = 'Diagnosis updated successfully';
+        return response()->json($response, 200);
+
+    }
 }

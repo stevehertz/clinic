@@ -84,7 +84,7 @@
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Doctor/ Optimist</h3>
+                        <h3 class="card-title">Doctor/ Optimetrist</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
@@ -204,12 +204,12 @@
                                                     {!! $diagnosis->diagnosis !!}
                                                 </div>
 
-                                                {{-- <div class="timeline-footer">
+                                                <div class="timeline-footer">
                                                     <a href="#" data-id="{{ $diagnosis->id }}"
-                                                        class="btn btn-primary btn-block btn-sm treatmentBtn">
-                                                        <i class="fa fa-plus"></i> Treatments
+                                                        class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
+                                                        <i class="fa fa-edit"></i> Edit Diagnosis
                                                     </a>
-                                                </div> --}}
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- END timeline item -->
@@ -1153,6 +1153,73 @@
         </div>
         <!-- /.modal -->
 
+        <div class="modal fade" id="editDiagnosisModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Edit Diagnosis
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="editDiagnosisForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="form-group">
+                                <input type="hidden" name="clinic_id" class="form-control" id="editDiagnosisClinicId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="diagnosis_id" class="form-control" id="editDiagnosisId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="patient_id" class="form-control"
+                                    id="editDiagnosisPatientId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="appointment_id" class="form-control"
+                                    id="editDiagnosisAppointmentId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="user_id" class="form-control" id="editDiagnosisUserId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="schedule_id" class="form-control"
+                                    id="editDiagnosisScheduleId" />
+                            </div>
+                            <div class="form-group">
+                                <label for="editDiagnosisSigns">Signs</label>
+                                <textarea id="editDiagnosisSigns" name="signs" class="form-control textarea" placeholder="Enter Signs here..."
+                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->signs !!}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editDiagnosisSymptoms">Symptoms</label>
+                                <textarea id="editDiagnosisSymptoms" name="symptoms" class="form-control textarea"
+                                    placeholder="Enter symptoms here..."
+                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->symptoms !!}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editDiagnosisDiagnosis">Diagnosis</label>
+                                <textarea id="editDiagnosisDiagnosis" name="diagnosis" class="form-control textarea"
+                                    placeholder="Enter diagnosis here..."
+                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->diagnosis !!}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="editDiagnosisSubmitBtn" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
         <div class="modal fade" id="addMedicineModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -1359,7 +1426,72 @@
 
                     }
                 });
+            });
 
+            $('.editDiagnosisBtn').on('click', function(e){
+                e.preventDefault();
+                var diagnosis_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var path = '{{ route('users.diagnosis.show') }}';
+                $.ajax({
+                    url:path,
+                    type:"POST",
+                    data:{
+                        diagnosis_id:diagnosis_id,
+                        _token:token
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data['status']){
+                            $('#editDiagnosisModal').modal('show');
+                            $('#editDiagnosisClinicId').val(data['data']['clinic_id']);
+                            $('#editDiagnosisId').val(data['data']['id']);
+                            $('#editDiagnosisPatientId').val(data['data']['patient_id']);
+                            $('#editDiagnosisAppointmentId').val(data['data']['appointment_id']);
+                            $('#editDiagnosisUserId').val(data['data']['user_id']);
+                            $('#editDiagnosisScheduleId').val(data['data']['schedule_id']);
+                            $('#editDiagnosisSigns').val(data['data']['signs']);
+                            $('#editDiagnosisSymptoms').val(data['data']['symptoms']);
+                            $('#editDiagnosisDiagnosis').val(data['data']['diagnosis']);
+                        }
+                    }
+                });
+            });
+
+            $('#editDiagnosisForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('users.diagnosis.update') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#editDiagnosisSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
+                        $('#editDiagnosisSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#editDiagnosisSubmitBtn').html('Save');
+                        $('#editDiagnosisSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            $('#editDiagnosisModal').modal('hide');
+                            toastr.success(data['message']);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            console.log(data);
+                        }
+
+                    }
+                });
             });
         });
     </script>

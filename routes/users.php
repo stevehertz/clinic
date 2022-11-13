@@ -170,6 +170,8 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
         Route::post('/store', [DiagnosisController::class, 'store'])->name('store');
 
         Route::post('/show', [DiagnosisController::class, 'show'])->name('show');
+
+        Route::post('/update', [DiagnosisController::class, 'update'])->name('update');
     });
 
     Route::prefix('treatment')->name('treatment.')->group(function () {
