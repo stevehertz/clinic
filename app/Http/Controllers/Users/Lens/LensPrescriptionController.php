@@ -64,7 +64,7 @@ class LensPrescriptionController extends Controller
         $response['status'] = true;
         $response['power_id'] = $lens_power->id;
         $response['prescription_id'] = $lens_power->lens_prescription->id;
-        $response['message'] = 'You have success prescription for a lens power';
+        $response['message'] = 'You have successfully created prescription for a lens power';
         return response()->json($response, 200);
     }
 
@@ -89,6 +89,48 @@ class LensPrescriptionController extends Controller
         $response['status'] = true;
         $response['data'] = $lens_prescription;
 
+        return response()->json($response, 200);
+    }
+
+    public function update(Request $request)
+    {
+        # code...
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+            'prescription_id' => 'required|integer|exists:lens_prescriptions,id',
+            'type_id' => 'required|integer|exists:lens_types,id',
+            'material_id' => 'required|integer|exists:lens_materials,id',
+            'index' => 'required|string|max:255',
+            'tint' => 'nullable|string|max:255',
+            'pupil' => 'nullable|string|max:255',
+            'focal_height' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $lens_prescription = LensPrescription::findOrFail($data['prescription_id']);
+
+        $lens_prescription->update([
+            'id' => $lens_prescription->id,
+            'power_id' => $lens_prescription->power_id,
+            'type_id' => $data['type_id'],
+            'material_id' => $data['material_id'],
+            'index' => $data['index'],
+            'tint' => $data['tint'],
+            'diameter' => $data['pupil'],
+            'focal_height' => $data['focal_height']
+        ]);
+
+        $response['status'] = true;
+        $response['power_id'] = $lens_prescription->power_id;
+        $response['prescription_id'] = $lens_prescription->id;
+        $response['message'] = 'You have successfully updated lens prescription';
         return response()->json($response, 200);
     }
 }

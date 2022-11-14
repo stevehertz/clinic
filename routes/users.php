@@ -188,7 +188,7 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
             Route::post('/show', [LensPowerController::class, 'show'])->name('show');
 
             Route::post('/update', [LensPowerController::class, 'update'])->name('update');
-            
+
         });
 
         Route::prefix('prescription')->name('prescription.')->group(function () {
@@ -196,6 +196,9 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
             Route::post('/store', [LensPrescriptionController::class, 'store'])->name('store');
 
             Route::post('/show', [LensPrescriptionController::class, 'show'])->name('show');
+
+            Route::post('/update', [LensPrescriptionController::class, 'update'])->name('update');
+            
         });
 
         Route::prefix('frame/prescription')->name('frame.prescription.')->group(function () {

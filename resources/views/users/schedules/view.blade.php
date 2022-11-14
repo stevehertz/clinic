@@ -43,7 +43,7 @@
                             </button>
                         </div>
                     </div>
-
+                    <!--.card-header -->
                     <div class="card-body p-0">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item active">
@@ -81,7 +81,8 @@
                     </div>
                     <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
+                <!--.card -->
+
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Doctor/ Optimetrist</h3>
@@ -117,7 +118,7 @@
                 </div>
                 <!-- /.card -->
             </div>
-            <!-- /.col -->
+            <!--.col-md-3 -->
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
                     <div class="card-header p-2">
@@ -145,18 +146,21 @@
                                 </li>
                             @endif
                         </ul>
-                    </div><!-- /.card-header -->
+                    </div>
+                    <!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="diagnosisTab">
                                 <!-- The timeline -->
                                 <div class="timeline timeline-inverse">
+
                                     <!-- timeline time label -->
                                     <div class="time-label">
                                         <span class="bg-primary">
                                             Patient Diagnosis
                                         </span>
                                     </div>
+
                                     <!-- /.timeline-label -->
                                     @if ($diagnosis)
                                         <!-- timeline item -->
@@ -174,6 +178,7 @@
                                             </div>
                                         </div>
                                         <!-- END timeline item -->
+
                                         <!-- timeline item -->
                                         <div>
                                             <i class="fa fa-sellsy bg-warning"></i>
@@ -237,14 +242,16 @@
                                         </div>
                                         <!-- END timeline item -->
                                     @endif
+
                                     <div>
                                         <i class="fa fa-clock-o bg-gray"></i>
                                     </div>
                                 </div>
+                                <!--.timeline .timeline-inverse -->
                             </div>
-                            <!-- /.tab-pane -->
-                            <div class="tab-pane" id="treatmentTab">
+                            <!--.active .tab-pane -->
 
+                            <div class="tab-pane" id="treatmentTab">
                                 <div class="lensPowerDiv">
                                     @if ($lens_power)
                                         <!-- The timeline -->
@@ -260,8 +267,8 @@
                                             <!-- timeline item -->
                                             <div>
                                                 <i class="fa fa-eye bg-danger"></i>
-
                                                 <div class="timeline-item">
+
                                                     <h3 class="timeline-header">
                                                         <a href="#">Right</a> eye
                                                     </h3>
@@ -300,19 +307,20 @@
 
                                                         </table>
                                                     </div>
+                                                    <!--.timeline-body .table-responsive -->
                                                 </div>
+                                                <!--.timeline-item -->
                                             </div>
-                                            <!-- END timeline item -->
 
                                             <!-- timeline item -->
                                             <div>
                                                 <i class="fa fa-eye bg-warning"></i>
-
                                                 <div class="timeline-item">
-
-                                                    <h3 class="timeline-header"><a href="#">Left </a> Eye</h3>
-
+                                                    <h3 class="timeline-header">
+                                                        <a href="#">Left </a> Eye
+                                                    </h3>
                                                     <div class="timeline-body table-responsive">
+
                                                         <table class="table table-bordered">
                                                             <tbody>
                                                                 <tr>
@@ -345,10 +353,14 @@
                                                             </tbody>
 
                                                         </table>
+
                                                     </div>
+                                                    <!--.timeline-body .table-responsive -->
                                                 </div>
+                                                <!--.timeline-item -->
                                             </div>
                                             <!-- END timeline item -->
+
                                             <!-- timeline time label -->
                                             <div class="time-label">
                                                 <span class="bg-success">
@@ -360,18 +372,29 @@
                                             <!-- timeline item -->
                                             <div>
                                                 <i class="fa fa-info-circle bg-purple"></i>
-
                                                 <div class="timeline-item">
 
                                                     <div class="timeline-body">
                                                         {{ $lens_power->notes }}
                                                     </div>
+
                                                     @if (!$lens_prescription)
                                                         <div class="timeline-footer">
-                                                            <a href="#" data-id="{{ $lens_power->id }}"
-                                                                class="btn btn-block btn-warning btn-flat btn-sm newLensPrescriptionBtn">
-                                                                Add Lens Prescription
-                                                            </a>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <a href="#" data-id="{{ $lens_power->id }}"
+                                                                        class="btn btn-block btn-warning btn-flat btn-sm newLensPrescriptionBtn">
+                                                                        Add Lens Prescription
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <a href="#" data-id="{{ $lens_power->id }}"
+                                                                        class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                        Edit Lens Power
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     @else
                                                         <div class="timeline-footer">
@@ -393,14 +416,15 @@
 
                                                         </div>
                                                     @endif
-
                                                 </div>
+                                                <!--.timeline-item -->
                                             </div>
                                             <!-- END timeline item -->
                                             <div>
                                                 <i class="fa fa-stop bg-gray"></i>
                                             </div>
                                         </div>
+                                        <!--.timeline .timeline-inverse -->
                                     @else
                                         <form id="lensPowerForm">
                                             @csrf
@@ -519,12 +543,13 @@
                                         </form>
                                     @endif
                                 </div>
-                                <!--.lensPowerDiv-->
+                                <!--.lensPowerDiv -->
 
                                 <div class="lensPrescriptionDiv">
                                     @if ($lens_prescription)
                                         <!-- The timeline -->
                                         <div class="timeline timeline-inverse">
+
                                             <!-- timeline time label -->
                                             <div class="time-label">
                                                 <span class="bg-primary">
@@ -628,17 +653,41 @@
 
                                                     @if ($frame_prescription)
                                                         <div class="timeline-footer">
-                                                            <a href="#" data-id="{{ $frame_prescription->id }}"
-                                                                class="btn btn-block btn-primary btn-flat btn-sm frameCodeBtn">
-                                                                Frame Code
-                                                            </a>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <a href="#"
+                                                                        data-id="{{ $frame_prescription->id }}"
+                                                                        class="btn btn-block btn-primary btn-flat btn-sm frameCodeBtn">
+                                                                        Frame Code
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <a href="#"
+                                                                        data-id="{{ $lens_prescription->id }}"
+                                                                        class="btn btn-block btn-sm btn-secondary editPrescriptionBtn">
+                                                                        Edit Prescription
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     @else
                                                         <div class="timeline-footer">
-                                                            <a href="#" data-id="{{ $lens_prescription->id }}"
-                                                                class="btn btn-block btn-warning btn-flat btn-sm newFrameCodeBtn">
-                                                                Add Frame Code
-                                                            </a>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <a href="#"
+                                                                        data-id="{{ $lens_prescription->id }}"
+                                                                        class="btn btn-block btn-warning btn-flat btn-sm newFrameCodeBtn">
+                                                                        Add Frame Code
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <a href="#" id="{{ $lens_prescription->id }}"
+                                                                        class="btn btn-block btn-sm btn-secondary">
+                                                                        Edit Prescription
+                                                                    </a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     @endif
 
@@ -650,6 +699,7 @@
                                                 <i class="fa fa-stop bg-gray"></i>
                                             </div>
                                         </div>
+                                        <!--.timeline .timeline-inverse -->
                                     @else
                                         <form id="lensPrescriptionForm">
                                             @csrf
@@ -659,7 +709,6 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">Lens Prescription</h5>
                                                     <br><br>
-
                                                     <div class="form-group">
                                                         <label for="lensPrescriptionType">Lens Type</label>
                                                         <select id="lensPrescriptionType" name="type_id"
@@ -680,6 +729,7 @@
                                                     <!-- /.form-group -->
 
                                                     <div class="row">
+
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="lensPrescriptionMaterial">Lens Material</label>
@@ -734,6 +784,7 @@
                                                             </div>
                                                             <!-- /.form-group -->
                                                         </div>
+
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label for="lensPrescriptionFocalHeight">Focal
@@ -744,27 +795,30 @@
                                                             </div>
                                                             <!-- /.form-group -->
                                                         </div>
+
                                                     </div>
+                                                    <!--.row -->
 
                                                     <button type="submit" id="lensPrescriptionSubmitBtn"
                                                         class="btn btn-block btn-primary">
                                                         Next
                                                     </button>
+
                                                 </div>
-                                                <!-- /.card-body -->
-
+                                                <!--.card-body -->
                                             </div>
-                                            <!-- /.card -->
+                                            <!--.card -->
                                         </form>
+                                        <!--#lensPrescriptionForm -->
                                     @endif
-
                                 </div>
-                                <!--.lensPrescriptionDiv-->
+                                <!--.lensPrescriptionDiv -->
 
                                 <div class="frameCodesDiv">
                                     @if ($frame_prescription)
                                         <!-- The timeline -->
                                         <div class="timeline timeline-inverse">
+
                                             <!-- timeline time label -->
                                             <div class="time-label">
                                                 <span class="bg-primary">
@@ -847,6 +901,7 @@
                                                 <i class="fa fa-stop bg-gray"></i>
                                             </div>
                                         </div>
+                                        <!--.timeline .timeline-inverse -->
                                     @else
                                         <form id="frameCodeForm">
                                             <div class="card">
@@ -945,9 +1000,9 @@
                                         </form>
                                     @endif
                                 </div>
-                                <!--.frameCodesDiv-->
+                                <!--.frameCodesDiv -->
                             </div>
-                            <!-- /.tab-pane -->
+                            <!--.tab-pane -->
 
                             <div class="tab-pane" id="medicineTab">
                                 <div class="table-responsive">
@@ -1015,12 +1070,15 @@
                             </div>
                             <!-- /.tab-pane -->
                         </div>
-                        <!-- /.tab-content -->
-                    </div><!-- /.card-body -->
+                        <!--.tab-content -->
+                    </div>
+                    <!--.card-body -->
+
                 </div>
-                <!-- /.nav-tabs-custom -->
+                <!--.card .card-outline .card-primary -->
             </div>
-            <!-- /.col -->
+            <!--.col-md-6 -->
+
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -1101,8 +1159,9 @@
                 <!-- /.card -->
             </div>
             <!-- /.col -->
+
         </div>
-        <!-- /.row -->
+        <!--.row -->
 
         <div class="modal fade" id="addDiagnosisModal">
             <div class="modal-dialog modal-lg">
@@ -1242,7 +1301,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">
-                            Edit Diagnosis
+                            Edit Lens Power
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -1272,27 +1331,24 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerRightCylinder">Cylinder</label>
-                                        <input type="text" name="right_cylinder"
-                                            class="form-control" id="editLensPowerRightCylinder"
-                                            placeholder="Cylinder">
+                                        <input type="text" name="right_cylinder" class="form-control"
+                                            id="editLensPowerRightCylinder" placeholder="Cylinder">
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerRightAxis">Axis</label>
-                                        <input type="text" name="right_axis"
-                                            class="form-control" id="editLensPowerRightAxis"
-                                            placeholder="Axis">
+                                        <input type="text" name="right_axis" class="form-control"
+                                            id="editLensPowerRightAxis" placeholder="Axis">
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerRightAdditional">Additional</label>
-                                        <input type="text" name="right_add"
-                                            class="form-control" id="editLensPowerRightAdditional"
-                                            placeholder="Additional">
+                                        <input type="text" name="right_add" class="form-control"
+                                            id="editLensPowerRightAdditional" placeholder="Additional">
                                     </div>
                                 </div>
                             </div>
@@ -1304,35 +1360,31 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerLeftSphere">Sphere</label>
-                                        <input type="text" name="left_sphere"
-                                            class="form-control" id="editLensPowerLeftSphere"
-                                            placeholder="Sphere">
+                                        <input type="text" name="left_sphere" class="form-control"
+                                            id="editLensPowerLeftSphere" placeholder="Sphere">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerLeftCylinder">Cylinder</label>
-                                        <input type="text" name="left_cylinder"
-                                            class="form-control" id="editLensPowerLeftCylinder"
-                                            placeholder="Cylinder">
+                                        <input type="text" name="left_cylinder" class="form-control"
+                                            id="editLensPowerLeftCylinder" placeholder="Cylinder">
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensPowerLeftAxis">Axis</label>
-                                        <input type="text" name="left_axis"
-                                            class="form-control" id="editLensPowerLeftAxis"
-                                            placeholder="Axis">
+                                        <input type="text" name="left_axis" class="form-control"
+                                            id="editLensPowerLeftAxis" placeholder="Axis">
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="editLensLeftAdditional">Additional</label>
-                                        <input type="text" name="left_add"
-                                            class="form-control" id="editLensLeftAdditional"
-                                            placeholder="Additional">
+                                        <input type="text" name="left_add" class="form-control"
+                                            id="editLensLeftAdditional" placeholder="Additional">
                                     </div>
                                 </div>
                             </div>
@@ -1349,6 +1401,138 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="submit" id="editLensPowerSubmitBtn" class="btn btn-primary">
                                 Update
+                            </button>
+                        </div>
+                        <!--.modal-footer .justify-content-between -->
+                    </form>
+                    <!--#editLensPowerForm -->
+                </div>
+                <!--.modal-content -->
+            </div>
+            <!--.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- Edit Lens Prescription -->
+        <div class="modal fade" id="editPrescriptionModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Edit Lens Prescription
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!--.modal-header -->
+                    <form id="editPrescriptionForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="hidden" name="prescription_id" id="editPrescriptionId"
+                                        class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionType">Lens Type</label>
+                                        <select id="editPrescriptionType" name="type_id"
+                                            class="form-control select2 select2-purple" style="width: 100%;"
+                                            data-dropdown-css-class="select2-purple">
+                                            @forelse ($types as $type) 
+                                                <option value="{{ $type->id }}" @if($type->id == $lens_prescription->type_id) selected="selected" @endif>
+                                                    {{ $type->type }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">
+                                                    No Lens Type Found
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionMaterial">Lens Material</label>
+                                        <select id="editPrescriptionMaterial" name="material_id"
+                                            class="form-control select2 select2-danger" style="width: 100%;"
+                                            data-dropdown-css-class="select2-danger">
+                                            @forelse ($materials as $material)
+                                                <option value="{{ $material->id }}" @if($material->id == $lens_prescription->material_id) selected="selected" @endif>
+                                                    {{ $material->title }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">
+                                                    No Lens Material Found
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionIndex">Lens
+                                            Index/Thickness</label>
+                                        <input type="text" name="index" class="form-control"
+                                            id="editPrescriptionIndex" placeholder="Lens Index/Thickness">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionTint">Tint</label>
+                                        <input type="text" name="tint" class="form-control"
+                                            id="editPrescriptionTint" placeholder="Lens Tint">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionPupil">Pupil
+                                            Diameter(mm)</label>
+                                        <input type="text" name="pupil" class="form-control"
+                                            id="editPrescriptionPupil"
+                                            placeholder="Pupil Diameter">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editPrescriptionFocalHeight">Focal
+                                            Height
+                                        </label>
+                                        <input type="text" name="focal_height"
+                                            class="form-control" id="editPrescriptionFocalHeight"
+                                            placeholder="Focal Height">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                        </div>
+                        <!--.modal-body -->
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="editPrescriptionSubmitBtn" class="btn btn-primary">
+                                Update Prescription
                             </button>
                         </div>
                         <!--.modal-footer .justify-content-between -->
@@ -1496,6 +1680,7 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
     </section>
     <!-- /.content -->
 @endsection
@@ -1589,7 +1774,8 @@
                             $('#editDiagnosisId').val(data['data']['id']);
                             $('#editDiagnosisPatientId').val(data['data']['patient_id']);
                             $('#editDiagnosisAppointmentId').val(data['data'][
-                            'appointment_id']);
+                                'appointment_id'
+                            ]);
                             $('#editDiagnosisUserId').val(data['data']['user_id']);
                             $('#editDiagnosisScheduleId').val(data['data']['schedule_id']);
                             $('#editDiagnosisSigns').val(data['data']['signs']);
@@ -1635,6 +1821,7 @@
                     }
                 });
             });
+
         });
     </script>
 
@@ -1692,25 +1879,27 @@
                 });
 
                 // Edit Lens Power
-                $(document).on('click', '.editLensPowerBtn', function(e){
+                $(document).on('click', '.editLensPowerBtn', function(e) {
                     e.preventDefault();
                     var power_id = $(this).data('id');
                     var path = '{{ route('users.lens.power.show') }}';
                     var token = '{{ csrf_token() }}';
                     $.ajax({
-                        url:path,
-                        type:"POST",
-                        data:{
+                        url: path,
+                        type: "POST",
+                        data: {
                             power_id: power_id,
                             _token: token
                         },
-                        dataType:"JSON",
-                        success:function(data){
-                            if(data['status']){
+                        dataType: "JSON",
+                        success: function(data) {
+                            if (data['status']) {
                                 $('#editLensPowerModal').modal('show');
                                 $('#editLensPowerId').val(data['data']['id']);
                                 $('#editLensPowerRightSphere').val(data['data']['right_sphere']);
-                                $('#editLensPowerRightCylinder').val(data['data']['right_cylinder']);
+                                $('#editLensPowerRightCylinder').val(data['data'][
+                                    'right_cylinder'
+                                ]);
                                 $('#editLensPowerRightAxis').val(data['data']['right_axis']);
                                 $('#editLensPowerRightAdditional').val(data['data']['right_add']);
                                 $('#editLensPowerLeftSphere').val(data['data']['left_sphere']);
@@ -1724,13 +1913,13 @@
                 });
 
                 // update lens power
-                $('#editLensPowerForm').submit(function(e){
+                $('#editLensPowerForm').submit(function(e) {
                     e.preventDefault();
                     var form = $(this);
                     var formData = new FormData(form[0]);
                     var path = '{{ route('users.lens.power.update') }}';
                     $.ajax({
-                        url:path,
+                        url: path,
                         type: "POST",
                         data: formData,
                         contentType: false,
@@ -1751,7 +1940,7 @@
                                 $('#editLensPowerForm')[0].reset();
                                 $('#myTab a[href="#treatmentTab"]').tab('show');
                                 location.reload();
-                            } 
+                            }
                         },
                         error: function(data) {
                             var errors = data.responseJSON;
@@ -1818,6 +2007,85 @@
                             errorsHtml += '</ul>';
                             toastr.error(errorsHtml);
                         },
+                    });
+                });
+
+                // Edit lens prescription
+                $(document).on('click', '.editPrescriptionBtn', function(e) {
+                    e.preventDefault();
+                    var prescription_id = $(this).data('id');
+                    var token = '{{ csrf_token() }}';
+                    var path = '{{ route('users.lens.prescription.show') }}';
+                    $.ajax({
+                        url: path,
+                        type: "POST",
+                        data: {
+                            prescription_id: prescription_id,
+                            _token: token,
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data['status']) {
+                                $('#editPrescriptionModal').modal('show');
+                                $('#editPrescriptionId').val(data['data']['id']);
+                                $('#editPrescriptionIndex').val(data['data']['index']);
+                                $('#editPrescriptionTint').val(data['data']['tint']);
+                                $('#editPrescriptionPupil').val(data['data']['diameter']);
+                                $('#editPrescriptionFocalHeight').val(data['data']['focal_height']);
+                            }
+                        },
+                        error: function(data) {
+                            var errors = data.responseJSON;
+                            var errorsHtml = '<ul>';
+                            $.each(errors['errors'], function(key, value) {
+                                errorsHtml += '<li>' + value + '</li>';
+                            });
+                            errorsHtml += '</ul>';
+                            toastr.error(errorsHtml);
+                        }
+                    });
+                });
+
+                // update lens prescription
+                $('#editPrescriptionForm').submit(function(e){
+                    e.preventDefault();
+                    var form = $(this);
+                    var formData = new FormData(form[0]);
+                    var path = '{{ route('users.lens.prescription.update') }}';
+                    $.ajax({
+                        url: path,
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType:false,
+                        processData: false,
+                        beforeSend: function(){
+                            $('#editPrescriptionSubmitBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#editPrescriptionSubmitBtn').attr('disabled', true);
+                        },
+                        complete:function(){
+                            $('#editPrescriptionSubmitBtn').html('Update Prescription');
+                            $('#editPrescriptionSubmitBtn').attr('disabled', false);
+                        },
+                        success:function(data){
+                            if(data['status']){
+                                toastr.success(data['message']);
+                                $('#editPrescriptionForm')[0].reset();
+                                $('#editPrescriptionModal').modal('hide');
+                                location.reload();
+                            }
+                        },
+                        error:function(data){
+                            var errors = data.responseJSON;
+                            var errorsHtml = '<ul>';
+                            $.each(errors['errors'], function(key, value) {
+                                errorsHtml += '<li>' + value + '</li>';
+                            });
+                            errorsHtml += '</ul>';
+                            toastr.error(errorsHtml);
+                        }
                     });
                 });
 
