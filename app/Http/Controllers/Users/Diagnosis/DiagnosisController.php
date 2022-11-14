@@ -135,6 +135,5 @@ class DiagnosisController extends Controller
         $response['status'] = true;
         $response['message'] = 'Diagnosis updated successfully';
         return response()->json($response, 200);
-
     }
 }

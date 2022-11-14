@@ -121,7 +121,7 @@
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
                     <div class="card-header p-2">
-                        <ul class="nav nav-pills">
+                        <ul id="myTab" class="nav nav-pills">
                             <li class="nav-item">
                                 <a class="nav-link active" href="#diagnosisTab" data-toggle="tab">
                                     Diagnosis
@@ -375,10 +375,22 @@
                                                         </div>
                                                     @else
                                                         <div class="timeline-footer">
-                                                            <a href="#" data-id="{{ $lens_prescription->id }}"
-                                                                class="btn btn-block btn-primary btn-flat btn-sm viewLensPrescription">
-                                                                Lens Prescription
-                                                            </a>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <a href="#"
+                                                                        data-id="{{ $lens_prescription->id }}"
+                                                                        class="btn btn-block btn-primary btn-flat btn-sm viewLensPrescription">
+                                                                        Lens Prescription
+                                                                    </a>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <a href="#" data-id="{{ $lens_power->id }}"
+                                                                        class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                        Edit Lens Power
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     @endif
 
@@ -857,14 +869,17 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="frameCode">Frame Code</label>
-                                                                <select name="stock_id" id="frameCode" class="form-control select2" style="width:100%;">
-                                                                    <option selected="selected" disabled="disabled">Choose Frame Code</option>
+                                                                <select name="stock_id" id="frameCode"
+                                                                    class="form-control select2" style="width:100%;">
+                                                                    <option selected="selected" disabled="disabled">Choose
+                                                                        Frame Code</option>
                                                                     @forelse ($frame_stocks as $frame_stock)
                                                                         <option value="{{ $frame_stock->id }}">
                                                                             {{ $frame_stock->frame->code }}
                                                                         </option>
                                                                     @empty
-                                                                        <option disabled="disabled">No Frame Code Available</option>
+                                                                        <option disabled="disabled">No Frame Code Available
+                                                                        </option>
                                                                     @endforelse
                                                                 </select>
                                                             </div>
@@ -1168,7 +1183,8 @@
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
-                                <input type="hidden" name="clinic_id" class="form-control" id="editDiagnosisClinicId" />
+                                <input type="hidden" name="clinic_id" class="form-control"
+                                    id="editDiagnosisClinicId" />
                             </div>
                             <div class="form-group">
                                 <input type="hidden" name="diagnosis_id" class="form-control" id="editDiagnosisId" />
@@ -1217,6 +1233,131 @@
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- Edit Lens Power -->
+        <div class="modal fade" id="editLensPowerModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Edit Diagnosis
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!--.modal-header -->
+                    <form id="editLensPowerForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="hidden" name="power_id" id="editLensPowerId" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>Right Eye</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerRightSphere">Sphere</label>
+                                        <input type="text" name="right_sphere" class="form-control"
+                                            id="editLensPowerRightSphere" placeholder="Sphere">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerRightCylinder">Cylinder</label>
+                                        <input type="text" name="right_cylinder"
+                                            class="form-control" id="editLensPowerRightCylinder"
+                                            placeholder="Cylinder">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerRightAxis">Axis</label>
+                                        <input type="text" name="right_axis"
+                                            class="form-control" id="editLensPowerRightAxis"
+                                            placeholder="Axis">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerRightAdditional">Additional</label>
+                                        <input type="text" name="right_add"
+                                            class="form-control" id="editLensPowerRightAdditional"
+                                            placeholder="Additional">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>Left Eye</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerLeftSphere">Sphere</label>
+                                        <input type="text" name="left_sphere"
+                                            class="form-control" id="editLensPowerLeftSphere"
+                                            placeholder="Sphere">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerLeftCylinder">Cylinder</label>
+                                        <input type="text" name="left_cylinder"
+                                            class="form-control" id="editLensPowerLeftCylinder"
+                                            placeholder="Cylinder">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensPowerLeftAxis">Axis</label>
+                                        <input type="text" name="left_axis"
+                                            class="form-control" id="editLensPowerLeftAxis"
+                                            placeholder="Axis">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="editLensLeftAdditional">Additional</label>
+                                        <input type="text" name="left_add"
+                                            class="form-control" id="editLensLeftAdditional"
+                                            placeholder="Additional">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="editLensPowerAdditionalInfo">
+                                    Additional Information
+                                </label>
+                                <textarea name="notes" id="editLensPowerAdditionalInfo" class="form-control" placeholder="Additional Information"></textarea>
+                            </div>
+                        </div>
+                        <!--.modal-body -->
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="editLensPowerSubmitBtn" class="btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                        <!--.modal-footer .justify-content-between -->
+                    </form>
+                    <!--#editLensPowerForm -->
+                </div>
+                <!--.modal-content -->
+            </div>
+            <!--.modal-dialog -->
         </div>
         <!-- /.modal -->
 
@@ -1428,26 +1569,27 @@
                 });
             });
 
-            $('.editDiagnosisBtn').on('click', function(e){
+            $('.editDiagnosisBtn').on('click', function(e) {
                 e.preventDefault();
                 var diagnosis_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 var path = '{{ route('users.diagnosis.show') }}';
                 $.ajax({
-                    url:path,
-                    type:"POST",
-                    data:{
-                        diagnosis_id:diagnosis_id,
-                        _token:token
+                    url: path,
+                    type: "POST",
+                    data: {
+                        diagnosis_id: diagnosis_id,
+                        _token: token
                     },
-                    dataType:"json",
-                    success:function(data){
-                        if(data['status']){
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
                             $('#editDiagnosisModal').modal('show');
                             $('#editDiagnosisClinicId').val(data['data']['clinic_id']);
                             $('#editDiagnosisId').val(data['data']['id']);
                             $('#editDiagnosisPatientId').val(data['data']['patient_id']);
-                            $('#editDiagnosisAppointmentId').val(data['data']['appointment_id']);
+                            $('#editDiagnosisAppointmentId').val(data['data'][
+                            'appointment_id']);
                             $('#editDiagnosisUserId').val(data['data']['user_id']);
                             $('#editDiagnosisScheduleId').val(data['data']['schedule_id']);
                             $('#editDiagnosisSigns').val(data['data']['signs']);
@@ -1458,7 +1600,7 @@
                 });
             });
 
-            $('#editDiagnosisForm').submit(function(e){
+            $('#editDiagnosisForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
@@ -1546,6 +1688,81 @@
                             errorsHtml += '</ul>';
                             toastr.error(errorsHtml);
                         },
+                    });
+                });
+
+                // Edit Lens Power
+                $(document).on('click', '.editLensPowerBtn', function(e){
+                    e.preventDefault();
+                    var power_id = $(this).data('id');
+                    var path = '{{ route('users.lens.power.show') }}';
+                    var token = '{{ csrf_token() }}';
+                    $.ajax({
+                        url:path,
+                        type:"POST",
+                        data:{
+                            power_id: power_id,
+                            _token: token
+                        },
+                        dataType:"JSON",
+                        success:function(data){
+                            if(data['status']){
+                                $('#editLensPowerModal').modal('show');
+                                $('#editLensPowerId').val(data['data']['id']);
+                                $('#editLensPowerRightSphere').val(data['data']['right_sphere']);
+                                $('#editLensPowerRightCylinder').val(data['data']['right_cylinder']);
+                                $('#editLensPowerRightAxis').val(data['data']['right_axis']);
+                                $('#editLensPowerRightAdditional').val(data['data']['right_add']);
+                                $('#editLensPowerLeftSphere').val(data['data']['left_sphere']);
+                                $('#editLensPowerLeftCylinder').val(data['data']['left_cylinder']);
+                                $('#editLensPowerLeftAxis').val(data['data']['left_axis']);
+                                $('#editLensLeftAdditional').val(data['data']['left_add']);
+                                $('#editLensPowerAdditionalInfo').val(data['data']['notes'])
+                            }
+                        }
+                    });
+                });
+
+                // update lens power
+                $('#editLensPowerForm').submit(function(e){
+                    e.preventDefault();
+                    var form = $(this);
+                    var formData = new FormData(form[0]);
+                    var path = '{{ route('users.lens.power.update') }}';
+                    $.ajax({
+                        url:path,
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#editLensPowerSubmitBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>');
+                            $('#editLensPowerSubmitBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#editLensPowerSubmitBtn').html('Update Power');
+                            $('#editLensPowerSubmitBtn').attr('disabled', false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                $('#editLensPowerModal').modal('hide');
+                                $('#editLensPowerForm')[0].reset();
+                                $('#myTab a[href="#treatmentTab"]').tab('show');
+                                location.reload();
+                            } 
+                        },
+                        error: function(data) {
+                            var errors = data.responseJSON;
+                            var errorsHtml = '<ul>';
+                            $.each(errors['errors'], function(key, value) {
+                                errorsHtml += '<li>' + value + '</li>';
+                            });
+                            errorsHtml += '</ul>';
+                            toastr.error(errorsHtml);
+                        },
+
                     });
                 });
 

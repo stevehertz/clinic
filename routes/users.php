@@ -186,6 +186,9 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
             Route::post('/store', [LensPowerController::class, 'store'])->name('store');
 
             Route::post('/show', [LensPowerController::class, 'show'])->name('show');
+
+            Route::post('/update', [LensPowerController::class, 'update'])->name('update');
+            
         });
 
         Route::prefix('prescription')->name('prescription.')->group(function () {
