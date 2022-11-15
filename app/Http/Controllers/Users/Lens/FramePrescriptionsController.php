@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Lens;
 
 use App\Http\Controllers\Controller;
+use App\Models\FramePrescription;
 use App\Models\FrameStock;
 use App\Models\LensPower;
 use App\Models\Workshop;
@@ -82,5 +83,61 @@ class FramePrescriptionsController extends Controller
     public function show(Request $request)
     {
         # code...
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+            'frame_prescription_id' => 'required|integer|exists:frame_prescriptions,id',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $frame_prescription = FramePrescription::findOrFail($data['frame_prescription_id']);
+        $response['status'] = true;
+        $response['data'] = $frame_prescription;
+
+        return response()->json($response, 200);
+    }
+
+    public function update(Request $request)
+    {
+        # code...
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+            'frame_prescription_id' => 'required|integer|exists:frame_prescriptions,id',
+            'stock_id' => 'required|integer|exists:frame_stocks,id',
+            'workshop_id' => 'required|integer|exists:workshops,id',
+            'remarks' => 'nullable|string|max:255',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $frame_stock = FrameStock::findOrFail($data['stock_id']);
+        $workshop = Workshop::findOrFail($data['workshop_id']);
+
+        $frame_prescription = FramePrescription::findOrFail($data['frame_prescription_id']);
+        $frame_prescription->update([
+            'id' => $frame_prescription->id,
+            'power_id' => $frame_prescription->power_id,
+            'prescription_id' => $frame_prescription->prescription_id,
+            'stock_id' => $frame_stock->id,
+            'frame_code' => $frame_stock->frame->code,
+            'receipt_number' => $frame_prescription->receipt_number,
+            'workshop_id' => $workshop->id,
+            'remarks' => $data['remarks']
+        ]);
+        $response['status'] = true;
+        $response['message'] = 'Frame Prescription updated successfully';
+        return response()->json($response, 200);
     }
 }

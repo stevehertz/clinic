@@ -206,6 +206,9 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
             Route::post('/store', [FramePrescriptionsController::class, 'store'])->name('store');
 
             Route::post('/show', [FramePrescriptionsController::class, 'show'])->name('show');
+
+            Route::post('/update', [FramePrescriptionsController::class, 'update'])->name('update');
+            
         });
     });
 

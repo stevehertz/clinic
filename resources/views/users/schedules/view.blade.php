@@ -887,12 +887,23 @@
                                                         {{ $frame_prescription->remarks }}
                                                     </div>
                                                 </div>
-
+                                                <br>
                                                 <div class="timeline-footer">
-                                                    <a href="#" data-id="{{ $frame_prescription->id }}"
-                                                        class="btn btn-block btn-primary btn-flat btn-sm backToLensPowerBtn">
-                                                        Lens Power
-                                                    </a>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <a href="#"
+                                                                class="btn btn-block btn-primary btn-flat btn-sm backToLensPowerBtn">
+                                                                Lens Power
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <a href="#" data-id="{{ $frame_prescription->id }}"
+                                                                class="btn btn-sm btn-block btn-secondary editFramePrescriptionBtn">
+                                                                Update Frame Code
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                             <!-- END timeline item -->
@@ -945,7 +956,7 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="frameCodeReceiptNumber">Receipt Number</label>
-                                                                <input type="number" name="receipt_number"
+                                                                <input type="text" name="receipt_number"
                                                                     id="frameCodeReceiptNumber"
                                                                     placeholder="Enter Receipt Number"
                                                                     class="form-control" required />
@@ -1443,8 +1454,9 @@
                                         <select id="editPrescriptionType" name="type_id"
                                             class="form-control select2 select2-purple" style="width: 100%;"
                                             data-dropdown-css-class="select2-purple">
-                                            @forelse ($types as $type) 
-                                                <option value="{{ $type->id }}" @if($type->id == $lens_prescription->type_id) selected="selected" @endif>
+                                            @forelse ($types as $type)
+                                                <option value="{{ $type->id }}"
+                                                    @if ($type->id == $lens_prescription->type_id) selected="selected" @endif>
                                                     {{ $type->type }}
                                                 </option>
                                             @empty
@@ -1465,7 +1477,8 @@
                                             class="form-control select2 select2-danger" style="width: 100%;"
                                             data-dropdown-css-class="select2-danger">
                                             @forelse ($materials as $material)
-                                                <option value="{{ $material->id }}" @if($material->id == $lens_prescription->material_id) selected="selected" @endif>
+                                                <option value="{{ $material->id }}"
+                                                    @if ($material->id == $lens_prescription->material_id) selected="selected" @endif>
                                                     {{ $material->title }}
                                                 </option>
                                             @empty
@@ -1506,8 +1519,7 @@
                                         <label for="editPrescriptionPupil">Pupil
                                             Diameter(mm)</label>
                                         <input type="text" name="pupil" class="form-control"
-                                            id="editPrescriptionPupil"
-                                            placeholder="Pupil Diameter">
+                                            id="editPrescriptionPupil" placeholder="Pupil Diameter">
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
@@ -1520,9 +1532,8 @@
                                         <label for="editPrescriptionFocalHeight">Focal
                                             Height
                                         </label>
-                                        <input type="text" name="focal_height"
-                                            class="form-control" id="editPrescriptionFocalHeight"
-                                            placeholder="Focal Height">
+                                        <input type="text" name="focal_height" class="form-control"
+                                            id="editPrescriptionFocalHeight" placeholder="Focal Height">
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
@@ -1544,6 +1555,99 @@
             <!--.modal-dialog -->
         </div>
         <!-- /.modal -->
+
+        <!--Edit Frame Prescription Modal -->
+        <div class="modal fade" id="editFramePrescriptionModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Edit Frame Code Prescription
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!--.modal-header -->
+                    <form id="editFramePrescriptionForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="hidden" name="frame_prescription_id" id="editFramePrescriptionId"
+                                        class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editFramePrescriptionFrameCode">Frame Code</label>
+                                        <select name="stock_id" id="editFramePrescriptionFrameCode"
+                                            class="form-control select2" style="width:100%;">
+                                            @forelse ($frame_stocks as $frame_stock)
+                                                <option value="{{ $frame_stock->id }}" @if($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
+                                                    {{ $frame_stock->frame->code }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">No Frame Code Available
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editFramePrescriptionWorkShop">
+                                            Workshop
+                                        </label>
+                                        <select id="editFramePrescriptionWorkShop" name="workshop_id"
+                                            class="form-control select2 select2-info" style="width: 100%;"
+                                            data-dropdown-css-class="select2-info">
+                                            @forelse ($workshops as $workshop)
+                                                <option value="{{ $workshop->id }}" @if($frame_prescription->workshop_id == $workshop->id) selected="selected" @endif>
+                                                    {{ $workshop->name }}</option>
+                                            @empty
+                                                <option disabled="disabled">No Workshos Added yet!
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editFramePrescriptionRemarks">
+                                            Remarks
+                                        </label>
+                                        <textarea name="remarks" id="editFramePrescriptionRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                        </div>
+                        <!--.modal-body -->
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="editFramePrescriptionSubmitBtn" class="btn btn-primary">
+                                Update Frame Code
+                            </button>
+                        </div>
+                        <!--.modal-footer .justify-content-between -->
+                    </form>
+                    <!--#editLensPowerForm -->
+                </div>
+                <!--.modal-content -->
+            </div>
+            <!--.modal-dialog -->
+        </div>
+        <!--.modal -->
 
         <div class="modal fade" id="addMedicineModal">
             <div class="modal-dialog modal-lg">
@@ -1874,7 +1978,7 @@
                             });
                             errorsHtml += '</ul>';
                             toastr.error(errorsHtml);
-                        },
+                        }
                     });
                 });
 
@@ -2006,7 +2110,7 @@
                             });
                             errorsHtml += '</ul>';
                             toastr.error(errorsHtml);
-                        },
+                        }
                     });
                 });
 
@@ -2047,7 +2151,7 @@
                 });
 
                 // update lens prescription
-                $('#editPrescriptionForm').submit(function(e){
+                $('#editPrescriptionForm').submit(function(e) {
                     e.preventDefault();
                     var form = $(this);
                     var formData = new FormData(form[0]);
@@ -2057,27 +2161,27 @@
                         type: "POST",
                         data: formData,
                         dataType: "json",
-                        contentType:false,
+                        contentType: false,
                         processData: false,
-                        beforeSend: function(){
+                        beforeSend: function() {
                             $('#editPrescriptionSubmitBtn').html(
                                 '<i class="fa fa-spinner fa-spin"></i>'
                             );
                             $('#editPrescriptionSubmitBtn').attr('disabled', true);
                         },
-                        complete:function(){
+                        complete: function() {
                             $('#editPrescriptionSubmitBtn').html('Update Prescription');
                             $('#editPrescriptionSubmitBtn').attr('disabled', false);
                         },
-                        success:function(data){
-                            if(data['status']){
+                        success: function(data) {
+                            if (data['status']) {
                                 toastr.success(data['message']);
                                 $('#editPrescriptionForm')[0].reset();
                                 $('#editPrescriptionModal').modal('hide');
                                 location.reload();
                             }
                         },
-                        error:function(data){
+                        error: function(data) {
                             var errors = data.responseJSON;
                             var errorsHtml = '<ul>';
                             $.each(errors['errors'], function(key, value) {
@@ -2123,7 +2227,6 @@
                 });
 
                 // Frame Codes
-                // frame code form
                 $(document).on('click', '.newFrameCodeBtn', function(e) {
                     e.preventDefault();
                     var prescription_id = $(this).data('id');
@@ -2191,7 +2294,83 @@
                             toastr.error(errorsHtml);
                         },
                     });
+                });
 
+                // edit frame code
+                $(document).on('click', '.editFramePrescriptionBtn', function(e) {
+                    e.preventDefault();
+                    var frame_prescription_id = $(this).data('id');
+                    var path = '{{ route('users.lens.frame.prescription.show') }}';
+                    var token = '{{ csrf_token() }}';
+                    $.ajax({
+                        url: path,
+                        type: "POST",
+                        data: {
+                            frame_prescription_id: frame_prescription_id,
+                            _token: token
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data['status']) {
+                                // console.log(data['data']);
+                                $('#editFramePrescriptionModal').modal('show');
+                                $('#editFramePrescriptionId').val(data['data']['id']);
+                                $('#editFramePrescriptionReceiptNumber').val(data['data']['receipt_number']);
+                                $('#editFramePrescriptionRemarks').val(data['data']['remarks']);
+                            }
+                        },
+                        error: function(data) {
+                            var errors = data.responseJSON;
+                            var errorsHtml = '<ul>';
+                            $.each(errors['errors'], function(key, value) {
+                                errorsHtml += '<li>' + value + '</li>';
+                            });
+                            errorsHtml += '</ul>';
+                            toastr.error(errorsHtml);
+                        }
+                    });
+                });
+
+                $('#editFramePrescriptionForm').submit(function(e){
+                    e.preventDefault();
+                    var form = $(this);
+                    var formData = new FormData(form[0]);
+                    var path = '{{ route('users.lens.frame.prescription.update') }}';
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('#editFramePrescriptionSubmitBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>');
+                            $('#editFramePrescriptionSubmitBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#editFramePrescriptionSubmitBtn').html('Update Frame Code');
+                            $('#editFramePrescriptionSubmitBtn').attr('disabled', false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                $('#editFramePrescriptionModal').modal('hide');
+                                $('#editFramePrescriptionForm')[0].reset();
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
+                            } 
+                        },
+                        error: function(data) {
+                            var errors = data.responseJSON;
+                            var errorsHtml = '<ul>';
+                            $.each(errors['errors'], function(key, value) {
+                                errorsHtml += '<li>' + value + '</li>';
+                            });
+                            errorsHtml += '</ul>';
+                            toastr.error(errorsHtml);
+                        },
+                    });
                 });
 
                 // view frame code
@@ -2200,6 +2379,14 @@
                     $('.lensPowerDiv').fadeOut();
                     $('.lensPrescriptionDiv').fadeOut();
                     $('.frameCodesDiv').fadeIn();
+                });
+
+                // back to lens power
+                $(document).on('click', '.backToLensPowerBtn', function(e) {
+                    e.preventDefault();
+                    $('.lensPowerDiv').fadeIn();
+                    $('.lensPrescriptionDiv').fadeOut();
+                    $('.frameCodesDiv').fadeOut();
                 });
 
                 // Medical History
