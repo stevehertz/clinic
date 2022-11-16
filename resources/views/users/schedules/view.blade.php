@@ -30,6 +30,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
+
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -119,6 +120,7 @@
                 <!-- /.card -->
             </div>
             <!--.col-md-3 -->
+
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
                     <div class="card-header p-2">
@@ -1174,6 +1176,7 @@
         </div>
         <!--.row -->
 
+
         <div class="modal fade" id="addDiagnosisModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -1238,416 +1241,429 @@
         </div>
         <!-- /.modal -->
 
-        <div class="modal fade" id="editDiagnosisModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Edit Diagnosis
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="editDiagnosisForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="form-group">
-                                <input type="hidden" name="clinic_id" class="form-control"
-                                    id="editDiagnosisClinicId" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="diagnosis_id" class="form-control" id="editDiagnosisId" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="patient_id" class="form-control"
-                                    id="editDiagnosisPatientId" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="appointment_id" class="form-control"
-                                    id="editDiagnosisAppointmentId" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="user_id" class="form-control" id="editDiagnosisUserId" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="schedule_id" class="form-control"
-                                    id="editDiagnosisScheduleId" />
-                            </div>
-                            <div class="form-group">
-                                <label for="editDiagnosisSigns">Signs</label>
-                                <textarea id="editDiagnosisSigns" name="signs" class="form-control textarea" placeholder="Enter Signs here..."
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->signs !!}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editDiagnosisSymptoms">Symptoms</label>
-                                <textarea id="editDiagnosisSymptoms" name="symptoms" class="form-control textarea"
-                                    placeholder="Enter symptoms here..."
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->symptoms !!}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editDiagnosisDiagnosis">Diagnosis</label>
-                                <textarea id="editDiagnosisDiagnosis" name="diagnosis" class="form-control textarea"
-                                    placeholder="Enter diagnosis here..."
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->diagnosis !!}</textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="editDiagnosisSubmitBtn" class="btn btn-primary">
-                                Save
+        @if ($diagnosis)
+            <div class="modal fade" id="editDiagnosisModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">
+                                Edit Diagnosis
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
-        <!-- Edit Lens Power -->
-        <div class="modal fade" id="editLensPowerModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Edit Lens Power
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <form id="editDiagnosisForm">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="hidden" name="clinic_id" class="form-control"
+                                        id="editDiagnosisClinicId" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="diagnosis_id" class="form-control"
+                                        id="editDiagnosisId" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="patient_id" class="form-control"
+                                        id="editDiagnosisPatientId" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="appointment_id" class="form-control"
+                                        id="editDiagnosisAppointmentId" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="user_id" class="form-control"
+                                        id="editDiagnosisUserId" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" name="schedule_id" class="form-control"
+                                        id="editDiagnosisScheduleId" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editDiagnosisSigns">Signs</label>
+                                    <textarea id="editDiagnosisSigns" name="signs" class="form-control textarea" placeholder="Enter Signs here..."
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->signs !!}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editDiagnosisSymptoms">Symptoms</label>
+                                    <textarea id="editDiagnosisSymptoms" name="symptoms" class="form-control textarea"
+                                        placeholder="Enter symptoms here..."
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->symptoms !!}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editDiagnosisDiagnosis">Diagnosis</label>
+                                    <textarea id="editDiagnosisDiagnosis" name="diagnosis" class="form-control textarea"
+                                        placeholder="Enter diagnosis here..."
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $diagnosis->diagnosis !!}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" id="editDiagnosisSubmitBtn" class="btn btn-primary">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <!--.modal-header -->
-                    <form id="editLensPowerForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input type="hidden" name="power_id" id="editLensPowerId" class="form-control" />
-                                </div>
-                            </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        @endif
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>Right Eye</p>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerRightSphere">Sphere</label>
-                                        <input type="text" name="right_sphere" class="form-control"
-                                            id="editLensPowerRightSphere" placeholder="Sphere">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerRightCylinder">Cylinder</label>
-                                        <input type="text" name="right_cylinder" class="form-control"
-                                            id="editLensPowerRightCylinder" placeholder="Cylinder">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerRightAxis">Axis</label>
-                                        <input type="text" name="right_axis" class="form-control"
-                                            id="editLensPowerRightAxis" placeholder="Axis">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerRightAdditional">Additional</label>
-                                        <input type="text" name="right_add" class="form-control"
-                                            id="editLensPowerRightAdditional" placeholder="Additional">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p>Left Eye</p>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerLeftSphere">Sphere</label>
-                                        <input type="text" name="left_sphere" class="form-control"
-                                            id="editLensPowerLeftSphere" placeholder="Sphere">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerLeftCylinder">Cylinder</label>
-                                        <input type="text" name="left_cylinder" class="form-control"
-                                            id="editLensPowerLeftCylinder" placeholder="Cylinder">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensPowerLeftAxis">Axis</label>
-                                        <input type="text" name="left_axis" class="form-control"
-                                            id="editLensPowerLeftAxis" placeholder="Axis">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="editLensLeftAdditional">Additional</label>
-                                        <input type="text" name="left_add" class="form-control"
-                                            id="editLensLeftAdditional" placeholder="Additional">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <label for="editLensPowerAdditionalInfo">
-                                    Additional Information
-                                </label>
-                                <textarea name="notes" id="editLensPowerAdditionalInfo" class="form-control" placeholder="Additional Information"></textarea>
-                            </div>
-                        </div>
-                        <!--.modal-body -->
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="editLensPowerSubmitBtn" class="btn btn-primary">
-                                Update
+        @if ($lens_power)
+            <!-- Edit Lens Power -->
+            <div class="modal fade" id="editLensPowerModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">
+                                Edit Lens Power
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <!--.modal-footer .justify-content-between -->
-                    </form>
-                    <!--#editLensPowerForm -->
-                </div>
-                <!--.modal-content -->
-            </div>
-            <!--.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+                        <!--.modal-header -->
+                        <form id="editLensPowerForm">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" name="power_id" id="editLensPowerId"
+                                            class="form-control" />
+                                    </div>
+                                </div>
 
-        <!-- Edit Lens Prescription -->
-        <div class="modal fade" id="editPrescriptionModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Edit Lens Prescription
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Right Eye</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerRightSphere">Sphere</label>
+                                            <input type="text" name="right_sphere" class="form-control"
+                                                id="editLensPowerRightSphere" placeholder="Sphere">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerRightCylinder">Cylinder</label>
+                                            <input type="text" name="right_cylinder" class="form-control"
+                                                id="editLensPowerRightCylinder" placeholder="Cylinder">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerRightAxis">Axis</label>
+                                            <input type="text" name="right_axis" class="form-control"
+                                                id="editLensPowerRightAxis" placeholder="Axis">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerRightAdditional">Additional</label>
+                                            <input type="text" name="right_add" class="form-control"
+                                                id="editLensPowerRightAdditional" placeholder="Additional">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Left Eye</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerLeftSphere">Sphere</label>
+                                            <input type="text" name="left_sphere" class="form-control"
+                                                id="editLensPowerLeftSphere" placeholder="Sphere">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerLeftCylinder">Cylinder</label>
+                                            <input type="text" name="left_cylinder" class="form-control"
+                                                id="editLensPowerLeftCylinder" placeholder="Cylinder">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensPowerLeftAxis">Axis</label>
+                                            <input type="text" name="left_axis" class="form-control"
+                                                id="editLensPowerLeftAxis" placeholder="Axis">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="editLensLeftAdditional">Additional</label>
+                                            <input type="text" name="left_add" class="form-control"
+                                                id="editLensLeftAdditional" placeholder="Additional">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label for="editLensPowerAdditionalInfo">
+                                        Additional Information
+                                    </label>
+                                    <textarea name="notes" id="editLensPowerAdditionalInfo" class="form-control" placeholder="Additional Information"></textarea>
+                                </div>
+                            </div>
+                            <!--.modal-body -->
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" id="editLensPowerSubmitBtn" class="btn btn-primary">
+                                    Update
+                                </button>
+                            </div>
+                            <!--.modal-footer .justify-content-between -->
+                        </form>
+                        <!--#editLensPowerForm -->
                     </div>
-                    <!--.modal-header -->
-                    <form id="editPrescriptionForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input type="hidden" name="prescription_id" id="editPrescriptionId"
-                                        class="form-control" />
-                                </div>
-                            </div>
+                    <!--.modal-content -->
+                </div>
+                <!--.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        @endif
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionType">Lens Type</label>
-                                        <select id="editPrescriptionType" name="type_id"
-                                            class="form-control select2 select2-purple" style="width: 100%;"
-                                            data-dropdown-css-class="select2-purple">
-                                            @forelse ($types as $type)
-                                                <option value="{{ $type->id }}"
-                                                    @if ($type->id == $lens_prescription->type_id) selected="selected" @endif>
-                                                    {{ $type->type }}
-                                                </option>
-                                            @empty
-                                                <option disabled="disabled">
-                                                    No Lens Type Found
-                                                </option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionMaterial">Lens Material</label>
-                                        <select id="editPrescriptionMaterial" name="material_id"
-                                            class="form-control select2 select2-danger" style="width: 100%;"
-                                            data-dropdown-css-class="select2-danger">
-                                            @forelse ($materials as $material)
-                                                <option value="{{ $material->id }}"
-                                                    @if ($material->id == $lens_prescription->material_id) selected="selected" @endif>
-                                                    {{ $material->title }}
-                                                </option>
-                                            @empty
-                                                <option disabled="disabled">
-                                                    No Lens Material Found
-                                                </option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionIndex">Lens
-                                            Index/Thickness</label>
-                                        <input type="text" name="index" class="form-control"
-                                            id="editPrescriptionIndex" placeholder="Lens Index/Thickness">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionTint">Tint</label>
-                                        <input type="text" name="tint" class="form-control"
-                                            id="editPrescriptionTint" placeholder="Lens Tint">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionPupil">Pupil
-                                            Diameter(mm)</label>
-                                        <input type="text" name="pupil" class="form-control"
-                                            id="editPrescriptionPupil" placeholder="Pupil Diameter">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editPrescriptionFocalHeight">Focal
-                                            Height
-                                        </label>
-                                        <input type="text" name="focal_height" class="form-control"
-                                            id="editPrescriptionFocalHeight" placeholder="Focal Height">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-                        </div>
-                        <!--.modal-body -->
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="editPrescriptionSubmitBtn" class="btn btn-primary">
-                                Update Prescription
+        @if ($lens_prescription)
+            <!-- Edit Lens Prescription -->
+            <div class="modal fade" id="editPrescriptionModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">
+                                Edit Lens Prescription
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <!--.modal-footer .justify-content-between -->
-                    </form>
-                    <!--#editLensPowerForm -->
-                </div>
-                <!--.modal-content -->
-            </div>
-            <!--.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+                        <!--.modal-header -->
+                        <form id="editPrescriptionForm">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" name="prescription_id" id="editPrescriptionId"
+                                            class="form-control" />
+                                    </div>
+                                </div>
 
-        <!--Edit Frame Prescription Modal -->
-        <div class="modal fade" id="editFramePrescriptionModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Edit Frame Code Prescription
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionType">Lens Type</label>
+                                            <select id="editPrescriptionType" name="type_id"
+                                                class="form-control select2 select2-purple" style="width: 100%;"
+                                                data-dropdown-css-class="select2-purple">
+                                                @forelse ($types as $type)
+                                                    <option value="{{ $type->id }}"
+                                                        @if ($type->id == $lens_prescription->type_id) selected="selected" @endif>
+                                                        {{ $type->type }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled="disabled">
+                                                        No Lens Type Found
+                                                    </option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionMaterial">Lens Material</label>
+                                            <select id="editPrescriptionMaterial" name="material_id"
+                                                class="form-control select2 select2-danger" style="width: 100%;"
+                                                data-dropdown-css-class="select2-danger">
+                                                @forelse ($materials as $material)
+                                                    <option value="{{ $material->id }}"
+                                                        @if ($material->id == $lens_prescription->material_id) selected="selected" @endif>
+                                                        {{ $material->title }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled="disabled">
+                                                        No Lens Material Found
+                                                    </option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionIndex">Lens
+                                                Index/Thickness</label>
+                                            <input type="text" name="index" class="form-control"
+                                                id="editPrescriptionIndex" placeholder="Lens Index/Thickness">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionTint">Tint</label>
+                                            <input type="text" name="tint" class="form-control"
+                                                id="editPrescriptionTint" placeholder="Lens Tint">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionPupil">Pupil
+                                                Diameter(mm)</label>
+                                            <input type="text" name="pupil" class="form-control"
+                                                id="editPrescriptionPupil" placeholder="Pupil Diameter">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="editPrescriptionFocalHeight">Focal
+                                                Height
+                                            </label>
+                                            <input type="text" name="focal_height" class="form-control"
+                                                id="editPrescriptionFocalHeight" placeholder="Focal Height">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--.modal-body -->
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" id="editPrescriptionSubmitBtn" class="btn btn-primary">
+                                    Update Prescription
+                                </button>
+                            </div>
+                            <!--.modal-footer .justify-content-between -->
+                        </form>
+                        <!--#editLensPowerForm -->
                     </div>
-                    <!--.modal-header -->
-                    <form id="editFramePrescriptionForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input type="hidden" name="frame_prescription_id" id="editFramePrescriptionId"
-                                        class="form-control" />
-                                </div>
-                            </div>
+                    <!--.modal-content -->
+                </div>
+                <!--.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        @endif
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editFramePrescriptionFrameCode">Frame Code</label>
-                                        <select name="stock_id" id="editFramePrescriptionFrameCode"
-                                            class="form-control select2" style="width:100%;">
-                                            @forelse ($frame_stocks as $frame_stock)
-                                                <option value="{{ $frame_stock->id }}" @if($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
-                                                    {{ $frame_stock->frame->code }}
-                                                </option>
-                                            @empty
-                                                <option disabled="disabled">No Frame Code Available
-                                                </option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editFramePrescriptionWorkShop">
-                                            Workshop
-                                        </label>
-                                        <select id="editFramePrescriptionWorkShop" name="workshop_id"
-                                            class="form-control select2 select2-info" style="width: 100%;"
-                                            data-dropdown-css-class="select2-info">
-                                            @forelse ($workshops as $workshop)
-                                                <option value="{{ $workshop->id }}" @if($frame_prescription->workshop_id == $workshop->id) selected="selected" @endif>
-                                                    {{ $workshop->name }}</option>
-                                            @empty
-                                                <option disabled="disabled">No Workshos Added yet!
-                                                </option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editFramePrescriptionRemarks">
-                                            Remarks
-                                        </label>
-                                        <textarea name="remarks" id="editFramePrescriptionRemarks" class="form-control" placeholder="Remarks"></textarea>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-                        </div>
-                        <!--.modal-body -->
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="editFramePrescriptionSubmitBtn" class="btn btn-primary">
-                                Update Frame Code
+        @if ($frame_prescription)
+            <!--Edit Frame Prescription Modal -->
+            <div class="modal fade" id="editFramePrescriptionModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">
+                                Edit Frame Code Prescription
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <!--.modal-footer .justify-content-between -->
-                    </form>
-                    <!--#editLensPowerForm -->
+                        <!--.modal-header -->
+                        <form id="editFramePrescriptionForm">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" name="frame_prescription_id" id="editFramePrescriptionId"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="editFramePrescriptionFrameCode">Frame Code</label>
+                                            <select name="stock_id" id="editFramePrescriptionFrameCode"
+                                                class="form-control select2" style="width:100%;">
+                                                @forelse ($frame_stocks as $frame_stock)
+                                                    <option value="{{ $frame_stock->id }}"
+                                                        @if ($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
+                                                        {{ $frame_stock->frame->code }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled="disabled">No Frame Code Available
+                                                    </option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="editFramePrescriptionWorkShop">
+                                                Workshop
+                                            </label>
+                                            <select id="editFramePrescriptionWorkShop" name="workshop_id"
+                                                class="form-control select2 select2-info" style="width: 100%;"
+                                                data-dropdown-css-class="select2-info">
+                                                @forelse ($workshops as $workshop)
+                                                    <option value="{{ $workshop->id }}"
+                                                        @if ($frame_prescription->workshop_id == $workshop->id) selected="selected" @endif>
+                                                        {{ $workshop->name }}</option>
+                                                @empty
+                                                    <option disabled="disabled">No Workshos Added yet!
+                                                    </option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="editFramePrescriptionRemarks">
+                                                Remarks
+                                            </label>
+                                            <textarea name="remarks" id="editFramePrescriptionRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--.modal-body -->
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" id="editFramePrescriptionSubmitBtn" class="btn btn-primary">
+                                    Update Frame Code
+                                </button>
+                            </div>
+                            <!--.modal-footer .justify-content-between -->
+                        </form>
+                        <!--#editLensPowerForm -->
+                    </div>
+                    <!--.modal-content -->
                 </div>
-                <!--.modal-content -->
+                <!--.modal-dialog -->
             </div>
-            <!--.modal-dialog -->
-        </div>
-        <!--.modal -->
+            <!--.modal -->
+        @endif
 
         <div class="modal fade" id="addMedicineModal">
             <div class="modal-dialog modal-lg">
@@ -1817,7 +1833,6 @@
                         } else {
                             console.log(data);
                         }
-
                     }
                 });
             });
@@ -1853,7 +1868,6 @@
                         } else {
                             console.log(data);
                         }
-
                     }
                 });
             });
@@ -1921,11 +1935,9 @@
                         } else {
                             console.log(data);
                         }
-
                     }
                 });
             });
-
         });
     </script>
 
@@ -2055,7 +2067,6 @@
                             errorsHtml += '</ul>';
                             toastr.error(errorsHtml);
                         },
-
                     });
                 });
 
@@ -2315,7 +2326,9 @@
                                 // console.log(data['data']);
                                 $('#editFramePrescriptionModal').modal('show');
                                 $('#editFramePrescriptionId').val(data['data']['id']);
-                                $('#editFramePrescriptionReceiptNumber').val(data['data']['receipt_number']);
+                                $('#editFramePrescriptionReceiptNumber').val(data['data'][
+                                    'receipt_number'
+                                ]);
                                 $('#editFramePrescriptionRemarks').val(data['data']['remarks']);
                             }
                         },
@@ -2331,7 +2344,7 @@
                     });
                 });
 
-                $('#editFramePrescriptionForm').submit(function(e){
+                $('#editFramePrescriptionForm').submit(function(e) {
                     e.preventDefault();
                     var form = $(this);
                     var formData = new FormData(form[0]);
@@ -2359,7 +2372,7 @@
                                 setTimeout(() => {
                                     location.reload();
                                 }, 1000);
-                            } 
+                            }
                         },
                         error: function(data) {
                             var errors = data.responseJSON;
@@ -2417,7 +2430,6 @@
                         "responsive": true,
                     });
                 }
-
                 // medicine form
                 $('#addMedicineBtn').click(function(e) {
                     e.preventDefault();
@@ -2571,7 +2583,6 @@
                                 $('#openBillScheduleId').val(data['data']['id']);
                                 $('#openBillModal').modal('show');
                             }
-
                             console.table(data);
                         },
                         error: function(data) {
@@ -2628,7 +2639,6 @@
                             toastr.error(errorsHtml);
                         },
                     });
-
                 });
 
                 // view bill
@@ -2665,9 +2675,7 @@
                             toastr.error(errorsHtml);
                         },
                     });
-
                 });
-
             });
         </script>
     @endif
