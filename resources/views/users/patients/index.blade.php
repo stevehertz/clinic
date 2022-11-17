@@ -23,6 +23,38 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="GET">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="from_date" id="fromDate"
+                                                placeholder="Enter From Date" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="to_date" id="toDate"
+                                                placeholder="Enter Date Date" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" name="filter" id="filter" class="btn btn-primary">
+                                            Filter
+                                        </button>
+                                        <button type="button" name="refresh" id="refresh" class="btn btn-default">
+                                            Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -37,6 +69,7 @@
                             <table id="patientsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Date Registered</th>
                                         <th>Full Names</th>
                                         <th>ID Number</th>
                                         <th>Telephone</th>
@@ -64,13 +97,23 @@
 
             find_patients();
 
-            function find_patients() {
+            function find_patients(from_date, to_date) {
                 var path = '{{ route('users.patients.index') }}';
                 $('#patientsData').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: path,
+                    ajax: {
+                        url: path,
+                        data: {
+                            from_date: from_date,
+                            to_date: to_date,
+                        }
+                    },
                     columns: [{
+                            data: 'date_in',
+                            name: 'date_in'
+                        },
+                        {
                             data: 'full_names',
                             name: 'full_names'
                         },
@@ -105,6 +148,28 @@
                     "responsive": true,
                 });
             }
+
+            // Filter Date
+            $(document).on('click', '#filter', function(e) {
+                e.preventDefault();
+                var from_date = $('#fromDate').val();
+                var to_date = $('#toDate').val();
+                if (from_date != '' && to_date != '') {
+                    $('#patientsData').DataTable().destroy();
+                    find_patients(from_date, to_date);
+                } else {
+                    toastr.error('Both Date is required');
+                }
+            });
+
+            // refresh afrter filter
+            $(document).on('click', '#refresh', function(e) {
+                e.preventDefault();
+                $('#fromDate').val('');
+                $('#toDate').val('')
+                $('#patientsData').DataTable().destroy();
+                find_patients();
+            });
 
             $(document).on('click', '.viewBtn', function(e) {
                 e.preventDefault();

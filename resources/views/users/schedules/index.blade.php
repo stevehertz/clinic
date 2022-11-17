@@ -23,6 +23,36 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="GET">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="from_date" id="fromDate"
+                                                placeholder="Enter From Date" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <input type="text" name="to_date" id="toDate"
+                                                placeholder="Enter Date Date" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" name="filter" id="filter"
+                                            class="btn btn-primary">Filter</button>
+                                        <button type="button" name="refresh" id="refresh"
+                                            class="btn btn-default">Refresh</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body table-responsive">
@@ -53,12 +83,19 @@
         $(document).ready(function() {
 
             find_doctor_schedules();
-            function find_doctor_schedules() {
+
+            function find_doctor_schedules(from_date, to_date) {
                 var path = '{{ route('users.doctor.schedules.index') }}';
                 $('#schedulesData').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: path,
+                    ajax: {
+                        url: path,
+                        data: {
+                            from_date: from_date,
+                            to_date: to_date,
+                        }
+                    },
                     columns: [{
                             data: 'patient_name',
                             name: 'patient_name'
@@ -92,7 +129,28 @@
                 });
             }
 
-            $(document).on('click', '.viewDoctorSchedule', function(e){
+            $(document).on('click', '#filter', function(e) {
+                e.preventDefault();
+                var from_date = $('#fromDate').val();
+                var to_date = $('#toDate').val();
+                if (from_date != '' && to_date != '') {
+                    $('#schedulesData').DataTable().destroy();
+                    find_doctor_schedules(from_date, to_date);
+                } else {
+                    toastr.error('Both Date is required');
+                }
+            });
+
+            // refresh afrter filter
+            $(document).on('click', '#refresh', function(e) {
+                e.preventDefault();
+                $('#fromDate').val('');
+                $('#toDate').val('')
+                $('#schedulesData').DataTable().destroy();
+                find_doctor_schedules();
+            });
+
+            $(document).on('click', '.viewDoctorSchedule', function(e) {
                 e.preventDefault();
                 var schedule_id = $(this).attr('data-id');
                 var path = '{{ route('users.doctor.schedules.show') }}';
@@ -105,7 +163,7 @@
                         schedule_id: schedule_id
                     },
                     success: function(data) {
-                        if(data['status']){
+                        if (data['status']) {
                             let url = '{{ route('users.doctor.schedules.view', ':id') }}';
                             schedule_url = url.replace(':id', data['data']['id']);
                             setTimeout(() => {

@@ -25,28 +25,36 @@ class DoctorSchedulesController extends Controller
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
-        if($request->ajax()){
+        if ($request->ajax()) {
 
-            $data = $clinic->doctor_schedule()->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $clinic->doctor_schedule()->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
+                    ->join('users', 'users.id', '=', 'doctor_schedules.user_id')
+                    ->select('doctor_schedules.*', 'users.first_name as dr_first', 'users.last_name as dr_last', 'patients.first_name  as patient_first', 'patients.last_name as patient_last')
+                    ->where('doctor_schedules.user_id', $user->id)
+                    ->whereBetween('doctor_schedules.date', [$request->from_date, $request->to_date])
+                    ->get();
+            } else {
+                $data = $clinic->doctor_schedule()->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
                     ->join('users', 'users.id', '=', 'doctor_schedules.user_id')
                     ->select('doctor_schedules.*', 'users.first_name as dr_first', 'users.last_name as dr_last', 'patients.first_name  as patient_first', 'patients.last_name as patient_last')
                     ->where('doctor_schedules.user_id', $user->id)
                     ->get();
-
+            }
             return datatables()->of($data)
-                    ->addIndexColumn()
-                    ->addColumn('patient_name', function($row){
-                        return $row->patient_first . ' ' . $row->patient_last;
-                    })
-                    ->addColumn('dr_name', function($row){
-                        return $row->dr_first . ' ' . $row->dr_last;
-                    })
-                    ->addColumn('action', function($row){
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="btn btn-tool btn-sm viewDoctorSchedule"><i class="fa fa-eye"></i></a>';
-                        return $btn;
-                    })
-                    ->rawColumns(['action', 'patient_name', 'dr_name'])
-                    ->make(true);
+                ->addIndexColumn()
+                ->addColumn('patient_name', function ($row) {
+                    return $row->patient_first . ' ' . $row->patient_last;
+                })
+                ->addColumn('dr_name', function ($row) {
+                    return $row->dr_first . ' ' . $row->dr_last;
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="btn btn-tool btn-sm viewDoctorSchedule"><i class="fa fa-eye"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action', 'patient_name', 'dr_name'])
+                ->make(true);
         }
         $page_title = 'Doctor Schedules';
         return view('users.schedules.index', compact('clinic', 'page_title'));
@@ -63,7 +71,7 @@ class DoctorSchedulesController extends Controller
             'patient_id' => 'required|integer|exists:patients,id',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -87,7 +95,7 @@ class DoctorSchedulesController extends Controller
         $schedule->time = $time;
         $schedule->status = 1;
 
-        if($schedule->save()){
+        if ($schedule->save()) {
 
             $report = $clinic->report()->findOrFail($appointment->report_id);
 
@@ -103,7 +111,6 @@ class DoctorSchedulesController extends Controller
             $response['schedule_id'] = $schedule->id;
             return response()->json($response, 200);
         }
-
     }
 
     public function show(Request $request)
@@ -115,7 +122,7 @@ class DoctorSchedulesController extends Controller
             'schedule_id' => 'required|integer|exists:doctor_schedules,id',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -144,19 +151,19 @@ class DoctorSchedulesController extends Controller
         $appointment = $schedule->appointment;
         $payment_details = $appointment->payment_detail;
         $diagnosis = $schedule->diagnosis;
-        if($diagnosis){
+        if ($diagnosis) {
             $lens_power = $diagnosis->lens_power;
-            if($lens_power){
+            if ($lens_power) {
                 $lens_prescription = $lens_power->lens_prescription;
                 $frame_prescription = $lens_power->frame_prescription;
-            }else{
+            } else {
                 $lens_prescription = null;
                 $frame_prescription = null;
             }
             $procedure = $diagnosis->procedure;
             $appointment = $diagnosis->appointment;
             $payment_bill = $appointment->payment_bill;
-        }else{
+        } else {
             $lens_power = null;
             $lens_prescription = null;
             $frame_prescription = null;

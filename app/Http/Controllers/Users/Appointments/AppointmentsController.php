@@ -33,13 +33,24 @@ class AppointmentsController extends Controller
         $user = User::find(auth()->user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            $data = Appointment::join('patients', 'appointments.patient_id', '=', 'patients.id')
-                ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
-                ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
-                ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
-                ->where('appointments.clinic_id', $clinic->id)
-                ->orderBy('appointments.created_at', 'desc')
-                ->get();
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $clinic->appointment()
+                    ->join('patients', 'appointments.patient_id', '=', 'patients.id')
+                    ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
+                    ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
+                    ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
+                    ->where('appointments.clinic_id', $clinic->id)
+                    ->whereBetween('appointments.date', [$request->from_date, $request->to_date])
+                    ->get();
+            } else {
+                $data = Appointment::join('patients', 'appointments.patient_id', '=', 'patients.id')
+                    ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
+                    ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
+                    ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
+                    ->where('appointments.clinic_id', $clinic->id)
+                    ->orderBy('appointments.created_at', 'desc')
+                    ->get();
+            }
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {

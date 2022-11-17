@@ -27,7 +27,11 @@ class PatientsController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            $data = $clinic->patient->sortBy('created_at', SORT_DESC);
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $clinic->patient()->whereBetween('date_in', [$request->from_date, $request->to_date])->latest();
+            } else {
+                $data = $clinic->patient->sortBy('created_at', SORT_DESC);
+            }
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
@@ -107,6 +111,7 @@ class PatientsController extends Controller
         $patient->address = $data['address'];
         $patient->next_of_kin = $data['next_of_kin'];
         $patient->next_of_kin_contact = $data['next_of_kin_contact'];
+        $patient->date_in = Carbon::now()->format('Y-m-d');
 
         if ($patient->save()) {
             $request->session()->put('patient_id', $patient->id);
@@ -187,7 +192,7 @@ class PatientsController extends Controller
             'clinic_id' => 'required|integer|exists:clinics,id',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'id_number' => 'required|string|unique:patients,id_number,'.$id,
+            'id_number' => 'required|string|unique:patients,id_number,' . $id,
             'phone' => 'required|numeric|min:10',
             'email' => 'nullable|string|email|max:255',
             'dob' => 'required|string|max:255|date_format:Y-m-d',

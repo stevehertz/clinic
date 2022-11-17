@@ -21,7 +21,8 @@ class Patient extends Model
         'gender',
         'address',
         'next_of_kin',
-        'next_of_kin_contact'
+        'next_of_kin_contact',
+        'date_in'
     ];
 
 

@@ -98,6 +98,10 @@
                             <strong><i class="fa fa-phone mr-1"></i> Next of Kin Contacts</strong>
 
                             <p class="text-muted">{{ $patient->next_of_kin_contact }}</p>
+                            <hr>
+
+                            <strong><i class="fa fa-calendar mr-1"></i> Date Registered</strong>
+                            <p class="text-muted">{{ $patient->date_in }}</p>
                         </div>
                         <!-- /.card-body -->
                     </div>
