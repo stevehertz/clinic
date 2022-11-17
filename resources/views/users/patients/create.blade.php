@@ -83,8 +83,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="newPatientDOB">Date of Birth</label>
-                                            <input type="text" class="form-control datepicker" name="dob"
-                                                id="newPatientDOB" placeholder="YYY-MM-DD">
+                                            <input type="text" class="form-control" name="dob" id="newPatientDOB"
+                                                placeholder="YYY-MM-DD">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -304,6 +304,14 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+
+            var date = new Date();
+            var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            $('#newPatientDOB').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                endDate: date,
+            })
 
             $('#newPatientCard').fadeIn();
             $('#patientPaymentDetailsCard').fadeOut();
