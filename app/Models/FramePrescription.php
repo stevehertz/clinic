@@ -42,4 +42,10 @@ class FramePrescription extends Model
         # code...
         return $this->hasMany(Report::class, 'frame_prescription_id', 'id');
     }
+
+    public function treatment()
+    {
+        # code...
+        return $this->hasOne(Treatment::class, 'frame_prescription_id', 'id');
+    }
 }

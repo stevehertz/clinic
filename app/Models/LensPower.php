@@ -72,5 +72,11 @@ class LensPower extends Model
         # code...
         return $this->hasMany(Report::class, 'power_id', 'id');
     }
+
+    public function treatment()
+    {
+        # code...
+        return $this->hasOne(Treatment::class, 'power_id', 'id');
+    }
 }
 

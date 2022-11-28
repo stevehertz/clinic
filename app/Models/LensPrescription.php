@@ -54,4 +54,10 @@ class LensPrescription extends Model
         # code...
         return $this->hasMany(Report::class, 'lens_prescription_id', 'id');
     }
+
+    public function treatment()
+    {
+        # code...
+        return $this->hasOne(Treatment::class, 'lens_prescription_id', 'id');
+    }
 }
