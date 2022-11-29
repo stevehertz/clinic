@@ -107,6 +107,14 @@ class OrdersController extends Controller
             'status' => 'APPROVED',
         ]);
 
+        // update order id on the treatment
+        $treatment = $lens_power->treatment;
+
+        $treatment->update([
+            'order_id' => $order->id,
+            'status' => 'ordered'
+        ]);
+
         $clinic = $payment_bill->clinic;
 
         $appointment = $payment_bill->appontment;

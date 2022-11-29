@@ -122,12 +122,6 @@
                                     Order Details
                                 </a>
                             </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#trackOrderTab" data-toggle="tab">
-                                    Track Order
-                                </a>
-                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -203,8 +197,27 @@
 
                             </div>
                             <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
 
-                            <div class="tab-pane" id="trackOrderTab">
+                <div class="card card-outline card-success">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#trackOrderTab" data-toggle="tab">
+                                    Track Current Order
+                                </a>
+                            </li>
+                        </ul>
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="trackOrderTab">
                                 @if ($order->status == 'APPROVED')
                                     <button type="button" data-id="{{ $order->id }}" data-value="SENT TO WORKSHOP"
                                         class="btn btn-block btn-success orderSentToWorkshopBtn">
@@ -235,6 +248,7 @@
                                 @endif
 
                                 <br>
+
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered">
                                         <thead>
@@ -267,14 +281,15 @@
 
                                     </table>
                                 </div>
+
                             </div>
-                            <!-- /.tab-pane -->
                         </div>
                         <!-- /.tab-content -->
                     </div><!-- /.card-body -->
+
                 </div>
-                <!-- /.nav-tabs-custom -->
             </div>
+            
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">

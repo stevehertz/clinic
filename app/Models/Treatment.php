@@ -15,6 +15,7 @@ class Treatment extends Model
         'lens_prescription_id',
         'frame_prescription_id',
         'workshop_id',
+        'order_id',
         'payments',
         'status'
     ];
@@ -49,9 +50,17 @@ class Treatment extends Model
         return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
     }
 
+    public function order()
+    {
+        # code...
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
     public function report()
     {
         # code...
         return $this->hasMany(Report::class, 'treatment_id', 'id');
     }
+
+    
 }

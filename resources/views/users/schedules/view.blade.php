@@ -1,6 +1,7 @@
 @extends('users.layouts.app')
 
 @section('content')
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -80,7 +81,8 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- /.card-body -->
+                    <!--.card-body .p-0 -->
+
                 </div>
                 <!--.card -->
 
@@ -94,6 +96,7 @@
                             </button>
                         </div>
                     </div>
+
                     <div class="card-body p-0">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item">
@@ -116,13 +119,15 @@
                         </ul>
                     </div>
                     <!-- /.card-body -->
+
                 </div>
-                <!-- /.card -->
+                <!--.card -->
             </div>
             <!--.col-md-3 -->
 
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
+
                     <div class="card-header p-2">
                         <ul id="myTab" class="nav nav-pills">
                             <li class="nav-item">
@@ -150,19 +155,19 @@
                         </ul>
                     </div>
                     <!-- /.card-header -->
+
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="active tab-pane" id="diagnosisTab">
                                 <!-- The timeline -->
                                 <div class="timeline timeline-inverse">
-
                                     <!-- timeline time label -->
                                     <div class="time-label">
                                         <span class="bg-primary">
                                             Patient Diagnosis
                                         </span>
                                     </div>
-
+                                    <!--.time-label -->
                                     <!-- /.timeline-label -->
                                     @if ($diagnosis)
                                         <!-- timeline item -->
@@ -210,12 +215,13 @@
                                                 <div class="timeline-body">
                                                     {!! $diagnosis->diagnosis !!}
                                                 </div>
-
                                                 <div class="timeline-footer">
-                                                    <a href="#" data-id="{{ $diagnosis->id }}"
-                                                        class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
-                                                        <i class="fa fa-edit"></i> Edit Diagnosis
-                                                    </a>
+                                                    @if ($treatment->status != 'ordered')
+                                                        <a href="#" data-id="{{ $diagnosis->id }}"
+                                                            class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
+                                                            <i class="fa fa-edit"></i> Edit Diagnosis
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -248,10 +254,12 @@
                                     <div>
                                         <i class="fa fa-clock-o bg-gray"></i>
                                     </div>
+
                                 </div>
                                 <!--.timeline .timeline-inverse -->
+
                             </div>
-                            <!--.active .tab-pane -->
+                            <!--.active .tab-pane #diagnosisTab -->
 
                             <div class="tab-pane" id="treatmentTab">
                                 <div class="lensPowerDiv">
@@ -390,10 +398,12 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    <a href="#" data-id="{{ $lens_power->id }}"
-                                                                        class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
-                                                                        Edit Lens Power
-                                                                    </a>
+                                                                    @if ($treatment->status != 'ordered')
+                                                                        <a href="#" data-id="{{ $lens_power->id }}"
+                                                                            class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                            Edit Lens Power
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
@@ -409,10 +419,12 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    <a href="#" data-id="{{ $lens_power->id }}"
-                                                                        class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
-                                                                        Edit Lens Power
-                                                                    </a>
+                                                                    @if ($treatment->status != 'ordered')
+                                                                        <a href="#" data-id="{{ $lens_power->id }}"
+                                                                            class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                            Edit Lens Power
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
@@ -422,9 +434,11 @@
                                                 <!--.timeline-item -->
                                             </div>
                                             <!-- END timeline item -->
+
                                             <div>
                                                 <i class="fa fa-stop bg-gray"></i>
                                             </div>
+
                                         </div>
                                         <!--.timeline .timeline-inverse -->
                                     @else
@@ -545,10 +559,12 @@
 
                                         </form>
                                     @endif
+
                                 </div>
-                                <!--.lensPowerDiv -->
+                                <!--#lensPowerDiv -->
 
                                 <div class="lensPrescriptionDiv">
+
                                     @if ($lens_prescription)
                                         <!-- The timeline -->
                                         <div class="timeline timeline-inverse">
@@ -665,11 +681,13 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    <a href="#"
-                                                                        data-id="{{ $lens_prescription->id }}"
-                                                                        class="btn btn-block btn-sm btn-secondary editPrescriptionBtn">
-                                                                        Edit Prescription
-                                                                    </a>
+                                                                    @if ($treatment->status != 'ordered')
+                                                                        <a href="#"
+                                                                            data-id="{{ $lens_prescription->id }}"
+                                                                            class="btn btn-block btn-sm btn-secondary editPrescriptionBtn">
+                                                                            Edit Prescription
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
@@ -685,10 +703,13 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    <a href="#" id="{{ $lens_prescription->id }}"
-                                                                        class="btn btn-block btn-sm btn-secondary">
-                                                                        Edit Prescription
-                                                                    </a>
+                                                                    @if ($treatment->status != 'ordered')
+                                                                        <a href="#"
+                                                                            id="{{ $lens_prescription->id }}"
+                                                                            class="btn btn-block btn-sm btn-secondary">
+                                                                            Edit Prescription
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -814,8 +835,9 @@
                                         </form>
                                         <!--#lensPrescriptionForm -->
                                     @endif
+
                                 </div>
-                                <!--.lensPrescriptionDiv -->
+                                <!--#lensPrescriptionDiv -->
 
                                 <div class="frameCodesDiv">
                                     @if ($frame_prescription)
@@ -900,10 +922,12 @@
                                                             </a>
                                                         </div>
                                                         <div class="col-md-8">
-                                                            <a href="#" data-id="{{ $frame_prescription->id }}"
-                                                                class="btn btn-sm btn-block btn-secondary editFramePrescriptionBtn">
-                                                                Update Frame Code
-                                                            </a>
+                                                            @if ($treatment->status != 'ordered')
+                                                                <a href="#" data-id="{{ $frame_prescription->id }}"
+                                                                    class="btn btn-sm btn-block btn-secondary editFramePrescriptionBtn">
+                                                                    Update Frame Code
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     </div>
 
@@ -1014,9 +1038,10 @@
                                         </form>
                                     @endif
                                 </div>
-                                <!--.frameCodesDiv -->
+                                <!--#frameCodesDiv -->
+
                             </div>
-                            <!--.tab-pane -->
+                            <!--.tab-pane #treatmentTab -->
 
                             <div class="tab-pane" id="medicineTab">
                                 <div class="table-responsive">
@@ -1091,11 +1116,13 @@
                             <!-- /.tab-pane -->
                         </div>
                         <!--.tab-content -->
+
                     </div>
                     <!--.card-body -->
 
                 </div>
-                <!--.card .card-outline .card-primary -->
+                <!-- .card .card-outline .card-primary -->
+
             </div>
             <!--.col-md-6 -->
 
@@ -1178,11 +1205,10 @@
                 </div>
                 <!-- /.card -->
             </div>
-            <!-- /.col -->
+            <!-- /.col-md-3 -->
 
         </div>
         <!--.row -->
-
 
         <div class="modal fade" id="addDiagnosisModal">
             <div class="modal-dialog modal-lg">
@@ -1748,22 +1774,21 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="openBillConsultationFee">
-                                            Consultation Fee
-                                        </label>
-                                        <input type="text" class="form-control" name="consultation_fee"
-                                            id="openBillConsultationFee" placeholder="Consultation Fee">
-                                    </div>
-                                </div>
-                                <!--.col-md-6-->
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         <label for="openBillConsultationReceipt">
                                             Consultation Receipt
                                         </label>
                                         <input type="text" class="form-control" name="consultation_receipt"
                                             id="openBillConsultationReceipt" placeholder="Consultation Receipt">
+                                    </div>
+                                </div>
+                                <!--.col-md-6-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="openBillConsultationFee">
+                                            Consultation Fee
+                                        </label>
+                                        <input type="text" class="form-control" name="consultation_fee"
+                                            id="openBillConsultationFee" placeholder="Consultation Fee">
                                     </div>
                                 </div>
                                 <!--.col-md-6-->
@@ -1819,9 +1844,9 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-
+        
     </section>
-    <!-- /.content -->
+
 @endsection
 
 @section('scripts')

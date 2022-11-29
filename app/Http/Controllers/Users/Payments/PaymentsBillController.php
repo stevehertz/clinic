@@ -147,7 +147,7 @@ class PaymentsBillController extends Controller
         $payment_bill->consultation_receipt_number = $data['consultation_receipt'];
 
         if ($data['claimed_amount'] == 0) {
-            $approval_status = "CLOSING";
+            $approval_status = "CLOSED";
         } else {
             $approval_status = "PENDING";
         }
@@ -155,7 +155,7 @@ class PaymentsBillController extends Controller
 
         if ($payments_details->client_type->type == 'Cash') {
             $payment_bill->bill_status = 'PENDING';
-            $payment_bill->approval_status = $approval_status;
+            $payment_bill->approval_status = 'APPROVED';
             $payment_bill->claimed_amount = $data['claimed_amount'];
             $payment_bill->agreed_amount = $payment_bill->claimed_amount;
         } else {
