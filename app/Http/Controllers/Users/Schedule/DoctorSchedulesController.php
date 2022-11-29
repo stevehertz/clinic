@@ -152,6 +152,7 @@ class DoctorSchedulesController extends Controller
         $payment_details = $appointment->payment_detail;
         $diagnosis = $schedule->diagnosis;
         if ($diagnosis) {
+            $treatment = $diagnosis->treatment;
             $lens_power = $diagnosis->lens_power;
             if ($lens_power) {
                 $lens_prescription = $lens_power->lens_prescription;
@@ -164,6 +165,7 @@ class DoctorSchedulesController extends Controller
             $appointment = $diagnosis->appointment;
             $payment_bill = $appointment->payment_bill;
         } else {
+            $treatment = null;
             $lens_power = null;
             $lens_prescription = null;
             $frame_prescription = null;
@@ -182,6 +184,7 @@ class DoctorSchedulesController extends Controller
             'appointment' => $appointment,
             'payment_details' => $payment_details,
             'diagnosis' => $diagnosis,
+            'treatment' => $treatment,
             'lens_power' => $lens_power,
             'lens_prescription' => $lens_prescription,
             'frame_prescription' => $frame_prescription,

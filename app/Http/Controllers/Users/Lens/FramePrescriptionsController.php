@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FramePrescription;
 use App\Models\FrameStock;
 use App\Models\LensPower;
+use App\Models\Treatment;
 use App\Models\Workshop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -46,6 +47,7 @@ class FramePrescriptionsController extends Controller
 
         // get cinic through appointment
         $appointment = $lens_power->appointment;
+
         $clinic = $appointment->clinic;
 
         $frame_prescription = $lens_power->frame_prescription()->create([
@@ -65,6 +67,17 @@ class FramePrescriptionsController extends Controller
             'closing_stock' => $closing_stock,
         ]);
 
+        // update treatment
+        $treatment = Treatment::findOrFail($lens_power->treatment->id);
+
+        $treatment->update([
+            'frame_prescription_id' => $frame_prescription->id,
+            'workshop_id' => $workshop->id,
+            'payments' => 'treatment',
+            'status' => 'frame prescription'
+        ]);
+
+        // update report
         $clinic = $lens_power->diagnosis->clinic;
 
         $report_id = $appointment->report_id;

@@ -16,6 +16,7 @@ class Report extends Model
         'payment_details_id',
         'schedule_id',
         'diagnosis_id',
+        'treatment_id',
         'power_id',
         'lens_prescription_id',
         'frame_prescription_id',
@@ -67,6 +68,12 @@ class Report extends Model
     {
         # code...
         return $this->belongsTo(Diagnosis::class, 'diagnosis_id', 'id');
+    }
+
+    public function treatment()
+    {
+        # code...
+        return $this->belongsTo(Treatment::class, 'treatment_id', 'id');
     }
 
     public function lens_power()

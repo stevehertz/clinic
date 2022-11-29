@@ -49,4 +49,9 @@ class Treatment extends Model
         return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
     }
 
+    public function report()
+    {
+        # code...
+        return $this->hasMany(Report::class, 'treatment_id', 'id');
+    }
 }

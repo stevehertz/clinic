@@ -30,12 +30,12 @@ class PaymentsBillController extends Controller
         if ($request->ajax()) {
 
             $data = $clinic->payment_bill()->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
-                    ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
-                    ->select('payment_bills.*', 'patients.first_name as patient_first', 'patients.last_name as patient_last')
-                    ->where('payment_bills.bill_status', '!=', 'CLOSED')
-                    ->where('doctor_schedules.user_id', $user->id)
-                    ->orderBy('payment_bills.id', 'desc')
-                    ->get();
+                ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
+                ->select('payment_bills.*', 'patients.first_name as patient_first', 'patients.last_name as patient_last')
+                ->where('payment_bills.bill_status', '!=', 'CLOSED')
+                ->where('doctor_schedules.user_id', $user->id)
+                ->orderBy('payment_bills.id', 'desc')
+                ->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
@@ -44,19 +44,19 @@ class PaymentsBillController extends Controller
                 ->addColumn('consultation_fee', function ($row) {
                     return number_format($row->consultation_fee, 2, '.', ',');
                 })
-                ->addColumn('claimed_amount', function($row) {
+                ->addColumn('claimed_amount', function ($row) {
                     return number_format($row->claimed_amount, 2, '.', ',');
                 })
-                ->addColumn('agreed_amount', function($row) {
+                ->addColumn('agreed_amount', function ($row) {
                     return number_format($row->agreed_amount, 2, '.', ',');
                 })
-                ->addColumn('total_amount', function($row) {
+                ->addColumn('total_amount', function ($row) {
                     return number_format($row->total_amount, 2, '.', ',');
                 })
-                ->addColumn('paid_amount', function($row) {
+                ->addColumn('paid_amount', function ($row) {
                     return number_format($row->paid_amount, 2, '.', ',');
                 })
-                ->addColumn('balance', function($row) {
+                ->addColumn('balance', function ($row) {
                     return number_format($row->balance, 2, '.', ',');
                 })
                 ->addColumn('open_date', function ($row) {
@@ -78,8 +78,11 @@ class PaymentsBillController extends Controller
                     return $btn;
                 })
                 ->rawColumns(
-                    ['action',
-                    'full_names', 'open_date', 'consultation_fee', 'claimed_amount', 'agreed_amount', 'total_amount', 'paid_amount', 'balance', 'bill_status'])
+                    [
+                        'action',
+                        'full_names', 'open_date', 'consultation_fee', 'claimed_amount', 'agreed_amount', 'total_amount', 'paid_amount', 'balance', 'bill_status'
+                    ]
+                )
                 ->make(true);
         }
         $page_title = 'Payment Bills';
@@ -142,14 +145,26 @@ class PaymentsBillController extends Controller
         $payment_bill->open_date = Carbon::createFromFormat('Y-m-d', $open_date)->format('Y-m-d');
         $payment_bill->consultation_fee = $data['consultation_fee'];
         $payment_bill->consultation_receipt_number = $data['consultation_receipt'];
-        if($payments_details->client_type->type == 'Cash'){
+
+        if ($data['claimed_amount'] == 0) {
+            $approval_status = "CLOSING";
+        } else {
+            $approval_status = "PENDING";
+        }
+
+
+        if ($payments_details->client_type->type == 'Cash') {
             $payment_bill->bill_status = 'PENDING';
-            $payment_bill->approval_status = 'PENDING';
+            $payment_bill->approval_status = $approval_status;
             $payment_bill->claimed_amount = $data['claimed_amount'];
             $payment_bill->agreed_amount = $payment_bill->claimed_amount;
-        }else{
-            $payment_bill->bill_status = 'OPEN';
-            $payment_bill->approval_status = 'PENDING';
+        } else {
+            if ($data['claimed_amount'] == 0) {
+                $payment_bill->bill_status = 'PENDING';
+            } else {
+                $payment_bill->bill_status = 'OPEN';
+            }
+            $payment_bill->approval_status = $approval_status;
             $payment_bill->claimed_amount = $data['claimed_amount'];
             $payment_bill->agreed_amount = 0;
         }
@@ -263,13 +278,12 @@ class PaymentsBillController extends Controller
             $payment_bill->approval_status = $data['approval_status'];
             $payment_bill->approval_number = $data['approval_number'];
         }
-        if($payment_bill->approval_status == 'REJECTED'){
+        if ($payment_bill->approval_status == 'REJECTED') {
             $payment_bill->agreed_amount = $data['amount'];
             $payment_bill->total_amount = 0 + $payment_bill->consultation_fee;
-        }else{
+        } else {
             $payment_bill->agreed_amount = $data['amount'];
             $payment_bill->total_amount = $payment_bill->agreed_amount + $payment_bill->consultation_fee;
-
         }
         $payment_bill->paid_amount = $payment_bill->paid_amount;
         $payment_bill->balance = $payment_bill->total_amount - $payment_bill->paid_amount;

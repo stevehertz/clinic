@@ -249,7 +249,7 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
-                                @if ($payment_bill->agreed_amount <= 0)
+                                @if ($payment_bill->claimed_amount > 0 && $payment_bill->agreed_amount <= 0)
                                     <a href="#" data-id='{{ $payment_bill->id }}'
                                         class="btn btn-default enterAgreedAmountBtn">
                                         <i class="fa fa-money"></i> Enter Agreed Amount

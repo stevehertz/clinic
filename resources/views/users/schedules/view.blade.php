@@ -432,6 +432,7 @@
                                             @csrf
                                             @if ($diagnosis)
                                                 <input type="hidden" value="{{ $diagnosis->id }}" name="diagnosis_id">
+                                                <input type="hidden" value="{{ $treatment->id }}" name="treatment_id">
                                             @endif
                                             <p>Right Eye</p>
                                             <div class="card">
@@ -1067,17 +1068,23 @@
                                     </form>
                                 @endif
                                 <hr>
-                                @if ($payment_bill)
-                                    <a href="#" data-id="{{ $payment_bill->id }}"
-                                        class="btn btn-block btn-primary viewPaymentBillBtn">
-                                        View Payment Bill
-                                    </a>
-                                @else
-                                    @if ($diagnosis)
-                                        <a href="#" id="{{ $diagnosis->schedule_id }}"
-                                            class="btn btn-block btn-success openBillBtn" rel="noopener noreferrer">
-                                            Open Bill
+                                @if ($treatment)
+                                    @if ($payment_bill)
+                                        <a href="#" data-id="{{ $payment_bill->id }}"
+                                            class="btn btn-block btn-primary viewPaymentBillBtn">
+                                            View Payment Bill
                                         </a>
+                                    @else
+                                        @if ($diagnosis)
+                                            <a href="#" id="{{ $diagnosis->schedule_id }}"
+                                                class="btn btn-block btn-success openBillBtn" rel="noopener noreferrer">
+                                                @if ($treatment->payments == 'consultation')
+                                                    Pay Consultation Fee
+                                                @else
+                                                    Open Bill
+                                                @endif
+                                            </a>
+                                        @endif
                                     @endif
                                 @endif
                             </div>
@@ -1762,19 +1769,31 @@
                                 <!--.col-md-6-->
                             </div>
                             <!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="openBillClaimedAmount">
-                                            Claimed Amount
-                                        </label>
-                                        <input type="text" class="form-control" name="claimed_amount"
-                                            id="openBillClaimedAmount" placeholder="Claimed Amount">
+                            @if ($treatment)
+                                @if ($treatment->payments == 'consultation')
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="hidden" value="0" class="form-control"
+                                                    name="claimed_amount" placeholder="Claimed Amount">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!--.row-->
+                                @else
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="openBillClaimedAmount">
+                                                    Claimed Amount
+                                                </label>
+                                                <input type="text" class="form-control" name="claimed_amount"
+                                                    id="openBillClaimedAmount" placeholder="Claimed Amount">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--.row-->
+                                @endif
+                            @endif
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -2676,6 +2695,8 @@
                         },
                     });
                 });
+
+                // consultation fee
             });
         </script>
     @endif

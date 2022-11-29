@@ -8,6 +8,7 @@ use App\Models\Clinic;
 use App\Models\Diagnosis;
 use App\Models\DoctorSchedule;
 use App\Models\Patient;
+use App\Models\Treatment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -59,17 +60,28 @@ class DiagnosisController extends Controller
 
         if ($diagnosis->save()) {
 
-            $report_id = $appointment->report_id;
+            // creae treatment 
+            $treatment = new Treatment;
 
-            $report = $clinic->report()->findOrFail($report_id);
+            $treatment->diagnosis_id = $diagnosis->id;
+            $treatment->status = "diagnosis";
 
-            $report->update([
-                'diagnosis_id' => $diagnosis->id,
-            ]);
+            if($treatment->save()){
 
-            $response['status'] = true;
-            $response['message'] = 'Diagnosis created successfully';
-            return response()->json($response, 200);
+                $report_id = $appointment->report_id;
+
+                $report = $clinic->report()->findOrFail($report_id);
+
+                $report->update([
+                    'diagnosis_id' => $diagnosis->id,
+                    'treatment_id' => $treatment->id
+                ]);
+
+                $response['status'] = true;
+                $response['message'] = 'Diagnosis created successfully';
+                return response()->json($response, 200);
+            }    
+           
         }
     }
 

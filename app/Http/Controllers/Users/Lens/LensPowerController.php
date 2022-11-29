@@ -7,6 +7,7 @@ use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Models\Diagnosis;
 use App\Models\LensPower;
+use App\Models\Treatment;
 use Illuminate\Support\Facades\Validator;
 
 class LensPowerController extends Controller
@@ -24,6 +25,7 @@ class LensPowerController extends Controller
 
         $validator = Validator::make($data, [
             'diagnosis_id' => 'required|integer|exists:diagnoses,id',
+            'treatment_id' => 'required|integer|exists:treatments,id',
             'right_sphere' => 'required|string|max:255',
             'right_cylinder' => 'required|string|max:255',
             'right_axis' => 'required|string|max:255',
@@ -57,6 +59,15 @@ class LensPowerController extends Controller
             'left_axis' => $data['left_axis'],
             'left_add' => $data['left_add'],
             'notes' => $data['notes'],
+        ]);
+
+
+        // update treament 
+        $treatment = Treatment::findOrFail($data['treatment_id']);
+
+        $treatment->update([
+            'power_id' => $lens_power->id,
+            'status' => 'lens power'
         ]);
 
         $clinic = $diagnosis->clinic;

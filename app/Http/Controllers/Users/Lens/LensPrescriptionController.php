@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users\Lens;
 use App\Http\Controllers\Controller;
 use App\Models\LensPower;
 use App\Models\LensPrescription;
+use App\Models\Treatment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -49,6 +50,13 @@ class LensPrescriptionController extends Controller
             'tint' => $tint,
             'diameter' => $data['pupil'],
             'focal_height' => $data['focal_height'],
+        ]);
+
+        $treatment = Treatment::findOrFail($lens_power->treatment->id);
+
+        $treatment->update([
+            'lens_prescription_id' => $lens_prescription->id,
+            'status' => 'lens prescription'
         ]);
 
         $clinic = $lens_power->diagnosis->clinic;
@@ -126,6 +134,8 @@ class LensPrescriptionController extends Controller
             'diameter' => $data['pupil'],
             'focal_height' => $data['focal_height']
         ]);
+
+        
 
         $response['status'] = true;
         $response['power_id'] = $lens_prescription->power_id;
