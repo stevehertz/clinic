@@ -17,6 +17,7 @@ class FrameStock extends Model
         'shape_id',
         'opening_stock',
         'purchase_stock',
+        'transfered_stock',
         'total_stock',
         'sold_stock',
         'closing_stock',
