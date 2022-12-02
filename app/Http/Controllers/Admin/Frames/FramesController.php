@@ -72,7 +72,12 @@ class FramesController extends Controller
         $num_frames = $clinic->frame->count();
         $num_frame_stocks = $clinic->frame_stock->count(); // number of frame stocks 
         $stocks = $clinic->frame_stock->sortBy('created_at', SORT_DESC); //Load all stocks to get entered stock frame code for purchase
+        $transfer_stocks = $clinic->frame_stock->where('closing_stock', '>', 0)->sortBy('created_at', SORT_DESC); // Get the available stocks before transfer
+        $transfer_doctors = $clinic->user->sortBy('created_at', SORT_DESC);
         $num_frame_purchases = $clinic->frame_purchase->count(); // num of frame purchases
+        // load clinics to transfer to
+        $clinics = $organization->clinic->where('id', '!=', $clinic->id)->sortBy('created_at', SORT_DESC);
+
         $page_title = 'Frames';
         return view('admin.frames.index', [
             'page_title' => $page_title,
@@ -90,6 +95,9 @@ class FramesController extends Controller
             'num_stocks' => $num_frame_stocks,
             'stocks' => $stocks,
             'num_purchases' => $num_frame_purchases,
+            'transfer_clinics' => $clinics,
+            'transfer_stocks' => $transfer_stocks,
+            'transfer_doctors' => $transfer_doctors,
         ]);
     }
 

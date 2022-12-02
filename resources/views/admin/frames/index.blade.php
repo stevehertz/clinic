@@ -76,6 +76,43 @@
                     </div>
                 </div>
                 <!-- ./col -->
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-secondary">
+                        <div class="inner">
+                            <h3>{{ $num_purchases }}</h3>
+
+                            <p>Transfered Stocks</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-document-text"></i>
+                        </div>
+                        <a href="#" class="small-box-footer transferStockBtn">
+                            Transfer Stock <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
+                {{-- <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>{{ $num_purchases }}</h3>
+
+                            <p>Received Stocks</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bookmark"></i>
+                        </div>
+                        <a href="#" class="small-box-footer receivedStockBtn">
+                            Receive Stock <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div> --}}
+                <!-- ./col -->
+
             </div>
 
             <div class="row">
@@ -151,11 +188,12 @@
                                                     <th>Gender</th>
                                                     <th>Color</th>
                                                     <th>Shape</th>
-                                                    <th>Opening Stock</th>
-                                                    <th>Purchased Stock</th>
-                                                    <th>Total Stock</th>
-                                                    <th>Sold Stock</th>
-                                                    <th>Closing Stock</th>
+                                                    <th>Opening</th>
+                                                    <th>Purchased</th>
+                                                    <th>Transfered</th>
+                                                    <th>Total</th>
+                                                    <th>Sold</th>
+                                                    <th>Closing</th>
                                                     <th>Supplier Price</th>
                                                     <th>Price</th>
                                                     <th>Remarks</th>
@@ -194,12 +232,23 @@
 
                                 <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-settings-tab">
-                                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus
-                                    turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis
-                                    vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum
-                                    pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget
-                                    aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac
-                                    habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                    <div class="table-responsive">
+                                        <table id="frameTransferData" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Frame Code</th>
+                                                    <th>From Clinic</th>
+                                                    <th>To Clinic</th>
+                                                    <th>Quantity</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Condition</th>
+                                                    <th>Remarks</th>
+                                                    <th>Doctor/Optimetrist</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <!--.tab-content-->
@@ -872,6 +921,173 @@
         <!--.modal -->
 
         <!-- Transfer Stock -->
+        <div class="modal fade" id="transferStockModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Transfer Stock
+                        </h4>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="transferStockForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="hidden" value="{{ $clinic->id }}" name="from_clinic_id"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockFrameCode">Frame Code</label>
+                                        <select name="stock_id" id="transferStockFrameCode" class="form-control select2">
+                                            <option disabled selected>Choose Stock</option>
+                                            @forelse ($transfer_stocks as $transfer_stock)
+                                                <option value="{{ $transfer_stock->id }}">
+                                                    {{ $transfer_stock->frame->code }} -
+                                                    {{ $transfer_stock->gender }} -
+                                                    {{ $transfer_stock->frame_color->color }} -
+                                                    {{ $transfer_stock->frame_shape->shape }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockClinicId">Transfer To</label>
+                                        <select name="to_clinic_id" id="transferStockClinicId"
+                                            class="form-control select2" style="width: 100%;">
+                                            <option disabled='disabled' selected="selected">
+                                                Choose clinic to transfer to
+                                            </option>
+                                            @forelse ($transfer_clinics as $transfer_clinic)
+                                                <option value="{{ $transfer_clinic->id }}">
+                                                    {{ $transfer_clinic->clinic }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">No Clinics available at the moment</option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockDate">
+                                            Transfer Date
+                                        </label>
+                                        <input type="text" id="transferStockDate" name="transfer_date"
+                                            class="form-control datepicker" placeholder="Transfer Date" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockQuantity">
+                                            Quantity
+                                        </label>
+                                        <input type="text" id="transferStockQuantity" name="quantity"
+                                            class="form-control" placeholder="Quantity Transfered" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockStatus">
+                                            Transfer Status
+                                        </label>
+                                        <select name="transfer_status" id="transferStockStatus"
+                                            class="form-control select2">
+                                            <option disabled='disabled' selected="selected">Transfer Status</option>
+                                            <option value="Transfered">Transfered</option>
+                                            <option value="Not Transfered">Not Transfered</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferStockCondition">
+                                            Stock Condition
+                                        </label>
+                                        <select name="condition" id="transferStockCondition"
+                                            class="form-control select2">
+                                            <option disabled='disabled' selected="selected">Transfered Stock Condition
+                                            </option>
+                                            <option value="Broken">Broken</option>
+                                            <option value="Irrepairable">Irrepairable</option>
+                                            <option value="Working">Working</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="transferStockRemarks">
+                                            Remarks
+                                        </label>
+                                        <textarea name="remarks" id="transferStockRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="transferStockUserId">Doctor/ Optimetrist Confirmed Transfer</label>
+                                        <select name="transfer_user_id" id="transferStockUserId"
+                                            class="form-control select2">
+                                            @forelse ($transfer_doctors as $doctor)
+                                                <option value="{{ $doctor->id }}">
+                                                    {{ $doctor->first_name }} {{ $doctor->last_name }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--.row -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="transferStockSubmitBtn" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         <!--.modal -->
 
     </section><!-- /.content -->
@@ -1092,6 +1308,10 @@
                         {
                             data: 'purchase_stock',
                             name: 'purchase_stock'
+                        },
+                        {
+                            data: 'transfered_stock',
+                            name: 'transfered_stock'
                         },
                         {
                             data: 'total_stock',
@@ -1350,6 +1570,109 @@
                     }
                 });
 
+            });
+
+
+            // Transfered Stocks
+            // view all transfered stocks
+            find_all_transfers();
+
+            function find_all_transfers() {
+                var path = '{{ route('admin.frame.transfers.index', $clinic->id) }}';
+                $('#frameTransferData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'to_clinic',
+                            name: 'to_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'transfer_date',
+                            name: 'transfer_date'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'doctor',
+                            name: 'doctor'
+                        }
+                    ]
+                });
+            }
+
+            // Transfer Stock 
+            $(document).on('click', '.transferStockBtn', function(e) {
+                e.preventDefault();
+                $('#transferStockModal').modal('show');
+            });
+
+            $('#transferStockForm').submit(function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('admin.frame.transfers.store') }}';
+                $.ajax({
+                    url: path,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#transferStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#transferStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#transferStockSubmitBtn').html('Save');
+                        $('#transferStockSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#transferStockForm')[0].reset();
+                            $('#transferStockModal').modal('hide');
+                            $('#purchasedStocks').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#framesData').DataTable().ajax.reload();
+                            $('#frameTransferData').DataTable().ajax.reload();
+                        }
+                    },
+                    error: function(error) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, error) {
+                                toastr.error(error);
+                            });
+                        } else {
+                            toastr.error(error.responseJSON.message);
+                        }
+                    }
+                });
             });
         });
     </script>

@@ -17,13 +17,21 @@ class FrameTransfer extends Model
         'transfer_user_id',
         'frame_code',
         'transfer_date',
+        'quantity',
         'transfer_status',
-        'transfer_stock_status',
-        'transfer_remarks',
-        'received_user_id',
-        'received_date',
-        'received_status',
-        'received_stock_status',
-        'received_remarks',
+        'condition',
+        'remarks',
     ];
+
+    public function from_clinic()
+    {
+        # code...
+        return $this->belongsTo(Clinic::class, 'from_clinic_id', 'id');
+    }
+
+    public function to_clinic()
+    {
+        # code...
+        return $this->belongsTo(Clinic::class, 'to_clinic_id', 'id');
+    }
 }

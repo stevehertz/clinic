@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('frame_stocks', function (Blueprint $table) {
             //
-            $table->integer('transfered_stock')->nullable()->after('purchase_stock');
+            $table->integer('transfered_stock')->nullable()->after('purchase_stock')->default(0);
         });
     }
 

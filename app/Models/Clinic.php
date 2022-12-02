@@ -127,4 +127,16 @@ class Clinic extends Model
         # code...
         return $this->hasMany(FramePurchase::class, 'clinic_id', 'id');
     }
+
+    public function frame_transfer_from()
+    {
+        # code...
+        return $this->hasMany(FrameTransfer::class, 'from_clinic_id', 'id');
+    }
+
+    public function frame_transfer_to()
+    {
+        # code...
+        return $this->hasMany(FrameTransfer::class, 'to_clinic_id', 'id');
+    }
 }

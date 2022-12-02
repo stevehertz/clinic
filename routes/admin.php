@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Frames\FramesController;
 use App\Http\Controllers\Admin\Frames\FrameShapesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
 use App\Http\Controllers\Admin\Frames\FramesStocksController;
+use App\Http\Controllers\Admin\Frames\FrameTransfersController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesController;
@@ -535,6 +536,16 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
             Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
             Route::delete('/delete', [FramePurchasesController::class, 'destroy'])->name('delete');
+        });
+
+    Route::prefix('frame/transfers')
+        ->name('frame.transfers.')
+        ->group(function() {
+
+            Route::get('/{id}', [FrameTransfersController::class, 'index'])->name('index');
+
+            Route::post('/store', [FrameTransfersController::class, 'store'])->name('store');
+
         });
 
     // Sun glasses
