@@ -81,7 +81,7 @@
                     <!-- small box -->
                     <div class="small-box bg-secondary">
                         <div class="inner">
-                            <h3>{{ $num_purchases }}</h3>
+                            <h3>{{ $num_transfers }}</h3>
 
                             <p>Transfered Stocks</p>
                         </div>
@@ -1420,6 +1420,7 @@
                                     Swal.fire(data['message'], '', 'success')
                                     $('#frameStocksData').DataTable().ajax.reload();
                                     $('#purchasedStocks').DataTable().ajax.reload();
+                                    location.reload();
                                 }
                             }
                         });
@@ -1522,6 +1523,7 @@
                             $('#frameStocksData').DataTable().ajax.reload();
                             $('#frameStocksData').DataTable().ajax.reload();
                             $('#framesData').DataTable().ajax.reload();
+                            location.reload();
                         }
                     },
                     error: function(error) {
@@ -1562,6 +1564,7 @@
                                     Swal.fire(data['message'], '', 'success')
                                     $('#frameStocksData').DataTable().ajax.reload();
                                     $('#purchasedStocks').DataTable().ajax.reload();
+                                    location.reload();
                                 }
                             }
                         });
@@ -1661,6 +1664,7 @@
                             $('#frameStocksData').DataTable().ajax.reload();
                             $('#framesData').DataTable().ajax.reload();
                             $('#frameTransferData').DataTable().ajax.reload();
+                            location.reload();
                         }
                     },
                     error: function(error) {
@@ -1673,6 +1677,10 @@
                         }
                     }
                 });
+            });
+
+            $(document).on('click', '', function(e){
+
             });
         });
     </script>

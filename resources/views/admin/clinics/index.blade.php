@@ -38,13 +38,12 @@
                             <table id="clinicData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Name</th>
                                         <th>Logo</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Address</th>
-                                        <th>Location</th>
-                                        <th>Select</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -135,6 +134,7 @@
         $(document).ready(function() {
 
             find_clinics();
+
             function find_clinics() {
                 var path = '{{ route('admin.clinics.index') }}';
                 $('#clinicData').DataTable({
@@ -142,6 +142,10 @@
                     serverSide: true,
                     ajax: path,
                     columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
                             data: 'clinic',
                             name: 'clinic'
                         },
@@ -158,14 +162,6 @@
                         {
                             data: 'phone',
                             name: 'phone'
-                        },
-                        {
-                            data: 'address',
-                            name: 'address'
-                        },
-                        {
-                            data: 'location',
-                            name: 'location'
                         },
                         {
                             data: 'select',
@@ -210,14 +206,14 @@
                             $('#newClinicModal').modal('hide');
                             $('#newClinicForm').trigger('reset');
                             $('#clinicData').DataTable().ajax.reload();
-                        }else{
+                        } else {
                             console.log(data);
                         }
                     }
                 });
             });
 
-            $(document).on('click', '.selectBtn', function(e){
+            $(document).on('click', '.selectBtn', function(e) {
                 e.preventDefault();
                 var clinic_id = $(this).attr('id');
                 var path = '{{ route('admin.clinics.show') }}';
@@ -232,8 +228,9 @@
                     success: function(data) {
                         if (data['status'] == false) {
                             console.log(data);
-                        }else{
-                            window.location.href = '{{ route('admin.dashboard.index', ':id') }}'.replace(':id', data.data.id);
+                        } else {
+                            window.location.href = '{{ route('admin.dashboard.index', ':id') }}'
+                                .replace(':id', data.data.id);
                         }
                     }
                 });

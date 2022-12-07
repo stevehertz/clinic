@@ -38,12 +38,12 @@
                             <table id="workshopsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Name</th>
                                         <th>Logo</th>
                                         <th>Phone</th>
                                         <th>Email</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +61,7 @@
                 <div class="modal-content">
                     <form id="newWorkShopForm">
                         @csrf
-                        <input type="hidden" value="{{ $organization->id }}" name="organization_id"/>
+                        <input type="hidden" value="{{ $organization->id }}" name="organization_id" />
                         <div class="modal-header">
                             <h4 class="modal-title">New Workshop</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -228,6 +228,9 @@
                     serverSide: true,
                     ajax: path,
                     columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        }, {
                             data: 'name',
                             name: 'name'
                         },
@@ -244,10 +247,6 @@
                         {
                             data: 'email',
                             name: 'email'
-                        },
-                        {
-                            data: 'address',
-                            name: 'address'
                         },
                         {
                             data: 'action',

@@ -77,6 +77,8 @@ class FramesController extends Controller
         $num_frame_purchases = $clinic->frame_purchase->count(); // num of frame purchases
         // load clinics to transfer to
         $clinics = $organization->clinic->where('id', '!=', $clinic->id)->sortBy('created_at', SORT_DESC);
+        // Number of transfered stocks
+        $num_transfers = $clinic->frame_transfer_from->count();
 
         $page_title = 'Frames';
         return view('admin.frames.index', [
@@ -98,6 +100,7 @@ class FramesController extends Controller
             'transfer_clinics' => $clinics,
             'transfer_stocks' => $transfer_stocks,
             'transfer_doctors' => $transfer_doctors,
+            'num_transfers' => $num_transfers,
         ]);
     }
 

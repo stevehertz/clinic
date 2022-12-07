@@ -66,6 +66,7 @@
                             <table id="patientsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Date Registered</th>
                                         <th>Full Names</th>
                                         <th>ID Number</th>
                                         <th>Telephone</th>
@@ -73,7 +74,6 @@
                                         <th>Date of Birth</th>
                                         <th>Gender</th>
                                         <th>Added By</th>
-                                        <th>Added Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -108,6 +108,10 @@
                         }
                     },
                     columns: [{
+                            data: 'date_in',
+                            name: 'date_in'
+                        },
+                        {
                             data: 'full_names',
                             name: 'full_names'
                         },
@@ -136,10 +140,6 @@
                             name: 'added_by'
                         },
                         {
-                            data: 'added_date',
-                            name: 'added_date'
-                        },
-                        {
                             data: 'action',
                             name: 'action',
                             orderable: false,
@@ -152,7 +152,7 @@
             }
 
             // filter by date entered
-            $(document).on('click', '#filter', function(e){
+            $(document).on('click', '#filter', function(e) {
                 e.preventDefault();
                 var from_date = $('#fromDate').val();
                 var to_date = $('#toDate').val();

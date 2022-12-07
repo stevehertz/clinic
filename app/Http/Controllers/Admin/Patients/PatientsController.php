@@ -31,17 +31,10 @@ class PatientsController extends Controller
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = $clinic->patient()
-                    ->join('users', 'users.id', '=', 'patients.user_id')
-                    ->join('appointments', 'appointments.patient_id', '=', 'patients.id')
-                    ->select('patients.*', 'users.first_name as user_first', 'users.last_name as user_last', 'appointments.date as added_date')
                     ->whereBetween('appointments.date', [$request->from_date, $request->to_date])
-                    ->latest()->get();
+                    ->get();
             } else {
-                $data = $clinic->patient()
-                    ->join('users', 'users.id', '=', 'patients.user_id')
-                    ->join('appointments', 'appointments.patient_id', '=', 'patients.id')
-                    ->select('patients.*', 'users.first_name as user_first', 'users.last_name as user_last', 'appointments.date as added_date')
-                    ->latest()->get();
+                $data = $clinic->patient()->latest()->get();
             }
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -49,10 +42,10 @@ class PatientsController extends Controller
                     return $row->first_name . ' ' . $row->last_name;
                 })
                 ->addColumn('doctor_full_names', function ($row) {
-                    return $row->doctor_first . ' ' . $row->doctor_last;
+                    return $row->user->first_name . ' ' . $row->user->last_name;
                 })
                 ->addColumn('added_by', function ($row) {
-                    return $row->user_first . ' ' . $row->user_last;
+                    return $row->user->first_name . ' ' . $row->user->last_name;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="#" id="' . $row['id'] . '" class="btn btn-tool viewBtn"><i class="fa fa-user"></i></a>';
@@ -121,7 +114,7 @@ class PatientsController extends Controller
         $clinic = Clinic::findOrFail($id);
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
-        return (new PatientsReport($clinic->id, $from_date, $to_date))->download('patients'.time().'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        return (new PatientsReport($clinic->id, $from_date, $to_date))->download('patients' . time() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
     public function destroy(Request $request)

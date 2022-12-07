@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
+use App\Models\Workshop;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,6 +15,7 @@ class DashboardController extends Controller
         $this->middleware('auth:admin');
     }
 
+    // clinic dashboard
     public function index($id)
     {
         # code...
@@ -30,6 +32,14 @@ class DashboardController extends Controller
         $remittances = $clinic->remittance()->sum('amount');
         $page_title = 'Dashboard';
         $patients = $clinic->patient->count();
-        return view('admin.dashboard.index', compact('clinic', 'page_title', 'patients', 'appointments', 'payments', 'remittances'));
+        return view('admin.dashboard.clinics.index', compact('clinic', 'page_title', 'patients', 'appointments', 'payments', 'remittances'));
+    }
+
+    // Workshop Dashboard
+    public function workshop($id)
+    {
+        # code...
+        $workshop = Workshop::findOrFail($id);
+        return view('admin.dashboard.workshops.index', compact('workshop'));
     }
 }

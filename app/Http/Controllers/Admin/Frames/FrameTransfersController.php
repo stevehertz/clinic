@@ -90,8 +90,8 @@ class FrameTransfersController extends Controller
         // available stocks
         $transfered_stock = $frame_stock->transfered_stock + $quantity;
         $total_stock = $frame_stock->total_stock - $transfered_stock;
-        $sold_stock = $total_stock - $frame_stock->sold_stock;
-        $closing_stock = $frame_stock->closing_stock - $sold_stock;
+        $sold_stock = $frame_stock->sold_stock;
+        $closing_stock = $frame_stock->total_stock - $sold_stock;
 
         // update frame stock 
         $frame_stock->update([
@@ -130,5 +130,31 @@ class FrameTransfersController extends Controller
     public function show(Request $request)
     {
         # code...
+    }
+
+    public function destroy(Request $request)
+    {
+        # code...
+        $data = $request->except("_token");
+
+        $validator = Validator::make($data, [
+            'transfer_id' => 'required|integer|exists:frame_transfers,id',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $frame_transfer = FrameTransfer::findOrFail($data['transfer_id']);
+
+        $frame_transfer->delete();
+
+        $response['status'] = true;
+        $response['message'] = 'Frame Transfer successfully deleted';
+        return response()->json($response, 200);
+        
     }
 }

@@ -330,6 +330,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
         Route::get('/{id}', [DashboardController::class, 'index'])->name('index');
+
+        Route::get('/{id}/workshop', [DashboardController::class, 'workshop'])->name('workshop.index');
+        
     });
 
     Route::prefix('patients')->name('patients.')->group(function () {
@@ -545,6 +548,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::get('/{id}', [FrameTransfersController::class, 'index'])->name('index');
 
             Route::post('/store', [FrameTransfersController::class, 'store'])->name('store');
+
+            Route::delete('/delete', [FrameTransfersController::class, 'destroy'])->name('delete');
 
         });
 

@@ -88,7 +88,8 @@
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </section><!-- /.content -->
+    </section>
+    <!-- /.content -->
 @endsection
 
 @section('scripts')
@@ -109,7 +110,8 @@
                             to_date: to_date,
                         }
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: 'date_in',
                             name: 'date_in'
                         },

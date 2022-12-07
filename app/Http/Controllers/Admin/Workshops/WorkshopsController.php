@@ -36,9 +36,7 @@ class WorkshopsController extends Controller
                     return $logo;
                 })
                 ->addColumn('action', function($data){
-                    $button = '<button type="button" name="edit" data-id="'.$data->id.'" class="edit btn btn-tool btn-sm editWorkshopBtn"><i class="fa fa-edit"></i></button>';
-                    $button .= '&nbsp;&nbsp;';
-                    $button .= '<button type="button" name="delete" data-id="'.$data->id.'" class="delete btn btn-tool btn-sm deleteWorkshopBtn"><i class="fa fa-trash"></i></button>';
+                    $button = '<button type="button" name="edit" data-id="'.$data->id.'" class="edit btn btn-primary btn-sm selectWorkshopBtn"><i class="fa fa-dashboard"></i> Dashboard</button>';
                     return $button;
                 })
                 ->rawColumns(['action', 'logo'])

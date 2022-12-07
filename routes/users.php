@@ -4,6 +4,7 @@ use App\Http\Controllers\Users\Appointments\AppointmentsController as Appointmen
 use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswordController;
 use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPasswordController;
+use App\Http\Controllers\Users\ClientType\ClientTypeController;
 use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
 use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
 use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
@@ -58,6 +59,12 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
         Route::post('/show', [AppointmentsAppointmentsController::class, 'show'])->name('show');
 
         Route::get('/{id}/view', [AppointmentsAppointmentsController::class, 'view'])->name('view');
+    });
+
+    Route::prefix('client/type')->name('client.type.')->group(function(){
+
+        Route::post('/show', [ClientTypeController::class, 'show'])->name('show');
+
     });
 
     Route::prefix('/users')->name('users.')->group(function () {

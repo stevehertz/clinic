@@ -65,6 +65,7 @@
                             <table id="reportsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Patient</th>
                                         <th>Appointment Date</th>
                                         <th>Client Type</th>
@@ -108,6 +109,10 @@
                         }
                     },
                     columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
                             data: 'full_name',
                             name: 'full_name'
                         },

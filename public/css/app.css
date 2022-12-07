@@ -25,6 +25,9 @@
 .content .container-fluid #patientPaymentDetailsCard .hospitalClientNumber {
   display: none;
 }
+.content .container-fluid #insuranceSpan {
+  display: none;
+}
 .content .card .card-body .lensPowerDiv {
   margin-bottom: 1rem;
   display: none;

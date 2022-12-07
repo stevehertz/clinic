@@ -189,83 +189,88 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsInsurance">Insurance Company</label>
-                                            <select id="patientPaymentDetailsInsurance" name="insurance_id"
-                                                class="form-control select2 select2-danger"
-                                                data-dropdown-css-class="select2-danger" style="width: 100%;">
-                                                <option selected="selected" disabled="disabled">Choose Insurance Company
-                                                </option>
-                                                @forelse($insurances as $insurance)
-                                                    <option value="{{ $insurance->id }}">
-                                                        {{ $insurance->title }}
+                                <span id="insuranceSpan">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsInsurance">Insurance Company</label>
+                                                <select id="patientPaymentDetailsInsurance" name="insurance_id"
+                                                    class="form-control select2 select2-danger"
+                                                    data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                                    <option selected="selected" disabled="disabled">Choose Insurance Company
                                                     </option>
-                                                @empty
-                                                    <option disabled="disabled">
-                                                        No Insurance company Found
-                                                    </option>
-                                                @endforelse
-                                            </select>
+                                                    @forelse($insurances as $insurance)
+                                                        <option value="{{ $insurance->id }}">
+                                                            {{ $insurance->title }}
+                                                        </option>
+                                                    @empty
+                                                        <option disabled="disabled">
+                                                            No Insurance company Found
+                                                        </option>
+                                                    @endforelse
+                                                </select>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsSchemeName">Scheme Name</label>
+                                                <input type="text" class="form-control" name="scheme"
+                                                    id="patientPaymentDetailsSchemeName" placeholder="Enter Scheme Name">
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsPricinpalMemberName">
+                                                    Principal Member Name
+                                                </label>
+                                                <input type="text" class="form-control" name="principal"
+                                                    id="patientPaymentDetailsPricinpalMemberName"
+                                                    placeholder="Enter Principal Member Name">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsPricinpalMemberPhone">
+                                                    Principal Member Phone
+                                                </label>
+                                                <input type="text" class="form-control" name="phone"
+                                                    id="patientPaymentDetailsPricinpalMemberPhone"
+                                                    placeholder="Enter Principal Member Phone Number">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsPricinpalMemberWorkplace">
+                                                    Principal Member Workplace
+                                                </label>
+                                                <input type="text" class="form-control" name="workplace"
+                                                    id="patientPaymentDetailsPricinpalMemberWorkplace"
+                                                    placeholder="Enter Principal Member Workplace">
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="patientPaymentDetailsInsuranceCard">
+                                                    Insurance Card Number
+                                                </label>
+                                                <input type="text" class="form-control" name="card_number"
+                                                    id="patientPaymentDetailsInsuranceCard"
+                                                    placeholder="Enter Insurance Card Number">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsSchemeName">Scheme Name</label>
-                                            <input type="text" class="form-control" name="scheme"
-                                                id="patientPaymentDetailsSchemeName" placeholder="Enter Scheme Name">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsPricinpalMemberName">
-                                                Principal Member Name
-                                            </label>
-                                            <input type="text" class="form-control" name="principal"
-                                                id="patientPaymentDetailsPricinpalMemberName"
-                                                placeholder="Enter Principal Member Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsPricinpalMemberPhone">
-                                                Principal Member Phone
-                                            </label>
-                                            <input type="text" class="form-control" name="phone"
-                                                id="patientPaymentDetailsPricinpalMemberPhone"
-                                                placeholder="Enter Principal Member Phone Number">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsPricinpalMemberWorkplace">
-                                                Principal Member Workplace
-                                            </label>
-                                            <input type="text" class="form-control" name="workplace"
-                                                id="patientPaymentDetailsPricinpalMemberWorkplace"
-                                                placeholder="Enter Principal Member Workplace">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="patientPaymentDetailsInsuranceCard">
-                                                Insurance Card Number
-                                            </label>
-                                            <input type="text" class="form-control" name="card_number"
-                                                id="patientPaymentDetailsInsuranceCard"
-                                                placeholder="Enter Insurance Card Number">
-                                        </div>
-                                    </div>
-                                </div>
+                                </span>
 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -355,6 +360,38 @@
                             });
                             errorHtml += '</ul>';
                             toastr.error(errorHtml);
+                        }
+                    }
+                });
+            });
+
+
+            $('#insuranceSpan').fadeOut();
+
+            $(document).on('change', '#patientPaymentDetailsClientType', function(e){
+                e.preventDefault();
+                var type_id = $(this).val();
+                var path = '{{ route('users.client.type.show') }}';
+                var token = '{{ csrf_token() }}';
+                $.ajax({
+                    url:path,
+                    type:"POST",
+                    data:{
+                        type_id:type_id,
+                        _token:token
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        if(data['status']){
+                            if(data['data']['type'] == "Insurance"){
+                                $('#insuranceSpan').fadeIn();
+                            } 
+                            if(data['data']['type'] == "Cash and Insurance"){
+                                $('#insuranceSpan').fadeIn();
+                            }
+                            if(data['data']['type'] == "Cash"){
+                                $('#insuranceSpan').fadeOut();
+                            }
                         }
                     }
                 });

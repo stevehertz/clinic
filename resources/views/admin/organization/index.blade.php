@@ -67,28 +67,77 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header border-0">
-                            <h3 class="card-title">Clinics</h3>
-                        </div>
-                        <div class="card-body table-responsive p-0">
-                            <table id="clinicData" class="table table-striped table-valign-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Logo</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Address</th>
-                                        <th>Location</th>
-                                        <th>Select</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    <div class="card card-primary card-outline card-outline-tabs">
 
-                                </tbody>
-                            </table>
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                                        aria-selected="true">
+                                        Clinics
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-profile" role="tab"
+                                        aria-controls="custom-tabs-four-profile" aria-selected="false">
+                                        Workshops
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
+                        <!---.card-header p-0 border-bottom-0-->
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-home-tab">
+
+                                    <div class="table-responsive">
+                                        <table id="clinicData" class="table table-striped table-bordered table-valign-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-profile-tab">
+
+                                    <div class="table-responsive">
+                                        <table id="workshopsData" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Phone</th>
+                                                    <th>Email</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!--.tab-content-->
+                        </div>
+                        <!-- /.card-body -->
+
                     </div>
                     <!-- /.card -->
                 </div>
@@ -113,7 +162,12 @@
                     processing: true,
                     serverSide: true,
                     ajax: path,
-                    columns: [{
+                    columns: [
+                        {
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
                             data: 'clinic',
                             name: 'clinic'
                         },
@@ -130,14 +184,6 @@
                         {
                             data: 'phone',
                             name: 'phone'
-                        },
-                        {
-                            data: 'address',
-                            name: 'address'
-                        },
-                        {
-                            data: 'location',
-                            name: 'location'
                         },
                         {
                             data: 'select',
@@ -175,6 +221,75 @@
                             window.location.href =
                                 '{{ route('admin.dashboard.index', ':id') }}'.replace(':id',
                                     data.data.id);
+                        }
+                    }
+                });
+            });
+
+            find_workshops();
+            function find_workshops()
+            {
+                var path = '{{ route('admin.workshop.index') }}';
+                $('#workshopsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path, 
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        }, {
+                            data: 'name',
+                            name: 'name'
+                        },
+                        {
+                            data: 'logo',
+                            name: 'logo',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'phone',
+                            name: 'phone'
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                    "searching": false,
+                    "lengthChange": false,
+                    "ordering": true,
+                    "info": true,
+                    "paging": true,
+                });
+            }
+
+            $(document).on('click', '.selectWorkshopBtn', function(e){
+                e.preventDefault();
+                var workshop_id = $(this).attr('data-id');
+                var path = '{{ route('admin.workshop.show') }}';
+                var token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        workshop_id: workshop_id
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            let workshop_url = '{{ route('admin.dashboard.workshop.index', ':id') }}'.replace(':id', data.data.id);
+                            window.location.href = workshop_url;
+                        } else {
+                            console.log(data);
                         }
                     }
                 });
