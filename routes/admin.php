@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Reports\ReportsController;
 use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
+use App\Http\Controllers\Admin\Settings\Workshops\WorkshopSettingsController;
 use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
@@ -254,6 +255,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 });
             });
         });
+
+        Route::prefix('workshops')->name('workshops.')->group(function(){
+
+            Route::get('/index', [WorkshopSettingsController::class, 'index'])->name('index');
+
+        });
+        
     });
 
     Route::prefix('status')->name('status.')->group(function () {

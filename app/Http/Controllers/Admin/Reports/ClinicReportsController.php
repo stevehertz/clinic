@@ -38,7 +38,9 @@ class ClinicReportsController extends Controller
                     return date('d-m-Y', strtotime($row->appointment_date));
                 })
                 ->addColumn('type', function ($row) {
-                    return $row->payment_detail->client_type->type;
+                    if($row->payment_detail){
+                        return $row->payment_detail->client_type->type;
+                    }    
                 })
                 ->addColumn('scheduled_date', function ($row) {
                     if ($row->doctor_schedule) {

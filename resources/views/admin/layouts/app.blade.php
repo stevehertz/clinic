@@ -203,7 +203,7 @@ TIP: This Layout is for the main admin dashboard page.
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.settings.workshops.index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-gear"></i>
                                 <p>
                                     Workshop Settings

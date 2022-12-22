@@ -48,7 +48,7 @@ class OrdersController extends Controller
                     return $row->patient_first . ' ' . $row->patient_last;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('users.orders.view', $row->id) . '" class="btn btn-tools btn-sm"><i class="fa fa-eye"></i></a>';
+                    $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action', 'full_names'])

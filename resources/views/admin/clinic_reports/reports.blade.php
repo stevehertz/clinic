@@ -1,48 +1,48 @@
 <table>
     <thead>
         <tr>
-            <th>Clinic</th>
-            <th>Patient Names</th>
-            <th>Phone Number</th>
-            <th>Email Address</th>
-            <th>Date of Birth</th>
-            <th>Gender</th>
-            <th>Address</th>
-            <th>Next of Kin</th>
-            <th>Next of Kin Contacts</th>
-            <th>Appointment Date</th>
-            <th>Client Type</th>
-            <th>Scheduled Date</th>
-            <th>Doctor</th>
-            <th>Signs</th>
-            <th>Symptoms</th>
-            <th>Diagnosis</th>
-            <th>Right Sphere</th>
-            <th>Right Cylinder</th>
-            <th>Right Axis</th>
-            <th>Right Add</th>
-            <th>Left Sphere</th>
-            <th>Left Cylinder</th>
-            <th>Left Axis</th>
-            <th>Left Add</th>
-            <th>Notes</th>
-            <th>Index</th>
-            <th>Tint</th>
-            <th>Diameter</th>
-            <th>Focal Height</th>
-            <th>Receipt Number</th>
-            <th>Frame Code</th>
-            <th>Bill Open Date</th>
-            <th>Consultation Fee</th>
-            <th>Consultation Receipt Number</th>
-            <th>Bill Status</th>
-            <th>Claimed Amount</th>
-            <th>Agreed Amount</th>
-            <th>Paid Amount</th>
-            <th>Balance</th>
-            <th>Order Date</th>
-            <th>Order Status</th>
-            <th>Workshop</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Clinic</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Patient Names</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Phone Number</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Email Address</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Date of Birth</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Gender</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Address</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Next of Kin</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Next of Kin Contacts</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Appointment Date</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Client Type</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Scheduled Date</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Doctor</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Signs</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Symptoms</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Diagnosis</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Sphere</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Cylinder</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Axis</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Add</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Sphere</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Cylinder</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Axis</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Add</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Notes</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Index</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Tint</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Diameter</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Focal Height</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Receipt Number</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Frame Code</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Bill Open Date</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Consultation Fee</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Consultation Receipt Number</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Bill Status</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Claimed Amount</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Agreed Amount</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Paid Amount</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Balance</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Order Date</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Order Status</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Workshop</th>
         </tr>
     </thead>
     <tbody>
@@ -52,13 +52,17 @@
                 <td>{{ $report->patient->first_name }} {{ $report->patient->last_name }}</td>
                 <td>{{ $report->patient->phone }}</td>
                 <td>{{ $report->patient->email }}</td>
-                <td>{{ date('d-M-Y', strtotime($report->patient->dob))}}</td>
+                <td>{{ date('d-M-Y', strtotime($report->patient->dob)) }}</td>
                 <td>{{ $report->patient->gender }}</td>
                 <td>{{ $report->patient->address }}</td>
                 <td>{{ $report->patient->next_of_kin }}</td>
                 <td>{{ $report->patient->next_of_kin_contact }}</td>
                 <td>{{ date('d-M-Y', strtotime($report->appointment_date)) }}</td>
-                <td>{{ $report->payment_detail->client_type->type }}</td>
+                <td>
+                    @if ($report->payment_detail)
+                        {{ $report->payment_detail->client_type->type }}
+                    @endif
+                </td>
                 <td>
                     @if ($report->doctor_schedule)
                         {{ date('d-M-Y', strtotime($report->doctor_schedule->date)) }}
@@ -72,17 +76,17 @@
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ $report->diagnosis->signs }}
+                        {{ strip_tags($report->diagnosis->signs) }}
                     @endif
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ $report->diagnosis->symptoms }}
+                        {{ strip_tags($report->diagnosis->symptoms) }}
                     @endif
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ $report->diagnosis->diagnosis }}
+                        {{ strip_tags($report->diagnosis->diagnosis) }}
                     @endif
                 </td>
                 <td>
@@ -127,7 +131,7 @@
                 </td>
                 <td>
                     @if ($report->lens_power)
-                        {{ $report->lens_power->notes }}
+                        {{ strip_tags($report->lens_power->notes) }}
                     @endif
                 </td>
                 <td>
