@@ -13,7 +13,7 @@
                             <a href="{{ route('admin.organization.index') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.settings.clinics.index') }}">
+                            <a href="{{ route('admin.settings.index') }}">
                                 Clinic Settings
                             </a>
                         </li>

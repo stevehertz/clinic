@@ -393,6 +393,29 @@
                 });
             });
 
+            $(document).on('click', '.selectWorkshopBtn', function(e){
+                e.preventDefault();
+                var workshop_id = $(this).attr('data-id');
+                var path = '{{ route('admin.workshop.show') }}';
+                var token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        workshop_id: workshop_id
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            let workshop_url = '{{ route('admin.dashboard.workshop.index', ':id') }}'.replace(':id', data.data.id);
+                            window.location.href = workshop_url;
+                        } else {
+                            console.log(data);
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 @endsection

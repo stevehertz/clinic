@@ -194,22 +194,22 @@ TIP: This Layout is for the main admin dashboard page.
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.clinics.index') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-gear"></i>
                                 <p>
-                                    Clinic Settings
+                                    Settings
                                 </p>
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('admin.settings.workshops.index') }}" class="nav-link">
                                 <i class="nav-icon fa fa-gear"></i>
                                 <p>
                                     Workshop Settings
                                 </p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

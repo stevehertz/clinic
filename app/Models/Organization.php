@@ -147,4 +147,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(FramePurchase::class, 'organization_id', 'id');
     }
+
+    public function vendor()
+    {
+        # code...
+        return $this->hasMany(Vendor::class, 'organization_id', 'id');
+    }
 }

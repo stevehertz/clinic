@@ -46,9 +46,12 @@ use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Reports\ReportsController;
 use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
+use App\Http\Controllers\Admin\Settings\SettingsController;
+use App\Http\Controllers\Admin\Settings\Workshops\Lens\LensTypeController as LensLensTypeController;
 use App\Http\Controllers\Admin\Settings\Workshops\WorkshopSettingsController;
 use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
+use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,7 +104,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::prefix('clinics')->name('clinics.')->group(function () {
 
-            Route::get('/index', [ClinicSettingsController::class, 'index'])->name('index');
+            // Route::get('/index', [ClinicSettingsController::class, 'index'])->name('index');
 
             Route::prefix('assets')->name('assets.')->group(function () {
 
@@ -258,9 +261,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::prefix('workshops')->name('workshops.')->group(function(){
 
-            Route::get('/index', [WorkshopSettingsController::class, 'index'])->name('index');
+            Route::prefix('vendors')->name('vendors.')->group(function(){
+
+                Route::get('/index', [VendorsController::class, 'index'])->name('index');
+
+                Route::post('/store', [VendorsController::class, 'store'])->name('store');
+
+            });
 
         });
+
+        Route::get('/index', [SettingsController::class, 'index'])->name('index');
         
     });
 
@@ -561,6 +572,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         });
 
+   
     // Sun glasses
     Route::prefix('sun/glasses')->name('sun.glasses.')->group(function () {
 
@@ -606,4 +618,5 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}', [ReportsController::class, 'index'])->name('index');
     });
+
 });

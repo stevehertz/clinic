@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Clinic Settings</h1>
+                    <h1>Settings</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -25,6 +25,7 @@
         <div class="container-fluid">
 
             <div class="row">
+
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.client.type.index') }}">
                         <div class="info-box">
@@ -44,6 +45,7 @@
 
                 </div>
                 <!-- /.col -->
+
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.insurance.index') }}">
                         <div class="info-box">
@@ -63,11 +65,33 @@
 
                 </div>
                 <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.workshops.vendors.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-secondary">
+                                <i class="fa fa-briefcase"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    Vendors
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+
+                </div>
+                <!-- /.col -->
             </div>
             <!-- /.row -->
+
             <h5 class="mb-2">
                 Lens Settings
             </h5>
+
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.lens.type.index') }}">
@@ -109,7 +133,11 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-            <h5 class="mb-2">Assets Settings</h5>
+
+            <h5 class="mb-2">
+                Assets Settings
+            </h5>
+
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.settings.clinics.assets.type.index') }}">
@@ -153,6 +181,7 @@
             <!-- /.row -->
 
             <h5 class="mb-2">Frames</h5>
+            
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.settings.clinics.frames.type.index') }}">
@@ -273,6 +302,7 @@
             <!-- /.row -->
 
             <h5 class="mb-2">Sun Glasses</h5>
+
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.settings.clinics.glasses.colors.index') }}">
@@ -293,7 +323,7 @@
                 </div>
                 <!-- /.col -->
 
-                <div class="col-md-3 col-sm-6 col-12">
+                {{-- <div class="col-md-3 col-sm-6 col-12">
                     <a href="#">
                         <div class="info-box">
                             <span class="info-box-icon bg-warning">
@@ -309,7 +339,7 @@
                         </div>
                         <!-- /.info-box -->
                     </a>
-                </div>
+                </div> --}}
                 <!-- /.col -->
 
                 <div class="col-md-3 col-sm-6 col-12">
