@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
 use App\Http\Controllers\Admin\Insurances\InsurancesController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
+use App\Http\Controllers\Admin\Lens\LensIndicesController;
 use App\Http\Controllers\Admin\Lens\LensPrescriptionController as LensLensPrescriptionController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
@@ -287,6 +288,20 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{id}/update', [CoatingController::class, 'update'])->name('update');
 
                 Route::delete('/{id}/delete', [CoatingController::class, 'destroy'])->name('delete');
+
+            });
+
+            Route::prefix('lens/index')->name('lens.index.')->group(function(){
+
+                Route::get('/index', [LensIndicesController::class, 'index'])->name('index');
+
+                Route::post('/store', [LensIndicesController::class, 'store'])->name('store');
+
+                Route::post('/{id}/show', [LensIndicesController::class, 'show'])->name('show');
+
+                Route::post('/{id}/update', [LensIndicesController::class, 'update'])->name('update');
+
+                Route::delete('/{id}/delete', [LensIndicesController::class, 'destroy'])->name('delete');
 
             });
 

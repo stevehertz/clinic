@@ -153,7 +153,7 @@
                 <!-- /.col -->
 
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="#">
+                    <a href="{{ route('admin.settings.workshops.lens.index.index') }}">
                         <div class="info-box">
                             <span class="info-box-icon bg-primary">
                                 <i class="fa fa-hourglass-end"></i>

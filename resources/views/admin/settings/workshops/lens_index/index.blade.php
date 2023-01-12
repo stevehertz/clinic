@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lens Coating</h1>
+                    <h1>Lens Index</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -19,7 +19,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Lens Coating
+                            Lens Index
                         </li>
                     </ol>
                 </div>
@@ -35,14 +35,14 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-tools">
-                                <a href="#" id="newLensCoatingBtn" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-plus-circle"></i> New Lens Coating
+                                <a href="#" id="newLensIndexBtn" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-plus-circle"></i> New Lens Index
                                 </a>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="coatingData" class="table table-bordered table-striped table-hover">
+                            <table id="indexData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -61,12 +61,12 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
 
-        <div class="modal fade" id="newLensCoatingModal">
+        <div class="modal fade" id="newLensIndexModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form id="newLensCoatingForm">
+                    <form id="newLensIndexForm">
                         <div class="modal-header">
-                            <h4 class="modal-title">New Lens Coating</h4>
+                            <h4 class="modal-title">New Lens Index</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -74,19 +74,19 @@
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
-                                <label for="newLensCoatingTitle">Title</label>
-                                <input type="text" name="title" class="form-control" id="newLensCoatingTitle"
-                                    placeholder="Lens Coating Title">
+                                <label for="newLensIndexTitle">Title</label>
+                                <input type="text" name="title" class="form-control" id="newLensIndexTitle"
+                                    placeholder="Lens Index Title">
                             </div>
 
                             <div class="form-group">
-                                <label for="newLensCoatingDescription">Description</label>
-                                <textarea name="description" id="newLensCoatingDescription" class="form-control" placeholder="Enter Description"></textarea>
+                                <label for="newLensIndexDescription">Description</label>
+                                <textarea name="description" id="newLensIndexDescription" class="form-control" placeholder="Enter Description"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="newLensCoatingSubmitBtn" class="btn btn-primary">Save</button>
+                            <button type="submit" id="newLensIndexSubmitBtn" class="btn btn-primary">Save</button>
                         </div>
                     </form>
                 </div>
@@ -96,12 +96,12 @@
         </div>
         <!-- /.modal -->
 
-        <div class="modal fade" id="updateLensCoatingModal">
+        <div class="modal fade" id="updateLensIndexModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form id="updateLensCoatingForm">
+                    <form id="updateLensIndexForm">
                         <div class="modal-header">
-                            <h4 class="modal-title">Update Lens Coating</h4>
+                            <h4 class="modal-title">Update Lens Index</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -109,22 +109,22 @@
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
-                                <input type="hidden" id="updateLensCoatingId" name="coating_id" class="form-control" />
+                                <input type="hidden" id="updateLensIndexId" name="index_id" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <label for="updateLensCoatingTitle">Title</label>
-                                <input type="text" name="title" class="form-control" id="updateLensCoatingTitle"
-                                    placeholder="Lens Coating Title">
+                                <label for="updateLensIndexTitle">Title</label>
+                                <input type="text" name="title" class="form-control" id="updateLensIndexTitle"
+                                    placeholder="Lens Index Title">
                             </div>
 
                             <div class="form-group">
-                                <label for="updateLensCoatingDescription">Description</label>
-                                <textarea name="description" id="updateLensCoatingDescription" class="form-control" placeholder="Enter Description"></textarea>
+                                <label for="updateLensIndexDescription">Description</label>
+                                <textarea name="description" id="updateLensIndexDescription" class="form-control" placeholder="Enter Description"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="updateLensCoatingSubmitBtn" class="btn btn-primary">Update</button>
+                            <button type="submit" id="updateLensIndexSubmitBtn" class="btn btn-primary">Update</button>
                         </div>
                     </form>
                 </div>
@@ -141,11 +141,11 @@
     <script>
         $(document).ready(function() {
 
-            find_coating();
+            find_index();
 
-            function find_coating() {
-                var path = "{{ route('admin.settings.workshops.coating.index') }}";
-                $('#coatingData').DataTable({
+            function find_index() {
+                var path = "{{ route('admin.settings.workshops.lens.index.index') }}";
+                $('#indexData').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "ajax": path,
@@ -173,17 +173,17 @@
                 });
             }
 
-            $('#newLensCoatingBtn').click(function(e) {
+            $('#newLensIndexBtn').click(function(e) {
                 e.preventDefault();
-                $('#newLensCoatingModal').modal('show');
-                $('#newLensCoatingForm')[0].reset();
+                $('#newLensIndexModal').modal('show');
+                $('#newLensIndexForm')[0].reset();
             });
 
-            $('#newLensCoatingForm').submit(function(e) {
+            $('#newLensIndexForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.settings.workshops.coating.store') }}';
+                var path = '{{ route('admin.settings.workshops.lens.index.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -191,20 +191,20 @@
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        $('#newLensCoatingSubmitBtn').html(
+                        $('#newLensIndexSubmitBtn').html(
                             '<i class="fa fa-spinner fa-spin"></i>');
-                        $('#newLensCoatingSubmitBtn').attr('disabled', true);
+                        $('#newLensIndexSubmitBtn').attr('disabled', true);
                     },
                     complete: function() {
-                        $('#newLensCoatingSubmitBtn').html('Save');
-                        $('#newLensCoatingSubmitBtn').attr('disabled', false);
+                        $('#newLensIndexSubmitBtn').html('Save');
+                        $('#newLensIndexSubmitBtn').attr('disabled', false);
                     },
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newLensCoatingModal').modal('hide');
-                            $('#newLensCoatingForm')[0].reset();
-                            $('#coatingData').DataTable().ajax.reload();
+                            $('#newLensIndexModal').modal('hide');
+                            $('#newLensIndexForm')[0].reset();
+                            $('#indexData').DataTable().ajax.reload();
                         }
                     },
                     error: function(data) {
@@ -219,12 +219,12 @@
                 });
             });
 
-            $(document).on('click', '.deleteCoatingBtn', function(e){
+            $(document).on('click', '.deleteLensIndexBtn', function(e){
                 e.preventDefault();
-                var coating_id = $(this).data('id');
+                var index_id = $(this).data('id');
                 var token = "{{ csrf_token() }}";
-                var path = "{{ route('admin.settings.workshops.coating.delete', ':id') }}";
-                path = path.replace(':id', coating_id);
+                var path = "{{ route('admin.settings.workshops.lens.index.delete', ':id') }}";
+                path = path.replace(':id', index_id);
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this record!",
@@ -243,7 +243,7 @@
                             success: function(data) {
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
-                                    $('#coatingData').DataTable().ajax.reload();
+                                    $('#indexData').DataTable().ajax.reload();
                                 }
                             }
                         });
@@ -253,11 +253,11 @@
                 });
             });
 
-            $(document).on('click', '.updateCoatingBtn', function(e) {
+            $(document).on('click', '.updateLensIndexBtn', function(e) {
                 e.preventDefault();
-                var coating_id = $(this).data('id');
-                var path = "{{ route('admin.settings.workshops.coating.show', ':id') }}";
-                path = path.replace(':id', coating_id);
+                var index_id = $(this).data('id');
+                var path = "{{ route('admin.settings.workshops.lens.index.show', ':id') }}";
+                path = path.replace(':id', index_id);
                 var token = "{{ csrf_token() }}";
                 $.ajax({
                     url: path,
@@ -268,10 +268,10 @@
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            $('#updateLensCoatingModal').modal('show');
-                            $('#updateLensCoatingId').val(data['data']['id']);
-                            $('#updateLensCoatingTitle').val(data['data']['title']);
-                            $('#updateLensCoatingDescription').val(data['data']['description']);
+                            $('#updateLensIndexModal').modal('show');
+                            $('#updateLensIndexId').val(data['data']['id']);
+                            $('#updateLensIndexTitle').val(data['data']['title']);
+                            $('#updateLensIndexDescription').val(data['data']['description']);
                             
                         }
                     },
@@ -287,13 +287,13 @@
                 });
             });
 
-            $('#updateLensCoatingForm').submit(function(e) {
+            $('#updateLensIndexForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var coating_id = $('#updateLensCoatingId').val();
-                let path = '{{ route('admin.settings.workshops.coating.update', ':id') }}';
-                path = path.replace(':id', coating_id);
+                var index_id = $('#updateLensIndexId').val();
+                let path = '{{ route('admin.settings.workshops.lens.index.update', ':id') }}';
+                path = path.replace(':id', index_id);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -306,20 +306,20 @@
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        $('#updateLensCoatingSubmitBtn').html(
+                        $('#updateLensIndexSubmitBtn').html(
                             '<i class="fa fa-spinner fa-spin"></i>');
-                        $('#updateLensCoatingSubmitBtn').attr('disabled', true);
+                        $('#updateLensIndexSubmitBtn').attr('disabled', true);
                     },
                     complete: function() {
-                        $('#updateLensCoatingSubmitBtn').html('Update');
-                        $('#updateLensCoatingSubmitBtn').attr('disabled', false);
+                        $('#updateLensIndexSubmitBtn').html('Update');
+                        $('#updateLensIndexSubmitBtn').attr('disabled', false);
                     },
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#updateLensCoatingModal').modal('hide');
-                            $('#updateLensCoatingForm')[0].reset();
-                            $('#coatingData').DataTable().ajax.reload();
+                            $('#updateLensIndexModal').modal('hide');
+                            $('#updateLensIndexForm')[0].reset();
+                            $('#indexData').DataTable().ajax.reload();
                         }
                     },
                     error: function(data) {
@@ -333,7 +333,6 @@
                     }
                 });
             });
-
         });
     </script>
 @endsection

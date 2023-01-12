@@ -159,4 +159,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(Coating::class, 'organization_id', 'id');
     }
+
+    public function lens_index()
+    {
+        # code...
+        return $this->hasMany(LensIndex::class, 'organization_id', 'id');
+    }
 }
