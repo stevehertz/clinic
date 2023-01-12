@@ -112,6 +112,7 @@
 
                 </div>
                 <!-- /.col -->
+
                 <div class="col-md-3 col-sm-6 col-12">
                     <a href="{{ route('admin.lens.material.index') }}">
                         <div class="info-box">
@@ -129,6 +130,44 @@
                         <!-- /.info-box -->
                     </a>
 
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.workshops.coating.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger">
+                                <i class="fa fa-hand-lizard-o"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    Lens Coating
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="#">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary">
+                                <i class="fa fa-hourglass-end"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    Lens Index
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
                 </div>
                 <!-- /.col -->
             </div>

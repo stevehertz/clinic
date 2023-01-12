@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\ClientType\ClientTypeController;
 use App\Http\Controllers\Admin\Clinics\ClinicsController;
+use App\Http\Controllers\Admin\Coating\CoatingController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
@@ -272,6 +273,20 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{id}/update', [VendorsController::class, 'update'])->name('update');
 
                 Route::delete('/{id}/delete', [VendorsController::class, 'destroy'])->name('delete');
+
+            });
+
+            Route::prefix('coating')->name('coating.')->group(function(){
+
+                Route::get('/index', [CoatingController::class, 'index'])->name('index');
+
+                Route::post('/store', [CoatingController::class, 'store'])->name('store');
+
+                Route::post('/{id}/show', [CoatingController::class, 'show'])->name('show');
+
+                Route::post('/{id}/update', [CoatingController::class, 'update'])->name('update');
+
+                Route::delete('/{id}/delete', [CoatingController::class, 'destroy'])->name('delete');
 
             });
 

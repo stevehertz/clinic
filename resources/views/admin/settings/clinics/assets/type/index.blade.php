@@ -201,6 +201,7 @@
                     },
                     success: function(data) {
                         if (data['status']) {
+                            toastr.success(data['message']);
                             $('#newAssetTypeModal').modal('hide');
                             $('#newAssetTypeForm')[0].reset();
                             $('#assetTypesData').DataTable().ajax.reload();
