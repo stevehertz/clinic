@@ -153,4 +153,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(Vendor::class, 'organization_id', 'id');
     }
+
+    public function coating()
+    {
+        # code...
+        return $this->hasMany(Coating::class, 'organization_id', 'id');
+    }
 }

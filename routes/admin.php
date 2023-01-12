@@ -267,6 +267,12 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::post('/store', [VendorsController::class, 'store'])->name('store');
 
+                Route::post('/show', [VendorsController::class, 'show'])->name('show');
+
+                Route::post('/{id}/update', [VendorsController::class, 'update'])->name('update');
+
+                Route::delete('/{id}/delete', [VendorsController::class, 'destroy'])->name('delete');
+
             });
 
         });

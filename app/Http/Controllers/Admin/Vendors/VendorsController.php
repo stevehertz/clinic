@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Vendors;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Organization;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -101,20 +103,29 @@ class VendorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         //
-    }
+        $data = $request->all();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $validator = Validator::make($data, [
+            'vendor_id' => 'required|integer|exists:vendors,id'
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $vendor = Vendor::findOrFail($data['vendor_id']);
+
+        $response['status'] = true;
+        $response['data'] = $vendor;
+
+        return response()->json($response, 200);
+
     }
 
     /**
@@ -127,6 +138,40 @@ class VendorsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'first_name' => 'required|string',
+            'last_name' => 'nullable|string',
+            'company' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'type' => 'required|string',
+            'location' => 'nullable',
+        ]);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $vendor = Vendor::findOrFail($id);
+
+        $vendor->update([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'company' => $data['company'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'type' => $data['type'],
+            'location' => $data['location'],
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'vendor updated successfully';
+        return response()->json($response, 200);
     }
 
     /**
@@ -138,5 +183,10 @@ class VendorsController extends Controller
     public function destroy($id)
     {
         //
+        $vendor = Vendor::findOrFail($id);
+        $vendor->delete();
+        $response['status'] = true;
+        $response['message'] = 'Vendor deleted successfully';
+        return response()->json($response, 200);
     }
 }
