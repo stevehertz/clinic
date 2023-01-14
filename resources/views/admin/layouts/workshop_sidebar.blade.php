@@ -71,6 +71,24 @@
 
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-database"></i>
+                        <p>
+                            Assets
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>Assets</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-check-square"></i>
                         <p>
                             Orders
@@ -91,15 +109,15 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
-                            Users
+                            Technicians
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.workshop.technicians.index', $workshop->id) }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Users</p>
+                                <p>Technicians</p>
                             </a>
                         </li>
                     </ul>

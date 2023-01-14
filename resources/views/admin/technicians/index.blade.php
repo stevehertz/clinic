@@ -1,19 +1,19 @@
-@extends('admin.layouts.temp')
+@extends('admin.layouts.workshop')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Users</h1>
+                    <h1>Technicians</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
+                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Users
+                            Technicians
                         </li>
                     </ol>
                 </div>
@@ -29,14 +29,14 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-tools">
-                                <a href="#" class="btn btn-primary btn-sm newUserBtn">
-                                    <i class="fa fa-plus-circle"></i> New User
+                                <a href="#" id="newTechnicianBtn" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-plus-circle"></i> New Technician
                                 </a>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="usersData" class="table table-bordered table-striped table-hover">
+                            <table id="techniciansData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Full Names</th>
@@ -52,38 +52,40 @@
                             </table>
                         </div><!-- /.card-body -->
                     </div><!-- /.card -->
-
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
 
-        <div class="modal fade" id="newUserModal">
+        <div class="modal fade" id="newTechnicianModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">
-                            New User
+                            New Technician
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="newUserForm">
+                    <form id="newTechnicianForm">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" value="{{ $clinic->id }}" name="clinic_id" id="newUserClinicId" class="form-control" />
+                            <input type="hidden" value="{{ $workshop->id }}" name="workshop_id"
+                                id="newTechnicianWorkshopId" class="form-control" />
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="newUserFirstName">First Name</label>
-                                        <input type="text" class="form-control" name="first_name" id="newUserFirstName" placeholder="Enter First Name">
+                                        <input type="text" class="form-control" name="first_name"
+                                            id="newTechnicianFirstName" placeholder="Enter First Name">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="newUserLastName">Last Name</label>
-                                        <input type="text" class="form-control" name="last_name" id="newUserLastName" placeholder="Enter Last Name">
+                                        <input type="text" class="form-control" name="last_name"
+                                            id="newTechnicianLastName" placeholder="Enter Last Name">
                                     </div>
                                 </div>
                             </div>
@@ -92,14 +94,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="newUserPhone">Telephone</label>
-                                        <input type="text" class="form-control" name="phone" id="newUserPhone"
+                                        <input type="text" class="form-control" name="phone" id="newTechnicianPhone"
                                             placeholder="Enter Telephone Number">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="newUserEmail">Email Address</label>
-                                        <input type="email" class="form-control" name="email" id="newUserEmail"
+                                        <input type="email" class="form-control" name="email" id="newTechnicianEmail"
                                             placeholder="Enter Email Address">
                                     </div>
                                 </div>
@@ -108,7 +110,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="newUserStatus">Status</label>
+                                        <label for="newTechnicianStatus">Status</label>
                                         <select id="newUserStatus" name="status"
                                             class="form-control select2 select2-danger"
                                             data-dropdown-css-class="select2-danger" style="width: 100%;">
@@ -121,12 +123,11 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="newUserRole">Role</label>
-                                        <select id="newUserRole" name="role_id"
-                                            class="form-control select2 select2-primary"
+                                        <label for="newTechnicianRole">Role</label>
+                                        <select id="newUserRole" name="role_id" class="form-control select2 select2-primary"
                                             data-dropdown-css-class="select2-primary" style="width: 100%;">
                                             <option disabled="disabled" selected="selected">Choose Role</option>
                                             <option value="doctor">Doctor</option>
@@ -134,11 +135,11 @@
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="newUserSubmitBtn" class="btn btn-primary">Save</button>
+                            <button type="submit" id="newTechnicianSubmitBtn" class="btn btn-primary">Save</button>
                         </div>
                     </form>
                 </div>
@@ -149,18 +150,17 @@
         <!-- /.modal -->
 
     </section><!-- /.content -->
-    
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function() {
 
-            find_users();
+            find_technicians();
 
-            function find_users() {
-                var path = '{{ route('admin.users.index', $clinic->id) }}';
-                $('#usersData').DataTable({
+            function find_technicians() {
+                var path = '{{ route('admin.workshop.technicians.index', $workshop->id) }}';
+                $('#techniciansData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
@@ -196,42 +196,43 @@
                 });
             }
 
-            $(document).on('click', '.newUserBtn', function(e) {
+            $(document).on('click', '#newTechnicianBtn', function(e) {
                 e.preventDefault();
-                $('#newUserModal').modal('show');
+                $('#newTechnicianModal').modal('show');
             });
 
-            $('#newUserForm').submit(function(e){
+            $('#newTechnicianForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.users.store') }}';
+                var path = '{{ route('admin.workshop.technicians.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
-                    beforeSend:function(){
-                        $('#newUserSubmitBtn').html('<i class="fa fa-spinner fa-spin"></i>');
-                        $('#newUserSubmitBtn').attr('disabled', true);
+                    beforeSend: function() {
+                        $('#newTechnicianSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
+                        $('#newTechnicianSubmitBtn').attr('disabled', true);
                     },
-                    complete:function(){
-                        $('#newUserSubmitBtn').html('Save');
-                        $('#newUserSubmitBtn').attr('disabled', false);
+                    complete: function() {
+                        $('#newTechnicianSubmitBtn').html('Save');
+                        $('#newTechnicianSubmitBtn').attr('disabled', false);
                     },
                     success: function(data) {
-                        if(data['status']) {
-                            $('#newUserModal').modal('hide');
-                            $('#newUserForm')[0].reset();
-                            $('#usersData').DataTable().ajax.reload();
+                        if (data['status']) {
+                            $('#newTechnicianModal').modal('hide');
+                            $('#newTechnicianForm')[0].reset();
+                            $('#techniciansData').DataTable().ajax.reload();
                         }
                     },
                     error: function(data) {
                         console.log(data.responseJSON.errors);
                         var errors = data.responseJSON.errors;
-                        if(errors) {
-                            $.each(errors, function(key, value){
+                        if (errors) {
+                            $.each(errors, function(key, value) {
                                 toastr.error(value);
                             });
                         }
@@ -239,15 +240,16 @@
                 });
             });
 
-            //delete user
-            $(document).on('click', '.deleteUsersBtn', function(e) {
+            $(document).on('click', '.deleteTechnicianBtn', function(e) {
+
                 e.preventDefault();
-                var path = '{{ route('admin.users.delete') }}';
-                var user_id = $(this).data('id');
+                var technician_id = $(this).data('id');
+                var path = "{{ route('admin.workshop.technicians.delete', ':id') }}";
+                path = path.replace(':id', technician_id);
                 var token = '{{ csrf_token() }}';
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this Doctor!",
+                    text: "Once deleted, you will not be able to recover this Technician!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -258,23 +260,21 @@
                             url: path,
                             type: "DELETE",
                             data: {
-                                user_id: user_id,
                                 _token: token,
                             },
                             dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
-                                    $('#usersData').DataTable().ajax.reload();
-                                } else {
-                                    console.log(data);
-                                }
+                                    $('#techniciansData').DataTable().ajax.reload();
+                                } 
                             }
                         });
                     } else if (result.isDenied) {
                         Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
+
             });
 
 

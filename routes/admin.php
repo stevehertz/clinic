@@ -52,6 +52,7 @@ use App\Http\Controllers\Admin\Settings\SettingsController;
 use App\Http\Controllers\Admin\Settings\Workshops\Lens\LensTypeController as LensLensTypeController;
 use App\Http\Controllers\Admin\Settings\Workshops\WorkshopSettingsController;
 use App\Http\Controllers\Admin\Status\StatusController;
+use App\Http\Controllers\Admin\Technicians\TechniciansController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
@@ -653,6 +654,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/export', [ReportsController::class, 'export'])->name('export');
 
         Route::get('/{id}', [ReportsController::class, 'index'])->name('index');
+    });
+
+    // Technicians
+    Route::prefix('workshop/technicians')->name('workshop.technicians.')->group(function(){
+
+        Route::get('/{id}/index', [TechniciansController::class, 'index'])->name('index');
+
+        Route::post('/store', [TechniciansController::class, 'store'])->name('store');
+
+        Route::delete('/{id}/delete', [TechniciansController::class, 'destroy'])->name('delete');
+
     });
 
 });

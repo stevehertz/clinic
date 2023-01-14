@@ -47,4 +47,10 @@ class Workshop extends Model
         # code...
         return $this->hasOne(Treatment::class, 'workshop_id', 'id');
     }
+
+    public function technician()
+    {
+        # code...
+        return $this->hasMany(Technician::class, 'workshop_id', 'id');
+    }
 }

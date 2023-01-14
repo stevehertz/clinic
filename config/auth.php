@@ -23,6 +23,11 @@ return [
         'model' => App\Models\Admin::class,
     ],
 
+    'technician' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Technician::class,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -48,6 +53,10 @@ return [
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
+        ],
+        'technician' => [
+            'driver' => 'session',
+            'provider' => 'technicians',
         ],
     ],
 
@@ -82,6 +91,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+        'technicians' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Technician::class,
+        ]
     ],
 
     /*
@@ -110,6 +123,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+
+        'technicians' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Technician::class,
         ],
     ],
 

@@ -41,6 +41,9 @@
                     <a href="{{ route('users.login') }}" class="btn btn-block btn-danger">
                         <i class="fa fa-sign-in mr-2"></i> Sign in as User
                     </a>
+                    <a href="{{ route('technicians.login') }}" class="btn btn-block btn-secondary">
+                        <i class="fa fa-sign-in mr-2"></i> Sign in as Technician
+                    </a>
                 </div>
                 <!-- /.social-auth-links -->
             </div>

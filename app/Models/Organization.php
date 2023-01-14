@@ -165,4 +165,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(LensIndex::class, 'organization_id', 'id');
     }
+
+    public function technician()
+    {
+        # code...
+        return $this->hasMany(Technician::class, 'organization_id', 'id');
+    }
 }
