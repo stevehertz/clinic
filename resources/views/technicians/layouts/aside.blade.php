@@ -1,6 +1,6 @@
 <aside class="main-sidebar elevation-4 sidebar-light-primary">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link navbar-primary">
+    <a href="{{ route('technicians.dashboard.index') }}" class="brand-link navbar-primary">
         <img src="{{ asset('storage/logo/AdminLTELogo.png') }}" alt="AdminLTE Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Clinic App</span>
@@ -15,7 +15,7 @@
                     class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth::guard('technician')->user()->first_name }}
+                <a href="{{ route('technicians.technicians.index') }}" class="d-block">{{ Auth::guard('technician')->user()->first_name }}
                     {{ Auth::guard('technician')->user()->last_name }}</a>
             </div>
         </div>
@@ -35,7 +35,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="{{ route('technicians.dashboard.index') }}" class="nav-link active">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>

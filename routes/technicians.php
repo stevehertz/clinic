@@ -24,6 +24,10 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function(){
 
         Route::get('/index', [TechniciansController::class, 'index'])->name('index');
 
+        Route::post('/update', [TechniciansController::class, 'update'])->name('update');
+
+        Route::post('/update/password', [TechniciansController::class, 'update_password'])->name('update.password');
+
         Route::post('/logout', [TechniciansController::class, 'logout'])->name('logout');
 
     });
