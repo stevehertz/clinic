@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
+use App\Http\Controllers\Technicians\Technicians\TechniciansController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:technician', 'preventBackHistory'])->group(function () {
@@ -17,6 +18,14 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function(){
     Route::prefix('dashboard')->name('dashboard.')->group(function()
     {
         Route::get('/index', [DashboardController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('technicians')->name('technicians.')->group(function(){
+
+        Route::get('/index', [TechniciansController::class, 'index'])->name('index');
+
+        Route::post('/logout', [TechniciansController::class, 'logout'])->name('logout');
+
     });
 
 });

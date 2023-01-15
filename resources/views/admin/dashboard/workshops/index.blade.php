@@ -215,6 +215,7 @@
         </div>
         <!--.container-fluid -->
     </div>
+    
 @endsection
 
 @section('scripts')
