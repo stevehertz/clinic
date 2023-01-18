@@ -53,7 +53,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('technicians.lens.index') }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Lens</p>
                             </a>
@@ -77,7 +77,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('technicians.assets.index') }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Assets</p>
                             </a>

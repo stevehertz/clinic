@@ -94,25 +94,6 @@
                     </div>
                 </div>
                 <!-- ./col -->
-
-                {{-- <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>{{ $num_purchases }}</h3>
-
-                            <p>Received Stocks</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bookmark"></i>
-                        </div>
-                        <a href="#" class="small-box-footer receivedStockBtn">
-                            Receive Stock <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div> --}}
-                <!-- ./col -->
-
             </div>
 
             <div class="row">

@@ -171,4 +171,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(Technician::class, 'organization_id', 'id');
     }
+
+    public function workshop_asset()
+    {
+        # code...
+        return $this->hasMany(WorkshopAsset::class, 'organization_id', 'id');
+    }
 }

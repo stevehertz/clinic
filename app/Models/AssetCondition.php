@@ -33,4 +33,10 @@ class AssetCondition extends Model
         # code...
         return $this->hasMany(AssetTransfer::class, 'condition_id', 'id');
     }
+
+    public function workshop_asset()
+    {
+        # code...
+        return $this->hasMany(WorkshopAsset::class, 'condition_id', 'id');
+    }
 }
