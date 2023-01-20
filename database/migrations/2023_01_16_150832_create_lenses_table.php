@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('lens_material_id');
             $table->string('lens_index');
             $table->date('date_added');
+            $table->string('eye');
             $table->integer('opening')->default(0);
             $table->integer('purchased')->default(0);
             $table->integer('transfered')->default(0);

@@ -59,4 +59,22 @@ class Workshop extends Model
         # code...
         return $this->hasMany(WorkshopAsset::class, 'workshop_id', 'id');
     }
+
+    public function lens()
+    {
+        # code...
+        return $this->hasMany(Lens::class, 'workshop_id', 'id');
+    }
+
+    public function from_workshop_transfer_asset()
+    {
+        # code...
+        return $this->hasMany(WorkshopTransferAsset::class, 'from_workshop_id', 'id');
+    }
+
+    public function to_workshop_transfer_asset()
+    {
+        # code...
+        return $this->hasMany(WorkshopTransferAsset::class, 'to_workshop_id', 'id');
+    }
 }

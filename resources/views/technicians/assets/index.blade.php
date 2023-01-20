@@ -39,24 +39,6 @@
                     <!-- /.info-box -->
                 </div>
                 <!-- /.col -->
-
-                <div class="col-md-4 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-success">
-                            <i class="fa fa-flag"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Transfered Assets
-                            </span>
-                            <span class="info-box-number">410</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
             </div>
             <!--.row -->
 
@@ -71,13 +53,6 @@
                                         href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
                                         aria-selected="true">
                                         Assets
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
-                                        href="#custom-tabs-four-profile" role="tab"
-                                        aria-controls="custom-tabs-four-profile" aria-selected="false">
-                                        Transfered Assets
                                     </a>
                                 </li>
                             </ul>
@@ -105,27 +80,6 @@
                                             <tbody>
 
                                             </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-
-                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
-                                    aria-labelledby="custom-tabs-four-profile-tab">
-
-                                    <div class="table-responsive">
-                                        <table id="frameStocksData" class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Asset </th>
-                                                    <th>Transfered Date</th>
-                                                    <th>Type</th>
-                                                    <th>Condition</th>
-                                                    <th>Quantity</th>
-                                                    <th>Remarks</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
                                         </table>
                                     </div>
 
@@ -196,11 +150,6 @@
                     ]
                 });
             }
-
-            function find_transfered(){
-                
-            }
-
 
         });
     </script>

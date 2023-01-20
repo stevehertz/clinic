@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Technicians\Assets\AssetsController;
+use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
 use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
@@ -43,6 +44,14 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
     Route::prefix('assets')->name('assets.')->group(function(){
 
         Route::get('/index', [AssetsController::class, 'index'])->name('index');
+
+    });
+
+    Route::prefix('assets/transfer')->name('assets.transfer.')->group(function(){
+
+        Route::get('/index', [TransferedAssetsController::class, 'index'])->name('index');
+
+        Route::get('/transfer/from', [TransferedAssetsController::class, 'transfer_from'])->name('transfer.from');
 
     });
 });

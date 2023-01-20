@@ -33,4 +33,10 @@ class LensMaterial extends Model
         # code...
         return $this->hasMany(ContactLen::class, 'material_id', 'id');
     }
+
+    public function lens()
+    {
+        # code...
+        return $this->hasMany(Lens::class, 'lens_material_id', 'id');
+    }
 }

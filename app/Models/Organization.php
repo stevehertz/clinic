@@ -177,4 +177,16 @@ class Organization extends Model
         # code...
         return $this->hasMany(WorkshopAsset::class, 'organization_id', 'id');
     }
+
+    public function lens()
+    {
+        # code...
+        return $this->hasMany(Lens::class, 'organization_id', 'id');
+    }
+
+    public function workshop_transfer_asset()
+    {
+        # code...
+        return $this->hasMany(WorkshopTransferAsset::class, 'organization_id', 'id');
+    }
 }

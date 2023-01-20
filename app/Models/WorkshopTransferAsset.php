@@ -5,33 +5,45 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WorkshopAsset extends Model
+class WorkshopTransferAsset extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'organization_id',
-        'workshop_id',
+        'asset_id',
+        'from_workshop_id',
+        'to_workshop_id',
+        'transfer_date',
         'type_id',
         'condition_id',
-        'asset',
-        'serial_number',
         'quantity',
-        'description',
-        'purchase_date',
-        'purchase_cost',
+        'remarks',
     ];
 
-    public function organzation()
+    
+    function organization()
     {
         # code...
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 
-    public function workshop()
+    public function asset()
     {
         # code...
-        return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
+        return $this->belongsTo(Asset::class, 'asset_id', 'id');
+    }
+
+    public function from_workshop()
+    {
+        # code...
+        return $this->belongsTo(Workshop::class, 'from_workshop_id', 'id');
+    }
+
+    public function to_workshop()
+    {
+        # code...
+        return $this->belongsTo(Workshop::class, 'to_workshop_id', 'id');
     }
 
     public function asset_type()
@@ -46,9 +58,4 @@ class WorkshopAsset extends Model
         return $this->belongsTo(AssetCondition::class, 'condition_id', 'id');
     }
 
-    public function workshop_transfer_asset()
-    {
-        # code...
-        return $this->hasMany(WorkshopTransferAsset::class, 'asset_id', 'id');
-    }
 }

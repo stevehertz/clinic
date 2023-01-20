@@ -33,4 +33,10 @@ class LensType extends Model
         # code...
         return $this->hasMany(ContactLen::class, 'type_id', 'id');
     }
+
+    public function lens()
+    {
+        # code...
+        return $this->hasMany(Lens::class, 'lens_type_id', 'id');
+    }
 }

@@ -18,6 +18,7 @@ class Lens extends Model
         'lens_material_id',
         'lens_index',
         'date_added',
+        'eye',
         'opening',
         'purchased',
         'transfered',
@@ -25,4 +26,28 @@ class Lens extends Model
         'sold',
         'closing',
     ];
+
+    public function organization()
+    {
+        # code...
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
+
+    public function workshop()
+    {
+        # code...
+        return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
+    }
+
+    public function lens_type()
+    {
+        # code...
+        return $this->belongsTo(LensType::class, 'lens_type_id', 'id');
+    }
+
+    public function lens_material()
+    {
+        # code...
+        return $this->belongsTo(LensMaterial::class, 'lens_material_id', 'id');
+    }
 }

@@ -112,7 +112,7 @@
                                     aria-labelledby="custom-tabs-four-home-tab">
 
                                     <div class="table-responsive">
-                                        <table id="lensData" class="table table-striped table-hover">
+                                        <table id="lensData" class="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Date Added</th>
@@ -121,6 +121,7 @@
                                                     <th>Lens Type</th>
                                                     <th>Lens Material</th>
                                                     <th>Lens Index</th>
+                                                    <th>Eye</th>
                                                     <th>Opening</th>
                                                     <th>Purchased</th>
                                                     <th>Transfered</th>
@@ -142,7 +143,7 @@
                                     aria-labelledby="custom-tabs-four-profile-tab">
 
                                     <div class="table-responsive">
-                                        <table id="frameStocksData" class="table table-striped table-hover">
+                                        <table id="frameStocksData" class="table table-bordered table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Purchased Date</th>
@@ -165,7 +166,7 @@
                                 <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-settings-tab">
                                     <div class="table-responsive">
-                                        <table id="frameTransferData" class="table table-striped table-hover">
+                                        <table id="frameTransferData" class="table table-bordered table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Frame Code</th>
@@ -191,12 +192,90 @@
 
                 </div><!-- /.col -->
             </div><!-- /.row -->
-            
-        </div><!--.container-fluid -->
+
+        </div>
+        <!--.container-fluid -->
     </section>
     <!-- /.content -->
-
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready(function() {
+
+            find_lens();
+
+            function find_lens() {
+                var path = '{{ route('technicians.lens.index') }}';
+                $('#lensData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    "responsive": true,
+                    "autoWidth": false,
+                    columns: [{
+                            data: 'date_added',
+                            name: 'date_added'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'type',
+                            name: 'type'
+                        },
+                        {
+                            data: 'material',
+                            name: 'material'
+                        },
+                        {
+                            data: 'lens_index',
+                            name: 'lens_index'
+                        },
+                        {
+                            data: 'eye',
+                            name: 'eye'
+                        },
+                        {
+                            data: 'opening',
+                            name: 'opening'
+                        },
+                        {
+                            data: 'purchased',
+                            name: 'purchased'
+                        },
+                        {
+                            data: 'transfered',
+                            name: 'transfered'
+                        },
+                        {
+                            data: 'total',
+                            name: 'total'
+                        },
+                        {
+                            data: 'sold',
+                            name: 'sold'
+                        },
+                        {
+                            data: 'closing',
+                            name: 'closing'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+
+                });
+            }
+
+        });
+    </script>
 @endsection

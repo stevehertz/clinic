@@ -82,6 +82,13 @@
                                 <p>Assets</p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('technicians.assets.transfer.index') }}" class="nav-link">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>Transfered Assets</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
