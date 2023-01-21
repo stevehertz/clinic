@@ -26,6 +26,9 @@ class RedirectIfAuthenticated
                 if($guard == 'admin'){
                     return redirect()->route('admin.organization.index');
                 }
+                if($guard == 'technician'){
+                    return redirect()->route('technicians.dashboard.index');
+                }
                 return redirect(RouteServiceProvider::HOME);
             }
         }

@@ -62,6 +62,7 @@ class WorkshopsController extends Controller
         $validator = Validator::make($data, [
             'organization_id' => 'required|integer|exists:organizations,id',
             'name' => 'required|string|max:255',
+            'initials' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'phone' => 'required|numeric|min:10',
             'email' => 'required|string|max:255',
@@ -99,6 +100,7 @@ class WorkshopsController extends Controller
         $organization = $admin->organization;
         $organization->workshop()->create([
             'name' => $data['name'],
+            'initials' => $data['initials'],
             'logo' => $logoNameToStore,
             'phone' => $data['phone'],
             'email' => $data['email'],

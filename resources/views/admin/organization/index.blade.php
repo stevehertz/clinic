@@ -99,6 +99,7 @@
                                                 <tr>
                                                     <th></th>
                                                     <th>Name</th>
+                                                    <th>Initials</th>
                                                     <th>Logo</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
@@ -121,6 +122,7 @@
                                                 <tr>
                                                     <th></th>
                                                     <th>Name</th>
+                                                    <th>Initials</th>
                                                     <th>Logo</th>
                                                     <th>Phone</th>
                                                     <th>Email</th>
@@ -170,6 +172,10 @@
                         {
                             data: 'clinic',
                             name: 'clinic'
+                        },
+                        {
+                            data: 'initials',
+                            name: 'initials'
                         },
                         {
                             data: 'logo',
@@ -240,6 +246,10 @@
                         }, {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'initials',
+                            name: 'initials'
                         },
                         {
                             data: 'logo',

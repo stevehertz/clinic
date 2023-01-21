@@ -39,6 +39,14 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
         
         Route::get('/index', [LensController::class, 'index'])->name('index');
 
+        Route::post('/store', [LensController::class, 'store'])->name('store');
+
+        Route::post('/{id}/show', [LensController::class, 'show'])->name('show');
+
+        Route::post('/{id}/update', [LensController::class, 'update'])->name('update');
+
+        Route::delete('/{id}/delete', [LensController::class, 'destroy'])->name('delete');
+
     });
 
     Route::prefix('assets')->name('assets.')->group(function(){

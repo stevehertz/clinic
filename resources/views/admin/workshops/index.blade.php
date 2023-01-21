@@ -40,6 +40,7 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
+                                        <th>Initials</th>
                                         <th>Logo</th>
                                         <th>Phone</th>
                                         <th>Email</th>
@@ -70,11 +71,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="newWorkShopTitle">Name</label>
                                         <input type="text" name="name" class="form-control" id="newWorkShopTitle"
                                             placeholder="Enter Workshop Name">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newWorkShopTitle">Initials</label>
+                                        <input type="text" name="initials" class="form-control" id="newWorkShopInitials"
+                                            placeholder="Enter Workshop Initials">
                                     </div>
                                 </div>
                             </div>
@@ -230,9 +239,14 @@
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
-                        }, {
+                        }, 
+                        {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'initials',
+                            name: 'initials'
                         },
                         {
                             data: 'logo',

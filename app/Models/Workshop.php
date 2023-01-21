@@ -12,6 +12,7 @@ class Workshop extends Model
     protected $fillable = [
         'organization_id',
         'name',
+        'initials',
         'logo',
         'phone',
         'email',
