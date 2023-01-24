@@ -50,4 +50,10 @@ class Lens extends Model
         # code...
         return $this->belongsTo(LensMaterial::class, 'lens_material_id', 'id');
     }
+
+    public function lens_purchase()
+    {
+        # code...
+        $this->hasMany(LensPurchase::class, 'lens_id', 'id');
+    }
 }

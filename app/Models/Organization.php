@@ -189,4 +189,10 @@ class Organization extends Model
         # code...
         return $this->hasMany(WorkshopTransferAsset::class, 'organization_id', 'id');
     }
+
+    public function lens_purchase()
+    {
+        # code...
+        return $this->hasMany(LensPurchase::class, 'organization_id', 'id');
+    }
 }

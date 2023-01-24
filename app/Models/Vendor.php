@@ -25,4 +25,10 @@ class Vendor extends Model
         # code...
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
+
+    public function lens_purchase()
+    {
+        # code...
+        return $this->hasMany(LensPurchase::class, 'vendor_id', 'id');
+    }
 }

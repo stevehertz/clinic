@@ -5,6 +5,7 @@ use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
 use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
+use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
 use App\Http\Controllers\Technicians\Technicians\TechniciansController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,16 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
         Route::post('/{id}/update', [LensController::class, 'update'])->name('update');
 
         Route::delete('/{id}/delete', [LensController::class, 'destroy'])->name('delete');
+
+    });
+
+    Route::prefix('lens/purchase')->name('lens.purchase.')->group(function(){
+
+        Route::get('/index', [LensPurchaseController::class, 'index'])->name('index');
+
+        Route::post('/store', [LensPurchaseController::class, 'store'])->name('store');
+
+        Route::delete('/{id}/delete', [LensPurchaseController::class, 'destroy'])->name('delete');
 
     });
 

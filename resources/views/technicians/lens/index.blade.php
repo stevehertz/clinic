@@ -47,14 +47,16 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>200</h3>
+                            <h3>
+                                <span id="numLensPurchasesStock"></span>
+                            </h3>
 
                             <p>Purchased Stock</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
+                        <a href="#" id="newLensPurchasesBtn" class="small-box-footer">
                             New Purchase <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -145,7 +147,8 @@
                                     aria-labelledby="custom-tabs-four-profile-tab">
 
                                     <div class="table-responsive">
-                                        <table id="frameStocksData" class="table table-bordered table-striped table-hover">
+                                        <table id="lensPurchasesData"
+                                            class="table table-bordered table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Purchased Date</th>
@@ -433,6 +436,115 @@
         </div>
         <!-- /.modal -->
 
+        <div class="modal fade" id="newLensPurchasesModal">
+            <div class="modal-dialog modal-lg" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            New Lens Purchase
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="newLensPurchasesForm" role="form">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensPurchasesLens">Lens</label>
+                                        <select id="newLensPurchasesLens" name="lens_id"
+                                            class="form-control select2 select2-primary"
+                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">Choose Lens</option>
+                                            @forelse ($lenses as $lens)
+                                                <option value="{{ $lens->id }}">
+                                                    {{ $lens->code }} : {{ $lens->power }} : {{ $lens->lens_type->type }} : {{ $lens->lens_material->title }} : {{ $lens->eye }}
+                                                </option>
+                                            @empty
+                                                <option disabled>No Lens Found</option>
+                                            @endforelse
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensPurchasesVendor">
+                                            Vendor
+                                        </label>
+                                        <select id="newLensPurchasesVendor" name="vendor_id"
+                                            class="form-control select2 select2-primary"
+                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">Choose Vendor</option>
+                                            @forelse ($vendors as $vendor)
+                                                <option value="{{ $vendor->id }}">
+                                                    {{ $vendor->first_name }} {{ $vendor->last_name }} - {{ $vendor->company }}
+                                                </option>
+                                            @empty
+                                                <option disabled>No Vendors Found</option>
+                                            @endforelse
+
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensPurchasesDate">
+                                            Purchased Date
+                                        </label>
+                                        <input type="text" id="newLensPurchasesDate" name="purchased_date" placeholder="Enter Placeholder" class="form-control datepicker">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensReceivedDate">
+                                            Received Date
+                                        </label>
+                                        <input type="text" id="newLensReceivedDate" name="received_date" placeholder="Enter Placeholder" class="form-control datepicker">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensPurchasesQuantity">Units</label>
+                                        <input type="text" class="form-control" name="quantity"
+                                            id="newLensPurchasesQuantity" placeholder="Enter Units">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="newLensPurchasesPrice">Price</label>
+                                        <input type="text" class="form-control" name="price"
+                                            id="newLensPurchasesPrice" placeholder="Enter Stock Price">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="newLensPurchasesSubmitBtn" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
     </section>
     <!-- /.content -->
 @endsection
@@ -445,6 +557,7 @@
 
             function find_num_lenses() {
                 $('#numLensStock').html('{{ $num_lens }}');
+                $('#numLensPurchasesStock').html('{{ $num_lens_purchase }}');
             }
 
             function find_lens() {
@@ -552,6 +665,7 @@
                             $('#newLensModal').modal('hide');
                             $('#newLensForm')[0].reset();
                             $('#lensData').DataTable().ajax.reload();
+                            $('#lensPurchasesData').DataTable().ajax.reload();
                             location.reload();
                         }
                     },
@@ -593,6 +707,7 @@
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
                                     $('#lensData').DataTable().clear().destroy();
+                                    $('#lensPurchasesData').DataTable().ajax.reload();
                                     find_lens();
                                     location.reload();
                                 }
@@ -675,6 +790,7 @@
                             $('#updateLensModal').modal('hide');
                             $('#updateLensForm')[0].reset();
                             $('#lensData').DataTable().clear().destroy();
+                            $('#lensPurchasesData').DataTable().ajax.reload();
                             find_lens();
                         }
                     },
@@ -690,6 +806,153 @@
                 });
             });
 
+            find_lens_purchases();
+
+            function find_lens_purchases() {
+                var path = '{{ route('technicians.lens.purchase.index') }}';
+                $('#lensPurchasesData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    "responsive": true,
+                    "autoWidth": false,
+                    columns: [{
+                            data: 'purchased_date',
+                            name: 'purchased_date'
+                        },
+                        {
+                            data: 'lens_code',
+                            name: 'lens_code'
+                        },
+                        {
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'vendor',
+                            name: 'vendor'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'total_price',
+                            name: 'total_price'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+
+                });
+            }
+
+            $(document).on('click', '#newLensPurchasesBtn', function(e) {
+                e.preventDefault();
+                $('#newLensPurchasesModal').modal('show');
+                $('#newLensPurchasesForm')[0].reset();
+            });
+
+            $('#newLensPurchasesForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('technicians.lens.purchase.store') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#newLensPurchasesSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
+                        $('#newLensPurchasesSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#newLensPurchasesSubmitBtn').html('Save');
+                        $('#newLensPurchasesSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            find_num_lenses();
+                            $('#newLensPurchasesModal').modal('hide');
+                            $('#newLensPurchasesForm')[0].reset();
+                            $('#lensData').DataTable().ajax.reload();
+                            $('#lensPurchasesData').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data.responseJSON.errors);
+                        var errors = data.responseJSON.errors;
+                        if (errors) {
+                            $.each(errors, function(key, value) {
+                                toastr.error(value);
+                            });
+                        }
+                    },
+                });
+            });
+
+            $(document).on('click', '.deleteLensPurchaseBtn', function(e){
+                e.preventDefault();
+                var lens_purchase_id = $(this).data('id');
+                var path = '{{ route('technicians.lens.purchase.delete', ':id') }}';
+                var path = path.replace(':id', lens_purchase_id);
+                var token = '{{ csrf_token() }}';
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: 'DELETE',
+                            data: {
+                                _token: token
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    $('#lensData').DataTable().clear().destroy();
+                                    $('#lensPurchasesData').DataTable().ajax.reload();
+                                    find_lens();
+                                    location.reload();
+                                }
+                            },
+                            error: function(data) {
+                                var errors = data.responseJSON;
+                                var errorsHtml = '<ul>';
+                                $.each(errors['errors'], function(key, value) {
+                                    errorsHtml += '<li>' + value + '</li>';
+                                });
+                                errorsHtml += '</ul>';
+                                Swal.fire(errorsHtml, '', 'info');
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
         });
     </script>
 @endsection

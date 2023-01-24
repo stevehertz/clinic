@@ -46,14 +46,20 @@ class LensController extends Controller
                 ->make(true);
         }
         $num_lens = $workshop->lens->count();
+        $num_lens_purchase = $workshop->lens_purchase->count();
         $lens_types = $organization->lens_type->sortBy('created_at', SORT_DESC);
         $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
+        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
+        $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
         $page_title = "Lens";
         return view('technicians.lens.index', [
             'page_title' => $page_title,
             'num_lens' => $num_lens,
+            'num_lens_purchase' => $num_lens_purchase,
             'types' => $lens_types,
             'materials' => $lens_materials,
+            'lenses' => $lenses,
+            'vendors' => $vendors,
         ]);
     }
 
