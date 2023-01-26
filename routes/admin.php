@@ -32,8 +32,10 @@ use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
 use App\Http\Controllers\Admin\Insurances\InsurancesController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
+use App\Http\Controllers\Admin\Lens\LensController;
 use App\Http\Controllers\Admin\Lens\LensIndicesController;
 use App\Http\Controllers\Admin\Lens\LensPrescriptionController as LensLensPrescriptionController;
+use App\Http\Controllers\Admin\Lens\LensPurchasesController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
@@ -481,6 +483,26 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/show', [SchedulesDoctorSchedulesController::class, 'show'])->name('show');
 
         Route::get('/{id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
+    });
+
+    Route::prefix('lens')->name('lens.')->group(function(){
+
+        Route::get('/{id}/index', [LensController::class, 'index'])->name('index');
+
+        Route::post('/store', [LensController::class, 'store'])->name('store');
+
+        Route::post('/show', [LensController::class, 'show'])->name('show');
+
+        Route::post('/update', [LensController::class, 'update'])->name('update');
+
+        Route::delete('/delete', [LensController::class, 'destroy'])->name('delete');
+
+    });
+
+    Route::prefix('lens/purchase')->name('lens.purchase.')->group(function(){
+
+        Route::get('/{id}/index', [LensPurchasesController::class, 'index'])->name('index');
+        
     });
 
     Route::prefix('lens/type')->name('lens.type.')->group(function () {

@@ -1,19 +1,20 @@
-@extends('technicians.layouts.app')
+@extends('admin.layouts.workshop')
 
 @section('content')
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lenses</h1>
+                    <h1>{{ $workshop->name }} Lenses</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('technicians.dashboard.index') }}">Home</a>
+                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Lenses</li>
+                        <li class="breadcrumb-item active">
+                            Lenses
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -62,26 +63,6 @@
                     </div>
                 </div>
                 <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>
-                                <span id="numLensTransferFrom"></span>
-                            </h3>
-
-                            <p>Transfered Stocks</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-briefcase"></i>
-                        </div>
-                        <a href="#" id="newLensTransferBtn" class="small-box-footer purchaseStockBtn">
-                            Make Transfer <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- ./col -->
             </div>
 
             <div class="row">
@@ -102,21 +83,6 @@
                                         href="#custom-tabs-four-profile" role="tab"
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">
                                         Stock Purchases
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
-                                        href="#custom-tabs-four-settings" role="tab"
-                                        aria-controls="custom-tabs-four-settings" aria-selected="false">
-                                        Transfer Stocks From
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-five-settings-tab" data-toggle="pill"
-                                        href="#custom-tabs-five-settings" role="tab"
-                                        aria-controls="custom-tabs-five-settings" aria-selected="false">
-                                        Transfer Stocks To
                                     </a>
                                 </li>
                             </ul>
@@ -179,51 +145,6 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
-                                    aria-labelledby="custom-tabs-four-settings-tab">
-                                    <div class="table-responsive">
-                                        <table id="lensTransferDataFrom"
-                                            class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Transfered Date</th>
-                                                    <th>Transfer From</th>
-                                                    <th>Transfered To</th>
-                                                    <th>Lens Code</th>
-                                                    <th>Lens Power</th>
-                                                    <th>Units</th>
-                                                    <th>Status</th>
-                                                    <th>Condition</th>
-                                                    <th>Technician</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade" id="custom-tabs-five-settings" role="tabpanel"
-                                    aria-labelledby="custom-tabs-five-settings-tab">
-                                    <div class="table-responsive">
-                                        <table id="lensTransferDataTo"
-                                            class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Transfered Date</th>
-                                                    <th>Transfer From</th>
-                                                    <th>Transfered To</th>
-                                                    <th>Lens Code</th>
-                                                    <th>Lens Power</th>
-                                                    <th>Units</th>
-                                                    <th>Status</th>
-                                                    <th>Condition</th>
-                                                    <th>Technician</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
                             </div>
                             <!--.tab-content-->
                         </div>
@@ -249,8 +170,14 @@
                         </button>
                     </div>
                     <form id="newLensForm" role="form">
-                        @csrf
+                        
                         <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @csrf
+                                    <input type="hidden" name="workshop_id" value="{{ $workshop->id }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -471,242 +398,6 @@
         </div>
         <!-- /.modal -->
 
-        <div class="modal fade" id="newLensPurchasesModal">
-            <div class="modal-dialog modal-lg" role="dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            New Lens Purchase
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="newLensPurchasesForm" role="form">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensPurchasesLens">Lens</label>
-                                        <select id="newLensPurchasesLens" name="lens_id"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Lens</option>
-                                            @forelse ($lenses as $lens)
-                                                <option value="{{ $lens->id }}">
-                                                    {{ $lens->code }} : {{ $lens->power }} : {{ $lens->lens_type->type }} : {{ $lens->lens_material->title }} : {{ $lens->eye }}
-                                                </option>
-                                            @empty
-                                                <option disabled>No Lens Found</option>
-                                            @endforelse
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensPurchasesVendor">
-                                            Vendor
-                                        </label>
-                                        <select id="newLensPurchasesVendor" name="vendor_id"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Vendor</option>
-                                            @forelse ($vendors as $vendor)
-                                                <option value="{{ $vendor->id }}">
-                                                    {{ $vendor->first_name }} {{ $vendor->last_name }} - {{ $vendor->company }}
-                                                </option>
-                                            @empty
-                                                <option disabled>No Vendors Found</option>
-                                            @endforelse
-
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensPurchasesDate">
-                                            Purchased Date
-                                        </label>
-                                        <input type="text" id="newLensPurchasesDate" name="purchased_date" placeholder="Enter Placeholder" class="form-control datepicker">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensReceivedDate">
-                                            Received Date
-                                        </label>
-                                        <input type="text" id="newLensReceivedDate" name="received_date" placeholder="Enter Placeholder" class="form-control datepicker">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensPurchasesQuantity">Units</label>
-                                        <input type="text" class="form-control" name="quantity"
-                                            id="newLensPurchasesQuantity" placeholder="Enter Units">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensPurchasesPrice">Price</label>
-                                        <input type="text" class="form-control" name="price"
-                                            id="newLensPurchasesPrice" placeholder="Enter Stock Price">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="newLensPurchasesSubmitBtn" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
-        <div class="modal fade" id="newLensTransferModal">
-            <div class="modal-dialog modal-lg" role="dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Make Transfer
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="newLensTransferForm" role="form">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransferLens">Lens</label>
-                                        <select id="newLensTransferLens" name="lens_id"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Lens</option>
-                                            @forelse ($lenses as $lens)
-                                                <option value="{{ $lens->id }}">
-                                                    {{ $lens->code }} : {{ $lens->power }} : {{ $lens->lens_type->type }} : {{ $lens->lens_material->title }} : {{ $lens->eye }}
-                                                </option>
-                                            @empty
-                                                <option disabled>No Lens Found</option>
-                                            @endforelse
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransferWorkshop">
-                                            Transfer To
-                                        </label>
-                                        <select id="newLensTransferWorkshop" name="to_workshop_id"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Workshop Transfer To</option>
-                                            @forelse ($transfer_workshops as $transfer_w)
-                                                <option value="{{ $transfer_w->id }}">
-                                                    {{ $transfer_w->name }} 
-                                                </option>
-                                            @empty
-                                                <option disabled>No Workshop Found</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransferDate">
-                                            Transfered Date
-                                        </label>
-                                        <input type="text" id="newLensTransferDate" name="transfer_date" placeholder="Enter Transfered Date" class="form-control datepicker">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransfeQuantity">
-                                            Units
-                                        </label>
-                                        <input type="number" id="newLensTransfeQuantity" name="quantity" placeholder="Enter Units Transfered" class="form-control">
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransfeCondition">Condition</label>
-                                        <select id="newLensTransfeCondition" name="condition"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Lens Condition</option>
-                                            <option value="BROKEN">BROKEN</option>
-                                            <option value="WORKING">WORKING</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="newLensTransfeStatus">Status</label>
-                                        <select id="newLensTransfeStatus" name="status"
-                                            class="form-control select2 select2-primary"
-                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">Choose Transfer Status</option>
-                                            <option value="TRANSFERED">TRANSFERED</option>
-                                            <option value="NOT TRANSFERED">NOT TRANSFERED</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="newLensTransfeRemarks">Remarks</label>
-                                        <textarea name="remarks" id="newLensTransfeRemarks" placeholder="Enter Your Remarks" class="form-control"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="newLensTransfeSubmitBtn" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
     </section>
     <!-- /.content -->
 @endsection
@@ -715,17 +406,15 @@
     <script>
         $(document).ready(function() {
 
-            find_lens();
-
+            find_lenses();
             function find_num_lenses() {
                 $('#numLensStock').html('{{ $num_lens }}');
                 $('#numLensPurchasesStock').html('{{ $num_lens_purchase }}');
-                $('#numLensTransferFrom').html('{{ $num_lens_transfer_from }}');
             }
 
-            function find_lens() {
+            function find_lenses() {
                 find_num_lenses();
-                var path = '{{ route('technicians.lens.index') }}';
+                let path = '{{ route('admin.lens.index', $workshop->id) }}';
                 $('#lensData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -795,7 +484,7 @@
                 });
             }
 
-            $(document).on('click', '#newLensBtn', function(e) {
+            $(document).on('click', '#newLensBtn', function(e){
                 e.preventDefault();
                 $('#newLensModal').modal('show');
                 $('#newLensForm')[0].reset();
@@ -805,7 +494,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('technicians.lens.store') }}';
+                var path = '{{ route('admin.lens.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -845,11 +534,10 @@
 
             });
 
-            $(document).on('click', '.deleteTechnicianBtn', function(e) {
+            $(document).on('click', '.deleteLensBtn', function(e){
                 e.preventDefault();
                 var lens_id = $(this).data('id');
-                var path = '{{ route('technicians.lens.delete', ':id') }}';
-                var path = path.replace(':id', lens_id);
+                var path = '{{ route('admin.lens.delete') }}';
                 var token = '{{ csrf_token() }}';
                 Swal.fire({
                     title: "Are you sure?",
@@ -863,6 +551,7 @@
                             url: path,
                             type: 'DELETE',
                             data: {
+                                lens_id: lens_id,
                                 _token: token
                             },
                             dataType: 'json',
@@ -871,7 +560,7 @@
                                     Swal.fire(data['message'], '', 'success')
                                     $('#lensData').DataTable().clear().destroy();
                                     $('#lensPurchasesData').DataTable().ajax.reload();
-                                    find_lens();
+                                    find_lenses();
                                     location.reload();
                                 }
                             },
@@ -894,13 +583,13 @@
             $(document).on('click', '.updateLensBtn', function(e) {
                 e.preventDefault();
                 var lens_id = $(this).data('id');
-                var path = '{{ route('technicians.lens.show', ':id') }}';
-                var path = path.replace(':id', lens_id);
+                var path = '{{ route('admin.lens.show') }}';
                 var token = '{{ csrf_token() }}';
                 $.ajax({
                     type: "POST",
                     url: path,
                     data: {
+                        lens_id: lens_id,
                         _token: token
                     },
                     dataType: "json",
@@ -925,13 +614,11 @@
                 });
             });
 
-            $('#updateLensForm').submit(function(e) {
+            $('#updateLensForm').submit(function(e){
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var lens_id = $('#updateLensId').val();
-                var path = '{{ route('technicians.lens.update', ':id') }}';
-                var path = path.replace(':id', lens_id);
+                var path = '{{ route('admin.lens.update') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -954,7 +641,7 @@
                             $('#updateLensForm')[0].reset();
                             $('#lensData').DataTable().clear().destroy();
                             $('#lensPurchasesData').DataTable().ajax.reload();
-                            find_lens();
+                            find_lenses();
                         }
                     },
                     error: function(data) {
@@ -969,10 +656,12 @@
                 });
             });
 
-            find_lens_purchases();
 
-            function find_lens_purchases() {
-                var path = '{{ route('technicians.lens.purchase.index') }}';
+
+            find_lens_purchases();
+            function find_lens_purchases()
+            {
+                let path = '{{ route('admin.lens.purchase.index', $workshop->id) }}';
                 $('#lensPurchasesData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -1021,222 +710,6 @@
 
                 });
             }
-
-            $(document).on('click', '#newLensPurchasesBtn', function(e) {
-                e.preventDefault();
-                $('#newLensPurchasesModal').modal('show');
-                $('#newLensPurchasesForm')[0].reset();
-            });
-
-            $('#newLensPurchasesForm').submit(function(e){
-                e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('technicians.lens.purchase.store') }}';
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('#newLensPurchasesSubmitBtn').html(
-                            '<i class="fa fa-spinner fa-spin"></i>');
-                        $('#newLensPurchasesSubmitBtn').attr('disabled', true);
-                    },
-                    complete: function() {
-                        $('#newLensPurchasesSubmitBtn').html('Save');
-                        $('#newLensPurchasesSubmitBtn').attr('disabled', false);
-                    },
-                    success: function(data) {
-                        if (data['status']) {
-                            toastr.success(data['message']);
-                            find_num_lenses();
-                            $('#newLensPurchasesModal').modal('hide');
-                            $('#newLensPurchasesForm')[0].reset();
-                            $('#lensData').DataTable().ajax.reload();
-                            $('#lensPurchasesData').DataTable().ajax.reload();
-                            location.reload();
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data.responseJSON.errors);
-                        var errors = data.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                toastr.error(value);
-                            });
-                        }
-                    },
-                });
-            });
-
-            $(document).on('click', '.deleteLensPurchaseBtn', function(e){
-                e.preventDefault();
-                var lens_purchase_id = $(this).data('id');
-                var path = '{{ route('technicians.lens.purchase.delete', ':id') }}';
-                var path = path.replace(':id', lens_purchase_id);
-                var token = '{{ csrf_token() }}';
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this record!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'DELETE',
-                            data: {
-                                _token: token
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success')
-                                    $('#lensData').DataTable().clear().destroy();
-                                    $('#lensPurchasesData').DataTable().ajax.reload();
-                                    find_lens();
-                                    location.reload();
-                                }
-                            },
-                            error: function(data) {
-                                var errors = data.responseJSON;
-                                var errorsHtml = '<ul>';
-                                $.each(errors['errors'], function(key, value) {
-                                    errorsHtml += '<li>' + value + '</li>';
-                                });
-                                errorsHtml += '</ul>';
-                                Swal.fire(errorsHtml, '', 'info');
-                            }
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            find_lens_transfer_from();
-
-            function find_lens_transfer_from()
-            {
-                var path = '{{ route('technicians.lens.transfer.index') }}';
-                $('#lensTransferDataFrom').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    "responsive": true,
-                    "autoWidth": false,
-                    columns: [{
-                            data: 'transfered_date',
-                            name: 'transfered_date'
-                        },
-                        {
-                            data: 'from_workshop',
-                            name: 'from_workshop'
-                        },
-                        {
-                            data: 'to_workshop',
-                            name: 'to_workshop'
-                        },
-                        {
-                            data: 'lens_code',
-                            name: 'lens_code'
-                        },
-                        {
-                            data: 'lens_power',
-                            name: 'lens_power'
-                        },
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'condition',
-                            name: 'condition'
-                        },
-                        {
-                            data: 'technician',
-                            name: 'technician'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
-                    ]
-
-                });
-            }
-
-            find_lens_transfer_to();
-            function find_lens_transfer_to()
-            {
-                var path = '{{ route('technicians.lens.transfer.to') }}';
-                $('#lensTransferDataTo').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    "responsive": true,
-                    "autoWidth": false,
-                    columns: [{
-                            data: 'transfered_date',
-                            name: 'transfered_date'
-                        },
-                        {
-                            data: 'from_workshop',
-                            name: 'from_workshop'
-                        },
-                        {
-                            data: 'to_workshop',
-                            name: 'to_workshop'
-                        },
-                        {
-                            data: 'lens_code',
-                            name: 'lens_code'
-                        },
-                        {
-                            data: 'lens_power',
-                            name: 'lens_power'
-                        },
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'condition',
-                            name: 'condition'
-                        },
-                        {
-                            data: 'technician',
-                            name: 'technician'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
-                    ]
-
-                });
-            }
-
-            $(document).on('click', '#newLensTransferBtn', function(e){
-                e.preventDefault();
-                $('#newLensTransferModal').modal('show');
-                $('#newLensTransferForm')[0].reset();
-            })
         });
     </script>
 @endsection

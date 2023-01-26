@@ -63,4 +63,10 @@ class Technician extends Authenticatable
         return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
     }
 
+    public function lens_transfer()
+    {
+        # code...
+        return $this->hasMany(LensTransfer::class, 'technician_id', 'id');
+    }
+
 }
