@@ -102,7 +102,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('technicians.orders.index') }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Orders</p>
                             </a>

@@ -37,12 +37,7 @@ class LensController extends Controller
                     $material = $row->lens_material->title;
                     return $material;
                 })
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Update" class="update btn btn-tools btn-sm updateLensBtn"><i class="fa fa-edit"></i></a>';
-                    $btn = $btn .= ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteTechnicianBtn"><i class="fa fa-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['type', 'material', 'action'])
+                ->rawColumns(['type', 'material'])
                 ->make(true);
         }
         $num_lens = $workshop->lens->count();
@@ -65,70 +60,6 @@ class LensController extends Controller
             'num_lens_transfer_from' => $num_lens_transfer_from,
             'transfer_workshops' => $transfer_workshops,
         ]);
-    }
-
-    public function store(Request $request)
-    {
-        # code...
-        $data = $request->except("_token");
-
-        $validator = Validator::make($data, [
-            'power' => 'required',
-            'lens_type_id' => 'required|integer|exists:lens_types,id',
-            'lens_material_id' => 'required|integer|exists:lens_materials,id',
-            'lens_index' => 'required',
-            'eye' => 'required|string',
-            'opening' => 'nullable|integer',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
-
-        $workshop = $technician->workshop;
-
-        $opening = $data['opening'];
-
-        $purchased = 0;
-
-        $transfered = 0;
-
-        $total = ($opening + $purchased) - $transfered;
-
-        $sold = 0;
-
-        $closing = $total - $sold;
-
-        $num_lens = $workshop->lens->count();
-
-        $code = $workshop->initials . "-" . Str::upper(Str::random(2));
-
-        $workshop->lens()->create([
-            'organization_id' => $workshop->organization->id,
-            'power' => $data['power'],
-            'code' => $code,
-            'lens_type_id' => $data['lens_type_id'],
-            'lens_material_id' => $data['lens_material_id'],
-            'lens_index' => $data['lens_index'],
-            'date_added' => Carbon::now()->format('Y-m-d'),
-            'eye' => $data['eye'],
-            'opening' => $opening,
-            'purchased' => $purchased,
-            'transfered' => $transfered,
-            'total' => $total,
-            'sold' => $sold,
-            'closing' => $closing,
-        ]);
-
-        $response['status'] = true;
-        $response['message'] = "New Lens Has Been Added To Stocks";
-
-        return response()->json($response);
     }
 
     public function show($id)
@@ -173,16 +104,6 @@ class LensController extends Controller
         $response['status'] = true;
         $response['message'] = "You have successfully updated lens details";
 
-        return response()->json($response);
-    }
-
-    public function destroy($id)
-    {
-        # code...
-        $lens = Lens::findOrFail($id);
-        $lens->delete();
-        $response['status'] = true;
-        $response['message'] = "You have successfully deleted lens from stock";
         return response()->json($response);
     }
 }

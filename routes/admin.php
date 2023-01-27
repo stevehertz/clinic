@@ -502,6 +502,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('lens/purchase')->name('lens.purchase.')->group(function(){
 
         Route::get('/{id}/index', [LensPurchasesController::class, 'index'])->name('index');
+
+        Route::post('/store', [LensPurchasesController::class, 'store'])->name('store');
+
+        Route::post('/show', [LensPurchasesController::class, 'show'])->name('show');
+
+        Route::post('/update', [LensPurchasesController::class, 'update'])->name('update');
+
+        Route::delete('/delete', [LensPurchasesController::class, 'destroy'])->name('delete');
         
     });
 

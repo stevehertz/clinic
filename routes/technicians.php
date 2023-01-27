@@ -7,6 +7,7 @@ use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
 use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
+use App\Http\Controllers\Technicians\Orders\OrdersController;
 use App\Http\Controllers\Technicians\Technicians\TechniciansController;
 use Illuminate\Support\Facades\Route;
 
@@ -86,6 +87,16 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
         Route::get('/index', [TransferedAssetsController::class, 'index'])->name('index');
 
         Route::get('/transfer/from', [TransferedAssetsController::class, 'transfer_from'])->name('transfer.from');
+
+    });
+
+    Route::prefix('orders')->name('orders.')->group(function(){
+
+        Route::get('/index', [OrdersController::class, 'index'])->name('index');
+
+        Route::post('/{id}/show', [OrdersController::class, 'show'])->name('show');
+
+        Route::get('/{id}/view', [OrdersController::class, 'view'])->name('view');
 
     });
 });

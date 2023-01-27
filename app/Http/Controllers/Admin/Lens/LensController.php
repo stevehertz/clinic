@@ -51,9 +51,11 @@ class LensController extends Controller
         $num_lens = $workshop->lens->count();
         $num_lens_purchase = $workshop->lens_purchase->count();
         $num_lens_transfer_from = $workshop->lens_transfer->count();
+        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
         $organization = $workshop->organization;
         $lens_types = $organization->lens_type->sortBy('created_at', SORT_DESC);
         $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
+        $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
         $page_title = "Lenses";
         return view('admin.lens.index', [
             'workshop' => $workshop,
@@ -63,6 +65,8 @@ class LensController extends Controller
             'num_lens_transfer_from' => $num_lens_transfer_from,
             'types' => $lens_types,
             'materials' => $lens_materials,
+            'lenses' => $lenses,
+            'vendors' => $vendors,
         ]);
     }
 

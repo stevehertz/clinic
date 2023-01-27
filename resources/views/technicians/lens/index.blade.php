@@ -23,70 +23,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>
-                                <span id="numLensStock"></span>
-                            </h3>
-
-                            <p>Lens stock</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" id="newLensBtn" class="small-box-footer">New Stock <i class="fa fa-plus "></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>
-                                <span id="numLensPurchasesStock"></span>
-                            </h3>
-
-                            <p>Purchased Stock</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" id="newLensPurchasesBtn" class="small-box-footer">
-                            New Purchase <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>
-                                <span id="numLensTransferFrom"></span>
-                            </h3>
-
-                            <p>Transfered Stocks</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-briefcase"></i>
-                        </div>
-                        <a href="#" id="newLensTransferBtn" class="small-box-footer purchaseStockBtn">
-                            Make Transfer <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- ./col -->
-            </div>
-
             <div class="row">
                 <div class="col-12">
-
                     <div class="card card-primary card-outline card-outline-tabs">
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
@@ -144,7 +82,6 @@
                                                     <th>Total</th>
                                                     <th>Sold</th>
                                                     <th>Closing</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -717,14 +654,7 @@
 
             find_lens();
 
-            function find_num_lenses() {
-                $('#numLensStock').html('{{ $num_lens }}');
-                $('#numLensPurchasesStock').html('{{ $num_lens_purchase }}');
-                $('#numLensTransferFrom').html('{{ $num_lens_transfer_from }}');
-            }
-
-            function find_lens() {
-                find_num_lenses();
+            function find_lens() 
                 var path = '{{ route('technicians.lens.index') }}';
                 $('#lensData').DataTable({
                     processing: true,
@@ -784,191 +714,11 @@
                             data: 'closing',
                             name: 'closing'
                         },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
                     ]
 
                 });
             }
-
-            $(document).on('click', '#newLensBtn', function(e) {
-                e.preventDefault();
-                $('#newLensModal').modal('show');
-                $('#newLensForm')[0].reset();
-            });
-
-            $('#newLensForm').submit(function(e) {
-                e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('technicians.lens.store') }}';
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('#newLensSubmitBtn').html(
-                            '<i class="fa fa-spinner fa-spin"></i>');
-                        $('#newLensSubmitBtn').attr('disabled', true);
-                    },
-                    complete: function() {
-                        $('#newLensSubmitBtn').html('Save');
-                        $('#newLensSubmitBtn').attr('disabled', false);
-                    },
-                    success: function(data) {
-                        if (data['status']) {
-                            toastr.success(data['message']);
-                            find_num_lenses();
-                            $('#newLensModal').modal('hide');
-                            $('#newLensForm')[0].reset();
-                            $('#lensData').DataTable().ajax.reload();
-                            $('#lensPurchasesData').DataTable().ajax.reload();
-                            location.reload();
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data.responseJSON.errors);
-                        var errors = data.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                toastr.error(value);
-                            });
-                        }
-                    },
-                });
-
-            });
-
-            $(document).on('click', '.deleteTechnicianBtn', function(e) {
-                e.preventDefault();
-                var lens_id = $(this).data('id');
-                var path = '{{ route('technicians.lens.delete', ':id') }}';
-                var path = path.replace(':id', lens_id);
-                var token = '{{ csrf_token() }}';
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this record!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'DELETE',
-                            data: {
-                                _token: token
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success')
-                                    $('#lensData').DataTable().clear().destroy();
-                                    $('#lensPurchasesData').DataTable().ajax.reload();
-                                    find_lens();
-                                    location.reload();
-                                }
-                            },
-                            error: function(data) {
-                                var errors = data.responseJSON;
-                                var errorsHtml = '<ul>';
-                                $.each(errors['errors'], function(key, value) {
-                                    errorsHtml += '<li>' + value + '</li>';
-                                });
-                                errorsHtml += '</ul>';
-                                Swal.fire(errorsHtml, '', 'info');
-                            }
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.updateLensBtn', function(e) {
-                e.preventDefault();
-                var lens_id = $(this).data('id');
-                var path = '{{ route('technicians.lens.show', ':id') }}';
-                var path = path.replace(':id', lens_id);
-                var token = '{{ csrf_token() }}';
-                $.ajax({
-                    type: "POST",
-                    url: path,
-                    data: {
-                        _token: token
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        if (data['status']) {
-                            $('#updateLensModal').modal('show');
-                            $('#updateLensId').val(data['data']['id']);
-                            $('#updateLensPower').val(data['data']['power']);
-                            $('#updateLensIndex').val(data['data']['lens_index']);
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data.responseJSON.errors);
-                        var errors = data.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                toastr.error(value);
-                            });
-                        }
-                    },
-
-                });
-            });
-
-            $('#updateLensForm').submit(function(e) {
-                e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var lens_id = $('#updateLensId').val();
-                var path = '{{ route('technicians.lens.update', ':id') }}';
-                var path = path.replace(':id', lens_id);
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('#updateLensSubmitBtn').html(
-                            '<i class="fa fa-spinner fa-spin"></i>');
-                        $('#updateLensSubmitBtn').attr('disabled', true);
-                    },
-                    complete: function() {
-                        $('#updateLensSubmitBtn').html('Update');
-                        $('#updateLensSubmitBtn').attr('disabled', false);
-                    },
-                    success: function(data) {
-                        if (data['status']) {
-                            toastr.success(data['message']);
-                            $('#updateLensModal').modal('hide');
-                            $('#updateLensForm')[0].reset();
-                            $('#lensData').DataTable().clear().destroy();
-                            $('#lensPurchasesData').DataTable().ajax.reload();
-                            find_lens();
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data.responseJSON.errors);
-                        var errors = data.responseJSON.errors;
-                        if (errors) {
-                            $.each(errors, function(key, value) {
-                                toastr.error(value);
-                            });
-                        }
-                    },
-                });
-            });
-
+            
             find_lens_purchases();
 
             function find_lens_purchases() {
