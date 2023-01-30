@@ -16,6 +16,7 @@ class FramePrescription extends Model
         'frame_code',
         'receipt_number',
         'workshop_id',
+        'quantity',
         'remarks',
     ];
 
@@ -29,6 +30,12 @@ class FramePrescription extends Model
     {
         # code...
         return $this->belongsTo(LensPrescription::class, 'prescription_id', 'id');
+    }
+
+    public function frame_stock()
+    {
+        # code...
+        return $this->belongsTo(FrameStock::class, 'stock_id', 'id');
     }
 
     public function workshop()

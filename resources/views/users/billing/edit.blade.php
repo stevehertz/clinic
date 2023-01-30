@@ -325,8 +325,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="addPaymentsItem">Item</label>
-                                <input type="text" class="form-control" id="addPaymentsItem" name="item"
-                                    placeholder="Enter the item name patient is paying for">
+                                <select name="item" id="addPaymentsItem" class="form-control select2">
+                                    <option disabled selected>Enter the item name</option>
+                                    <option value="SERVICE FEE">SERVICE FEE</option>
+                                    <option value="DEPOSIT ONE">DEPOSIT ONE</option>
+                                    <option value="DEPOSIT TWO">DEPOSIT TWO</option>
+                                    <option value="BALANCE">BALANCE</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="addPaymentsAmount">Payment Amount</label>

@@ -34,14 +34,25 @@ class FramesController extends Controller
         $clinic = Clinic::findOrFail($id);
         $organization = $clinic->organization;
         if ($request->ajax()) {
-            $data = $clinic->frame()->join('frame_brands', 'frame_brands.id', '=', 'frames.brand_id')
-                ->join('frame_types', 'frame_types.id', '=', 'frames.type_id')
-                ->join('frame_sizes', 'frame_sizes.id', '=', 'frames.size_id')
-                ->join('frame_materials', 'frame_materials.id', '=', 'frames.material_id')
-                ->select('frames.*', 'frame_sizes.size as size', 'frame_brands.title as brand', 'frame_types.title as type', 'frame_materials.title as material')
-                ->get();
+            $data = $clinic->frame->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('brand', function($row){
+                    $brand = $row->frame_brand->title;
+                    return $brand;
+                })
+                ->addColumn('size', function($row){
+                    $size = $row->frame_size->size;
+                    return $size;
+                })
+                ->addColumn('type', function($row){
+                    $type = $row->frame_type->title;
+                    return $type;
+                })
+                ->addColumn('material', function($row){
+                    $material = $row->frame_material->title;
+                    return $material;
+                })
                 ->addColumn('photo', function ($row) {
                     $img = '<img src="' . asset('storage/frames/' . $row->photo) . '" alt="' . $row->title . '" class="img-circle img-size-32 mr-2" width="100px">';
                     return $img;
@@ -53,12 +64,15 @@ class FramesController extends Controller
                         return '<span class="badge badge-danger">Inactive</span>';
                     }
                 })
-                ->addColumn('action', function ($row) {
+                ->addColumn('update', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tools btn-sm editFrame"><i class="fa fa-edit"></i></a>';
-                    $btn = $btn .= '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteFrame"><i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'photo', 'status'])
+                ->addColumn('delete', function($row){
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteFrame"><i class="fa fa-trash"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['brand', 'size', 'material', 'photo', 'status', 'update', 'delete'])
                 ->make(true);
         }
         $patients = $clinic->patient->count();

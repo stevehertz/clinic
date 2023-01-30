@@ -863,7 +863,7 @@
 
                                                     <div class="timeline-body table-responsive">
                                                         <p>
-                                                            {{ $frame_prescription->frame_code }}
+                                                            {{ $frame_prescription->frame_code }} 
                                                         </p>
                                                     </div>
                                                 </div>
@@ -968,7 +968,7 @@
                                                                         Frame Code</option>
                                                                     @forelse ($frame_stocks as $frame_stock)
                                                                         <option value="{{ $frame_stock->id }}">
-                                                                            {{ $frame_stock->frame->code }}
+                                                                            {{ $frame_stock->frame->code }} - {{ $frame_stock->gender }} - {{ $frame_stock->frame_color->color }} - {{ $frame_stock->frame_shape->shape }}
                                                                         </option>
                                                                     @empty
                                                                         <option disabled="disabled">No Frame Code Available
@@ -1632,9 +1632,8 @@
                                             <select name="stock_id" id="editFramePrescriptionFrameCode"
                                                 class="form-control select2" style="width:100%;">
                                                 @forelse ($frame_stocks as $frame_stock)
-                                                    <option value="{{ $frame_stock->id }}"
-                                                        @if ($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
-                                                        {{ $frame_stock->frame->code }}
+                                                    <option value="{{ $frame_stock->id }}" @if ($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
+                                                        {{ $frame_stock->frame->code }} - {{ $frame_stock->gender }} - {{ $frame_stock->frame_color->color }} - {{ $frame_stock->frame_shape->shape }}
                                                     </option>
                                                 @empty
                                                     <option disabled="disabled">No Frame Code Available

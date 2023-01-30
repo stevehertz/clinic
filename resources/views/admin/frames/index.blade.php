@@ -77,7 +77,7 @@
                 </div>
                 <!-- ./col -->
 
-                <div class="col-lg-3 col-6">
+                {{-- <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-secondary">
                         <div class="inner">
@@ -92,7 +92,7 @@
                             Transfer Stock <i class="fa fa-plus"></i>
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 <!-- ./col -->
             </div>
 
@@ -123,11 +123,12 @@
                                         Stock Purchases
                                     </a>
                                 </li>
-                                <li class="nav-item">
+
+                                {{-- <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
                                         href="#custom-tabs-four-settings" role="tab"
                                         aria-controls="custom-tabs-four-settings" aria-selected="false">Transfer Stocks</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                         <!---.card-header p-0 border-bottom-0-->
@@ -147,7 +148,8 @@
                                                     <th>Material</th>
                                                     <th>Photo</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>Update</th>
+                                                    <th>Delete</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -211,7 +213,7 @@
 
                                 </div>
 
-                                <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
+                                {{-- <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-settings-tab">
                                     <div class="table-responsive">
                                         <table id="frameTransferData" class="table table-striped table-hover">
@@ -230,7 +232,7 @@
                                             </thead>
                                         </table>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <!--.tab-content-->
                         </div>
@@ -1120,8 +1122,14 @@
                             name: 'status'
                         },
                         {
-                            data: 'action',
-                            name: 'action',
+                            data: 'update',
+                            name: 'update',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'delete',
+                            name: 'delete   ',
                             orderable: false,
                             searchable: false
                         },
@@ -1251,6 +1259,43 @@
                         401: function() {
                             toastr.error("There is an error");
                         }
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteFrame', function(e){
+                e.preventDefault();
+                let frame_id = $(this).data('id');
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.frames.delete') }}';
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                                frame_id: frame_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success');
+                                    $('#framesData').DataTable().ajax.reload();
+                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#purchasedStocks').DataTable().ajax.reload();
+                                    location.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
             });
@@ -1398,7 +1443,8 @@
                             dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success')
+                                    Swal.fire(data['message'], '', 'success');
+                                    $('#framesData').DataTable().ajax.reload();
                                     $('#frameStocksData').DataTable().ajax.reload();
                                     $('#purchasedStocks').DataTable().ajax.reload();
                                     location.reload();
@@ -1658,10 +1704,6 @@
                         }
                     }
                 });
-            });
-
-            $(document).on('click', '', function(e){
-
             });
         });
     </script>

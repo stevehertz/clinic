@@ -55,6 +55,7 @@
         $(document).ready(function() {
 
             find_orders();
+
             function find_orders() {
                 var path = '{{ route('users.orders.index') }}';
                 $('#ordersData').DataTable({
@@ -92,6 +93,31 @@
                     "responsive": true,
                 });
             }
+
+            $(document).on('click', '.viewOrderBtn', function(e) {
+                e.preventDefault();
+                var order_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var path = '{{ route('users.orders.show') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: {
+                        order_id: order_id,
+                        _token: token
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data['status']){
+                            setTimeout(() => {
+                                var order_path = '{{ route('users.orders.view', ':id') }}';
+                                order_path = order_path.replace(':id', data['data']['id']);
+                                window.location.href = order_path;
+                            }, 1000);
+                        }
+                    }
+                });
+            });
 
         });
     </script>

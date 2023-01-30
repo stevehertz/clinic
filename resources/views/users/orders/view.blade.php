@@ -32,8 +32,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-md-3">
 
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -97,15 +97,44 @@
                         </div>
                     </div>
 
-                    <div class="card-body table-responsive">
-                        <p>
+                    <div class="card-body">
+
+                        <strong><i class="fa fa-archive mr-1"></i> Frame Code</strong>
+
+                        <p class="text-muted">
                             {{ $order->frame_prescription->frame_code }}
                         </p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-user mr-1"></i> Gender</strong>
+
+                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->gender }}</p>
+
+                        <hr>
+
+                        <strong><i class="fa  fa-industry mr-1"></i> Shape</strong>
+
+                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_shape->shape }}</p>
+
+                        <hr>
+
+                        <strong><i class="fa fa-creative-commons mr-1"></i> Color</strong>
+
+                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
+
+                        <hr>
+
+                        <strong><i class="fa  fa-map-signs mr-1"></i> Workshop</strong>
+
+                        <p class="text-muted">{{ $order->workshop->name }}</p>
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
             </div>
+            <!-- /.col -->
+
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
                     <div class="card-header p-2">
@@ -200,24 +229,9 @@
                         </div>
                         <!-- /.tab-content -->
                     </div><!-- /.card-body -->
-                </div>
-                <!-- /.nav-tabs-custom -->
-
-                <div class="card card-outline card-success">
-                    <div class="card-header p-2">
-                        <ul class="nav nav-pills">
-
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#trackOrderTab" data-toggle="tab">
-                                    Track Current Order
-                                </a>
-                            </li>
-                        </ul>
-                    </div><!-- /.card-header -->
-
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="active tab-pane" id="trackOrderTab">
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
                                 @if ($order->status == 'APPROVED')
                                     <button type="button" data-id="{{ $order->id }}" data-value="SENT TO WORKSHOP"
                                         class="btn btn-block btn-success orderSentToWorkshopBtn">
@@ -246,50 +260,17 @@
                                         <i class="fa fa-send"></i> CLOSE ORDER
                                     </button>
                                 @endif
-
-                                <br>
-
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Doctor</th>
-                                                <th>Status</th>
-                                                <th>Workshop</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse ($order->order_track as $track)
-                                                <tr>
-                                                    <td>
-                                                        {{ date('d-m-Y', strtotime($track->track_date)) }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $track->user->first_name }} {{ $track->user->last_name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $track->track_status }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $track->workshop->name }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                            @endforelse
-                                        </tbody>
-
-                                    </table>
-                                </div>
-
+                            </div>
+                            <div class="col-md-6">
+                                <button id="trackOrderBtn" class="btn btn-secondary btn-block">Track Order</button>
                             </div>
                         </div>
-                        <!-- /.tab-content -->
-                    </div><!-- /.card-body -->
-
+                    </div>
                 </div>
+                <!-- /.nav-tabs-custom -->
             </div>
-            
+            <!-- /.col -->
+
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -384,6 +365,60 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
+
+        <div class="modal fade" id="trackOrderModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Track Order
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th>Workshop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($order->order_track as $track)
+                                    <tr>
+                                        <td>
+                                            {{ date('d-m-Y', strtotime($track->track_date)) }}
+                                        </td>
+                                        <td>
+                                            {{ $track->user->first_name }} {{ $track->user->last_name }}
+                                        </td>
+                                        <td>
+                                            {{ $track->track_status }}
+                                        </td>
+                                        <td>
+                                            {{ $track->workshop->name }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
     </section>
     <!-- /.content -->
 @endsection
@@ -621,6 +656,11 @@
                         Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
+            });
+
+            $(document).on('click', '#trackOrderBtn', function(e){
+                e.preventDefault();
+                $('#trackOrderModal').modal('show');
             });
         });
     </script>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Users\Orders;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrdersMail;
+use App\Models\FramePrescription;
+use App\Models\FrameStock;
 use App\Models\LensPower;
 use App\Models\Order;
 use App\Models\PaymentBill;
@@ -92,6 +94,34 @@ class OrdersController extends Controller
 
         $lens_power = LensPower::find($data['lens_power_id']);
 
+        $frame_prescription = FramePrescription::findOrFail($lens_power->frame_prescription->id);
+
+        $quantity = $frame_prescription->quantity;
+
+        $frame_stock = FrameStock::findOrFail($frame_prescription->stock_id);
+
+        $opening = $frame_stock->opening_stock;
+
+        $purchased = $frame_stock->purchase_stock;
+
+        $transfered  = $frame_stock->transfered_stock;
+
+        $total = ($opening + $purchased) - $transfered;
+
+        $sold = $frame_stock->sold_stock + $quantity;
+
+        $closing = $total - $sold;
+        
+
+        $frame_stock->update([
+            'opening_stock' => $opening,
+            'purchase_stock' => $purchased,
+            'transfered_stock' => $transfered,
+            'total_stock' => $total,
+            'sold_stock' => $sold,
+            'closing_stock' => $closing
+        ]);
+
         $order = $payment_bill->order()->create([
             'clinic_id' => $payment_bill->clinic_id,
             'patient_id' => $payment_bill->patient_id,
@@ -101,7 +131,7 @@ class OrdersController extends Controller
             'workshop_id' => $workshop->id,
             'lens_power_id' => $lens_power->id,
             'lens_prescription_id' => $lens_power->lens_prescription->id,
-            'frame_prescription_id' => $lens_power->frame_prescription->id,
+            'frame_prescription_id' => $frame_prescription->id,
             'order_date' => Carbon::now(),
             'receipt_number' => $lens_power->frame_prescription->receipt_number,
             'status' => 'APPROVED',

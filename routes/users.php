@@ -7,6 +7,8 @@ use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPassword
 use App\Http\Controllers\Users\ClientType\ClientTypeController;
 use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
 use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
+use App\Http\Controllers\Users\Frames\FramesController;
+use App\Http\Controllers\Users\Frames\FrameStocksController;
 use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
 use App\Http\Controllers\Users\Lens\LensPowerController;
 use App\Http\Controllers\Users\Lens\LensPrescriptionController;
@@ -253,5 +255,17 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
     Route::prefix('order/track')->name('order.track.')->group(function () {
 
         Route::post('/store', [OrderTracksController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('frames')->name('frames.')->group(function(){
+
+        Route::get('/index', [FramesController::class, 'index'])->name('index');
+
+    });
+
+    Route::prefix('frame/stocks')->name('frame.stocks.')->group(function(){
+
+        Route::get('/index', [FrameStocksController::class, 'index'])->name('index');
+
     });
 });

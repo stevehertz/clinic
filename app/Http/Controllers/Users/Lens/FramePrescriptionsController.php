@@ -50,21 +50,27 @@ class FramePrescriptionsController extends Controller
 
         $clinic = $appointment->clinic;
 
+        // check avalable frame stocks
+        $closing = $frame_stock->closing_stock;
+
+        $quantity = 1;
+
+
+        if($closing <= 0 && $quantity > $closing) {
+            $errors = ['No Frame Stocks available for the clinic. Please contact the admin in order to continue'];
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
         $frame_prescription = $lens_power->frame_prescription()->create([
             'prescription_id' => $lens_prescription->id,
             'stock_id' => $frame_stock->id,
             'frame_code' => $frame_stock->frame->code,
             'receipt_number' => $clinic->initials.'/'.$data['receipt_number'],
             'workshop_id' => $workshop->id,
+            'quantity' => $quantity,
             'remarks' => $data['remarks'],
-        ]);
-
-        $sold_stock = $frame_stock->sold_stock + 1;
-        $closing_stock = $frame_stock->closing_stock - $sold_stock;
-
-        $frame_stock->update([
-            'sold_stock' => $sold_stock,
-            'closing_stock' => $closing_stock,
         ]);
 
         // update treatment
@@ -136,21 +142,37 @@ class FramePrescriptionsController extends Controller
         }
 
         $frame_stock = FrameStock::findOrFail($data['stock_id']);
+
         $workshop = Workshop::findOrFail($data['workshop_id']);
 
         $frame_prescription = FramePrescription::findOrFail($data['frame_prescription_id']);
+
+        // check avalable frame stocks
+        $closing = $frame_stock->closing_stock;
+
+        $quantity = 1;
+
+        if($closing <= 0 && $quantity > $closing) {
+            $errors = ['No Frame Stocks available for the clinic. Please contact the admin in order to continue'];
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
         $frame_prescription->update([
-            'id' => $frame_prescription->id,
             'power_id' => $frame_prescription->power_id,
             'prescription_id' => $frame_prescription->prescription_id,
             'stock_id' => $frame_stock->id,
             'frame_code' => $frame_stock->frame->code,
             'receipt_number' => $frame_prescription->receipt_number,
             'workshop_id' => $workshop->id,
+            'quantity' => $quantity,
             'remarks' => $data['remarks']
         ]);
+
         $response['status'] = true;
         $response['message'] = 'Frame Prescription updated successfully';
         return response()->json($response, 200);
+
     }
 }

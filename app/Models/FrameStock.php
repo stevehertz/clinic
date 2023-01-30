@@ -55,4 +55,10 @@ class FrameStock extends Model
         # code...
         return $this->hasMany(FramePurchase::class, 'stock_id', 'id');
     }
+
+    public function frame_prescription()
+    {
+        # code...
+        return $this->hasMany(FramePrescription::class, 'stock_id', 'id');
+    }
 }

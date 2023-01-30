@@ -143,7 +143,7 @@ class DoctorSchedulesController extends Controller
         $organization = $clinic->organization;
         $types = $organization->lens_type->sortBy('created_at', SORT_DESC);
         $materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
-        $workshops = $organization->workshop->sortBy('created_at', SORT_DESC);
+        $workshops = $organization->    workshop->sortBy('created_at', SORT_DESC);
 
         $schedule = DoctorSchedule::findOrFail($id);
         $patient = $schedule->patient;
