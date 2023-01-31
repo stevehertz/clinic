@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Technicians\Orders;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TechnicianOrdersMail;
 use App\Models\Order;
 use App\Models\Technician;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class OrdersController extends Controller
 {
@@ -23,7 +26,7 @@ class OrdersController extends Controller
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
         $workshop = $technician->workshop;
         if ($request->ajax()) {
-            $data = $workshop->order->sortBy('created_at', SORT_DESC);
+            $data = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('patient', function ($row) {
@@ -51,7 +54,7 @@ class OrdersController extends Controller
     {
         # code...
         $order = Order::findOrFail($id);
-        
+
         $response = [
             'status' => true,
             'data' => $order
@@ -70,5 +73,83 @@ class OrdersController extends Controller
             'page_title' => $page_title,
             'order' => $order,
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        # code...
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'status' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $response['status'] = false;
+            $response['errors'] = $errors;
+            return response()->json($response, 401);
+        }
+
+        $order = Order::findOrFail($id);
+
+        $appointment = $order->appointment;
+
+        $order->id = $order->id;
+
+        $order->status = $data['status'];
+
+        if ($order->status == 'ORDER RECEIVED') {
+            $clinic = $order->clinic;
+
+            $email = $clinic->email;
+
+            $details['title'] = 'Order Details';
+            $details['body'] = 'An order has been received from your clinic successfully.';
+
+            Mail::to($email)->send(new TechnicianOrdersMail($details));
+        }
+
+        if ($order->status == 'FRAME RECEIVED') {
+            $clinic = $order->clinic;
+
+            $email = $clinic->email;
+
+            $details['title'] = 'Order Details';
+            $details['body'] = 'Frame has been received from your clinic successfully.';
+
+            Mail::to($email)->send(new TechnicianOrdersMail($details));
+        }
+
+
+        if ($order->save()) {
+
+            $order = Order::findOrFail($order->id);
+
+            $order->order_track()->create([
+                'user_id' => $order->doctor_schedule->user->id,
+                'workshop_id' => $order->workshop->id,
+                'track_date' => $order->order_date,
+                'track_status' => $order->status,
+            ]);
+
+            $clinic = $order->clinic;
+
+            $report_id = $appointment->report_id;
+
+            $report = $clinic->report()->findOrFail($report_id);
+
+            $report->update([
+                'order_status' => $order->status,
+            ]);
+
+            $response['status'] = true;
+            $response['message'] = 'Order updated successfully';
+            return response()->json($response, 200);
+        } else {
+            $response['status'] = false;
+            $response['errors'] = 'Something went wrong';
+            return response()->json($response, 401);
+        }
     }
 }

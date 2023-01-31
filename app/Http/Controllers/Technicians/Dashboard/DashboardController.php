@@ -21,10 +21,12 @@ class DashboardController extends Controller
         # code...
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
         $workshop = $technician->workshop;
+        $orders = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
         $page_title = "Dashboard";
         return view('technicians.dashboard.index', [
             'page_title' => $page_title,
             'workshop' => $workshop,
+            'orders' => $orders,
         ]);
     }
 }

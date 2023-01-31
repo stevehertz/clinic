@@ -98,5 +98,7 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
 
         Route::get('/{id}/view', [OrdersController::class, 'view'])->name('view');
 
+        Route::post('/{id}/update', [OrdersController::class, 'update'])->name('update');
+
     });
 });

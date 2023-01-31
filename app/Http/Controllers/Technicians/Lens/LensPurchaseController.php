@@ -41,11 +41,7 @@ class LensPurchaseController extends Controller
                     $vendor = $row->vendor->first_name . ' ' . $row->vendor->last_name;
                     return $vendor;
                 })
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteLensPurchaseBtn"><i class="fa fa-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action', 'lens_code', 'power', 'vendor'])
+                ->rawColumns(['lens_code', 'power', 'vendor'])
                 ->make(true);
         }
     }

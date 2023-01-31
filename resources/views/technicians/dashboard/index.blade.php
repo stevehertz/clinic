@@ -77,7 +77,7 @@
                      <!-- small box -->
                      <div class="small-box bg-danger">
                          <div class="inner">
-                             <h3>65</h3>
+                             <h3>{{ count($orders) }}</h3>
 
                              <p>Orders</p>
                          </div>
@@ -103,98 +103,36 @@
                              <table class="table table-striped table-valign-middle">
                                  <thead>
                                      <tr>
-                                         <th>Product</th>
-                                         <th>Price</th>
-                                         <th>Sales</th>
-                                         <th>More</th>
+                                         <th>Date</th>
+                                         <th>Receipt Number</th>
+                                         <th>Patient</th>
+                                         <th>Clinic</th>
+                                         <th>Status</th>
+                                         <th>View</th>
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
-                                         <td>
-                                             <img src="dist/img/default-150x150.png" alt="Product 1"
-                                                 class="img-circle img-size-32 mr-2">
-                                             Some Product
-                                         </td>
-                                         <td>$13 USD</td>
-                                         <td>
-                                             <small class="text-success mr-1">
-                                                 <i class="fas fa-arrow-up"></i>
-                                                 12%
-                                             </small>
-                                             12,000 Sold
-                                         </td>
-                                         <td>
-                                             <a href="#" class="text-muted">
-                                                 <i class="fa fa-search"></i>
-                                             </a>
-                                         </td>
-                                     </tr>
-
-                                     <tr>
-                                         <td>
-                                             <img src="dist/img/default-150x150.png" alt="Product 1"
-                                                 class="img-circle img-size-32 mr-2">
-                                             Another Product
-                                         </td>
-                                         <td>$29 USD</td>
-                                         <td>
-                                             <small class="text-warning mr-1">
-                                                 <i class="fas fa-arrow-down"></i>
-                                                 0.5%
-                                             </small>
-                                             123,234 Sold
-                                         </td>
-                                         <td>
-                                             <a href="#" class="text-muted">
-                                                 <i class="fa fa-search"></i>
-                                             </a>
-                                         </td>
-                                     </tr>
-
-                                     <tr>
-                                         <td>
-                                             <img src="dist/img/default-150x150.png" alt="Product 1"
-                                                 class="img-circle img-size-32 mr-2">
-                                             Amazing Product
-                                         </td>
-                                         <td>$1,230 USD</td>
-                                         <td>
-                                             <small class="text-danger mr-1">
-                                                 <i class="fas fa-arrow-down"></i>
-                                                 3%
-                                             </small>
-                                             198 Sold
-                                         </td>
-                                         <td>
-                                             <a href="#" class="text-muted">
-                                                 <i class="fa fa-search"></i>
-                                             </a>
-                                         </td>
-                                     </tr>
-
-                                     <tr>
-                                         <td>
-                                             <img src="dist/img/default-150x150.png" alt="Product 1"
-                                                 class="img-circle img-size-32 mr-2">
-                                             Perfect Item
-                                             <span class="badge bg-danger">NEW</span>
-                                         </td>
-                                         <td>$199 USD</td>
-                                         <td>
-                                             <small class="text-success mr-1">
-                                                 <i class="fas fa-arrow-up"></i>
-                                                 63%
-                                             </small>
-                                             87 Sold
-                                         </td>
-                                         <td>
-                                             <a href="#" class="text-muted">
-                                                 <i class="fa fa-search"></i>
-                                             </a>
-                                         </td>
-                                     </tr>
-
+                                     @forelse ($orders as $order)
+                                         <tr>
+                                             <td>{{ $order->order_date }}</td>
+                                             <td>{{ $order->receipt_number }}</td>
+                                             <td>{{ $order->patient->first_name }} {{ $order->patient->last_name }}</td>
+                                             <td>{{ $order->clinic->clinic }}</td>
+                                             <td>{{ $order->status }}</td>
+                                             <td>
+                                                 <a href="#" data-id="{{ $order->id }}"
+                                                     class="text-muted viewOrderBtn">
+                                                     <i class="fa fa-eye"></i>
+                                                 </a>
+                                             </td>
+                                         </tr>
+                                     @empty
+                                         <tr>
+                                             <td colspan="6">
+                                                 <p class="text-center">No Orders Found!</p>
+                                             </td>
+                                         </tr>
+                                     @endforelse
                                  </tbody>
                              </table>
                          </div>
@@ -211,4 +149,34 @@
  @endsection
 
  @section('scripts')
+     <script>
+         $(document).ready(function() {
+
+             $(document).on('click', '.viewOrderBtn', function(e) {
+                 e.preventDefault();
+                 let order_id = $(this).data('id');
+                 let path = '{{ route('technicians.orders.show', ':id') }}';
+                 path = path.replace(':id', order_id);
+                 let token = '{{ csrf_token() }}';
+                 $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: {
+                        _token:token
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if(data['status']){
+                            let order_url = '{{ route('technicians.orders.view', ':id') }}';
+                            order_url = order_url.replace(':id', data['data']['id']);
+                            setTimeout(() => {
+                                window.location.href = order_url;
+                            }, 1000);
+                        }
+                    }
+                });
+             });
+
+         });
+     </script>
  @endsection

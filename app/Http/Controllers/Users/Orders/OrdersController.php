@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users\Orders;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrdersMail;
+use App\Mail\OrderTechnicianMail;
 use App\Models\FramePrescription;
 use App\Models\FrameStock;
 use App\Models\LensPower;
@@ -37,23 +38,25 @@ class OrdersController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            $data = Order::join('clinics', 'clinics.id', '=', 'orders.clinic_id')
-                ->join('patients', 'patients.id', '=', 'orders.patient_id')
-                ->join('workshops', 'workshops.id', '=', 'orders.workshop_id')
-                ->select('orders.*', 'clinics.clinic', 'patients.first_name as patient_first', 'patients.last_name as patient_last', 'workshops.name as workshop')
-                ->where('orders.clinic_id', $clinic->id)
-                ->orderBy('orders.created_at', 'desc')
-                ->get();
+            $data = $clinic->order->sortBy('created_at', SORT_DESC);
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
-                    return $row->patient_first . ' ' . $row->patient_last;
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('clinic', function($row){
+                    $clinic = $row->clinic->clinic;
+                    return $clinic;
+                })
+                ->addColumn('workshop', function($row){
+                    $workshop = $row->workshop->name;
+                    return $workshop;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'full_names'])
+                ->rawColumns(['action', 'full_names', 'clinic', 'workshop'])
                 ->make(true);
         }
         $page_title = 'Orders';
@@ -243,6 +246,26 @@ class OrdersController extends Controller
         $order->id = $order->id;
 
         $order->status = $data['status'];
+
+        if($order->status == 'SENT TO WORKSHOP') 
+        {
+            $workshop = $order->workshop;  
+            $email = $workshop->email;
+            $details['title'] = 'Order Details';
+            $details['body'] = 'An order has been send to the workshop. Please check';
+
+            Mail::to($email)->send(new OrderTechnicianMail($details));
+        }
+
+        if($order->status == 'FRAME SENT TO WORKSHOP')
+        {
+            $workshop = $order->workshop;   
+            $email = $workshop->email;
+            $details['title'] = 'Order Details';
+            $details['body'] = 'Frame has been send to the workshop. Please check';
+
+            Mail::to($email)->send(new OrderTechnicianMail($details));
+        }
 
         if ($order->status == 'CLOSED') {
             $order->closed_date = Carbon::now();

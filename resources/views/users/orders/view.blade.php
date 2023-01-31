@@ -233,37 +233,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 @if ($order->status == 'APPROVED')
-                                    <button type="button" data-id="{{ $order->id }}" data-value="SENT TO WORKSHOP"
+                                    <button type="button" id="sendOrderToWorkshopBtn" data-id="{{ $order->id }}" data-value="SENT TO WORKSHOP"
                                         class="btn btn-block btn-success orderSentToWorkshopBtn">
                                         <i class="fa fa-send"></i> ORDER SENT TO WORKSHOP
                                     </button>
                                 @elseif($order->status == 'SENT TO WORKSHOP')
                                     <button type="button" data-id="{{ $order->id }}"
-                                        data-value="FRAME SENT TO WORKSHOP"
+                                        data-value="FRAME SENT TO WORKSHOP" id="sendFrameSentToWorkshopBtn"
                                         class="btn btn-block btn-primary orderfRAMESentToWorkshopBtn">
                                         <i class="fa fa-send"></i> FRAME SENT TO WORKSHOP
-                                    </button>
-                                @elseif($order->status == 'FRAME SENT TO WORKSHOP')
-                                    <button type="button" data-id="{{ $order->id }}"
-                                        data-value="FRAME RECEIVED FROM WORKSHOP"
-                                        class="btn btn-block btn-info orderfRAMEReceivedFromWorkshopBtn">
-                                        <i class="fa fa-send"></i> FRAME RECEIVED FROM WORKSHOP
-                                    </button>
-                                @elseif($order->status == 'FRAME RECEIVED FROM WORKSHOP')
-                                    <button type="button" data-id="{{ $order->id }}" data-value="COLLECTED"
-                                        class="btn btn-block btn-success orderfRAMECollectedBtn">
-                                        <i class="fa fa-send"></i> FRAME COLLECTED
-                                    </button>
-                                @elseif($order->status == 'COLLECTED')
-                                    <button type="button" data-id="{{ $order->id }}" data-value="CLOSE"
-                                        class="btn btn-block btn-danger orderCloseBtn">
-                                        <i class="fa fa-send"></i> CLOSE ORDER
                                     </button>
                                 @endif
                             </div>
                             <div class="col-md-6">
                                 <button id="trackOrderBtn" class="btn btn-secondary btn-block">Track Order</button>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -452,6 +436,18 @@
                                 _token: token
                             },
                             dataType: "json",
+                            beforeSend:function(){
+                                $('#sendOrderToWorkshopBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#sendOrderToWorkshopBtn').attr('disabled', true);
+                            },
+                            complete:function(){
+                                $('#sendOrderToWorkshopBtn').html(
+                                    'ORDER SENT TO WORKSHOP'
+                                );
+                                $('#sendOrderToWorkshopBtn').attr('disabled', false);
+                            },
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
@@ -493,6 +489,18 @@
                                 _token: token
                             },
                             dataType: "json",
+                            beforeSend:function(){
+                                $('#sendFrameSentToWorkshopBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#sendFrameSentToWorkshopBtn').attr('disabled', true);
+                            },
+                            complete:function(){
+                                $('#sendFrameSentToWorkshopBtn').html(
+                                    'FRAME SENT TO WORKSHOP'
+                                );
+                                $('#sendFrameSentToWorkshopBtn').attr('disabled', false);
+                            },
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
