@@ -128,7 +128,7 @@
                                 </a>
                             </li>
 
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link" href="#orderFromClinicTab" data-toggle="tab">
                                     From Clinic
@@ -304,6 +304,11 @@
                                     <button type="button" id="frameRceceivedBtn" data-id="{{ $order->id }}"
                                         data-value="FRAME RECEIVED" class="btn btn-block btn-success frameRceceivedBtn">
                                         <i class="fa fa-send"></i> FRAME RECEIVED
+                                    </button>
+                                @elseif ($order->status == 'FRAME RECEIVED')
+                                    <button type="button" id="glazingBtn" data-id="{{ $order->id }}"
+                                        data-value="GLAZING" class="btn btn-block btn-success glazingBtn">
+                                        <i class="fa fa-send"></i> GLAZING
                                     </button>
                                 @endif
                             </div>
@@ -527,7 +532,7 @@
                 });
             });
 
-            $(document).on('click', '.frameRceceivedBtn', function(e){
+            $(document).on('click', '.frameRceceivedBtn', function(e) {
                 e.preventDefault();
                 var order_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
