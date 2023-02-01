@@ -96,4 +96,10 @@ class Workshop extends Model
         # code...
         return $this->hasMany(LensTransfer::class, 'to_workshop_id', 'id');
     }
+
+    public function workshop_sale()
+    {
+        # code...
+        return $this->hasMany(WorkshopSale::class, 'workshop_id', 'id');
+    }
 }

@@ -40,6 +40,10 @@ class DashboardController extends Controller
     {
         # code...
         $workshop = Workshop::findOrFail($id);
-        return view('admin.dashboard.workshops.index', compact('workshop'));
+        $orders = $workshop->order->sortBy('created_at', SORT_DESC);
+        $sum_lenses = $workshop->lens->sum('closing');
+        $num_orders = $workshop->order->count();
+        $num_technicians = $workshop->technician->count();
+        return view('admin.dashboard.workshops.index', compact('workshop', 'sum_lenses', 'orders', 'num_orders', 'num_technicians'));
     }
 }

@@ -83,55 +83,6 @@
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Frame Code
-                        </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-
-                        <strong><i class="fa fa-archive mr-1"></i> Frame Code</strong>
-
-                        <p class="text-muted">
-                            {{ $order->frame_prescription->frame_code }}
-                        </p>
-
-                        <hr>
-
-                        <strong><i class="fa fa-user mr-1"></i> Gender</strong>
-
-                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->gender }}</p>
-
-                        <hr>
-
-                        <strong><i class="fa  fa-industry mr-1"></i> Shape</strong>
-
-                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_shape->shape }}</p>
-
-                        <hr>
-
-                        <strong><i class="fa fa-creative-commons mr-1"></i> Color</strong>
-
-                        <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
-
-                        <hr>
-
-                        <strong><i class="fa  fa-map-signs mr-1"></i> Workshop</strong>
-
-                        <p class="text-muted">{{ $order->workshop->name }}</p>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
             </div>
             <!-- /.col -->
 
@@ -141,21 +92,54 @@
                         <ul class="nav nav-pills">
 
                             <li class="nav-item">
-                                <a class="nav-link active" href="#lensPrescriptionTab" data-toggle="tab">
+                                <a class="nav-link active" href="#orderDetailsTab" data-toggle="tab">
+                                    Order Details
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#lensPrescriptionTab" data-toggle="tab">
                                     Lens Prescription
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#orderDetailsTab" data-toggle="tab">
-                                    Order Details
+                                <a class="nav-link" href="#framePrescriptionTab" data-toggle="tab">
+                                    Frame Prescription
                                 </a>
                             </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="active tab-pane" id="lensPrescriptionTab">
+
+                            <div class="active tab-pane" id="orderDetailsTab">
+                                <strong><i class="fa fa-calendar mr-1"></i> Date</strong>
+
+                                <p class="text-muted">
+                                    {{ date('d-m-Y', strtotime($order->order_date)) }}
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-sticky-note mr-1"></i> Order Receipt</strong>
+
+                                <p class="text-muted">
+                                    {{ $order->receipt_number }}
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-cog mr-1"></i> Status</strong>
+
+                                <p class="text-muted">
+                                    {{ $order->status }}
+                                </p>
+
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="lensPrescriptionTab">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <tbody>
@@ -201,31 +185,42 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane" id="orderDetailsTab">
-                                <strong><i class="fa fa-calendar mr-1"></i> Date</strong>
+                            <div class="tab-pane" id="framePrescriptionTab">
+                                <strong><i class="fa fa-archive mr-1"></i> Frame Code</strong>
 
                                 <p class="text-muted">
-                                    {{ date('d-m-Y', strtotime($order->order_date)) }}
+                                    {{ $order->frame_prescription->frame_code }}
                                 </p>
 
                                 <hr>
 
-                                <strong><i class="fa fa-sticky-note mr-1"></i> Order Receipt</strong>
+                                <strong><i class="fa fa-user mr-1"></i> Gender</strong>
 
-                                <p class="text-muted">
-                                    {{ $order->receipt_number }}
-                                </p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->gender }}</p>
 
                                 <hr>
 
-                                <strong><i class="fa fa-cog mr-1"></i> Status</strong>
+                                <strong><i class="fa  fa-industry mr-1"></i> Shape</strong>
 
-                                <p class="text-muted">
-                                    {{ $order->status }}
-                                </p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_shape->shape }}</p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-creative-commons mr-1"></i> Color</strong>
+
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
+
+                                <hr>
+
+                                <strong><i class="fa  fa-map-signs mr-1"></i> Workshop</strong>
+
+                                <p class="text-muted">{{ $order->workshop->name }}</p>
+
+
 
                             </div>
                             <!-- /.tab-pane -->
+
                         </div>
                         <!-- /.tab-content -->
                     </div><!-- /.card-body -->
@@ -233,7 +228,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 @if ($order->status == 'APPROVED')
-                                    <button type="button" id="sendOrderToWorkshopBtn" data-id="{{ $order->id }}" data-value="SENT TO WORKSHOP"
+                                    <button type="button" id="sendOrderToWorkshopBtn" data-id="{{ $order->id }}"
+                                        data-value="SENT TO WORKSHOP"
                                         class="btn btn-block btn-success orderSentToWorkshopBtn">
                                         <i class="fa fa-send"></i> ORDER SENT TO WORKSHOP
                                     </button>
@@ -243,11 +239,32 @@
                                         class="btn btn-block btn-primary orderfRAMESentToWorkshopBtn">
                                         <i class="fa fa-send"></i> FRAME SENT TO WORKSHOP
                                     </button>
+                                @elseif($order->status == 'SEND TO CLINIC')
+                                    <button type="button" data-id="{{ $order->id }}"
+                                        data-value="RECEIVED FROM WORKSHOP" id="receivedFromWorkshopBtn"
+                                        class="btn btn-block btn-primary receivedFromWorkshopBtn">
+                                        <i class="fa fa-send"></i> RECEIVED FROM WORKSHOP
+                                    </button>
+                                @elseif($order->status == 'RECEIVED FROM WORKSHOP')
+                                    <button type="button" data-id="{{ $order->id }}" data-value="CALL FOR COLLECTION"
+                                        id="callForCollectionBtn" class="btn btn-block btn-primary callForCollectionBtn">
+                                        <i class="fa fa-send"></i> CALL FOR COLLECTION
+                                    </button>
+                                @elseif($order->status == 'CALL FOR COLLECTION')
+                                    <button type="button" data-id="{{ $order->id }}" data-value="FRAME COLLECTED"
+                                        id="frameCollectedBtn" class="btn btn-block btn-primary frameCollectedBtn">
+                                        <i class="fa fa-send"></i> FRAME COLLECTED
+                                    </button>
+                                @elseif($order->status == 'FRAME COLLECTED')
+                                    <button type="button" data-id="{{ $order->id }}" data-value="CLOSED"
+                                        id="closedBtn" class="btn btn-block btn-success closedBtn">
+                                        <i class="fa fa-send"></i> CLOSED
+                                    </button>
                                 @endif
                             </div>
                             <div class="col-md-6">
                                 <button id="trackOrderBtn" class="btn btn-secondary btn-block">Track Order</button>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -436,13 +453,13 @@
                                 _token: token
                             },
                             dataType: "json",
-                            beforeSend:function(){
+                            beforeSend: function() {
                                 $('#sendOrderToWorkshopBtn').html(
                                     '<i class="fa fa-spinner fa-spin"></i>'
                                 );
                                 $('#sendOrderToWorkshopBtn').attr('disabled', true);
                             },
-                            complete:function(){
+                            complete: function() {
                                 $('#sendOrderToWorkshopBtn').html(
                                     'ORDER SENT TO WORKSHOP'
                                 );
@@ -489,17 +506,18 @@
                                 _token: token
                             },
                             dataType: "json",
-                            beforeSend:function(){
+                            beforeSend: function() {
                                 $('#sendFrameSentToWorkshopBtn').html(
                                     '<i class="fa fa-spinner fa-spin"></i>'
                                 );
                                 $('#sendFrameSentToWorkshopBtn').attr('disabled', true);
                             },
-                            complete:function(){
+                            complete: function() {
                                 $('#sendFrameSentToWorkshopBtn').html(
                                     'FRAME SENT TO WORKSHOP'
                                 );
-                                $('#sendFrameSentToWorkshopBtn').attr('disabled', false);
+                                $('#sendFrameSentToWorkshopBtn').attr('disabled',
+                                    false);
                             },
                             success: function(data) {
                                 if (data['status']) {
@@ -517,15 +535,16 @@
                 });
             });
 
-            $(document).on('click', '.orderfRAMEReceivedFromWorkshopBtn', function(e) {
+            $(document).on('click', '.receivedFromWorkshopBtn', function(e) {
                 e.preventDefault();
                 var order_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 var status = $(this).data('value');
                 var path = '{{ route('users.orders.update', $order->id) }}';
+
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "You are about to move frame to workshop!",
+                    text: "You have received the order and frame from workshop!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -541,75 +560,19 @@
                                 _token: token
                             },
                             dataType: "json",
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    send_patient();
-                                }
+                            beforeSend: function() {
+                                $('#receivedFromWorkshopBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#receivedFromWorkshopBtn').attr('disabled', true);
                             },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            function send_patient() {
-                var order_id = '{{ $order->id }}';
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.orders.send.mail') }}';
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    data: {
-                        order_id: order_id,
-                        _token: token
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        if (data['status']) {
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1000);
-                        }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
-                });
-            }
-
-            $(document).on('click', '.orderfRAMECollectedBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You are about to move frame to workshop!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
+                            complete: function() {
+                                $('#receivedFromWorkshopBtn').html(
+                                    'RECEIVED FROM WORKSHOP'
+                                );
+                                $('#receivedFromWorkshopBtn').attr('disabled',
+                                    false);
                             },
-                            dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
@@ -626,15 +589,16 @@
                 });
             });
 
-            $(document).on('click', '.orderCloseBtn', function(e) {
+            $(document).on('click', '.callForCollectionBtn', function(e) {
                 e.preventDefault();
                 var order_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 var status = $(this).data('value');
                 var path = '{{ route('users.orders.update', $order->id) }}';
+
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "You are about to move frame to workshop!",
+                    text: "You want to call the patient to collect the order!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -650,6 +614,19 @@
                                 _token: token
                             },
                             dataType: "json",
+                            beforeSend: function() {
+                                $('#callForCollectionBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#callForCollectionBtn').attr('disabled', true);
+                            },
+                            complete: function() {
+                                $('#callForCollectionBtn').html(
+                                    'CALL FOR COLLECTION'
+                                );
+                                $('#callForCollectionBtn').attr('disabled',
+                                    false);
+                            },
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
@@ -666,7 +643,115 @@
                 });
             });
 
-            $(document).on('click', '#trackOrderBtn', function(e){
+            $(document).on('click', '.frameCollectedBtn', function(e) {
+                e.preventDefault();
+                var order_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var status = $(this).data('value');
+                var path = '{{ route('users.orders.update', $order->id) }}';
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Frame has already been collected!",
+                    icon: "success",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: 'POST',
+                            data: {
+                                order_id: order_id,
+                                status: status,
+                                _token: token
+                            },
+                            dataType: "json",
+                            beforeSend: function() {
+                                $('#frameCollectedBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#frameCollectedBtn').attr('disabled', true);
+                            },
+                            complete: function() {
+                                $('#frameCollectedBtn').html(
+                                    'CALL FOR COLLECTION'
+                                );
+                                $('#frameCollectedBtn').attr('disabled',
+                                    false);
+                            },
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            },
+
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '.closedBtn', function(e) {
+                e.preventDefault();
+                var order_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var status = $(this).data('value');
+                var path = '{{ route('users.orders.update', $order->id) }}';
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to close this order",
+                    icon: "success",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: 'POST',
+                            data: {
+                                order_id: order_id,
+                                status: status,
+                                _token: token
+                            },
+                            dataType: "json",
+                            beforeSend: function() {
+                                $('#closedBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#closedBtn').attr('disabled', true);
+                            },
+                            complete: function() {
+                                $('#closedBtn').html(
+                                    'CLOSED'
+                                );
+                                $('#closedBtn').attr('disabled',
+                                    false);
+                            },
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            },
+
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '#trackOrderBtn', function(e) {
                 e.preventDefault();
                 $('#trackOrderModal').modal('show');
             });

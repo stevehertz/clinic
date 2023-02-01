@@ -267,6 +267,29 @@ class OrdersController extends Controller
             Mail::to($email)->send(new OrderTechnicianMail($details));
         }
 
+        if($order->status == 'RECEIVED FROM WORKSHOP')
+        {
+            $workshop = $order->workshop;   
+            $email = $workshop->email;
+            $details['title'] = 'Order Details';
+            $details['body'] = 'Order and Frame has been received. Thank you';
+
+            Mail::to($email)->send(new OrderTechnicianMail($details));
+        }
+
+        if($order->status == 'CALL FOR COLLECTION')
+        {
+            $patient = $order->patient;
+            $email = $patient->email;
+
+            $details['title'] = 'Order Details';
+
+            $details['body'] = 'Your lens that you ordered is ready to be picked up. You are welcome to come an pick them up';
+
+            Mail::to($patient->email)->send(new OrdersMail($details));
+            
+        }
+
         if ($order->status == 'CLOSED') {
             $order->closed_date = Carbon::now();
         }
@@ -278,7 +301,7 @@ class OrdersController extends Controller
             $order->order_track()->create([
                 'user_id' => $order->doctor_schedule->user->id,
                 'workshop_id' => $order->workshop->id,
-                'track_date' => $order->order_date,
+                'track_date' => Carbon::now()->format('Y-m-d'),
                 'track_status' => $order->status,
             ]);
 

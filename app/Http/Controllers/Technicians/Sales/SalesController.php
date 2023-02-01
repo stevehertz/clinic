@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Mail\TechnicianOrdersMail;
 use App\Models\Lens;
 use App\Models\Order;
+use App\Models\Technician;
 use App\Models\WorkshopSale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -94,7 +96,12 @@ class SalesController extends Controller
 
         $sale = new WorkshopSale;
 
+        $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
+
+        $workshop = $technician->workshop;
+
         $sale->organization_id = $lens->organization->id;
+        $sale->workshop_id = $workshop->id;
         $sale->order_id = $order->id;
         $sale->lens_id = $lens->id;
         $sale->payment_bill_id = $order->payment_bill->id;
