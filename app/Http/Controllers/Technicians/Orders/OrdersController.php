@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\TechnicianOrdersMail;
 use App\Models\Order;
 use App\Models\Technician;
+use App\Models\WorkshopSale;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -67,11 +69,16 @@ class OrdersController extends Controller
     {
         # code...
         $order = Order::findOrFail($id);
-
+        $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
+        $workshop = $technician->workshop;
+        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
+        $sales = $order->workshop_sale->sortBy('created_at', SORT_DESC);
         $page_title = "View Order";
         return view('technicians.orders.view', [
             'page_title' => $page_title,
             'order' => $order,
+            'lenses' => $lenses,
+            'sales' => $sales,
         ]);
     }
 
@@ -121,6 +128,17 @@ class OrdersController extends Controller
             Mail::to($email)->send(new TechnicianOrdersMail($details));
         }
 
+        if ($order->status == 'SEND TO CLINIC') {
+            $clinic = $order->clinic;
+
+            $email = $clinic->email;
+
+            $details['title'] = 'Order Details';
+            $details['body'] = 'Job Has Been successfully sent back to the clinic. Please Check to continue';
+
+            Mail::to($email)->send(new TechnicianOrdersMail($details));
+        }
+
 
         if ($order->save()) {
 
@@ -129,7 +147,7 @@ class OrdersController extends Controller
             $order->order_track()->create([
                 'user_id' => $order->doctor_schedule->user->id,
                 'workshop_id' => $order->workshop->id,
-                'track_date' => $order->order_date,
+                'track_date' => Carbon::now()->format('Y-m-d'),
                 'track_status' => $order->status,
             ]);
 

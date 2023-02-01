@@ -96,4 +96,10 @@ class Order extends Model
         # code...
         return $this->hasOne(Treatment::class, 'order_id', 'id');
     }
+
+    public function workshop_sale()
+    {
+        # code...
+        return $this->hasMany(WorkshopSale::class, 'order_id', 'id');
+    }
 }

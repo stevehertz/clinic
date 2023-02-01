@@ -62,4 +62,10 @@ class Lens extends Model
         # code...
         return $this->hasMany(LensTransfer::class, 'lens_id', 'id');
     }
+
+    public function workshop_sale()
+    {
+        # code...
+        return $this->hasMany(WorkshopSale::class, 'lens_id', 'id');
+    }
 }

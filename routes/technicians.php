@@ -8,6 +8,7 @@ use App\Http\Controllers\Technicians\Lens\LensController;
 use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
 use App\Http\Controllers\Technicians\Orders\OrdersController;
+use App\Http\Controllers\Technicians\Sales\SalesController;
 use App\Http\Controllers\Technicians\Technicians\TechniciansController;
 use Illuminate\Support\Facades\Route;
 
@@ -99,6 +100,14 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
         Route::get('/{id}/view', [OrdersController::class, 'view'])->name('view');
 
         Route::post('/{id}/update', [OrdersController::class, 'update'])->name('update');
+
+    });
+
+    Route::prefix('sales')->name('sales.')->group(function(){
+
+        Route::get('/index', [SalesController::class, 'index'])->name('index');
+
+        Route::post('/store', [SalesController::class, 'store'])->name('store');
 
     });
 });

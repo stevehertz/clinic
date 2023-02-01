@@ -88,4 +88,10 @@ class PaymentBill extends Model
         # code...
         return $this->hasMany(Report::class, 'bill_id', 'id');
     }
+
+    public function workshop_sale()
+    {
+        # code...
+        return $this->hasMany(WorkshopSale::class, 'payment_bill_id', 'id');
+    }
 }

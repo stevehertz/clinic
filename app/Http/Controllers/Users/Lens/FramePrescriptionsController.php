@@ -56,7 +56,7 @@ class FramePrescriptionsController extends Controller
         $quantity = 1;
 
 
-        if($closing <= 0 && $quantity > $closing) {
+        if($closing <= 0 || $quantity > $closing) {
             $errors = ['No Frame Stocks available for the clinic. Please contact the admin in order to continue'];
             $response['status'] = false;
             $response['errors'] = $errors;
