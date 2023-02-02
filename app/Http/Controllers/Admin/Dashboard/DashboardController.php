@@ -44,6 +44,7 @@ class DashboardController extends Controller
         $sum_lenses = $workshop->lens->sum('closing');
         $num_orders = $workshop->order->count();
         $num_technicians = $workshop->technician->count();
-        return view('admin.dashboard.workshops.index', compact('workshop', 'sum_lenses', 'orders', 'num_orders', 'num_technicians'));
+        $num_sales = $workshop->workshop_sale->sum('quantity');
+        return view('admin.dashboard.workshops.index', compact('workshop', 'sum_lenses', 'orders', 'num_orders', 'num_technicians', 'num_sales'));
     }
 }

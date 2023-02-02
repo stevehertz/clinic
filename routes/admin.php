@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Assets\AssetConditionsController;
 use App\Http\Controllers\Admin\Assets\AssetsController;
 use App\Http\Controllers\Admin\Assets\AssetTransferController;
 use App\Http\Controllers\Admin\Assets\AssetTypesController;
+use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
@@ -694,6 +695,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/store', [TechniciansController::class, 'store'])->name('store');
 
         Route::delete('/{id}/delete', [TechniciansController::class, 'destroy'])->name('delete');
+
+    });
+
+    // Workshop Assets
+    Route::prefix('workshop/assets')->name('workshop.assets.')->group(function(){
+
+        Route::get('/{id}', [WorkshopAssetsController::class, 'index'])->name('index');
+
+        Route::post('/store', [WorkshopAssetsController::class, 'store'])->name('store');
+
+        Route::post('/show', [WorkshopAssetsController::class, 'show'])->name('show');
+
+        Route::post('/update', [WorkshopAssetsController::class, 'update'])->name('update');
+
+        Route::delete('/delete', [WorkshopAssetsController::class, 'destroy'])->name('delete');
 
     });
 

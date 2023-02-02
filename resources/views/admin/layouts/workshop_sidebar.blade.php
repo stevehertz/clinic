@@ -36,7 +36,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#"
+                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}"
                                 class="nav-link active">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Dashboard</p>
@@ -79,7 +79,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.workshop.assets.index', $workshop->id) }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Assets</p>
                             </a>

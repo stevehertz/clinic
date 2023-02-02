@@ -28,7 +28,7 @@ class AssetsController extends Controller
                     $type = $row->asset_type->title;
                     return $type;
                 })
-                ->addColumn('cndition', function($row){
+                ->addColumn('condition', function($row){
                     $condition = $row->asset_condition->title;
                     return $condition;
                 })
