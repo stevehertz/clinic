@@ -27,6 +27,18 @@ class AssetTransfer extends Model
         return $this->belongsTo(Asset::class, 'asset_id', 'id');
     }
 
+    public function from_clinic()
+    {
+        # code...
+        return $this->belongsTo(Clinic::class, 'from_clinic_id', 'id');
+    }
+
+    public function to_clinic()
+    {
+        # code...
+        return $this->belongsTo(Clinic::class, 'to_clinic_id', 'id');
+    }
+
     public function asset_type()
     {
         # code...

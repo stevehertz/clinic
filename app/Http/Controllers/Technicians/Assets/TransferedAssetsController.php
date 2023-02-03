@@ -40,7 +40,11 @@ class TransferedAssetsController extends Controller
                     $serial_number = $row->asset->serial_number;
                     return $serial_number;
                 })
-                ->rawColumns(['asset', 'type', 'condtion', 'serial_number'])
+                ->addColumn('from_workshop', function($row){
+                    $from_workshop = $row->from_workshop->name;
+                    return $from_workshop;
+                })
+                ->rawColumns(['asset', 'type', 'condtion', 'serial_number', 'from_workshop'])
                 ->make(true);
         }
         $num_transfered_to = $workshop->to_workshop_transfer_asset->count();
@@ -79,7 +83,11 @@ class TransferedAssetsController extends Controller
                     $serial_number = $row->asset->serial_number;
                     return $serial_number;
                 })
-                ->rawColumns(['asset', 'type', 'condtion', 'serial_number'])
+                ->addColumn('to_workshop', function($row){
+                    $to_workshop = $row->to_workshop->name;
+                    return $to_workshop;
+                })
+                ->rawColumns(['asset', 'type', 'condtion', 'serial_number', 'to_workshop'])
                 ->make(true);
         }
     }

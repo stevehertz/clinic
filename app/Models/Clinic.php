@@ -80,6 +80,18 @@ class Clinic extends Model
         return $this->hasMany(Asset::class, 'clinic_id', 'id');
     }
 
+    public function from_asset_transfer()
+    {
+        # code...
+        return $this->hasMany(AssetTransfer::class, 'from_clinic_id', 'id');
+    }
+
+    public function to_asset_transfer()
+    {
+        # code...
+        return $this->hasMany(AssetTransfer::class, 'to_clinic_id', 'id');
+    }
+
     public function frame()
     {
         # code...

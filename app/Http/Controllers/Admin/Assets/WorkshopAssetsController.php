@@ -50,12 +50,14 @@ class WorkshopAssetsController extends Controller
         $organization = $workshop->organization;
         $asset_types = $organization->asset_type->sortBy('created_at', SORT_DESC);
         $asset_conditions = $organization->asset_condition->sortBy('created_at', SORT_DESC);
+        $org_workshops = $organization->workshop->where('id', '!=', $workshop->id)->sortBy('created_at', SORT_DESC);
         $page_title = "Workshop Assets";
         return view('admin.assets.workshop.index', [
             'page_title' => $page_title,
             'workshop' => $workshop,
             'asset_types' => $asset_types,
             'asset_conditions' => $asset_conditions,
+            'org_workshops' => $org_workshops,
         ]);
     }
 

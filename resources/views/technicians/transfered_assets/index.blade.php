@@ -105,6 +105,7 @@
                                                     <th>Quantity</th>
                                                     <th>Transfered Date</th>
                                                     <th>Remarks</th>
+                                                    <th>Transfered From</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -129,6 +130,7 @@
                                                     <th>Quantity</th>
                                                     <th>Transfered Date</th>
                                                     <th>Remarks</th>
+                                                    <th>Transfered To</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -194,6 +196,10 @@
                             data: 'remarks',
                             name: 'remarks'
                         },
+                        {
+                            data: 'from_workshop',
+                            name: 'from_workshop'
+                        },
                     ]
                 });
             }
@@ -234,6 +240,10 @@
                         {
                             data: 'remarks',
                             name: 'remarks'
+                        },
+                        {
+                            data: 'to_workshop',
+                            name: 'to_workshop'
                         },
                     ]
                 });

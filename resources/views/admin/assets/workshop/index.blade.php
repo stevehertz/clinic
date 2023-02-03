@@ -325,6 +325,120 @@
         </div>
         <!-- /.modal -->
 
+        <div class="modal fade" id="transferAssetModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Tranfer Asset</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="transferAssetForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @csrf
+                                    <div class="form-group">
+                                        <input type="hidden" id="transferAssetId" name="asset_id" class="form-control">
+                                        <input type="hidden" name="from_workshop_id" class="form-control"
+                                            value="{{ $workshop->id }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transferAssetTo">Transfer To</label>
+                                        <select id="transferAssetTo" name="to_workshop_id" class="form-control select2"
+                                            style="width: 100%;">
+                                            <option selected="selected" disabled="disabled">
+                                                Choose Workshop asset transfered to
+                                            </option>
+                                            @forelse ($org_workshops as $org_workshop)
+                                                <option value="{{ $org_workshop->id }}">
+                                                    {{ $org_workshop->name }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">
+                                                    No Any other Workshop found!
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--.col-md-12-->
+                            </div>
+                            <!--.row-->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="utransferAssetCondition">Asset Condition</label>
+                                        <select id="transferAssetCondition" name="condition_id"
+                                            class="form-control select2" style="width: 100%;">
+                                            <option selected="selected" disabled="disabled">
+                                                Choose Asset Condition
+                                            </option>
+                                            @forelse ($asset_conditions as $condition)
+                                                <option value="{{ $condition->id }}">
+                                                    {{ $condition->title }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">
+                                                    No asset conditions found!
+                                                </option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <!--.col-md-6-->
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="transferAssetDate">Transfer Date</label>
+                                        <input type="text" id="transferAssetDate" name="transfer_date"
+                                            class="form-control datepicker" placeholder="Transfer Date">
+                                    </div>
+                                </div>
+                                <!--.col-md-6-->
+                            </div>
+                            <!--.row-->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="transferAssetQuantity">Quantity</label>
+                                        <input type="number" id="transferAssetQuantity" name="quantity"
+                                            class="form-control" placeholder="Enter Quantity Transfered" />
+                                    </div>
+                                </div>
+                                <!--.col-md-12-->
+                            </div>
+                            <!--.row-->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="transferAssetRemarks">Remarks</label>
+                                        <textarea name="remarks" id="transferAssetRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                    </div>
+                                </div>
+                                <!--.col-md-12-->
+                            </div>
+                            <!--.row-->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" id="transferAssetSubmitBtn" class="btn btn-primary">
+                                Transfer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
     </section><!-- /.content -->
 @endsection
 
@@ -539,7 +653,77 @@
                     }
                 });
             });
-            
+
+            $(document).on('click', '.transferItemBtn', function(e){
+                e.preventDefault();
+                var asset_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var path = '{{ route('admin.workshop.assets.show') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: {
+                        asset_id: asset_id,
+                        _token: token
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data['status']) {
+                            $('#transferAssetId').val(data['data']['id']);
+                            $('#transferAssetModal').modal('show');
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+            $('#transferAssetForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                let path = '{{ route('admin.workshop.assets.transfer.store') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#transferAssetSubmitBtn').html(
+                        '<i class="fa fa-spinner fa-spin"></i>');
+                        $('#transferAssetSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#transferAssetSubmitBtn').html('Transfer');
+                        $('#transferAssetSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#transferAssetForm')[0].reset();
+                            $('#transferAssetModal').modal('hide');
+                            $('#assetsData').DataTable().ajax.reload();
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
         });
     </script>
 @endsection

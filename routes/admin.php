@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Assets\AssetsController;
 use App\Http\Controllers\Admin\Assets\AssetTransferController;
 use App\Http\Controllers\Admin\Assets\AssetTypesController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
+use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
@@ -710,6 +711,16 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/update', [WorkshopAssetsController::class, 'update'])->name('update');
 
         Route::delete('/delete', [WorkshopAssetsController::class, 'destroy'])->name('delete');
+
+    });
+
+    Route::prefix('workshop/assets/transfer')->name('workshop.assets.transfer.')->group(function(){
+
+        Route::get('/{id}', [WorkshopAssetTransferController::class, 'index'])->name('index');
+
+        Route::post('/store', [WorkshopAssetTransferController::class, 'store'])->name('store');
+
+        Route::post('/show', [WorkshopAssetTransferController::class, 'show'])->name('show');
 
     });
 

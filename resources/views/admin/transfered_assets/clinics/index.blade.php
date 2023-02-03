@@ -70,8 +70,8 @@
                             name: 'asset'
                         },
                         {
-                            data: 'transfered_to',
-                            name: 'transfered_to'
+                            data: 'transfer_to',
+                            name: 'transfer_to'
                         },
                         {
                             data: 'transfer_date',

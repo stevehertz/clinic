@@ -31,7 +31,7 @@ class WorkshopTransferAsset extends Model
     public function asset()
     {
         # code...
-        return $this->belongsTo(Asset::class, 'asset_id', 'id');
+        return $this->belongsTo(WorkshopAsset::class, 'asset_id', 'id');
     }
 
     public function from_workshop()

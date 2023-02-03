@@ -26,22 +26,31 @@ class AssetTransferController extends Controller
         //
         $clinic = Clinic::findOrFail($id);
         if ($request->ajax()) {
-            $data = AssetTransfer::join('assets', 'asset_transfers.asset_id', '=', 'assets.id')
-                ->join('clinics', 'asset_transfers.to_clinic_id', '=', 'clinics.id')
-                ->join('asset_types', 'asset_transfers.type_id', '=', 'asset_types.id')
-                ->join('asset_conditions', 'asset_transfers.condition_id', '=', 'asset_conditions.id')
-                ->select('asset_transfers.*', 'assets.asset', 'clinics.clinic as transfered_to', 'asset_types.title as type', 'asset_conditions.title as condition')
-                ->where('asset_transfers.from_clinic_id', '=', $clinic->id)
-                ->latest()
-                ->get();
-
+            $data = $clinic->from_asset_transfer->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('asset', function($row){
+                    $asset = $row->asset->asset;
+                    return $asset;
+                })
+                ->addColumn('transfer_to', function($row){
+                    $transfer_to = $row->to_clinic->clinic;
+                    return $transfer_to;
+                })
+                ->addColumn('type', function($row){
+                    $type = $row->asset_type->title;
+                    return $type;
+                })
+                ->addColumn('condition', function($row){
+                    $condition = $row->asset_condition->title;
+                    return $condition;
+                })
+                ->rawColumns(['asset', 'transfer_to', 'type', 'condition'])
                 ->make(true);
         }
         $patients = $clinic->patient->count();
         $page_title = 'Transfered Asset';
-        return view('admin.transfered_assets.index', [
+        return view('admin.transfered_assets.clinics.index', [
             'clinic' => $clinic,
             'patients' => $patients,
             'page_title' => $page_title,
