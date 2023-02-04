@@ -1,4 +1,4 @@
-@extends('admin.layouts.temp')
+@extends('admin.layouts.workshop')
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $clinic->clinic }}</h1>
+                    <h1>{{ $workshop->name }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
+                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Settings
@@ -32,16 +32,16 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
-                                    src="{{ asset('storage/clinics/' . $clinic->logo) }}" alt="User profile picture">
+                                <img class="profile-user-img img-fluid img-circle" src="{{ asset('storage/workshops/'.$workshop->logo) }}"
+                                    alt="User profile picture">
                             </div>
 
                             <h3 class="profile-username text-center">
-                                {{ $clinic->clinic }}
+                                {{ $workshop->name }}
                             </h3>
 
                             <p class="text-muted text-center">
-                                {{ $clinic->initials }}
+                                {{ $workshop->initials }}
                             </p>
                         </div>
                         <!-- /.card-body -->
@@ -54,7 +54,7 @@
                             <strong><i class="fa fa-envelope mr-1"></i> Email Address</strong>
 
                             <p class="text-muted">
-                                {{ $clinic->email }}
+                                {{ $workshop->email }}
                             </p>
 
                             <hr>
@@ -62,7 +62,7 @@
                             <strong><i class="fa fa-phone mr-1"></i> Phone Number</strong>
 
                             <p class="text-muted">
-                                {{ $clinic->phone }}
+                                {{ $workshop->phone }}
                             </p>
 
                             <hr>
@@ -70,15 +70,7 @@
                             <strong><i class="fa fa-map-signs mr-1"></i> Address</strong>
 
                             <p class="text-muted">
-                                {{ $clinic->address }}
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fa fa-map mr-1"></i> Location</strong>
-
-                            <p class="text-muted">
-                                {{ $clinic->location }}
+                                {{ $workshop->address }}
                             </p>
                         </div>
                         <!-- /.card-body -->
@@ -92,31 +84,30 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#updateClinicTab" data-toggle="tab">
-                                        Update Clinic
+                                    <a class="nav-link active" href="#updateOrganizationTab" data-toggle="tab">
+                                        Update Organization
                                     </a>
                                 </li>
                             </ul>
                         </div><!-- /.card-header -->
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="active tab-pane" id="updateClinicTab">
-                                    <form id="updateClinicForm" role="form">
+                                <div class="active tab-pane" id="updateOrganizationTab">
+                                    <form id="updateOrganizationForm" role="form">
                                         @csrf
-                                        <input type="hidden" value="{{ $clinic->id }}" name="clinic_id" />
+                                        <input type="hidden" value="{{ $workshop->id }}" name="workshop_id" />
                                         <div class="form-group">
-                                            <label for="updateClinicName">Clinic Name</label>
-                                            <input type="text" class="form-control" value="{{ $clinic->clinic }}"
-                                                id="updateClinicName" name="clinic" placeholder="Clinic Name">
+                                            <label for="updateOrganizationName">Workshop Name</label>
+                                            <input type="text" class="form-control" value="{{ $workshop->name }}" id="updateOrganizationName" name="name" placeholder="Workshop Name">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="updateClinicLogo">Logo</label>
+                                            <label for="updateOrganizationLogo">Logo</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="logo" class="custom-file-input"
-                                                        id="updateClinicLogo">
-                                                    <label class="custom-file-label" for="updateClinicLogo">
+                                                        id="updateOrganizationLogo">
+                                                    <label class="custom-file-label" for="updateOrganizationLogo">
                                                         Choose file
                                                     </label>
                                                 </div>
@@ -124,38 +115,27 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="updateClinicInitials">Clinic Initials</label>
-                                            <input type="text" class="form-control" value="{{ $clinic->initials }}"
-                                                id="updateClinicInitials" name="initials" placeholder="Clinic Initials">
+                                            <label for="updateOrganizationInitials">Workshop Initials</label>
+                                            <input type="text" class="form-control" value="{{ $workshop->initials }}" id="updateOrganizationInitials" name="initials" placeholder="Clinic Initials">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="updateClinicPhone">Phone Number</label>
-                                            <input type="text" class="form-control" value="{{ $clinic->phone }}"
-                                                id="updateClinicPhone" name="phone" placeholder="Phone Number">
+                                            <label for="updateOrganizationPhone">Phone Number</label>
+                                            <input type="text" class="form-control" value="{{ $workshop->phone }}" id="updateOrganizationPhone" name="phone" placeholder="Phone Number">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="updateClinicEmail">Email Address</label>
-                                            <input type="email" value="{{ $clinic->email }}" name="email"
-                                                class="form-control" id="updateClinicEmail">
-                                        </div>
-
-
-
-                                        <div class="form-group">
-                                            <label for="updateClinicAddress">Address</label>
-                                            <textarea name="address" id="updateClinicAddress" class="form-control" placeholder="Enter Clinic's Address">{{ $clinic->address }}</textarea>
+                                            <label for="updateOrganizationEmail">Email Address</label>
+                                            <input type="email" value="{{ $workshop->email }}" name="email" class="form-control" id="updateOrganizationEmail">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="updateClinicLocation">Location</label>
-                                            <input type="text" value="{{ $clinic->location }}" name="location"
-                                                class="form-control" id="updateClinicLocation">
+                                            <label for="updateOrganizationAddress">Address</label>
+                                            <textarea name="address" id="updateOrganizationAddress" class="form-control" placeholder="Enter Workshop Address">{{ $workshop->address }}</textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <button type="submit" id="updateClinicSubmitBtn"
+                                            <button type="submit" id="updateOrganizationSubmitBtn"
                                                 class="btn btn-primary btn-block">UPDATE</button>
                                         </div>
                                     </form>
@@ -179,11 +159,11 @@
     <script>
         $(document).ready(function() {
 
-            $('#updateClinicForm').submit(function(e) {
+            $('#updateOrganizationForm').submit(function(e) {
                 e.preventDefault();
-                $('#updateClinicSubmitBtn').html('<i class="fa fa-spinner fa-spin"></i>');
-                $('#updateClinicSubmitBtn').attr('disabled', true);
-                var path = '{{ route('admin.clinics.update') }}';
+                $('#updateOrganizationSubmitBtn').html('<i class="fa fa-spinner fa-spin"></i>');
+                $('#updateOrganizationSubmitBtn').attr('disabled', true);
+                var path = '{{ route('admin.workshop.update') }}';
                 var formData = new FormData(this);
                 $.ajax({
                     url: path,
@@ -193,8 +173,8 @@
                     cache: false,
                     processData: false,
                     success: function(data) {
-                        $('#updateClinicSubmitBtn').html('UPDATE');
-                        $('#updateClinicSubmitBtn').attr('disabled', false);
+                        $('#updateOrganizationSubmitBtn').html('UPDATE');
+                        $('#updateOrganizationSubmitBtn').attr('disabled', false);
                         if (data['status']) {
                             toastr.success(data.message);
                             setTimeout(function() {
@@ -206,6 +186,7 @@
                     }
                 });
             });
+
 
         });
     </script>

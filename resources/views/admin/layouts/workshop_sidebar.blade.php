@@ -143,7 +143,7 @@
                 <li class="nav-header">SETTINGS</li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('admin.workshop.view', $workshop->id) }}" class="nav-link">
                         <i class="nav-icon fa fa-cogs"></i>
                         <p>
                             Settings

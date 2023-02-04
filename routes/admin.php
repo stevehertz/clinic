@@ -563,6 +563,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::post('/show', [WorkshopsController::class, 'show'])->name('show');
 
+        Route::get('/{id}/view', [WorkshopsController::class, 'view'])->name('view');
+
         Route::post('/update', [WorkshopsController::class, 'update'])->name('update');
 
         Route::post('/delete', [WorkshopsController::class, 'destroy'])->name('delete');

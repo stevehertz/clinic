@@ -70,11 +70,7 @@ TIP: This Layout is for the clinic dashboard page.
                         <i class="fa fa-user"></i> {{ Auth::guard('admin')->user()->username }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <i class="fa fa-user mr-2"></i> Profile
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a href="{{ route('admin.workshop.view', $workshop->id) }}" class="dropdown-item">
                             <i class="fa fa-cogs mr-2"></i> settings
                         </a>
                         <div class="dropdown-divider"></div>

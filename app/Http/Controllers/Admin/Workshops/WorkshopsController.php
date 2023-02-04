@@ -142,6 +142,24 @@ class WorkshopsController extends Controller
         return response()->json($response, 200);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function view($id)
+    {
+        //
+        $workshop = Workshop::findOrFail($id);
+        $page_title = "View Workshop";
+        return view('admin.workshops.view', [
+            'page_title' => $page_title,
+            'workshop' => $workshop,
+        ]);
+    }
+    
+
 
     /**
      * Update the specified resource in storage.
@@ -158,6 +176,7 @@ class WorkshopsController extends Controller
         $validator = Validator::make($data, [
             'workshop_id' => 'required|integer|exists:workshops,id',
             'name' => 'required|string|max:255',
+            'initials' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'email' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -195,6 +214,7 @@ class WorkshopsController extends Controller
         }
 
         $workshop->name = $data['name'];
+        $workshop->initials = $data['initials'];
         $workshop->phone = $data['phone'];
         $workshop->email = $data['email'];
         $workshop->address = $data['address'];
