@@ -216,8 +216,6 @@
 
                                 <p class="text-muted">{{ $order->workshop->name }}</p>
 
-
-
                             </div>
                             <!-- /.tab-pane -->
 

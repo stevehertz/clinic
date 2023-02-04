@@ -103,7 +103,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.workshop.orders.index', $workshop->id) }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Orders</p>
                             </a>

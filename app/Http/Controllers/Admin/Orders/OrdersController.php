@@ -42,7 +42,7 @@ class OrdersController extends Controller
         }
         $patients = $clinic->patient->count();
         $page_title = 'Orders';
-        return view('admin.orders.index', [
+        return view('admin.orders.clinics.index', [
             'clinic' => $clinic,
             'patients' => $patients,
             'page_title' => $page_title,
@@ -83,7 +83,7 @@ class OrdersController extends Controller
             $order = Order::findOrFail($order_id);
             $request->session()->forget('order_id');
             $page_title = 'Order #' . $order->id;
-            return view('admin.orders.view', [
+            return view('admin.orders.clinics.view', [
                 'page_title' => $page_title,
                 'clinic' => $clinic,
                 'order' => $order,

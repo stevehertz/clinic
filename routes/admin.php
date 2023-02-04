@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
+use App\Http\Controllers\Admin\Orders\WorkshopOrdersController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
 use App\Http\Controllers\Admin\Patients\PatientsController;
 use App\Http\Controllers\Admin\Payments\ClosedBillsController;
@@ -723,6 +724,16 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/store', [WorkshopAssetTransferController::class, 'store'])->name('store');
 
         Route::post('/show', [WorkshopAssetTransferController::class, 'show'])->name('show');
+
+    });
+
+    Route::prefix('workshop/orders')->name('workshop.orders.')->group(function(){
+
+        Route::get('/{id}', [WorkshopOrdersController::class, 'index'])->name('index');
+
+        Route::post('/show', [WorkshopOrdersController::class, 'show'])->name('show');
+
+        Route::get('/{id}/view', [WorkshopOrdersController::class, 'view'])->name('view');
 
     });
 
