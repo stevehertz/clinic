@@ -234,7 +234,7 @@
                             </div>
                             <!--.tab-pane -->
 
-                            <div class="tab-pane" id="framePrescriptionTab">
+                            <div class="tab-pane p-0" id="framePrescriptionTab">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <tbody>
@@ -266,6 +266,13 @@
                                                 <th>Frame Material</th>
                                                 <td>
                                                     {{ $order->frame_prescription->frame_stock->frame->frame_brand->title }}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Remarks</th>
+                                                <td>
+                                                    {{ $order->frame_prescription->remarks }}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -316,12 +323,13 @@
                     <div class="card-footer">
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <button type="button" id="trackOrderBtn" class="btn btn-secondary btn-block">
                                     Track Order
                                 </button>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-4">
                                 @if ($order->status == 'FRAME SENT TO WORKSHOP')
                                     <button type="button" id="orderRceceivedBtn" data-id="{{ $order->id }}"
                                         data-value="ORDER RECEIVED" class="btn btn-block btn-success orderRceceivedBtn">
@@ -348,6 +356,12 @@
                                         <i class="fa fa-send"></i> SEND TO CLINIC
                                     </button>
                                 @endif
+                            </div>
+
+                            <div class="col-md-4">
+                                <button type="button" id="paymentsBillBtn" class="btn btn-warning btn-block">
+                                    Payments Agreed
+                                </button>
                             </div>
                         </div>
 
@@ -574,6 +588,100 @@
                             </button>
                         </div>
                     </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="paymentsBillModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Payments Made On The Order
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body table-responsive">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>
+                                    <i class="fa fa-bar-chart mr-1"></i> Invoice Number
+                                </strong>
+
+                                <p class="text-muted">
+                                    {{ $order->payment_bill->invoice_number }}
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-cogs mr-1"></i> Bill Status</strong>
+
+                                <p class="text-muted">{{ $order->payment_bill->bill_status }}</p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-money mr-1"></i> Consultation Fee</strong>
+
+                                <p class="text-muted">
+                                    <span class="tag tag-success">
+                                        {{ number_format($order->payment_bill->consultation_fee, 2, '.', ',') }}
+                                    </span>
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-money mr-1"></i> Agreed Amount</strong>
+
+                                <p class="text-muted">
+                                    <span class="tag tag-success">
+                                        {{ number_format($order->payment_bill->agreed_amount, 2, '.', ',') }}
+                                    </span>
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-money mr-1"></i> Total Amount </strong>
+
+                                <p class="text-muted">
+                                    <span class="tag tag-success">
+                                        {{ number_format($order->payment_bill->total_amount, 2, '.', ',') }}
+                                    </span>
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-money mr-1"></i> Paid Amount </strong>
+
+                                <p class="text-muted">
+                                    <span class="tag tag-success">
+                                        {{ number_format($order->payment_bill->paid_amount, 2, '.', ',') }}
+                                    </span>
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fa fa-money mr-1"></i> Balance </strong>
+
+                                <p class="text-muted">
+                                    <span class="tag tag-success">
+                                        {{ number_format($order->payment_bill->balance, 2, '.', ',') }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -816,6 +924,11 @@
                         Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
+            });
+
+            $(document).on('click', '#paymentsBillBtn', function(e){
+                e.preventDefault();
+                $('#paymentsBillModal').modal('show');
             });
         });
     </script>
