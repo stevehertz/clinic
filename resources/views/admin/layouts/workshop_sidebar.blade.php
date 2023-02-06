@@ -113,6 +113,24 @@
 
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-bar-chart"></i>
+                        <p>
+                            Sales
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.workshop.sales.index', $workshop->id) }}" class="nav-link">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>Sales</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Technicians

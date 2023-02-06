@@ -61,6 +61,7 @@ use App\Http\Controllers\Admin\Technicians\TechniciansController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
+use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -735,6 +736,12 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}/view', [WorkshopOrdersController::class, 'view'])->name('view');
 
+    });
+
+    Route::prefix('workshop/sales')->name('workshop.sales.')->group(function(){
+
+        Route::get('/{id}', [WorkshopSalesController::class, 'index'])->name('index');
+        
     });
 
 });

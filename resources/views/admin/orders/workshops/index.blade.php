@@ -20,8 +20,8 @@
         </div><!-- /.container-fluid -->
     </section>
 
-     <!-- Main content -->
-     <section class="content">
+    <!-- Main content -->
+    <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -48,7 +48,6 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </section><!-- /.content -->
-
 @endsection
 
 @section('scripts')
@@ -56,8 +55,8 @@
         $(document).ready(function() {
 
             find_orders();
-            function find_orders()
-            {
+
+            function find_orders() {
                 let path = '{{ route('admin.workshop.orders.index', $workshop->id) }}';
                 $('#ordersData').DataTable({
                     processing: true,
@@ -95,7 +94,7 @@
                 });
             }
 
-            $(document).on('click', '.viewOrderBtn', function(e){
+            $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
                 var order_id = $(this).data('id');
                 var token = "{{ csrf_token() }}";
@@ -108,13 +107,14 @@
                         _token: token
                     },
                     dataType: "json",
-                    success: function (data) {
-                        if(data['status']){
-                            let order_path = '{{ route('admin.workshop.orders.view', $workshop->id) }}';
+                    success: function(data) {
+                        if (data['status']) {
+                            let order_path =
+                                '{{ route('admin.workshop.orders.view', $workshop->id) }}';
                             setTimeout(() => {
                                 window.location.href = order_path;
                             }, 1000);
-                        }   
+                        }
                     }
                 });
             })
