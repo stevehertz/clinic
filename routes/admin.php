@@ -507,6 +507,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}/index', [LensPurchasesController::class, 'index'])->name('index');
 
+        Route::get('/{id}/download', [LensPurchasesController::class, 'download'])->name('download');
+
         Route::post('/store', [LensPurchasesController::class, 'store'])->name('store');
 
         Route::post('/show', [LensPurchasesController::class, 'show'])->name('show');

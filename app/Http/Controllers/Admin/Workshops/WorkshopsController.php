@@ -177,6 +177,7 @@ class WorkshopsController extends Controller
             'workshop_id' => 'required|integer|exists:workshops,id',
             'name' => 'required|string|max:255',
             'initials' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'phone' => 'required|string|max:255',
             'email' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',

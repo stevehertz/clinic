@@ -7,6 +7,8 @@ use App\Models\Lens;
 use App\Models\LensPurchase;
 use App\Models\Workshop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\WorkDay;
 
@@ -17,6 +19,7 @@ class LensPurchasesController extends Controller
     {
         $this->middleware('auth:admin');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,13 +45,31 @@ class LensPurchasesController extends Controller
                     $vendor = $row->vendor->first_name . ' ' . $row->vendor->last_name;
                     return $vendor;
                 })
+                ->addColumn('receipt', function ($row) {
+                    $receipt = '<a href="'.route('admin.lens.purchase.download', $row->id).'" target="_blank" class="btn btn-tools btn-sm">' . $row->receipt . '</a>';
+                    return $receipt;
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteLensPurchaseBtn"><i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'lens_code', 'power', 'vendor'])
+
+                ->rawColumns(['action', 'lens_code', 'power', 'vendor', 'receipt'])
                 ->make(true);
         }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function download($id)
+    {
+        $lens_purchase = LensPurchase::findOrFail($id);
+        if(Storage::disk('public')->exists('purchases/', $lens_purchase->receipt)):
+            return Storage::disk('public')->download('purchases/'.$lens_purchase->receipt, $lens_purchase->receipt);
+        endif;
     }
 
     /**
@@ -65,6 +86,8 @@ class LensPurchasesController extends Controller
         $validator = Validator::make($data, [
             'lens_id' => 'required|integer|exists:lenses,id',
             'vendor_id' => 'required|integer|exists:vendors,id',
+            'receipt_number' => 'required',
+            'receipt' => 'nullable|mimes:pdf,doc,docx,ppt,xls,txt',
             'purchased_date' => 'required|date',
             'quantity' => 'required|integer',
             'price' => 'required',
@@ -76,6 +99,26 @@ class LensPurchasesController extends Controller
             $response['status'] = false;
             $response['errors'] = $errors;
             return response()->json($response, 401);
+        }
+
+        if ($request->hasFile('receipt')) {
+
+            // file name with extension
+            $receiptNameWithExt = $request->file('receipt')->getClientOriginalName();
+
+            // Get Filename
+            $receiptName = pathinfo($receiptNameWithExt, PATHINFO_FILENAME);
+
+            // Get just Extension
+            $extension = $request->file('receipt')->getClientOriginalExtension();
+
+            // Filename To store
+            $receiptNameToStore = $receiptName . '_' . time() . '.' . $extension;
+
+            // Upload Image
+            $path = $request->file('receipt')->storeAs('public/purchases', $receiptNameToStore);
+        } else {
+            $receiptNameToStore = '';
         }
 
         $lens = Lens::findOrFail($data['lens_id']);
@@ -114,6 +157,8 @@ class LensPurchasesController extends Controller
             'workshop_id' => $lens->workshop->id,
             'lens_id' => $lens->id,
             'vendor_id' => $data['vendor_id'],
+            'receipt_number' => $data['receipt_number'],
+            'receipt' => $receiptNameToStore,
             'purchased_date' => $data['purchased_date'],
             'quantity' => $quantity,
             'price' => $price,
@@ -127,7 +172,6 @@ class LensPurchasesController extends Controller
         ];
 
         return response()->json($response, 200);
-
     }
 
     /**
@@ -204,6 +248,9 @@ class LensPurchasesController extends Controller
             'sold' => $sold,
             'closing' => $closing
         ]);
+        if ($lens_purchase->receipt != '' && $lens_purchase->receipt != NULL) {
+            Storage::delete('public/purchases/' . $lens_purchase->receipt);
+        }
         $lens_purchase->delete();
 
         $response['status'] = true;

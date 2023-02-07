@@ -14,6 +14,8 @@ class LensPurchase extends Model
         'workshop_id',
         'lens_id',
         'vendor_id',
+        'receipt_number',
+        'receipt',
         'purchased_date',
         'quantity',
         'price',

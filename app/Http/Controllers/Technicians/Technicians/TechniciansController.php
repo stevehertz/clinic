@@ -37,6 +37,7 @@ class TechniciansController extends Controller
         $validator = Validator::make($data, [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'phone' => ['required', 'unique:technicians,phone,'.Auth::guard('technician')->user()->id, 'numeric'],
             'email' => 'required|email|unique:technicians,email,'.Auth::guard('technician')->user()->id
         ]);

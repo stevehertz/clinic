@@ -137,6 +137,22 @@ class LensController extends Controller
         return response()->json($response);
     }
 
+
+    /**
+     * Import a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Request $request)
+    {
+        $data = $request->except('_token');
+
+        $validator = Validator::make($data, [
+
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *

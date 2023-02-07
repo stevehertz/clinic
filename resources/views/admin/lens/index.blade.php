@@ -130,6 +130,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Purchased Date</th>
+                                                    <th>Receipt Number</th>
                                                     <th>Lens Code</th>
                                                     <th>Lens Power</th>
                                                     <th>Vendor</th>
@@ -137,6 +138,7 @@
                                                     <th>Units</th>
                                                     <th>Price</th>
                                                     <th>Total Price</th>
+                                                    <th>Receipt</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -462,11 +464,34 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label for="newLensPurchasesReceiptNumber">
+                                            Receipt Number
+                                        </label>
+                                        <input type="text" id="newLensPurchasesReceiptNumber" name="receipt_number"
+                                            placeholder="Enter Receipt Number" class="form-control">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="newLensPurchasesReceipt">Receipt</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="receipt" class="custom-file-input"
+                                                id="newLensPurchasesReceipt">
+                                            <label class="custom-file-label" for="newLensPurchasesReceipt">Attach Receipt</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label for="newLensPurchasesDate">
                                             Purchased Date
                                         </label>
                                         <input type="text" id="newLensPurchasesDate" name="purchased_date"
-                                            placeholder="Enter Placeholder" class="form-control datepicker">
+                                            placeholder="Enter Date Purchased" class="form-control datepicker">
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
@@ -477,7 +502,7 @@
                                             Received Date
                                         </label>
                                         <input type="text" id="newLensReceivedDate" name="received_date"
-                                            placeholder="Enter Placeholder" class="form-control datepicker">
+                                            placeholder="Enter Date Received" class="form-control datepicker">
                                     </div>
                                     <!-- /.form-group -->
                                 </div>
@@ -787,6 +812,10 @@
                             name: 'purchased_date'
                         },
                         {
+                            data: 'receipt_number',
+                            name: 'receipt_number'
+                        },
+                        {
                             data: 'lens_code',
                             name: 'lens_code'
                         },
@@ -813,6 +842,12 @@
                         {
                             data: 'total_price',
                             name: 'total_price'
+                        },
+                        {
+                            data: 'receipt',
+                            name: 'receipt',
+                            orderable: false,
+                            searchable: false
                         },
                         {
                             data: 'action',
