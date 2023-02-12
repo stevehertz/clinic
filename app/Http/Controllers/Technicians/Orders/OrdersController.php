@@ -71,13 +71,15 @@ class OrdersController extends Controller
         $order = Order::findOrFail($id);
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
         $workshop = $technician->workshop;
-        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
+        $right_eye_lenses = $workshop->lens->where('eye', 'RIGHT')->sortBy('created_at', SORT_DESC);
+        $left_eye_lenses = $workshop->lens->where('eye', 'LEFT')->sortBy('created_at', SORT_DESC);
         $sales = $order->workshop_sale->sortBy('created_at', SORT_DESC);
         $page_title = "View Order";
         return view('technicians.orders.view', [
             'page_title' => $page_title,
             'order' => $order,
-            'lenses' => $lenses,
+            'right_eye_lenses' => $right_eye_lenses,
+            'left_eye_lenses' => $left_eye_lenses,
             'sales' => $sales,
         ]);
     }

@@ -346,9 +346,16 @@
                                         <i class="fa fa-send"></i> GLAZING
                                     </button>
                                 @elseif ($order->status == 'GLAZING')
-                                    <button type="button" id="glazingBtn" data-id="{{ $order->id }}"
-                                        data-value="GLAZING" class="btn btn-block btn-success glazingBtn">
-                                        <i class="fa fa-send"></i> GLAZING
+                                    <button type="button" id="rightLensGlazingBtn" data-id="{{ $order->id }}"
+                                        data-value="RIGHT LENS GLAZING"
+                                        class="btn btn-block btn-success rightLensGlazingBtn">
+                                        <i class="fa fa-send"></i> RIGHT LENS GLAZING
+                                    </button>
+                                @elseif ($order->status == 'RIGHT LENS GLAZED')
+                                    <button type="button" id="leftLensGlazingBtn" data-id="{{ $order->id }}"
+                                        data-value="LEFT LENS GLAZING"
+                                        class="btn btn-block btn-success leftLensGlazingBtn">
+                                        <i class="fa fa-send"></i> LEFT LENS GLAZING
                                     </button>
                                 @elseif ($order->status == 'GLAZED')
                                     <button type="button" id="sendToClinicBtn" data-id="{{ $order->id }}"
@@ -519,41 +526,41 @@
         </div>
         <!-- /.modal -->
 
-        <div class="modal fade" id="salesModal">
+        <div class="modal fade" id="rightLensGlazingModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">
-                            Glazing
+                            Right Lens Glazing
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="salesForm" method="POST">
+                    <form id="rightLensGlazingForm" method="POST">
                         <div class="modal-body table-responsive">
                             <div class="row">
                                 <div class="col-md-12">
                                     @csrf
-                                    <input type="hidden" name="order_id" id="salesOrderId" class="form-control">
-                                    <input type="hidden" name="" id="" class="form-control">
+                                    <input type="hidden" name="order_id" id="rightLensGlazingOrderId" class="form-control">
+                                    <input type="hidden" name="status" value="RIGHT LENS GLAZED" class="form-control">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="salesLens">Lens</label>
-                                        <select id="salesLens" name="lens_id"
+                                        <label for="rightLensGlazingLens">Lens</label>
+                                        <select id="rightLensGlazingLens" name="lens_id"
                                             class="form-control select2 select2-primary"
                                             data-dropdown-css-class="select2-primary" style="width: 100%;">
                                             <option disabled="disabled" selected="selected">
                                                 Choose Lens To Use in this order
                                             </option>
-                                            @forelse ($lenses as $lens)
-                                                <option value="{{ $lens->id }}">{{ $lens->code }} :
-                                                    {{ $lens->power }} : {{ $lens->lens_type->type }} :
-                                                    {{ $lens->lens_material->title }} : {{ $lens->lens_index }} :
-                                                    {{ $lens->eye }}
+                                            @forelse ($right_eye_lenses as $right_eye_lens)
+                                                <option value="{{ $right_eye_lens->id }}">{{ $right_eye_lens->code }} :
+                                                    {{ $right_eye_lens->power }} : {{ $right_eye_lens->lens_type->type }} :
+                                                    {{ $right_eye_lens->lens_material->title }} : {{ $right_eye_lens->lens_index }} :
+                                                    {{ $right_eye_lens->eye }}
                                                 </option>
                                             @empty
                                                 <option disabled="disabled">NOT TRANSFERED</option>
@@ -564,25 +571,71 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="submit" id="rightLensGlazingSubmitBtn" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="leftLensGlazingModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Left Lens Glazing
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="leftLensGlazingForm" method="POST">
+                        <div class="modal-body table-responsive">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @csrf
+                                    <input type="hidden" name="order_id" id="leftLensGlazingOrderId" class="form-control">
+                                    <input type="hidden" name="status" value="GLAZED" class="form-control">
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="salesStatus">Job Status</label>
-                                        <select id="salesLens" name="status"
+                                        <label for="leftLensGlazingLens">Lens</label>
+                                        <select id="leftLensGlazingLens" name="lens_id"
                                             class="form-control select2 select2-primary"
                                             data-dropdown-css-class="select2-primary" style="width: 100%;">
                                             <option disabled="disabled" selected="selected">
-                                                Select Status
+                                                Choose Lens To Use in this order
                                             </option>
-                                            <option value="GLAZING">GLAZING</option>
-                                            <option value="GLAZED">GLAZED</option>
+                                            @forelse ($left_eye_lenses as $left_eye_lens)
+                                                <option value="{{ $left_eye_lens->id }}">{{ $left_eye_lens->code }} :
+                                                    {{ $left_eye_lens->power }} : {{ $left_eye_lens->lens_type->type }} :
+                                                    {{ $left_eye_lens->lens_material->title }} : {{ $left_eye_lens->lens_index }} :
+                                                    {{ $left_eye_lens->eye }}
+                                                </option>
+                                            @empty
+                                                <option disabled="disabled">NOT TRANSFERED</option>
+                                            @endforelse
+
+
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="submit" id="salesSubmitBtn" class="btn btn-primary">Save</button>
+                            <button type="submit" id="leftLensGlazingSubmitBtn" class="btn btn-primary">Save</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">
                                 Close
                             </button>
@@ -806,7 +859,61 @@
                 });
             });
 
+
             $(document).on('click', '.glazingBtn', function(e) {
+                e.preventDefault();
+                var order_id = $(this).data('id');
+                var token = '{{ csrf_token() }}';
+                var status = $(this).data('value');
+                var path = '{{ route('technicians.orders.update', ':id') }}';
+                path = path.replace(':id', order_id);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Job has started glazing!",
+                    icon: "success",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: 'POST',
+                            data: {
+                                order_id: order_id,
+                                status: status,
+                                _token: token
+                            },
+                            dataType: "json",
+                            beforeSend: function() {
+                                $('#glazingBtn').html(
+                                    '<i class="fa fa-spinner fa-spin"></i>'
+                                );
+                                $('#glazingBtn').attr('disabled', true);
+                            },
+                            complete: function() {
+                                $('#glazingBtn').html(
+                                    'GLAZING'
+                                );
+                                $('#glazingBtn').attr('disabled', false);
+                            },
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            },
+
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '.rightLensGlazingBtn', function(e) {
                 e.preventDefault();
                 let order_id = $(this).data('id');
                 let token = '{{ csrf_token() }}';
@@ -821,15 +928,15 @@
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            $('#salesModal').modal('show');
-                            $('#salesOrderId').val(data['data']['id']);
+                            $('#rightLensGlazingModal').modal('show');
+                            $('#rightLensGlazingOrderId').val(data['data']['id']);
                         }
                     }
                 });
 
             });
 
-            $('#salesForm').submit(function(e) {
+            $('#rightLensGlazingForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 var formData = new FormData(form[0]);
@@ -842,20 +949,20 @@
                     processData: false,
                     dataType: "json",
                     beforeSend: function() {
-                        $('#salesSubmitBtn').html(
+                        $('#rightLensGlazingSubmitBtn').html(
                             '<i class="fa fa-spinner fa-spin"></i>'
                         );
-                        $('#salesSubmitBtn').attr('disabled', true);
+                        $('#rightLensGlazingSubmitBtn').attr('disabled', true);
                     },
                     complete: function() {
-                        $('#salesSubmitBtn').html('Save');
-                        $('#salesSubmitBtn').attr('disabled', false);
+                        $('#rightLensGlazingSubmitBtn').html('Save');
+                        $('#rightLensGlazingSubmitBtn').attr('disabled', false);
                     },
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#salesForm')[0].reset();
-                            $('#salesModal').modal('hide');
+                            $('#rightLensGlazingForm')[0].reset();
+                            $('#rightLensGlazingModal').modal('hide');
                             setTimeout(() => {
                                 location.reload();
                             }, 1000);
@@ -872,6 +979,74 @@
                     }
                 });
             });
+
+            $(document).on('click', '.leftLensGlazingBtn', function(e) {
+                e.preventDefault();
+                let order_id = $(this).data('id');
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('technicians.orders.show', ':id') }}';
+                path = path.replace(':id', order_id);
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: {
+                        _token: token
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
+                            $('#leftLensGlazingModal').modal('show');
+                            $('#leftLensGlazingOrderId').val(data['data']['id']);
+                        }
+                    }
+                });
+
+            });
+
+            $('#leftLensGlazingForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('technicians.sales.store') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#leftLensGlazingSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#leftLensGlazingSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#leftLensGlazingSubmitBtn').html('Save');
+                        $('#leftLensGlazingSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#leftLensGlazingForm')[0].reset();
+                            $('#leftLensGlazingModal').modal('hide');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
 
             $(document).on('click', '.sendToClinicBtn', function(e) {
                 e.preventDefault();
@@ -926,7 +1101,7 @@
                 });
             });
 
-            $(document).on('click', '#paymentsBillBtn', function(e){
+            $(document).on('click', '#paymentsBillBtn', function(e) {
                 e.preventDefault();
                 $('#paymentsBillModal').modal('show');
             });

@@ -83,6 +83,40 @@
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Workshop
+                        </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fa fa-industry"></i>
+                                    {{ $order->workshop->name }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fa fa-phone text-warning"></i> {{ $order->workshop->phone }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fa fa-envelope text-primary"></i>
+                                    {{ $order->workshop->email }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <!-- /.col -->
 
@@ -210,12 +244,6 @@
 
                                 <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
 
-                                <hr>
-
-                                <strong><i class="fa  fa-map-signs mr-1"></i> Workshop</strong>
-
-                                <p class="text-muted">{{ $order->workshop->name }}</p>
-
                             </div>
                             <!-- /.tab-pane -->
 
@@ -326,7 +354,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Doctor/ Optimist</h3>
+                        <h3 class="card-title">Doctor/ Optimetrist</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
