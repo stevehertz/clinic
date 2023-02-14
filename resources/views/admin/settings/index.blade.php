@@ -94,7 +94,7 @@
 
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{{ route('admin.lens.type.index') }}">
+                    <a href="{{ route('admin.settings.workshops.lens.type.index') }}">
                         <div class="info-box">
                             <span class="info-box-icon bg-info">
                                 <i class="fa fa-cubes"></i>
@@ -114,7 +114,7 @@
                 <!-- /.col -->
 
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{{ route('admin.lens.material.index') }}">
+                    <a href="{{ route('admin.settings.workshops.lens.material.index') }}">
                         <div class="info-box">
                             <span class="info-box-icon bg-warning">
                                 <i class="fa fa-diamond"></i>

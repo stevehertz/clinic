@@ -54,8 +54,6 @@ use App\Http\Controllers\Admin\Reports\ReportsController;
 use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
 use App\Http\Controllers\Admin\Settings\SettingsController;
-use App\Http\Controllers\Admin\Settings\Workshops\Lens\LensTypeController as LensLensTypeController;
-use App\Http\Controllers\Admin\Settings\Workshops\WorkshopSettingsController;
 use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
@@ -312,6 +310,34 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             });
 
+            Route::prefix('lens/type')->name('lens.type.')->group(function(){
+
+                Route::get('index', [LensTypeController::class, 'index'])->name('index');
+
+                Route::post('/store', [LensTypeController::class, 'store'])->name('store');
+
+                Route::post('/show', [LensTypeController::class, 'show'])->name('show');
+
+                Route::post('/update', [LensTypeController::class, 'update'])->name('update');
+
+                Route::delete('/delete', [LensTypeController::class, 'destroy'])->name('delete');
+
+            });
+
+            Route::prefix('lens/material')->name('lens.material.')->group(function(){
+
+                Route::get('/index', [LensMaterialsController::class, 'index'])->name('index');
+
+                Route::post('/store', [LensMaterialsController::class, 'store'])->name('store');
+
+                Route::post('/show', [LensMaterialsController::class, 'show'])->name('show');
+
+                Route::post('/update', [LensMaterialsController::class, 'update'])->name('update');
+
+                Route::delete('/delete', [LensMaterialsController::class, 'destroy'])->name('delete');
+
+            });
+
         });
 
         Route::get('/index', [SettingsController::class, 'index'])->name('index');
@@ -519,38 +545,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         
     });
 
-    Route::prefix('lens/type')->name('lens.type.')->group(function () {
+    
 
-        Route::get('/index', [LensTypeController::class, 'index'])->name('index');
+   
 
-        Route::post('/store', [LensTypeController::class, 'store'])->name('store');
+    Route::prefix('lens/prescription')->name('lens.prescription.')->group(function () {
 
-        Route::post('/show', [LensTypeController::class, 'show'])->name('show');
-
-        Route::post('/update', [LensTypeController::class, 'update'])->name('update');
-
-        Route::post('/delete', [LensTypeController::class, 'destroy'])->name('delete');
-    });
-
-    Route::prefix('lens/material')->name('lens.material.')->group(function () {
-
-        Route::get('/index', [LensMaterialsController::class, 'index'])->name('index');
-
-        Route::post('/store', [LensMaterialsController::class, 'store'])->name('store');
-
-        Route::post('/show', [LensMaterialsController::class, 'show'])->name('show');
-
-        Route::post('/update', [LensMaterialsController::class, 'update'])->name('update');
-
-        Route::post('/delete', [LensMaterialsController::class, 'destroy'])->name('delete');
-    });
-
-    Route::prefix('lens')->name('lens.')->group(function () {
-
-        Route::prefix('prescription')->name('prescription.')->group(function () {
-
-            Route::post('/show', [LensLensPrescriptionController::class, 'show'])->name('show');
-        });
+        Route::post('/show', [LensLensPrescriptionController::class, 'show'])->name('show');
+        
     });
 
     // medicine

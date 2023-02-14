@@ -38,8 +38,17 @@ class PatientsController extends Controller
                     return $row->first_name . ' ' . $row->last_name;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="#" id="' . $row['id'] . '" class="btn btn-tool editBtn"><i class="fa fa-edit"></i></a>';
-                    $btn = $btn . '<a href="#" id="' . $row['id'] . '" class="btn btn-tool viewBtn"><i class="fa fa-user"></i></a>';
+                    $btn = '<div class="btn-group">';
+                    $btn = $btn . '<button type="button" class="btn btn-default">Action</button>';
+                    $btn = $btn . '<button type="button" class="btn btn-default dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">';
+                    $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
+                    $btn = $btn . '</button>';
+                    $btn = $btn . '<div class="dropdown-menu" role="menu">';
+                    $btn = $btn . '<a class="dropdown-item editBtn" id="' . $row['id'] . '" href="#"><i class="fa fa-edit"></i> Edit</a>';
+                    $btn = $btn . '<div class="dropdown-divider"></div>';
+                    $btn = $btn . '<a class="dropdown-item viewBtn" id="' . $row['id'] . '" href="#"><i class="fa fa-user"></i> Profile</a>';
+                    $btn = $btn . '</div>';
+                    $btn = $btn . '</div>';
                     return $btn;
                 })
                 ->rawColumns(['full_names', 'action'])

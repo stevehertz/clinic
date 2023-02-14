@@ -141,7 +141,7 @@
             find_lens_materials();
 
             function find_lens_materials() {
-                var path = '{{ route('admin.lens.material.index') }}';
+                var path = '{{ route('admin.settings.workshops.lens.material.index') }}';
                 $('#lensMaterialsData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -180,7 +180,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.lens.material.store') }}';
+                var path = '{{ route('admin.settings.workshops.lens.material.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -198,6 +198,7 @@
                     },
                     success: function(data) {
                         if (data['status']) {
+                            toastr.success(data['message']);
                             $('#newLensMaterialModal').modal('hide');
                             $('#newLensMaterialForm')[0].reset();
                             $('#lensMaterialsData').DataTable().ajax.reload();
@@ -217,7 +218,7 @@
 
             $(document).on('click', '.editMaterialBtn', function(e) {
                 e.preventDefault();
-                var path = '{{ route('admin.lens.material.show') }}';
+                var path = '{{ route('admin.settings.workshops.lens.material.show') }}';
                 var material_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 $.ajax({
@@ -252,7 +253,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.lens.material.update') }}'
+                var path = '{{ route('admin.settings.workshops.lens.material.update') }}'
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -290,7 +291,7 @@
 
             $(document).on('click', '.deleteMaterialBtn', function(e) {
                 e.preventDefault();
-                var path = '{{ route('admin.lens.material.delete') }}';
+                var path = '{{ route('admin.settings.workshops.lens.material.delete') }}';
                 var material_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 Swal.fire({
@@ -303,7 +304,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: path,
-                            type: "POST",
+                            type: "DELETE",
                             data: {
                                 material_id: material_id,
                                 _token: token,

@@ -35,8 +35,17 @@ class LensMaterialsController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tool btn-sm editMaterialBtn"><i class="fa fa-edit"></i></a>';
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-tool btn-sm deleteMaterialBtn"><i class="fa fa-trash"></i></a>';
+                    $btn = '<div class="btn-group">';
+                    $btn = $btn . '<button type="button" class="btn btn-default">Action</button>';
+                    $btn = $btn . '<button type="button" class="btn btn-default dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">';
+                    $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
+                    $btn = $btn . '</button>';
+                    $btn = $btn . '<div class="dropdown-menu" role="menu">';
+                    $btn = $btn . '<a class="dropdown-item editMaterialBtn" data-id="' . $row['id'] . '" href="javascript:void(0)"><i class="fa fa-edit"></i> Edit</a>';
+                    $btn = $btn . '<div class="dropdown-divider"></div>';
+                    $btn = $btn . '<a class="dropdown-item deleteMaterialBtn" data-id="' . $row['id'] . '" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a>';
+                    $btn = $btn . '</div>';
+                    $btn = $btn . '</div>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -65,7 +74,7 @@ class LensMaterialsController extends Controller
             'description' => 'nullable|string|max:255',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -100,7 +109,7 @@ class LensMaterialsController extends Controller
             'material_id' => 'required|integer|exists:lens_materials,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -132,7 +141,7 @@ class LensMaterialsController extends Controller
             'description' => 'nullable|string|max:255',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -167,7 +176,7 @@ class LensMaterialsController extends Controller
             'material_id' => 'required|integer|exists:lens_materials,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;

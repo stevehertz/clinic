@@ -142,7 +142,7 @@
             find_lens_type();
 
             function find_lens_type() {
-                var path = '{{ route('admin.lens.type.index') }}';
+                let path = '{{ route('admin.settings.workshops.lens.type.index') }}';
                 $('#lensTypeData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -178,9 +178,9 @@
 
             $('#newLensTypeForm').submit(function(e){
                 e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('admin.lens.type.store') }}';
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('admin.settings.workshops.lens.type.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -218,9 +218,9 @@
 
             $(document).on('click', '.editLensType', function(e) {
                 e.preventDefault();
-                var path = '{{ route('admin.lens.type.show') }}';
-                var type_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.settings.workshops.lens.type.show') }}';
+                let type_id = $(this).data('id');
+                let token = '{{ csrf_token() }}';
                 $.ajax({
                     url: path,
                     type: "POST",
@@ -251,9 +251,9 @@
 
             $('#updateLensTypeForm').submit(function(e){
                 e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('admin.lens.type.update') }}'
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('admin.settings.workshops.lens.type.update') }}'
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -291,7 +291,7 @@
 
             $(document).on('click', '.deleteLensType', function(e) {
                 e.preventDefault();
-                var path = '{{ route('admin.lens.type.delete') }}';
+                var path = '{{ route('admin.settings.workshops.lens.type.delete') }}';
                 var type_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
                 Swal.fire({
@@ -304,7 +304,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: path,
-                            type: "POST",
+                            type: "DELETE",
                             data: {
                                 type_id: type_id,
                                 _token: token,
