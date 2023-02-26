@@ -10,6 +10,7 @@ use App\Models\FrameShape;
 use App\Models\FrameStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 use function GuzzleHttp\Promise\all;
 
@@ -39,11 +40,14 @@ class FramesStocksController extends Controller
                 ->get();
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('remarks', function($row){
+                    return Str::limit($row->remarks, 20, '...');
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteFrameStock"><i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'remarks'])
                 ->make(true);
         }
         $patients = $clinic->patient->count();

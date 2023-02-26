@@ -545,10 +545,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         
     });
 
-    
-
-   
-
     Route::prefix('lens/prescription')->name('lens.prescription.')->group(function () {
 
         Route::post('/show', [LensLensPrescriptionController::class, 'show'])->name('show');
@@ -629,10 +625,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // frame purchases
-    Route::prefix('frame/purchases')
-        ->name('frame.purchases.')
-        ->group(function () {
+    Route::prefix('frame/purchases')->name('frame.purchases.')->group(function () {
             Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
+            Route::get('/{id}/download', [FramePurchasesController::class, 'download'])->name('download');
             Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
             Route::delete('/delete', [FramePurchasesController::class, 'destroy'])->name('delete');
         });

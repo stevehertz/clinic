@@ -205,6 +205,7 @@
                                                     <th>Price </th>
                                                     <th>Total Price</th>
                                                     <th>Supplier</th>
+                                                    <th>Receipt</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -831,7 +832,7 @@
                             <!--.row -->
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="purchasedStockReceiptNumber">
                                             Receipt Number
@@ -840,6 +841,16 @@
                                             class="form-control" placeholder="Receipt Number" />
                                     </div>
                                     <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="purchasedStockReceipt">Receipt</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">   
+                                            <input type="file" name="receipt" class="custom-file-input"
+                                                id="purchasedStockReceipt">
+                                            <label class="custom-file-label" for="purchasedStockReceipt">Attach Receipt</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!--.row -->
@@ -1504,6 +1515,10 @@
                         {
                             data: 'supplier',
                             name: 'supplier'
+                        },
+                        {
+                            data: 'receipt',
+                            name: 'receipt'
                         },
                         {
                             data: 'action',

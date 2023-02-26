@@ -21,14 +21,14 @@ class ClinicReportsController extends Controller
     {
         # code...
         if ($request->ajax()) {
-            if(!empty($request->from_date) && !empty($request->to_date)){
+            if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = Report::whereBetween('appointment_date', [$request->from_date, $request->to_date])->get();
-            }else{
+            } else {
                 $data = Report::latest()->get();
             }
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('clinic', function($row){
+                ->addColumn('clinic', function ($row) {
                     return $row->clinic->clinic;
                 })
                 ->addColumn('full_name', function ($row) {
@@ -38,9 +38,16 @@ class ClinicReportsController extends Controller
                     return date('d-m-Y', strtotime($row->appointment_date));
                 })
                 ->addColumn('type', function ($row) {
-                    if($row->payment_detail){
+                    if ($row->payment_detail) {
                         return $row->payment_detail->client_type->type;
-                    }    
+                    }
+                })
+                ->addColumn('insurance', function ($row) {
+                    if ($row->payment_detail) {
+                        if($row->payment_detail->client_type->type == "Insurance") {
+                            return $row->payment_detail->insurance->title;
+                        }
+                    }
                 })
                 ->addColumn('scheduled_date', function ($row) {
                     if ($row->doctor_schedule) {

@@ -1,48 +1,49 @@
 <table>
     <thead>
         <tr>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Clinic</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Patient Names</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Phone Number</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Email Address</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Date of Birth</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Gender</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Address</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Next of Kin</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Next of Kin Contacts</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Appointment Date</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Client Type</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Scheduled Date</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Doctor</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Signs</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Symptoms</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Diagnosis</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Sphere</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Cylinder</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Axis</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Right Add</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Sphere</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Cylinder</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Axis</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Left Add</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Notes</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Index</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Tint</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Diameter</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Focal Height</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Receipt Number</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Frame Code</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Bill Open Date</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Consultation Fee</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Consultation Receipt Number</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Bill Status</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Claimed Amount</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Agreed Amount</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Paid Amount</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Balance</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Order Date</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Order Status</th>
-            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Workshop</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Clinic</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Patient Names</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Phone Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Email Address</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Date of Birth</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Gender</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Address</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Next of Kin</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Next of Kin Contacts</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Appointment Date</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Client Type</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Insurance</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Scheduled Date</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Doctor</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Signs</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Symptoms</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Diagnosis</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Right Sphere</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Right Cylinder</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Right Axis</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Right Add</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Left Sphere</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Left Cylinder</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Left Axis</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Left Add</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Notes</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Index</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Tint</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Diameter</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Focal Height</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Receipt Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Frame Code</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Bill Open Date</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Consultation Fee</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Consultation Receipt Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Bill Status</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Claimed Amount</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Agreed Amount</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Paid Amount</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Balance</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Order Date</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Order Status</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Workshop</th>
         </tr>
     </thead>
     <tbody>
@@ -61,6 +62,13 @@
                 <td>
                     @if ($report->payment_detail)
                         {{ $report->payment_detail->client_type->type }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_detail)
+                        @if ($report->payment_detail->client_type->type == 'Insurance')
+                            {{ $report->payment_detail->insurance->title }}
+                        @endif
                     @endif
                 </td>
                 <td>

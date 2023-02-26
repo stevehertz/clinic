@@ -230,8 +230,8 @@
             $('#changePasswordForm').submit(function(e){
                 e.preventDefault();
                 let form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('technicians.technicians.update.password') }}';
+                let formData = new FormData(form[0]);
+                let path = '{{ route('technicians.technicians.update.password') }}';
                 $.ajax({
                     url:path,
                     type:'POST',

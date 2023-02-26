@@ -24,6 +24,7 @@ class FramePurchase extends Model
         'price',
         'total',
         'supplier',
+        'receipt',
     ];
 
     public function organization()
