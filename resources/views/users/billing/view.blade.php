@@ -29,11 +29,11 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+
             <div class="row">
                 <div class="col-12">
                     <!-- Main content -->
                     <div class="invoice p-3 mb-3">
-
                         <!-- title row -->
                         <div class="row">
                             <div class="col-12">
@@ -57,7 +57,7 @@
                                     Email: {{ $payment_bill->clinic->email }}
                                 </address>
                             </div>
-                            <!-- /.col -->
+                            <!--.col-sm-4 invoice-col -->
 
                             <div class="col-sm-4 invoice-col">
                                 To
@@ -70,7 +70,6 @@
                                 </address>
                             </div>
                             <!-- /.col -->
-
 
                             <div class="col-sm-4 invoice-col">
                                 @if ($payment_bill->invoice_number)
@@ -93,10 +92,8 @@
                             <!-- /.col -->
 
                         </div>
-                        <!-- /.row -->
-
+                        <!--.row -->
                         <hr>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <h5>Consultation Fee:</h5>
@@ -115,6 +112,7 @@
                                 </p>
                             </div>
                         </div>
+                        <!--.row -->
 
                         <!-- Table row -->
                         <div class="row">
@@ -150,10 +148,9 @@
                             </div>
                             <!-- /.col -->
                         </div>
-                        <!-- /.row -->
+                        <!--.row -->
 
                         <br>
-
                         <div class="row">
                             <!-- accepted payments column -->
                             <div class="col-12 col-md-6">
@@ -173,25 +170,25 @@
                                 @else
                                     {{ $payment_bill->payment_detail->client_type->type }}
                                 @endif
-
                                 <br><br>
                                 <h5>Remarks</h5>
                                 <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
                                     {{ $payment_bill->remarks }}
                                 </p>
                             </div>
-                            <!-- /.col -->
-
+                            <!--.col-12 col-md-6 -->
                             <div class="col-12 col-md-6">
+
                                 @if ($payment_bill->closing_date)
                                     <p class="lead">
                                         Closing Date: {{ date('d-m-Y', strtotime($payment_bill->close_date)) }}
                                     </p>
                                 @endif
 
-
                                 <div class="table-responsive">
+
                                     <table class="table">
+
                                         <tr>
                                             <th style="width:50%">
                                                 Claimed Amount
@@ -201,7 +198,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            @if( $payment_bill->approval_status == 'REJECTED' )
+                                            @if ($payment_bill->approval_status == 'REJECTED')
                                                 <th>
                                                     Rejected Amount
                                                 </th>
@@ -214,6 +211,7 @@
                                                 {{ number_format($payment_bill->agreed_amount, 2, '.', ',') }}
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <th>
                                                 Total Amount <br>
@@ -223,6 +221,7 @@
                                                 {{ number_format($payment_bill->total_amount, 2, '.', ',') }}
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <th>
                                                 Paid Amount
@@ -233,22 +232,28 @@
                                                 {{ number_format($payment_bill->paid_amount, 2, '.', ',') }}
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <th>Balance</th>
                                             <td>
                                                 {{ number_format($payment_bill->balance, 2, '.', ',') }}
                                             </td>
                                         </tr>
+
                                     </table>
+
                                 </div>
+
                             </div>
-                            <!-- /.col -->
+                            <!--.col-12 col-md-6 -->
                         </div>
-                        <!-- /.row -->
+                        <!--.row -->
 
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
+
                             <div class="col-12">
+
                                 <a href="{{ route('users.payments.bills.edit', $payment_bill->id) }}"
                                     class="btn btn-default">
                                     <i class="fa fa-edit"></i> Edit
@@ -266,12 +271,15 @@
                                             <i class="fa fa-sticky-note"></i> View Order
                                         </a>
                                     @else
-                                        <button type="button" data-id="{{ $payment_bill->id }}"
-                                            data-lens_power='{{ $payment_bill->doctor_schedule->lens_power->id }}'
-                                            data-workshop="{{ $payment_bill->doctor_schedule->lens_power->frame_prescription->workshop->id }}"
-                                            class="btn btn-success float-right proceedOrdersBtn" style="margin-right: 5px;">
-                                            <i class="fa fa-check"></i> Proceed to Orders
-                                        </button>
+                                        @if ($treatment->lens_power)
+                                            <button type="button" data-id="{{ $payment_bill->id }}"
+                                                data-lens_power='{{ $payment_bill->doctor_schedule->lens_power->id }}'
+                                                data-workshop="{{ $payment_bill->doctor_schedule->lens_power->frame_prescription->workshop->id }}"
+                                                class="btn btn-success float-right proceedOrdersBtn"
+                                                style="margin-right: 5px;">
+                                                <i class="fa fa-check"></i> Proceed to Orders
+                                            </button>
+                                        @endif
                                     @endif
                                 @endif
 
@@ -279,15 +287,21 @@
                                     class="btn btn-warning float-right printPaymentsBtn " style="margin-right: 5px;">
                                     <i class="fa fa-print"></i> Print
                                 </button>
+
                             </div>
+                            <!--.col-12 -->
+
                         </div>
-                        <!-- /.row -->
+                        <!--.row no-print -->
 
                     </div>
-                    <!-- /.invoice -->
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                    <!--.invoice p-3 mb-3  -->
+                </div>
+            </div>
+            <!--.row -->
+
+        </div>
+        <!--.container-fluid -->
 
         <!-- /send bill to remittance -->
         <div class="modal fade" id="closeBillModal">
@@ -312,16 +326,16 @@
                                 <label for="closeBillInvoiceNumber">
                                     Invoice Number
                                 </label>
-                                <input type="text" name="invoice_number" class="form-control"
-                                    id="closeBillInvoiceNumber" placeholder="Enter Bill Invoice Number">
+                                <input type="text" name="invoice_number" class="form-control" id="closeBillInvoiceNumber"
+                                    placeholder="Enter Bill Invoice Number">
                             </div>
 
                             <div class="form-group">
                                 <label for="closeBillLPONumber">
                                     LPO Number
                                 </label>
-                                <input type="text" name="lpo_number" class="form-control"
-                                    id="closeBillLPONumber" placeholder="Enter Bill LPO Number">
+                                <input type="text" name="lpo_number" class="form-control" id="closeBillLPONumber"
+                                    placeholder="Enter Bill LPO Number">
                             </div>
 
                             <div class="form-group">
@@ -345,6 +359,7 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
     </section>
     <!-- /.content -->
 @endsection
@@ -483,7 +498,7 @@
                 });
             });
 
-            $('#closeBillForm').submit(function(e){
+            $('#closeBillForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
@@ -498,11 +513,11 @@
                         $('#closeBillSubmitBtn').html(
                             '<i class="fa fa-spinner fa-spin"></i>');
                         $('#closeBillSubmitBtn').attr('disabled', true);
-                    } ,
+                    },
                     complete: function() {
                         $('#closeBillSubmitBtn').html('Save');
                         $('#closeBillSubmitBtn').attr('disabled', false);
-                    } ,
+                    },
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
@@ -527,7 +542,7 @@
             });
 
             // view order
-            $(document).on('click', '.viewOrderBtn', function(e){
+            $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
                 var order_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';

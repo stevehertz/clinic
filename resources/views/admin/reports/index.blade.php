@@ -66,17 +66,18 @@
                                 <thead>
                                     <tr>
                                         <th></th>
+                                        <th>Date</th>
                                         <th>Patient</th>
-                                        <th>Appointment Date</th>
                                         <th>Client Type</th>
-                                        <th>Appointment Status</th>
-                                        <th>Scheduled Date</th>
-                                        <th>Doctor</th>
-                                        <th>Consultation Fee</th>
+                                        <th>Insurance Name</th>
+                                        <th>Consultation Receipt No</th>
+                                        <th>Consultation Amount</th>
                                         <th>Agreed Amount</th>
                                         <th>Paid Amount</th>
-                                        <th>Order Date</th>
-                                        <th>Order Status</th>
+                                        <th>Bill Status</th>
+                                        <th>LPO No</th>
+                                        <th>Lens Type</th>
+                                        <th>Doctor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,7 +95,7 @@
     <script>
         $(document).ready(function() {
 
-            find_reports();
+            // find_reports();
 
             function find_reports(from_date = '', to_date = '') {
                 var path = '{{ route('admin.reports.index', $clinic->id) }}';

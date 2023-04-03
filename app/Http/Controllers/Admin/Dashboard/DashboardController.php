@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
+use App\Models\PaymentBill;
 use App\Models\Workshop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -32,6 +34,9 @@ class DashboardController extends Controller
         $remittances = $clinic->remittance()->sum('amount');
         $page_title = 'Dashboard';
         $patients = $clinic->patient->count();
+
+        // $payments_report = PaymentBill::select('');
+
         return view('admin.dashboard.clinics.index', compact('clinic', 'page_title', 'patients', 'appointments', 'payments', 'remittances'));
     }
 

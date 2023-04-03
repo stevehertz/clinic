@@ -79,14 +79,11 @@
              <div class="row">
                  <div class="col-md-12">
                      <div class="card">
-                         <div class="card-header border-0">
-                             <h3 class="card-title">Orders</h3>
-
-                         </div>
-                         <div class="card-body table-responsive p-0">
-                             <table class="table table-striped table-valign-middle">
+                         <div class="card-body table-responsive">
+                             <table id="ordersData" class="table table-striped table-bordered table-valign-middle">
                                  <thead>
                                      <tr>
+                                        <th></th>
                                          <th>Date</th>
                                          <th>Receipt Number</th>
                                          <th>Patient</th>
@@ -96,27 +93,6 @@
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     @forelse ($orders as $order)
-                                         <tr>
-                                             <td>{{ $order->order_date }}</td>
-                                             <td>{{ $order->receipt_number }}</td>
-                                             <td>{{ $order->patient->first_name }} {{ $order->patient->last_name }}</td>
-                                             <td>{{ $order->clinic->clinic }}</td>
-                                             <td>{{ $order->status }}</td>
-                                             <td>
-                                                 <a href="#" data-id="{{ $order->id }}"
-                                                     class="text-muted viewOrderBtn">
-                                                     <i class="fa fa-eye"></i>
-                                                 </a>
-                                             </td>
-                                         </tr>
-                                     @empty
-                                         <tr>
-                                             <td colspan="6">
-                                                 <p class="text-center">No Orders Found!</p>
-                                             </td>
-                                         </tr>
-                                     @endforelse
                                  </tbody>
                              </table>
                          </div>
@@ -136,6 +112,53 @@
      <script>
          $(document).ready(function() {
 
+             find_orders();
+
+             function find_orders() {
+                 let path = '{{ route('technicians.dashboard.index') }}';
+                 $('#ordersData').DataTable({
+                     processing: true,
+                     serverSide: true,
+                     ajax: path,
+                     columns: [{
+                             data: "DT_RowIndex",
+                             name: "DT_RowIndex"
+                         },
+                         {
+                             data: 'order_date',
+                             name: 'order_date'
+                         },
+                         {
+                             data: 'receipt_number',
+                             name: 'receipt_number'
+                         },
+                          {
+                              data: 'patient',
+                              name: 'patient'
+                          },
+                         {
+                             data: 'clinic',
+                             name: 'clinic'
+                         },
+                         {
+                             data: 'status',
+                             name: 'status'
+                         },
+                         {
+                             data: 'view',
+                             name: 'view',
+                             orderable: false,
+                             searchable: false
+                         },
+                     ],
+                     "responsive": true,
+                     "autoWidth": false,
+                     "searching": false,
+                     "ordering": false,
+                     "lengthChange": false,
+                 });
+             }
+
              $(document).on('click', '.viewOrderBtn', function(e) {
                  e.preventDefault();
                  let order_id = $(this).data('id');
@@ -143,22 +166,22 @@
                  path = path.replace(':id', order_id);
                  let token = '{{ csrf_token() }}';
                  $.ajax({
-                    type: "POST",
-                    url: path,
-                    data: {
-                        _token:token
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        if(data['status']){
-                            let order_url = '{{ route('technicians.orders.view', ':id') }}';
-                            order_url = order_url.replace(':id', data['data']['id']);
-                            setTimeout(() => {
-                                window.location.href = order_url;
-                            }, 1000);
-                        }
-                    }
-                });
+                     type: "POST",
+                     url: path,
+                     data: {
+                         _token: token
+                     },
+                     dataType: "json",
+                     success: function(data) {
+                         if (data['status']) {
+                             let order_url = '{{ route('technicians.orders.view', ':id') }}';
+                             order_url = order_url.replace(':id', data['data']['id']);
+                             setTimeout(() => {
+                                 window.location.href = order_url;
+                             }, 1000);
+                         }
+                     }
+                 });
              });
 
          });

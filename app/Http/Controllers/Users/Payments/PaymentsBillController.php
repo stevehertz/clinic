@@ -227,12 +227,16 @@ class PaymentsBillController extends Controller
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
         $payment_bill = PaymentBill::findOrFail($id);
+        $doctor_schedule = $payment_bill->doctor_schedule;
+        $diagnosis = $doctor_schedule->diagnosis;
+        $treatment = $diagnosis->treatment;
         $page_title = 'View Bill';
         return view('users.billing.view', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
             'payment_bill' => $payment_bill,
+            'treatment' => $treatment
         ]);
     }
 

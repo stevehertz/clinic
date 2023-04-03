@@ -44,7 +44,7 @@ class ClinicReportsController extends Controller
                 })
                 ->addColumn('insurance', function ($row) {
                     if ($row->payment_detail) {
-                        if($row->payment_detail->client_type->type == "Insurance") {
+                        if($row->payment_detail->insurance) {
                             return $row->payment_detail->insurance->title;
                         }
                     }

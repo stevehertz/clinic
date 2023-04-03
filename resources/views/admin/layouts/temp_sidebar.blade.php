@@ -228,7 +228,7 @@
                     <a href="{{ route('admin.reports.index', $clinic->id) }}" class="nav-link">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            Reports
+                            Remittance Reports
                         </p>
                     </a>
                 </li>

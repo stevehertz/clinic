@@ -266,9 +266,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             });
         });
 
-        Route::prefix('workshops')->name('workshops.')->group(function(){
+        Route::prefix('workshops')->name('workshops.')->group(function () {
 
-            Route::prefix('vendors')->name('vendors.')->group(function(){
+            Route::prefix('vendors')->name('vendors.')->group(function () {
 
                 Route::get('/index', [VendorsController::class, 'index'])->name('index');
 
@@ -279,10 +279,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{id}/update', [VendorsController::class, 'update'])->name('update');
 
                 Route::delete('/{id}/delete', [VendorsController::class, 'destroy'])->name('delete');
-
             });
 
-            Route::prefix('coating')->name('coating.')->group(function(){
+            Route::prefix('coating')->name('coating.')->group(function () {
 
                 Route::get('/index', [CoatingController::class, 'index'])->name('index');
 
@@ -293,10 +292,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{id}/update', [CoatingController::class, 'update'])->name('update');
 
                 Route::delete('/{id}/delete', [CoatingController::class, 'destroy'])->name('delete');
-
             });
 
-            Route::prefix('lens/index')->name('lens.index.')->group(function(){
+            Route::prefix('lens/index')->name('lens.index.')->group(function () {
 
                 Route::get('/index', [LensIndicesController::class, 'index'])->name('index');
 
@@ -307,10 +305,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{id}/update', [LensIndicesController::class, 'update'])->name('update');
 
                 Route::delete('/{id}/delete', [LensIndicesController::class, 'destroy'])->name('delete');
-
             });
 
-            Route::prefix('lens/type')->name('lens.type.')->group(function(){
+            Route::prefix('lens/type')->name('lens.type.')->group(function () {
 
                 Route::get('index', [LensTypeController::class, 'index'])->name('index');
 
@@ -321,10 +318,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/update', [LensTypeController::class, 'update'])->name('update');
 
                 Route::delete('/delete', [LensTypeController::class, 'destroy'])->name('delete');
-
             });
 
-            Route::prefix('lens/material')->name('lens.material.')->group(function(){
+            Route::prefix('lens/material')->name('lens.material.')->group(function () {
 
                 Route::get('/index', [LensMaterialsController::class, 'index'])->name('index');
 
@@ -335,13 +331,10 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/update', [LensMaterialsController::class, 'update'])->name('update');
 
                 Route::delete('/delete', [LensMaterialsController::class, 'destroy'])->name('delete');
-
             });
-
         });
 
         Route::get('/index', [SettingsController::class, 'index'])->name('index');
-        
     });
 
     Route::prefix('status')->name('status.')->group(function () {
@@ -420,7 +413,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}', [DashboardController::class, 'index'])->name('index');
 
         Route::get('/{id}/workshop', [DashboardController::class, 'workshop'])->name('workshop.index');
-        
     });
 
     Route::prefix('patients')->name('patients.')->group(function () {
@@ -515,7 +507,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
     });
 
-    Route::prefix('lens')->name('lens.')->group(function(){
+    Route::prefix('lens')->name('lens.')->group(function () {
 
         Route::get('/{id}/index', [LensController::class, 'index'])->name('index');
 
@@ -526,10 +518,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/update', [LensController::class, 'update'])->name('update');
 
         Route::delete('/delete', [LensController::class, 'destroy'])->name('delete');
-
     });
 
-    Route::prefix('lens/purchase')->name('lens.purchase.')->group(function(){
+    Route::prefix('lens/purchase')->name('lens.purchase.')->group(function () {
 
         Route::get('/{id}/index', [LensPurchasesController::class, 'index'])->name('index');
 
@@ -542,13 +533,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/update', [LensPurchasesController::class, 'update'])->name('update');
 
         Route::delete('/delete', [LensPurchasesController::class, 'destroy'])->name('delete');
-        
     });
 
     Route::prefix('lens/prescription')->name('lens.prescription.')->group(function () {
 
         Route::post('/show', [LensLensPrescriptionController::class, 'show'])->name('show');
-        
     });
 
     // medicine
@@ -626,25 +615,22 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
     // frame purchases
     Route::prefix('frame/purchases')->name('frame.purchases.')->group(function () {
-            Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
-            Route::get('/{id}/download', [FramePurchasesController::class, 'download'])->name('download');
-            Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
-            Route::delete('/delete', [FramePurchasesController::class, 'destroy'])->name('delete');
-        });
+        Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
+        Route::get('/{id}/download', [FramePurchasesController::class, 'download'])->name('download');
+        Route::post('/store', [FramePurchasesController::class, 'store'])->name('store');
+        Route::delete('/delete', [FramePurchasesController::class, 'destroy'])->name('delete');
+    });
 
-    Route::prefix('frame/transfers')
-        ->name('frame.transfers.')
-        ->group(function() {
+    Route::prefix('frame/transfers')->name('frame.transfers.')->group(function () {
 
-            Route::get('/{id}', [FrameTransfersController::class, 'index'])->name('index');
+        Route::get('/{id}', [FrameTransfersController::class, 'index'])->name('index');
 
-            Route::post('/store', [FrameTransfersController::class, 'store'])->name('store');
+        Route::post('/store', [FrameTransfersController::class, 'store'])->name('store');
 
-            Route::delete('/delete', [FrameTransfersController::class, 'destroy'])->name('delete');
+        Route::delete('/delete', [FrameTransfersController::class, 'destroy'])->name('delete');
+    });
 
-        });
 
-   
     // Sun glasses
     Route::prefix('sun/glasses')->name('sun.glasses.')->group(function () {
 
@@ -692,18 +678,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // Technicians
-    Route::prefix('workshop/technicians')->name('workshop.technicians.')->group(function(){
+    Route::prefix('workshop/technicians')->name('workshop.technicians.')->group(function () {
 
         Route::get('/{id}/index', [TechniciansController::class, 'index'])->name('index');
 
         Route::post('/store', [TechniciansController::class, 'store'])->name('store');
 
         Route::delete('/{id}/delete', [TechniciansController::class, 'destroy'])->name('delete');
-
     });
 
     // Workshop Assets
-    Route::prefix('workshop/assets')->name('workshop.assets.')->group(function(){
+    Route::prefix('workshop/assets')->name('workshop.assets.')->group(function () {
 
         Route::get('/{id}', [WorkshopAssetsController::class, 'index'])->name('index');
 
@@ -714,33 +699,28 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/update', [WorkshopAssetsController::class, 'update'])->name('update');
 
         Route::delete('/delete', [WorkshopAssetsController::class, 'destroy'])->name('delete');
-
     });
 
-    Route::prefix('workshop/assets/transfer')->name('workshop.assets.transfer.')->group(function(){
+    Route::prefix('workshop/assets/transfer')->name('workshop.assets.transfer.')->group(function () {
 
         Route::get('/{id}', [WorkshopAssetTransferController::class, 'index'])->name('index');
 
         Route::post('/store', [WorkshopAssetTransferController::class, 'store'])->name('store');
 
         Route::post('/show', [WorkshopAssetTransferController::class, 'show'])->name('show');
-
     });
 
-    Route::prefix('workshop/orders')->name('workshop.orders.')->group(function(){
+    Route::prefix('workshop/orders')->name('workshop.orders.')->group(function () {
 
         Route::get('/{id}', [WorkshopOrdersController::class, 'index'])->name('index');
 
         Route::post('/show', [WorkshopOrdersController::class, 'show'])->name('show');
 
         Route::get('/{id}/view', [WorkshopOrdersController::class, 'view'])->name('view');
-
     });
 
-    Route::prefix('workshop/sales')->name('workshop.sales.')->group(function(){
+    Route::prefix('workshop/sales')->name('workshop.sales.')->group(function () {
 
         Route::get('/{id}', [WorkshopSalesController::class, 'index'])->name('index');
-        
     });
-
 });

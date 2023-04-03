@@ -66,7 +66,7 @@
                 </td>
                 <td>
                     @if ($report->payment_detail)
-                        @if ($report->payment_detail->client_type->type == 'Insurance')
+                        @if ($report->payment_detail->insurance)
                             {{ $report->payment_detail->insurance->title }}
                         @endif
                     @endif
