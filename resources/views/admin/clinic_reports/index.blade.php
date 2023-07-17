@@ -69,7 +69,8 @@
                                         <th>Patient</th>
                                         <th>Appointment Date</th>
                                         <th>Client Type</th>
-                                        <th>Insurance</th>
+                                        <th>Insurance Name</th>
+                                        <th>Scheme Name</th>
                                         <th>Scheduled Date</th>
                                         <th>Doctor</th>
                                         <th>Consultation Fee</th>
@@ -128,6 +129,10 @@
                         {
                             data: 'insurance',
                             name: 'insurance'
+                        },
+                        {
+                            data: 'scheme',
+                            name: 'scheme'
                         },
                         {
                             data: 'scheduled_date',

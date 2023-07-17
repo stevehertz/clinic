@@ -18,6 +18,7 @@ class FrameStock extends Model
         'opening_stock',
         'purchase_stock',
         'transfered_stock',
+        'received_stock',
         'total_stock',
         'sold_stock',
         'closing_stock',
@@ -60,5 +61,10 @@ class FrameStock extends Model
     {
         # code...
         return $this->hasMany(FramePrescription::class, 'stock_id', 'id');
+    }
+
+    public function received_frame() 
+    {
+        return $this->hasMany(ReceivedFrame::class, 'stock_id', 'id');    
     }
 }

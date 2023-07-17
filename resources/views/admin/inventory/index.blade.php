@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Frames</h1>
+                    <h1>Inventory</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -25,21 +25,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $num_frames }}</h3>
-
-                            <p>Frames</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer newFrameBtn">New Frame <i class="fa fa-plus "></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
 
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -53,7 +38,7 @@
                             <i class="ion ion-stats-bars"></i>
                         </div>
                         <a href="#" class="small-box-footer newFrameStockBtn">
-                            New Frame <i class="fa fa-plus"></i>
+                            New Frame Stock <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
@@ -94,6 +79,24 @@
                     </div>
                 </div>
                 <!-- ./col -->
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $num_received }}</h3>
+
+                            <p>Received Stocks</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-copy"></i>
+                        </div>
+                        <a href="javascript:void(0)" class="small-box-footer receivedStockBtn">
+                            Receive Stock <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
             </div>
 
             <div class="row">
@@ -102,15 +105,9 @@
                     <div class="card card-primary card-outline card-outline-tabs">
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
-                                        href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
-                                        aria-selected="true">
-                                        Frames
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                                    <a class="nav-link active" id="custom-tabs-four-profile-tab" data-toggle="pill"
                                         href="#custom-tabs-four-profile" role="tab"
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">
                                         Frame Stocks
@@ -127,40 +124,23 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
                                         href="#custom-tabs-four-settings" role="tab"
-                                        aria-controls="custom-tabs-four-settings" aria-selected="false">Transfer Stocks</a>
+                                        aria-controls="custom-tabs-four-settings" aria-selected="false">Transfer Stocks
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-five-settings-tab" data-toggle="pill"
+                                        href="#custom-tabs-five-settings" role="tab"
+                                        aria-controls="custom-tabs-five-settings" aria-selected="false">
+                                        Received Stocks
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                         <!---.card-header p-0 border-bottom-0-->
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
-                                <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
-                                    aria-labelledby="custom-tabs-four-home-tab">
-
-                                    <div class="table-responsive">
-                                        <table id="framesData" class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Code</th>
-                                                    <th>Brand</th>
-                                                    <th>Size</th>
-                                                    <th>Type</th>
-                                                    <th>Material</th>
-                                                    <th>Photo</th>
-                                                    <th>Status</th>
-                                                    <th>Update</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-
-                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                                <div class="tab-pane fade show active" id="custom-tabs-four-profile" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-profile-tab">
 
                                     <div class="table-responsive">
@@ -174,6 +154,7 @@
                                                     <th>Opening</th>
                                                     <th>Purchased</th>
                                                     <th>Transfered</th>
+                                                    <th>Received</th>
                                                     <th>Total</th>
                                                     <th>Sold</th>
                                                     <th>Closing</th>
@@ -216,7 +197,9 @@
 
                                 <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-settings-tab">
+
                                     <div class="table-responsive">
+
                                         <table id="frameTransferData" class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
@@ -224,7 +207,7 @@
                                                     <th>From Clinic</th>
                                                     <th>To Clinic</th>
                                                     <th>Quantity</th>
-                                                    <th>Date</th>
+                                                    <th>Transfer Date</th>
                                                     <th>Status</th>
                                                     <th>Condition</th>
                                                     <th>Remarks</th>
@@ -233,6 +216,32 @@
                                             </thead>
                                         </table>
                                     </div>
+
+                                </div>
+
+                                <div class="tab-pane fade" id="custom-tabs-five-settings" role="tabpanel"
+                                    aria-labelledby="custom-tabs-five-settings-tab">
+
+                                    <div class="table-responsive">
+                                        <table id="frameReceivedData" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Received Date</th>
+                                                    <th>Frame Code</th>
+                                                    <th>From Clinic</th>
+                                                    <th>To Clinic</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Condition</th>
+                                                    <th>Remarks</th>
+                                                    <th>Send By(Doctor/Optometrist)</th>
+                                                    <th>Received By(Doctor/Optometrist)</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+
                                 </div>
                             </div>
                             <!--.tab-content-->
@@ -743,6 +752,156 @@
         </div>
         <!--.modal -->
 
+        <!-- Received Stock -->
+        <div class="modal fade" id="receivedStockModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Received Stock
+                        </h4>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="receivedStockForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <!--
+                                                will send transfer id to the back
+                                                load frame codes from frame transfers table
+                                                where send to is current clinic
+                                            -->
+                                        <label for="receivedStockTransferId">Frame Code</label>
+                                        <select name="transfer_id" id="receivedStockTransferId"
+                                            class="form-control select2">
+                                            <option disabled selected>Choose Frame Code</option>
+                                            @forelse ($transfers_to_current_clinic as $transfers)
+                                                <option value="{{ $transfers->id }}">
+                                                    {{ $transfers->frame_code }} -
+                                                    {{ $transfers->frame_stock->gender }} -
+                                                    {{ $transfers->frame_stock->frame_color->color }} -
+                                                    {{ $transfers->frame_stock->frame_shape->shape }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="receivedStockDate">
+                                            Received Date
+                                        </label>
+                                        <input type="text" id="receivedStockDate" name="received_date"
+                                            class="form-control datepicker" placeholder="Received Date" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                {{-- <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="receivedStockQuantity">
+                                            Quantity
+                                        </label>
+                                        <input type="text" id="receivedStockQuantity" name="quantity"
+                                            class="form-control" placeholder="Quantity Transfered" />
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div> --}}
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="receivedStockStatus">
+                                            Received Status
+                                        </label>
+                                        <select name="received_status" id="receivedStockStatus"
+                                            class="form-control select2">
+                                            <option disabled='disabled' selected="selected">Received Status</option>
+                                            <option value="RECEIVED">RECEIVED</option>
+                                            <option value="NOT RECEIVED">NOT RECEIVED</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="receivedStockCondition">
+                                            Stock Condition
+                                        </label>
+                                        <select name="condition" id="receivedStockCondition"
+                                            class="form-control select2">
+                                            <option disabled='disabled' selected="selected">
+                                                Received Stock Condition
+                                            </option>
+                                            <option value="Broken">Broken</option>
+                                            <option value="Irrepairable">Irrepairable</option>
+                                            <option value="Working">Working</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="receivedStockRemarks">
+                                            Remarks
+                                        </label>
+                                        <textarea name="remarks" id="receivedStockRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--.row -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="receivedStockUserId">Doctor/ Optimetrist Confirmed Transfer</label>
+                                        <select name="received_user_id" id="receivedStockUserId"
+                                            class="form-control select2">
+                                            @forelse ($transfer_doctors as $doctor)
+                                                <option value="{{ $doctor->id }}">
+                                                    {{ $doctor->first_name }} {{ $doctor->last_name }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--.row -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="receivedStockSubmitBtn" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!--.modal -->
+
     </section><!-- /.content -->
 @endsection
 
@@ -750,7 +909,545 @@
     <script>
         $(document).ready(function() {
 
-            
+            // Frame Stocks sector (Tab)
+            find_frame_stocks();
+
+            function find_frame_stocks() {
+                var path = '{{ route('admin.frame.stocks.index', $clinic->id) }}';
+                $('#frameStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
+                        },
+                        {
+                            data: 'opening_stock',
+                            name: 'opening_stock'
+                        },
+                        {
+                            data: 'purchase_stock',
+                            name: 'purchase_stock'
+                        },
+                        {
+                            data: 'transfered_stock',
+                            name: 'transfered_stock'
+                        },
+                        {
+                            data: 'received_stock',
+                            name: 'received_stock'
+                        },
+                        {
+                            data: 'total_stock',
+                            name: 'total_stock'
+                        },
+                        {
+                            data: 'sold_stock',
+                            name: 'sold_stock'
+                        },
+                        {
+                            data: 'closing_stock',
+                            name: 'closing_stock'
+                        },
+                        {
+                            data: 'supplier_price',
+                            name: 'supplier_price'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            }
+
+            $(document).on('click', '.newFrameStockBtn', function(e) {
+                e.preventDefault();
+                $('#newFrameStockModal').modal('show');
+            });
+
+            $('#newFrameStockForm').submit(function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('admin.frame.stocks.store') }}';
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#newFrameStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#newFrameStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#newFrameStockSubmitBtn').html('Save');
+                        $('#newFrameStockSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#newFrameStockForm')[0].reset();
+                            $('#newFrameStockModal').modal('hide');
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#frameReceivedData').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, error) {
+                                toastr.error(error);
+                            });
+                        } else {
+                            toastr.error(error.responseJSON.message);
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteFrameStock', function(e) {
+                e.preventDefault();
+                var stock_id = $(this).data('id');
+                var token = "{{ csrf_token() }}";
+                var path = "{{ route('admin.frame.stocks.delete') }}";
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                                stock_id: stock_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success');
+                                    $('#framesData').DataTable().ajax.reload();
+                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#purchasedStocks').DataTable().ajax.reload();
+                                    $('#frameReceivedData').DataTable().ajax.reload();
+                                    location.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            // Stock Purchases 
+            // view all purchases
+            find_all_purchases();
+
+            function find_all_purchases() {
+                var path = '{{ route('admin.frame.purchases.index', $clinic->id) }}';
+                $('#purchasedStocks').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'receipt_number',
+                            name: 'receipt_number'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'total',
+                            name: 'total'
+                        },
+                        {
+                            data: 'supplier',
+                            name: 'supplier'
+                        },
+                        {
+                            data: 'receipt',
+                            name: 'receipt'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            }
+
+            $(document).on('click', '.purchaseStockBtn', function(e) {
+                e.preventDefault();
+                $('#purchasedStockModal').modal('show');
+            });
+
+            $('#purchasedStockForm').submit(function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('admin.frame.purchases.store') }}';
+                $.ajax({
+                    url: path,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#purchasedStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#purchasedStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#purchasedStockSubmitBtn').html('Save');
+                        $('#purchasedStockSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#purchasedStockForm')[0].reset();
+                            $('#purchasedStockModal').modal('hide');
+                            $('#purchasedStocks').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#framesData').DataTable().ajax.reload();
+                            $('#frameReceivedData').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        if (error.status == 422) {
+                            $.each(error.responseJSON.errors, function(i, error) {
+                                toastr.error(error);
+                            });
+                        } else {
+                            toastr.error(error.responseJSON.message);
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteFramePurchase', function(e) {
+                e.preventDefault();
+                var purchase_id = $(this).data('id');
+                var token = "{{ csrf_token() }}";
+                var path = "{{ route('admin.frame.purchases.delete') }}";
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                                purchase_id: purchase_id
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#purchasedStocks').DataTable().ajax.reload();
+                                    $('#frameReceivedData').DataTable().ajax.reload();
+                                    location.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+
+            });
+
+            // Transfered Stocks
+            // view all transfered stocks
+            find_all_transfers();
+
+            function find_all_transfers() {
+                var path = '{{ route('admin.frame.transfers.index', $clinic->id) }}';
+                $('#frameTransferData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'to_clinic',
+                            name: 'to_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'transfer_date',
+                            name: 'transfer_date'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'doctor',
+                            name: 'doctor'
+                        }
+                    ]
+                });
+            }
+
+            // Transfer Stock 
+            $(document).on('click', '.transferStockBtn', function(e) {
+                e.preventDefault();
+                $('#transferStockModal').modal('show');
+            });
+
+            $('#transferStockForm').submit(function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var path = '{{ route('admin.frame.transfers.store') }}';
+                $.ajax({
+                    url: path,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#transferStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#transferStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#transferStockSubmitBtn').html('Save');
+                        $('#transferStockSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#transferStockForm')[0].reset();
+                            $('#transferStockModal').modal('hide');
+                            $('#purchasedStocks').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#framesData').DataTable().ajax.reload();
+                            $('#frameTransferData').DataTable().ajax.reload();
+                            $('#frameReceivedData').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    },
+                    error: function(error) {
+
+                        $.each(error.responseJSON.errors, function(i, error) {
+                            toastr.error(error);
+                        });
+
+                    }
+                });
+            });
+
+            // Received Stocks
+            // view all transfered stocks
+            find_received_stocks();
+
+            function find_received_stocks() {
+                let path = '{{ route('admin.frame.received.index', $clinic->id) }}';
+                $('#frameReceivedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: path,
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'to_clinic',
+                            name: 'to_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'received_status',
+                            name: 'received_status'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'send_by',
+                            name: 'send_by'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        }
+                    ],
+                    'responsive': true,
+                    "autoWidth": false,
+                });
+            }
+
+            // receive stock 
+            $(document).on('click', '.receivedStockBtn', function(e) {
+                e.preventDefault();
+                let path = '{{ route('admin.frame.received.check.transfers', $clinic->id) }}';
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
+                            $('#receivedStockModal').modal('show');
+                        }
+                    },
+                    error: function(error) {
+                        $.each(error.responseJSON.errors, function(i, error) {
+                            toastr.error(error);
+                        });
+                    }
+                });
+            });
+
+            $('#receivedStockForm').submit(function(e) {
+                e.preventDefault();
+                let path = '{{ route('admin.frame.received.store') }}';
+                let formData = new FormData($(this)[0]);
+                $.ajax({
+                    url: path,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#receivedStockSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $('#receivedStockSubmitBtn').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $('#receivedStockSubmitBtn').html('Save');
+                        $('#receivedStockSubmitBtn').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#receivedStockForm')[0].reset();
+                            $('#receivedStockModal').modal('hide');
+                            $('#frameReceivedData').DataTable().ajax.reload();
+                            $('#purchasedStocks').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#framesData').DataTable().ajax.reload();
+                            $('#frameTransferData').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        $.each(error.responseJSON.errors, function(i, error) {
+                            toastr.error(error);
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endsection

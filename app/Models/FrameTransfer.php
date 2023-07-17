@@ -34,4 +34,15 @@ class FrameTransfer extends Model
         # code...
         return $this->belongsTo(Clinic::class, 'to_clinic_id', 'id');
     }
+
+    public function frame_stock() 
+    {
+        # code...
+        return $this->belongsTo(FrameStock::class, 'stock_id', 'id');
+    }
+
+    public function received_frame() 
+    {
+        return $this->hasMany(ReceivedFrame::class, 'transfer_id', 'id');   
+    }
 }

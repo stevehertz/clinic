@@ -26,8 +26,8 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link active">
+                <li class="nav-item has-treeview @if ($page_title == 'dashboard') menu-open @endif">
+                    <a href="#" class="nav-link @if ($page_title == 'dashboard') active @endif">
                         <i class="nav-icon fa fa-dashboard"></i>
                         <p>
                             Dashboard
@@ -36,7 +36,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}" class="nav-link active">
+                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}"
+                                class="nav-link @if (isset($sub_page) && $sub_page == 'dashboard') active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -44,8 +45,8 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview @if ($page_title == 'patients') menu-open @endif">
+                    <a href="#" class="nav-link @if ($page_title == 'patients') active @endif">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Patients
@@ -57,7 +58,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.patients.index', $clinic->id) }}" class="nav-link">
+                            <a href="{{ route('admin.patients.index', $clinic->id) }}" class="nav-link @if ($page_title == 'patients') active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Patients</p>
                             </a>
@@ -149,9 +150,9 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview @if ($page_title == 'inventory') menu-open @endif">
 
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link @if ($page_title == 'inventory') active @endif">
                         <i class="nav-icon fa fa-balance-scale"></i>
                         <p>
                             Inventory
@@ -160,7 +161,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.frames.index', $clinic->id) }}" class="nav-link">
+                            <a href="{{ route('admin.inventory.index', $clinic->id) }}"
+                                class="nav-link @if (isset($sub_page) && $sub_page == 'frames') active @endif">
                                 <i class="nav-icon fa fa-circle"></i>
                                 <p>
                                     Frames
@@ -177,7 +179,7 @@
 
                 </li>
 
-                <li class="nav-item has-treeview"> 
+                <li class="nav-item has-treeview">
 
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-database"></i>
@@ -203,7 +205,7 @@
                     </ul>
 
                 </li>
-                
+
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
@@ -225,10 +227,29 @@
                 <li class="nav-header">REPORTS</li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.reports.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == 'reports') active @endif">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            Main Report
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.reports.index', $clinic->id) }}" class="nav-link">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            Remittance Reports
+                            Payments Report
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.reports.index', $clinic->id) }}" class="nav-link">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            Orders Report
                         </p>
                     </a>
                 </li>

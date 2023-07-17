@@ -151,4 +151,14 @@ class Clinic extends Model
         # code...
         return $this->hasMany(FrameTransfer::class, 'to_clinic_id', 'id');
     }
+
+    public function frame_received_from()
+    {
+        return $this->hasMany(ReceivedFrame::class, 'from_clinic_id', 'id');
+    }
+
+    public function frame_received_to()
+    {
+        return $this->hasMany(ReceivedFrame::class, 'to_clinic_id', 'id');
+    }
 }

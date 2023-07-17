@@ -31,6 +31,9 @@ class ReportsController extends Controller
             }
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('date_in', function($row){
+                    return date('d-m-Y', strtotime($row->patient->date_in));
+                })
                 ->addColumn('full_name', function ($row) {
                     return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
@@ -38,21 +41,23 @@ class ReportsController extends Controller
                     return date('d-m-Y', strtotime($row->appointment_date));
                 })
                 ->addColumn('type', function ($row) {
-                    if($row->payment_detail){
+                    if ($row->payment_detail) {
                         return $row->payment_detail->client_type->type;
                     }
                 })
-                ->addColumn('appointment_status', function ($row) {
-                    if ($row->appointment->status == 0)
-                    {
-                        $output = '<span class="badge badge-danger">Not Scheduled</span>';
+                ->addColumn('insurance', function($row){
+                    if ($row->payment_detail) {
+                        if ($row->payment_detail->insurance) {
+                            return $row->payment_detail->insurance->title;
+                        }
                     }
-                    else
-                    {
-                        $output = '<span class="badge badge-success">Scheduled</span>';
+                })
+                ->addColumn('scheme', function($row){
+                    if ($row->payment_detail) {
+                        if ($row->payment_detail->insurance) {
+                            return $row->payment_detail->scheme;
+                        }
                     }
-
-                    return $output;
                 })
                 ->addColumn('scheduled_date', function ($row) {
                     if ($row->doctor_schedule) {
@@ -64,34 +69,26 @@ class ReportsController extends Controller
                         return $row->doctor_schedule->user->first_name . ' ' . $row->doctor_schedule->user->last_name;
                     }
                 })
-                ->addColumn('consultation_fee', function ($row) {
-                    return number_format($row->consultation_fee, 2, '.', ',');
-                })
-                ->addColumn('agreed_amount', function ($row) {
-                    return number_format($row->agreed_amount, 2, '.', ',');
-                })
-                ->addColumn('paid_amount', function ($row) {
-                    return number_format($row->paid_amount, 2, '.', ',');
-                })
-                ->addColumn('order_date', function ($row) {
-                    if ($row->order) {
-                        return date('d-m-Y', strtotime($row->order->order_date));
-                    }
-                })
-                ->addColumn('order_status', function ($row) {
-                    if ($row->order) {
-                        return date('d-m-Y', strtotime($row->order->status));
-                    }
-                })
-                ->rawColumns(['full_name', 'appointment_date', 'type', 'appointment_status', 'scheduled_date', 'doctor_full_name',   'consultation_fee', 'agreed_amount', 'order_date', 'order_status'])
+                ->rawColumns([
+                    'date_in',
+                    'full_name',
+                    'appointment_date',
+                    'type',
+                    'insurance',
+                    'scheme',
+                    'scheduled_date',
+                    'doctor_full_name',
+                ])
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = "Reports";
+        $page_title = "reports";
+        $sub_page = "main-reports";
         return view('admin.reports.index', [
             'clinic' => $clinic,
             'patients' => $patients,
-            'page_title' => $page_title
+            'page_title' => $page_title,
+            'sub_page' => $sub_page
         ]);
     }
 

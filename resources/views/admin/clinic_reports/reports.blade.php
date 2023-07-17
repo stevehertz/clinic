@@ -13,6 +13,7 @@
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Appointment Date</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Client Type</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Insurance</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Scheme Name</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Scheduled Date</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Doctor</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Signs</th>
@@ -68,6 +69,13 @@
                     @if ($report->payment_detail)
                         @if ($report->payment_detail->insurance)
                             {{ $report->payment_detail->insurance->title }}
+                        @endif
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_detail)
+                        @if ($report->payment_detail->insurance)
+                            {{ $report->payment_detail->scheme }}
                         @endif
                     @endif
                 </td>

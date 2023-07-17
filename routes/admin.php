@@ -1,66 +1,67 @@
 <?php
 // Admin Auth Group
-use App\Http\Controllers\Admin\Admins\AdminsController;
-use App\Http\Controllers\Admin\Appointments\AppointmentsController;
-use App\Http\Controllers\Admin\Assets\AssetConditionsController;
-use App\Http\Controllers\Admin\Assets\AssetsController;
-use App\Http\Controllers\Admin\Assets\AssetTransferController;
-use App\Http\Controllers\Admin\Assets\AssetTypesController;
-use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
-use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
-use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Lens\LensController;
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\Admins\AdminsController;
+use App\Http\Controllers\Admin\Assets\AssetsController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
-use App\Http\Controllers\Admin\Auth\ResetPasswordController;
-use App\Http\Controllers\Admin\ClientType\ClientTypeController;
+use App\Http\Controllers\Admin\Frames\FramesController;
+use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
-use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
+use App\Http\Controllers\Admin\Reports\ReportsController;
+use App\Http\Controllers\Admin\Vendors\VendorsController;
+use App\Http\Controllers\Admin\Frames\FrameTypeController;
+use App\Http\Controllers\Admin\Lens\ContactLensController;
+use App\Http\Controllers\Admin\Lens\LensIndicesController;
+use App\Http\Controllers\Admin\Medicine\MedcineController;
+use App\Http\Controllers\Admin\Assets\AssetTypesController;
+use App\Http\Controllers\Admin\Frames\FrameSizesController;
+use App\Http\Controllers\Admin\LensType\LensTypeController;
+use App\Http\Controllers\Admin\Patients\PatientsController;
+use App\Http\Controllers\Admin\Payments\PaymentsController;
+use App\Http\Controllers\Admin\Settings\SettingsController;
+use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
 use App\Http\Controllers\Admin\Frames\FrameColorsController;
+use App\Http\Controllers\Admin\Frames\FrameShapesController;
+use App\Http\Controllers\Admin\Glasses\SunGlassesController;
+use App\Http\Controllers\Admin\Lens\LensPurchasesController;
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
+use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\Frames\FramesStocksController;
+use App\Http\Controllers\Admin\Inventory\InventoryController;
+use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
+use App\Http\Controllers\Admin\Workshops\WorkshopsController;
+use App\Http\Controllers\Admin\Assets\AssetTransferController;
+use App\Http\Controllers\Admin\Payments\ClosedBillsController;
+use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
+use App\Http\Controllers\Admin\ClientType\ClientTypeController;
 use App\Http\Controllers\Admin\Frames\FrameMaterialsController;
 use App\Http\Controllers\Admin\Frames\FramePurchasesController;
-use App\Http\Controllers\Admin\Frames\FramesController;
-use App\Http\Controllers\Admin\Frames\FrameShapesController;
-use App\Http\Controllers\Admin\Frames\FrameSizesController;
-use App\Http\Controllers\Admin\Frames\FramesStocksController;
 use App\Http\Controllers\Admin\Frames\FrameTransfersController;
-use App\Http\Controllers\Admin\Frames\FrameTypeController;
-use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
-use App\Http\Controllers\Admin\Glasses\SunGlassesController;
-use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
-use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
-use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
 use App\Http\Controllers\Admin\Insurances\InsurancesController;
-use App\Http\Controllers\Admin\Lens\ContactLensController;
-use App\Http\Controllers\Admin\Lens\LensController;
-use App\Http\Controllers\Admin\Lens\LensIndicesController;
-use App\Http\Controllers\Admin\Lens\LensPrescriptionController as LensLensPrescriptionController;
-use App\Http\Controllers\Admin\Lens\LensPurchasesController;
-use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
-use App\Http\Controllers\Admin\LensType\LensTypeController;
-use App\Http\Controllers\Admin\Medicine\MedcineController;
-use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Orders\WorkshopOrdersController;
-use App\Http\Controllers\Admin\Organization\OrganizationController;
-use App\Http\Controllers\Admin\Patients\PatientsController;
-use App\Http\Controllers\Admin\Payments\ClosedBillsController;
-use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
-use App\Http\Controllers\Admin\Payments\PaymentsController;
-use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
 use App\Http\Controllers\Admin\Reports\ClinicReportsController;
-use App\Http\Controllers\Admin\Reports\ReportsController;
-use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
-use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
-use App\Http\Controllers\Admin\Settings\SettingsController;
-use App\Http\Controllers\Admin\Status\StatusController;
+use App\Http\Controllers\Admin\Assets\AssetConditionsController;
+use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
+use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
+use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
+use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
+use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
+use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
+use App\Http\Controllers\Admin\Appointments\AppointmentsController;
+use App\Http\Controllers\Admin\Organization\OrganizationController;
+use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
+use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
-use App\Http\Controllers\Admin\Vendors\VendorsController;
-use App\Http\Controllers\Admin\Workshops\WorkshopsController;
-use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
+use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
+use App\Http\Controllers\Admin\Lens\LensPrescriptionController as LensLensPrescriptionController;
+use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
 
 /*
 |---------------------------------------------------------
@@ -220,6 +221,12 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [FrameShapesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [FrameShapesController::class, 'destroy'])->name('delete');
+                });
+
+                Route::prefix('all')->name('all.')->group(function(){
+
+                    Route::get('index', [FramesController::class, 'index'])->name('index');
+
                 });
             });
 
@@ -597,6 +604,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/delete', [FramesController::class, 'destroy'])->name('delete');
     });
 
+    // Inventory
+    Route::prefix('inventory')->name('inventory.')->group(function(){
+
+        Route::get('/{id}', [InventoryController::class, 'index'])->name('index');
+
+    });
+
     // frame stocks
     Route::prefix('frame/stocks')->name('frame.stocks.')->group(function () {
 
@@ -628,6 +642,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/store', [FrameTransfersController::class, 'store'])->name('store');
 
         Route::delete('/delete', [FrameTransfersController::class, 'destroy'])->name('delete');
+    });
+
+    // frames received
+    Route::prefix('frame/received')->name('frame.received.')->group(function(){
+
+        Route::get('/{id}', [ReceivedFramesController::class, 'index'])->name('index');
+
+        Route::get('/{id}/check/transfers', [ReceivedFramesController::class, 'check_stock_transfered'])->name('check.transfers');
+
+        Route::post('/store', [ReceivedFramesController::class, 'store'])->name('store');
+
     });
 
 

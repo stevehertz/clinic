@@ -88,7 +88,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Doctor/ Optimetrist</h3>
+                        <h3 class="card-title">Doctor/ Optometrist</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i

@@ -28,28 +28,28 @@ class FramesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id)
+    public function index(Request $request)
     {
         //
-        $clinic = Clinic::findOrFail($id);
-        $organization = $clinic->organization;
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
         if ($request->ajax()) {
-            $data = $clinic->frame->sortBy('created_at', SORT_DESC);
+            $data = $organization->frame->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('brand', function($row){
+                ->addColumn('brand', function ($row) {
                     $brand = $row->frame_brand->title;
                     return $brand;
                 })
-                ->addColumn('size', function($row){
+                ->addColumn('size', function ($row) {
                     $size = $row->frame_size->size;
                     return $size;
                 })
-                ->addColumn('type', function($row){
+                ->addColumn('type', function ($row) {
                     $type = $row->frame_type->title;
                     return $type;
                 })
-                ->addColumn('material', function($row){
+                ->addColumn('material', function ($row) {
                     $material = $row->frame_material->title;
                     return $material;
                 })
@@ -64,57 +64,35 @@ class FramesController extends Controller
                         return '<span class="badge badge-danger">Inactive</span>';
                     }
                 })
-                ->addColumn('update', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tools btn-sm editFrame"><i class="fa fa-edit"></i></a>';
+                ->addColumn('action', function ($row) {
+                    $btn = '<div class="btn-group">';
+                    $btn = $btn . '<button type="button" class="btn btn-default">Action</button>';
+                    $btn = $btn . '<button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">';
+                    $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
+                    $btn = $btn . '</button>';
+                    $btn = $btn . '<div class="dropdown-menu" role="menu">';
+                    $btn = $btn . '<a class="dropdown-item editFrame" data-id="' . $row->id . '" href="javascript:void(0)">Edit</a>';
+                    $btn = $btn . '<a class="dropdown-item deleteFrame" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
+                    $btn = $btn . '</div></div>';
                     return $btn;
                 })
-                ->addColumn('delete', function($row){
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteFrame"><i class="fa fa-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['brand', 'size', 'material', 'photo', 'status', 'update', 'delete'])
+                ->rawColumns(['brand', 'size', 'material', 'photo', 'status', 'action'])
                 ->make(true);
         }
-        $patients = $clinic->patient->count();
-        $frame_types = $organization->frame_type->sortBy('created_at', SORT_DESC);
-        $frame_sizes = $organization->frame_size->sortBy('created_at', SORT_DESC);
-        $frame_materials = $organization->frame_material->sortBy('created_at', SORT_DESC);
-        $frame_brands = $organization->frame_brand->sortBy('created_at', SORT_DESC);
-        $frame_colors = $organization->frame_color->sortBy('created_at', SORT_DESC);
-        $frame_shapes = $organization->frame_shape->sortBy('created_at', SORT_DESC);
-        $clinic_frames = $clinic->frame->sortBy('created_at', SORT_DESC);
-        $num_frames = $clinic->frame->count();
-        $num_frame_stocks = $clinic->frame_stock->count(); // number of frame stocks 
-        $stocks = $clinic->frame_stock->sortBy('created_at', SORT_DESC); //Load all stocks to get entered stock frame code for purchase
-        $transfer_stocks = $clinic->frame_stock->where('closing_stock', '>', 0)->sortBy('created_at', SORT_DESC); // Get the available stocks before transfer
-        $transfer_doctors = $clinic->user->sortBy('created_at', SORT_DESC);
-        $num_frame_purchases = $clinic->frame_purchase->count(); // num of frame purchases
-        // load clinics to transfer to
-        $clinics = $organization->clinic->where('id', '!=', $clinic->id)->sortBy('created_at', SORT_DESC);
-        // Number of transfered stocks
-        $num_transfers = $clinic->frame_transfer_from->count();
-
-        $page_title = 'Frames';
-        return view('admin.frames.index', [
+        $frame_types = $organization->frame_type->sortBy('created_at', SORT_DESC); // Frame Types
+        $frame_sizes = $organization->frame_size->sortBy('created_at', SORT_DESC); // Frame Sizes
+        $frame_materials = $organization->frame_material->sortBy('created_at', SORT_DESC); // Frame Materials
+        $frame_brands = $organization->frame_brand->sortBy('created_at', SORT_DESC); // Frame Brands
+        $page_title = 'frames';
+        $sub_page = "frames";
+        return view('admin.settings.clinics.frames.all.index', [
             'page_title' => $page_title,
-            'clinic' => $clinic,
+            'sub_page' => $sub_page,
             'organization' => $organization,
-            'patients' => $patients,
             'frame_types' => $frame_types,
             'frame_sizes' => $frame_sizes,
             'frame_materials' => $frame_materials,
             'frame_brands' => $frame_brands,
-            'frame_colors' => $frame_colors,
-            'frame_shapes' => $frame_shapes,
-            'clinic_frames' => $clinic_frames,
-            'num_frames' => $num_frames,
-            'num_stocks' => $num_frame_stocks,
-            'stocks' => $stocks,
-            'num_purchases' => $num_frame_purchases,
-            'transfer_clinics' => $clinics,
-            'transfer_stocks' => $transfer_stocks,
-            'transfer_doctors' => $transfer_doctors,
-            'num_transfers' => $num_transfers,
         ]);
     }
 

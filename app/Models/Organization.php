@@ -118,6 +118,12 @@ class Organization extends Model
         return $this->hasMany(FrameColor::class, 'organization_id', 'id');
     }
 
+    public function frame()
+    {
+        # code...
+        return $this->hasMany(Frame::class, 'organization_id', 'id');
+    }
+
     public function frame_shape()
     {
         # code...
@@ -206,5 +212,10 @@ class Organization extends Model
     {
         # code...
         return $this->hasMany(WorkshopSale::class, 'organization_id', 'id');
+    }
+
+    public function received_frame()
+    {
+        return $this->hasMany(ReceivedFrame::class, 'organization_id', 'id');
     }
 }

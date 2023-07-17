@@ -10,7 +10,7 @@ class Frame extends Model
     use HasFactory;
 
     protected $fillable = [
-        'clinic_id',
+        'organization_id',
         'brand_id',
         'type_id',
         'size_id',
@@ -20,9 +20,9 @@ class Frame extends Model
         'status',
     ];
 
-    public function clinic()
+    public function organization()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 
     public function frame_brand()

@@ -44,8 +44,15 @@ class ClinicReportsController extends Controller
                 })
                 ->addColumn('insurance', function ($row) {
                     if ($row->payment_detail) {
-                        if($row->payment_detail->insurance) {
+                        if ($row->payment_detail->insurance) {
                             return $row->payment_detail->insurance->title;
+                        }
+                    }
+                })
+                ->addColumn('scheme', function ($row) {
+                    if ($row->payment_detail) {
+                        if ($row->payment_detail->insurance) {
+                            return $row->payment_detail->scheme;
                         }
                     }
                 })
@@ -78,7 +85,17 @@ class ClinicReportsController extends Controller
                         return date('d-m-Y', strtotime($row->order->status));
                     }
                 })
-                ->rawColumns(['full_name', 'appointment_date', 'type', 'scheduled_date', 'doctor_full_name',   'consultation_fee', 'agreed_amount', 'order_date', 'order_status'])
+                ->rawColumns([
+                    'full_name',
+                    'appointment_date', '
+                    type',
+                    'scheduled_date',
+                    'doctor_full_name',
+                    'consultation_fee',
+                    'agreed_amount',
+                    'order_date',
+                    'order_status'
+                ])
                 ->make(true);
         }
         return view('admin.clinic_reports.index');

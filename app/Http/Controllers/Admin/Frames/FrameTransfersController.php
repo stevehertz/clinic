@@ -15,7 +15,7 @@ class FrameTransfersController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth:admin');   
+        $this->middleware('auth:admin');
     }
 
     public function index(Request $request, $id)
@@ -26,24 +26,23 @@ class FrameTransfersController extends Controller
         if ($request->ajax()) {
             $data = $clinic->frame_transfer_from()->latest()->get();
             return datatables()->of($data)
-            ->addIndexColumn()
-            ->addColumn('from_clinic', function($row){
-                $from_clinic = $row->from_clinic->clinic;
-                return $from_clinic;
-            })
-            ->addColumn('to_clinic', function($row){
-                $to_clinic = $row->to_clinic->clinic;
-                return $to_clinic;
-            })
-            ->addColumn('doctor', function($row)
-            {
-                # code...
-                $transfer_user = $row['transfer_user_id'];
-                $doctor = User::findOrFail($transfer_user);
-                return $doctor['first_name'] . ' ' . $doctor['last_name'];
-            })
-            ->rawColumns(['from_clinic', 'from_clinic'])
-            ->make(true);
+                ->addIndexColumn()
+                ->addColumn('from_clinic', function ($row) {
+                    $from_clinic = $row->from_clinic->clinic;
+                    return $from_clinic;
+                })
+                ->addColumn('to_clinic', function ($row) {
+                    $to_clinic = $row->to_clinic->clinic;
+                    return $to_clinic;
+                })
+                ->addColumn('doctor', function ($row) {
+                    # code...
+                    $transfer_user = $row['transfer_user_id'];
+                    $doctor = User::findOrFail($transfer_user);
+                    return $doctor['first_name'] . ' ' . $doctor['last_name'];
+                })
+                ->rawColumns(['from_clinic', 'from_clinic'])
+                ->make(true);
         }
     }
 
@@ -63,7 +62,7 @@ class FrameTransfersController extends Controller
             "condition" => "required|string",
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -74,24 +73,31 @@ class FrameTransfersController extends Controller
 
         $organization = $clinic->organization;
 
-        $frame_stock = FrameStock::findOrFail($data['stock_id']);
-
         // perform quantity deduction on frame stocks
         $quantity = $data['quantity'];
 
         // check if the quantity ask for is available
-        if($quantity > $frame_stock->closing_stock) 
-        {
+
+        $frame_stock = FrameStock::findOrFail($data['stock_id']);
+
+        if ($quantity > $frame_stock->closing_stock) {
             $response['status'] = false;
-            $response['errors'] = "The quantity requested is not available at the moment";
-            return response()->json($response, 401);
+            $response['errors'] = ["The quantity requested is not available at the moment"];
+            return response()->json($response, 422);
         }
 
-        // available stocks
+        // update available stocks
+        // 1. calculate total transfered stocks
         $transfered_stock = $frame_stock->transfered_stock + $quantity;
+
+        // 2. calculate total stocks (opening + purchased - transfered)
         $total_stock = $frame_stock->total_stock - $transfered_stock;
+
+        // 3. get sold stocks
         $sold_stock = $frame_stock->sold_stock;
-        $closing_stock = $frame_stock->total_stock - $sold_stock;
+
+        // 4. calculate the remaining closing stock
+        $closing_stock = $total_stock - $sold_stock;
 
         // update frame stock 
         $frame_stock->update([
@@ -122,7 +128,7 @@ class FrameTransfersController extends Controller
         $to_clinic = Clinic::findOrFail($data['to_clinic_id']);
 
         $response['status'] = true;
-        $response['message'] = "You have successfully transfered ".$quantity." frames to ".$to_clinic->clinic;
+        $response['message'] = "You have successfully transfered " . $quantity . " frames to " . $to_clinic->clinic;
 
         return response()->json($response, 200);
     }
@@ -141,7 +147,7 @@ class FrameTransfersController extends Controller
             'transfer_id' => 'required|integer|exists:frame_transfers,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -155,6 +161,5 @@ class FrameTransfersController extends Controller
         $response['status'] = true;
         $response['message'] = 'Frame Transfer successfully deleted';
         return response()->json($response, 200);
-        
     }
 }

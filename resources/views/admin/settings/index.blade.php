@@ -238,7 +238,6 @@
                         </div>
                         <!-- /.info-box -->
                     </a>
-
                 </div>
                 <!-- /.col -->
                 <div class="col-md-3 col-sm-6 col-12">
@@ -328,6 +327,25 @@
                             <div class="info-box-content">
                                 <span class="info-box-text">
                                     Frame Shapes
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.clinics.frames.all.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary">
+                                <i class="fa  fa-file-text"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    Frames
                                 </span>
                             </div>
                             <!-- /.info-box-content -->

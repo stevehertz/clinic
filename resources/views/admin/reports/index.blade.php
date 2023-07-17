@@ -68,15 +68,13 @@
                                         <th></th>
                                         <th>Date</th>
                                         <th>Patient</th>
+                                        <th>Appointment Date</th>
                                         <th>Client Type</th>
                                         <th>Insurance Name</th>
-                                        <th>Consultation Receipt No</th>
+                                        <th>Scheme Name</th>
+                                        <th>Scheduled Date</th>
                                         <th>Consultation Amount</th>
                                         <th>Agreed Amount</th>
-                                        <th>Paid Amount</th>
-                                        <th>Bill Status</th>
-                                        <th>LPO No</th>
-                                        <th>Lens Type</th>
                                         <th>Doctor</th>
                                     </tr>
                                 </thead>
@@ -95,7 +93,7 @@
     <script>
         $(document).ready(function() {
 
-            // find_reports();
+            find_reports();
 
             function find_reports(from_date = '', to_date = '') {
                 var path = '{{ route('admin.reports.index', $clinic->id) }}';
@@ -114,6 +112,10 @@
                             name: 'DT_RowIndex'
                         },
                         {
+                            data: 'date_in',
+                            name: 'date_in'
+                        },
+                        {
                             data: 'full_name',
                             name: 'full_name'
                         },
@@ -126,16 +128,16 @@
                             name: 'type'
                         },
                         {
-                            data: 'appointment_status',
-                            name: 'appointment_status'
+                            data: 'insurance',
+                            name: 'insurance'
+                        },
+                        {
+                            data: 'scheme',
+                            name: 'scheme'
                         },
                         {
                             data: 'scheduled_date',
                             name: 'scheduled_date'
-                        },
-                        {
-                            data: 'doctor_full_name',
-                            name: 'doctor_full_name'
                         },
                         {
                             data: 'consultation_fee',
@@ -146,17 +148,9 @@
                             name: 'agreed_amount'
                         },
                         {
-                            data: 'paid_amount',
-                            name: 'paid_amount'
+                            data: 'doctor_full_name',
+                            name: 'doctor_full_name'
                         },
-                        {
-                            data: 'order_date',
-                            name: 'order_date'
-                        },
-                        {
-                            data: 'order_status',
-                            name: 'order_status'
-                        }
                     ],
                     'responsive': true,
                     'autoWidth': false,

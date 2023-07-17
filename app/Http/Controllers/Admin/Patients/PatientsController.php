@@ -55,7 +55,7 @@ class PatientsController extends Controller
                 ->rawColumns(['full_names', 'action', 'added_by'])
                 ->make(true);
         }
-        $page_title = 'Patients';
+        $page_title = 'patients';
         $patients = $clinic->patient->count();
         return view('admin.patients.index', [
             'page_title' => $page_title,

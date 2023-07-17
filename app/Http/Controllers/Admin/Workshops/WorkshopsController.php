@@ -65,7 +65,7 @@ class WorkshopsController extends Controller
             'initials' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'phone' => 'required|numeric|min:10',
-            'email' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'address' => 'nullable|string|max:255',
         ]);
 

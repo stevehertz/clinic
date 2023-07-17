@@ -12,6 +12,8 @@
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Next of Kin Contacts</th>
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Appointment Date</th>
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Client Type</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Insurance</th>
+            <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Scheme Name</th>
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Scheduled Date</th>
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Doctor</th>
             <th style="background-color: #FFFF00; font-size:22px; padding:10px;">Signs</th>
@@ -61,6 +63,16 @@
                 <td>
                     @if ($report->payment_detail)
                         {{ $report->payment_detail->client_type->type }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_detail->insurance)
+                        {{ $report->payment_detail->insurance->title }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_detail->insurance)
+                        {{ $report->payment_detail->scheme }}
                     @endif
                 </td>
                 <td>
