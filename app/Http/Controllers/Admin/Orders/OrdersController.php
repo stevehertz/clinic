@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Orders;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Order as ResourcesOrder;
 use App\Models\Clinic;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class OrdersController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Orders';
+        $page_title = trans('pages.orders');
         return view('admin.orders.clinics.index', [
             'clinic' => $clinic,
             'patients' => $patients,
@@ -49,47 +50,24 @@ class OrdersController extends Controller
         ]);
     }
 
-    public function show(Request $request)
+    public function show($order_id)
     {
         # code...
-        $data = $request->all();
+        $order = Order::find($order_id);
 
-        $validator = Validator::make($data, [
-            'order_id' => 'required|integer|exists:orders,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $order = Order::find($data['order_id']);
-        $request->session()->put('order_id', $order->id);
-
-        $response['status'] = true;
-        $response['data'] = $order;
-        return response()->json($response, 200);
+        return new ResourcesOrder($order);
     }
 
-    public function view(Request $request, $id)
+    public function view($id, $order_id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
-        $patients = $clinic->patient->count();
-        if ($request->session()->has('order_id')) {
-            $order_id = $request->session()->get('order_id');
-            $order = Order::findOrFail($order_id);
-            $request->session()->forget('order_id');
-            $page_title = 'Order #' . $order->id;
-            return view('admin.orders.clinics.view', [
-                'page_title' => $page_title,
-                'clinic' => $clinic,
-                'order' => $order,
-                'patients' => $patients,
-            ]);
-        }
-        return redirect()->route('admin.orders.index', $clinic->id);
+        $order = $clinic->order()->findOrFail($order_id);
+        $page_title = trans('pages.orders');
+        return view('admin.orders.clinics.view', [
+            'page_title' => $page_title,
+            'clinic' => $clinic,
+            'order' => $order,
+        ]);
     }
 }

@@ -38,6 +38,11 @@ class Clinic extends Model
         return $this->hasMany(Patient::class, 'clinic_id', 'id');
     }
 
+    function patients_per_clinic() 
+    {
+        return $this->patient()->latest()->count();   
+    }
+
     public function appointment()
     {
         # code...

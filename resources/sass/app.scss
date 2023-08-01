@@ -33,6 +33,16 @@
         #insuranceSpan {
             display: none;
         }
+
+        .col-md-3{
+            .card-outline{
+                .card-body{
+                    .active{
+                        color:#264dfa!important;
+                    }
+                }
+            }
+        }
     }
     .card{
         .card-body{

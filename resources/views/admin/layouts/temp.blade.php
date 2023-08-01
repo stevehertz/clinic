@@ -89,7 +89,7 @@ TIP: This Layout is for the clinic dashboard page.
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('admin.layouts.temp_sidebar')
+        @include('admin.components.clinic_sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -149,6 +149,7 @@ TIP: This Layout is for the clinic dashboard page.
         });
     </script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

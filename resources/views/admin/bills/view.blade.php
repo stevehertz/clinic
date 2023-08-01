@@ -1,6 +1,7 @@
 @extends('admin.layouts.temp')
 
 @section('content')
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -14,7 +15,10 @@
                             <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.payments.bills.index', $clinic->id) }}">Appointments</a>
+                            <a href="{{ route('admin.patients.payments', [$clinic->id, $payment_bill->patient->id]) }}">Patient Profile</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.payments.bills.index', $clinic->id) }}">Payments</a>
                         </li>
                         <li class="breadcrumb-item active">View Payments</li>
                     </ol>
@@ -272,11 +276,11 @@
             $(document).on('click', '.printPaymentsBtn', function(e) {
                 e.preventDefault();
                 var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.payments.bills.show') }}';
+                var path = '{{ route('admin.payments.bills.show', ':id') }}';
+                path = path.replace(':id', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
+                    type: 'GET',
                     data: {
                         bill_id: bill_id,
                         _token: token
@@ -301,20 +305,18 @@
             // view order
             $(document).on('click', '.viewOrderBtn', function(e){
                 e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.orders.show') }}';
+                let order_id = $(this).data('id');
+                let path = '{{ route('admin.orders.show', ':order_id') }}';
+                path = path.replace(':order_id', order_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        _token: token,
-                        order_id: order_id
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('admin.orders.view', $clinic->id) }}';
+                            let url = '{{ route('admin.orders.view', [':id', ':order_id']) }}';
+                            url = url.replace(':id', {{ $clinic->id }});
+                            url = url.replace(':order_id', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);

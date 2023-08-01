@@ -26,80 +26,47 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item has-treeview @if ($page_title == 'dashboard') menu-open @endif">
-                    <a href="#" class="nav-link @if ($page_title == 'dashboard') active @endif">
+                <li class="nav-item">
+                    <a href="{{ route('admin.dashboard.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.dashboard')) active @endif">
                         <i class="nav-icon fa fa-dashboard"></i>
                         <p>
-                            Dashboard
-                            <i class="right fa fa-angle-left"></i>
+                            @lang('pages.dashboard')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}"
-                                class="nav-link @if (isset($sub_page) && $sub_page == 'dashboard') active @endif">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
-                <li class="nav-item has-treeview @if ($page_title == 'patients') menu-open @endif">
-                    <a href="#" class="nav-link @if ($page_title == 'patients') active @endif">
+                <li class="nav-item">
+                    <a href="{{ route('admin.patients.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.patients')) active @endif">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
-                            Patients
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('pages.patients')
                             <span class="badge badge-info right">
-                                {{ $patients }}
+                                {{ $clinic->patients_per_clinic() }}
                             </span>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.patients.index', $clinic->id) }}" class="nav-link @if ($page_title == 'patients') active @endif">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Patients</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('admin.appointments.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.appointments')) active @endif">
                         <i class="nav-icon fa fa-check-square"></i>
                         <p>
-                            Appointments
-                            <i class="right fa fa-angle-left"></i>
+                            @lang('pages.appointments')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.appointments.index', $clinic->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Appointments</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-user-secret"></i>
+                    <a href="{{ route('admin.doctor.schedules.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.schedule')) active @endif">
+                        <i class="nav-icon fa fa-calendar"></i>
                         <p>
-                            Doctors Schedule
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('pages.schedule')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.doctor.schedules.index', $clinic->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Schedule</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-item has-treeview">
@@ -133,21 +100,13 @@
                 </li>
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('admin.orders.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.orders')) active @endif">
                         <i class="nav-icon fa fa-cubes"></i>
                         <p>
-                            Orders
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('pages.orders')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.orders.index', $clinic->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Orders</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-item has-treeview @if ($page_title == 'inventory') menu-open @endif">
@@ -206,22 +165,14 @@
 
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.users')) active @endif">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
-                            Users
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('pages.users')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.users.index', $clinic->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Users</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-header">REPORTS</li>
@@ -267,19 +218,15 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.organization.index') }}" class="nav-link">
-                        <i class="nav-icon fa fa-database"></i>
+                        <i class="nav-icon fa fa-dashboard"></i>
                         <p>
-                            Clinics
+                            HQ Dashboard
                         </p>
                     </a>
                 </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
-
-
     </div>
     <!--.sidebar-->
-
-
 </aside>

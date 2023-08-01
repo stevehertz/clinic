@@ -407,7 +407,7 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -462,7 +462,7 @@
                 });
             }
 
-            $(document).on('click', '.newFrameBtn', function(e) {
+            $(document).on('click', '#newFrameBtn', function(e) {
                 e.preventDefault();
                 $('#newFrameModal').modal('show');
             });
@@ -497,13 +497,9 @@
                         }
                     },
                     error: function(error) {
-                        if (error.status == 422) {
-                            $.each(error.responseJSON.errors, function(i, error) {
-                                toastr.error(error);
-                            });
-                        } else {
-                            toastr.error(error.responseJSON.message);
-                        }
+                        $.each(error.responseJSON.errors, function(i, error) {
+                            toastr.error(error);
+                        });
                     }
                 });
             });
@@ -511,14 +507,11 @@
             $(document).on('click', '.editFrame', function(e) {
                 e.preventDefault();
                 var frame_id = $(this).data('id');
-                var path = '{{ route('admin.frames.show') }}';
+                var path = '{{ route('admin.frames.show', ':id') }}';
+                path = path.replace(':id', frame_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        'frame_id': frame_id,
-                        '_token': '{{ csrf_token() }}'
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
@@ -532,9 +525,6 @@
                             $('#updateFramePhoto').val(data['data']['photo']);
                             $('#updateFrameStatus').val(data['data']['status']);
                         }
-                    },
-                    error: function(data) {
-                        console.log(data);
                     }
                 });
             });
@@ -543,7 +533,9 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.frames.update') }}';
+                var frame_id = $('#updateFrameId').val();
+                var path = '{{ route('admin.frames.update', ':id') }}';
+                path = path.replace(':id', frame_id);
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -613,9 +605,6 @@
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success');
                                     $('#framesData').DataTable().ajax.reload();
-                                    $('#frameStocksData').DataTable().ajax.reload();
-                                    $('#purchasedStocks').DataTable().ajax.reload();
-                                    location.reload();
                                 }
                             }
                         });
@@ -627,4 +616,4 @@
 
         });
     </script>
-@endsection
+@endpush

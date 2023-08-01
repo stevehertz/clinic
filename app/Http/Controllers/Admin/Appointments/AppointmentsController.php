@@ -65,7 +65,7 @@ class AppointmentsController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Appointments';
+        $page_title = trans('pages.appointments');
         return view('admin.appointments.index', compact('clinic', 'page_title', 'patients'));
     }
 

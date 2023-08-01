@@ -163,7 +163,6 @@ class FramesController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'clinic_id' => 'required|integer|exists:clinics,id',
             'code' => 'required|string|unique:frames,code',
             'type_id' => 'required|integer|exists:frame_types,id',
             'brand_id' => 'required|integer|exists:frame_brands,id',
@@ -198,6 +197,10 @@ class FramesController extends Controller
             $photoNameToStore = 'noimage.png';
         }
 
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+
+        $organization = $admin->organization;
+
         $frame_type = FrameType::findOrFail($data['type_id']);
 
         $frame_brand = FrameBrand::findOrFail($data['brand_id']);
@@ -206,9 +209,7 @@ class FramesController extends Controller
 
         $frame_material = FrameMaterial::findOrFail($data['material_id']);
 
-        $clinic = Clinic::findOrFail($data['clinic_id']);
-
-        $clinic->frame()->create([
+        $organization->frame()->create([
             'brand_id' => $frame_brand->id,
             'type_id' => $frame_type->id,
             'size_id' => $frame_size->id,
@@ -229,23 +230,10 @@ class FramesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
         //
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'frame_id' => 'required|integer|exists:frames,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $frame = Frame::findOrFail($data['frame_id']);
+        $frame = Frame::findOrFail($id);
 
         $response['status'] = true;
         $response['data'] = $frame;
@@ -259,15 +247,16 @@ class FramesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         //
-        $data = $request->all();
+
+        $frame = Frame::findOrFail($id);
+
+        $data = $request->except("_token");
 
         $validator = Validator::make($data, [
-            'frame_id' => 'required|integer|exists:frames,id',
-            'clinic_id' => 'required|integer|exists:clinics,id',
-            'code' => 'required|string|unique:frames,code,' . $data['frame_id'],
+            'code' => 'required|string|unique:frames,code,' . $frame->id,
             'type_id' => 'required|integer|exists:frame_types,id',
             'brand_id' => 'required|integer|exists:frame_brands,id',
             'size_id' => 'required|integer|exists:frame_sizes,id',
@@ -298,10 +287,6 @@ class FramesController extends Controller
             // Upload Image
             $path = $request->file('photo')->storeAs('public/frames', $photoNameToStore);
         }
-
-        $clinic = Clinic::findOrFail($data['clinic_id']);
-
-        $frame = $clinic->frame()->findOrFail($data['frame_id']);
 
         $frame_type = FrameType::findOrFail($data['type_id']);
 

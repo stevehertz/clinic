@@ -10,8 +10,14 @@ class FrameStock extends Model
     use HasFactory;
 
     protected $fillable = [
+        'organization_id', // new
         'clinic_id',
+        'brand_id', //new
+        'type_id', // new
+        'size_id', // new
+        'material_id', //new
         'frame_id',
+        'code', // new
         'gender',
         'color_id',
         'shape_id',
@@ -25,6 +31,7 @@ class FrameStock extends Model
         'price',
         'supplier_price',
         'remarks',
+        'status' // new
     ];
 
     public function clinic()

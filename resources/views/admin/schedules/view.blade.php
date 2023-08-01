@@ -18,6 +18,11 @@
                             <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
+                            <a
+                                href="{{ route('admin.patients.schedules', [$clinic->id, $patient->id]) }}">Patient
+                                Profile</a>
+                        </li>
+                        <li class="breadcrumb-item">
                             <a href="{{ route('admin.patients.index', $clinic->id) }}">
                                 Doctors Schedules
                             </a>
@@ -86,7 +91,7 @@
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Doctor/ Optimist</h3>
+                        <h3 class="card-title">Doctor/ Optometist</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
@@ -665,7 +670,8 @@
                                     </div>
                                 @endif
 
-                            </div><!--.tab-pane-->
+                            </div>
+                            <!--.tab-pane-->
 
                         </div><!-- /.tab-content -->
                     </div><!-- /.card-body -->

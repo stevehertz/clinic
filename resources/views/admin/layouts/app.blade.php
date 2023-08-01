@@ -47,175 +47,11 @@ TIP: This Layout is for the main admin dashboard page.
 <body class="hold-transition sidebar-mini accent-primary">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('admin.organization.index') }}" class="nav-link">Home</a>
-                </li>
-
-            </ul>
-
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user"></i> {{ Auth::guard('admin')->user()->username }}
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                        <a href="{{ route('admin.personal.index') }}" class="dropdown-item">
-                            <i class="fa fa-user mr-2"></i> profile
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa fa-sign-out mr-2"></i> {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('admin.personal.logout') }}" method="POST"
-                            class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                </li>
-            </ul>
-        </nav>
+        @include('admin.components.main_nav')
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-primary">
-            <!-- Brand Logo -->
-            <a href="{{ route('admin.organization.index') }}" class="brand-link navbar-primary">
-                <img src="{{ asset('storage/logo/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Clinic App</span>
-            </a>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{ asset('storage/admin/'.Auth::guard()->user()->profile) }}" class="img-circle elevation-2"
-                            alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="{{ route('admin.personal.index') }}" class="d-block">
-                            {{ Auth::guard('admin')->user()->first_name }}
-                            {{ Auth::guard('admin')->user()->last_name }}
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
-                        <li class="nav-item has-treeview menu-open">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fa fa-dashboard"></i>
-                                <p>
-                                    Dashboard
-                                    <i class="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.organization.index') }}" class="nav-link active">
-                                        <i class="fa fa-circle nav-icon"></i>
-                                        <p>Dashboard</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-database"></i>
-                                <p>
-                                    Clinics
-                                    <i class="fa fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.clinics.index') }}" class="nav-link">
-                                        <i class="fa fa-circle nav-icon"></i>
-                                        <p>Clinics</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-area-chart"></i>
-                                <p>
-                                    Workshops
-                                    <i class="fa fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.workshop.index') }}" class="nav-link">
-                                        <i class="fa fa-circle nav-icon"></i>
-                                        <p>Workshops</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-
-                        <li class="nav-header">REPORTS</li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.clinics.reports.index') }}" class="nav-link">
-                                <i class="nav-icon fa fa-line-chart"></i>
-                                <p>
-                                    Clinic Reports
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-header">SETTINGS</li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.organization.view') }}" class="nav-link">
-                                <i class="nav-icon fa fa-bank"></i>
-                                <p>
-                                    Organizaton
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.settings.index') }}" class="nav-link">
-                                <i class="nav-icon fa fa-gear"></i>
-                                <p>
-                                    Settings
-                                </p>
-                            </a>
-                        </li>
-
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('admin.settings.workshops.index') }}" class="nav-link">
-                                <i class="nav-icon fa fa-gear"></i>
-                                <p>
-                                    Workshop Settings
-                                </p>
-                            </a>
-                        </li> --}}
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
+        @include('admin.components.main_sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -274,6 +110,7 @@ TIP: This Layout is for the main admin dashboard page.
         });
     </script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

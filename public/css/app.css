@@ -28,6 +28,9 @@
 .content .container-fluid #insuranceSpan {
   display: none;
 }
+.content .container-fluid .col-md-3 .card-outline .card-body .active {
+  color: #264dfa !important;
+}
 .content .card .card-body .lensPowerDiv {
   margin-bottom: 1rem;
   display: none;

@@ -71,8 +71,6 @@
                                         <th>ID Number</th>
                                         <th>Telephone</th>
                                         <th>Email</th>
-                                        <th>Date of Birth</th>
-                                        <th>Gender</th>
                                         <th>Added By</th>
                                         <th>Action</th>
                                     </tr>
@@ -89,7 +87,8 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -126,14 +125,6 @@
                         {
                             data: 'email',
                             name: 'email'
-                        },
-                        {
-                            data: 'dob',
-                            name: 'dob'
-                        },
-                        {
-                            data: 'gender',
-                            name: 'gender'
                         },
                         {
                             data: 'added_by',
@@ -175,23 +166,23 @@
 
             $(document).on('click', '.viewBtn', function(e) {
                 e.preventDefault();
-                var patient_id = $(this).attr('id');
-                var path = '{{ route('admin.patients.show') }}';
-                var token = '{{ csrf_token() }}';
+                let patient_id = $(this).attr('id');
+                let path = '{{ route('admin.patients.show', ':id') }}';
+                path = path.replace(':id', patient_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        patient_id: patient_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        if (data['status'] == false) {
-                            console.log(data);
-                        } else {
-                            window.location.href =
-                                '{{ route('admin.patients.view', $clinic->id) }}';
+                        if(data['status'])
+                        {
+                            let profilePath = '{{ route('admin.patients.view', [':id', ':patient_id', ':patient_name'])  }}';
+                            profilePath = profilePath.replace(':id', {{$clinic->id}})
+                            profilePath = profilePath.replace(':patient_id', data['data']['id']);
+                            profilePath = profilePath.replace(':patient_name', data['data']['patient']);
+                            setTimeout(() => {
+                                window.location.href = profilePath;
+                            }, 500);
                         }
                     }
                 });
@@ -199,9 +190,10 @@
 
             $(document).on('click', '.deleteBtn', function(e) {
                 e.preventDefault();
-                var path = '{{ route('admin.patients.delete') }}';
-                var patient_id = $(this).attr('id');
-                var token = '{{ csrf_token() }}';
+                let patient_id = $(this).attr('id');
+                let path = '{{ route('admin.patients.delete', ':id') }}';
+                path = path.replace(':id', patient_id);
+                let token = '{{ csrf_token() }}';
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this patient!",
@@ -213,7 +205,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: path,
-                            type: "POST",
+                            type: "DELETE",
                             data: {
                                 patient_id: patient_id,
                                 _token: token,
@@ -236,4 +228,4 @@
 
         });
     </script>
-@endsection
+@endpush

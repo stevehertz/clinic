@@ -64,24 +64,10 @@ class PaymentsController extends Controller
         ]);
     }
 
-    public function show(Request $request)
+    public function show($payment_id)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-        $request->session()->put('bill_id', $payment_bill->id);
+        $payment_bill = PaymentBill::findOrFail($payment_id);
 
         $response['status'] = true;
         $response['data'] = $payment_bill;
@@ -89,24 +75,17 @@ class PaymentsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function view(Request $request, $id)
+    public function view($id, $payment_id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
-        $patients = $clinic->patient->count();
-        if($request->session()->has('bill_id')){
-            $bill_id = $request->session()->get('bill_id');
-            $payment_bill = PaymentBill::findOrFail($bill_id);
-            $request->session()->forget('bill_id');
-            $page_title = 'View Bill';
-            return view('admin.bills.view', [
-                'payment_bill' => $payment_bill,
-                'page_title' => $page_title,
-                'clinic' => $clinic,
-                'patients' => $patients,
-            ]);
-        }
-        return redirect()->route('admin.payments.bills.index', $clinic->id);
+        $payment_bill = PaymentBill::findOrFail($payment_id);
+        $page_title = 'View Bill';
+        return view('admin.bills.view', [
+            'clinic' => $clinic,
+            'payment_bill' => $payment_bill,
+            'page_title' => $page_title,
+        ]);
     }
 
     public function print(Request $request, $id)
@@ -114,7 +93,7 @@ class PaymentsController extends Controller
         # code...
         $clinic = Clinic::findOrFail($id);
         $patients = $clinic->patient->count();
-        if($request->session()->has('bill_id')){
+        if ($request->session()->has('bill_id')) {
             $bill_id = $request->session()->get('bill_id');
             $payment_bill = PaymentBill::findOrFail($bill_id);
             $request->session()->forget('bill_id');

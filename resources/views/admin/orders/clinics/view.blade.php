@@ -14,6 +14,11 @@
                             <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
+                            <a href="{{ route('admin.patients.orders', [$clinic->id, $order->patient->id]) }}">
+                                Patient Profile
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
                             <a href="{{ route('admin.orders.index', $clinic->id) }}">Orders</a>
                         </li>
                         <li class="breadcrumb-item active">View Order</li>
@@ -26,6 +31,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
+
             <div class="col-md-3">
 
                 <div class="card">
@@ -135,7 +141,7 @@
                                 <strong><i class="fa fa-calendar mr-1"></i> Date</strong>
 
                                 <p class="text-muted">
-                                    {{ date('d-m-Y', strtotime($order->order_date)) }}
+                                    {{ date('d, F, Y', strtotime($order->order_date)) }}
                                 </p>
 
                                 <hr>
@@ -283,7 +289,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="fa fa-calendar"></i> {{ $order->patient->dob }}
+                                    <i class="fa fa-calendar"></i> {{ date('d, F, Y', strtotime($order->patient->dob)) }}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -369,7 +375,7 @@
                                 @forelse ($order->order_track as $track)
                                     <tr>
                                         <td>
-                                            {{ date('d-m-Y', strtotime($track->track_date)) }}
+                                            {{ date('d, F, Y', strtotime($track->track_date)) }}
                                         </td>
                                         <td>
                                             {{ $track->user->first_name }} {{ $track->user->last_name }}

@@ -32,7 +32,7 @@ class DashboardController extends Controller
             ->get();
         $payments = $clinic->payment_bill()->sum('paid_amount');
         $remittances = $clinic->remittance()->sum('amount');
-        $page_title = 'dashboard';
+        $page_title = trans('pages.dashboard');
         $sub_page = 'dashboard';
         $patients = $clinic->patient->count();
 

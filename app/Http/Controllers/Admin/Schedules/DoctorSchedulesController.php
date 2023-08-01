@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Schedules;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DoctorSchedule as ResourcesDoctorSchedule;
 use App\Models\Clinic;
 use App\Models\DoctorSchedule;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class DoctorSchedulesController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Doctor Schedules';
+        $page_title = trans('pages.schedule');
         return view('admin.schedules.index', [
             'page_title' => $page_title,
             'clinic' => $clinic,
@@ -51,82 +52,59 @@ class DoctorSchedulesController extends Controller
         ]);
     }
 
-    public function show(Request $request)
+    public function show($schedule_id)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'schedule_id' => 'required|integer|exists:doctor_schedules,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $schedule = DoctorSchedule::findOrFail($data['schedule_id']);
-        $request->session()->put('schedule_id', $schedule->id);
-
-        $response['status'] = true;
-        $response['data'] = $schedule;
-        return response()->json($response, 200);
+        $schedule = DoctorSchedule::findOrFail($schedule_id);
+        return new ResourcesDoctorSchedule($schedule);
     }
 
-    public function view(Request $request, $id)
+    public function view($id, $schedule_id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
-        $patients = $clinic->patient->count();
-        if ($request->session()->has('schedule_id')) {
-            $schedule_id = $request->session()->get('schedule_id');
-            $schedule = DoctorSchedule::findOrFail($schedule_id);
-            $request->session()->forget('schedule_id');
-            $patient = $schedule->patient;
-            $doctor = $schedule->user; // This users with the roles of doctor or optimist
-            $appointment = $schedule->appointment;
-            $payment_details = $appointment->payment_detail;
-            $diagnosis = $schedule->diagnosis;
-            if($diagnosis){
-                $lens_power = $diagnosis->lens_power;
-                if($lens_power){
-                    $lens_prescription = $lens_power->lens_prescription;
-                    $frame_prescription = $lens_power->frame_prescription;
-                }else{
-                    $lens_prescription = null;
-                    $frame_prescription = null;
-                }
-                $procedure = $diagnosis->procedure;
-                $appointment = $diagnosis->appointment;
-                $payment_bill = $appointment->payment_bill;
-            }else{
-                $lens_power = null;
+        $schedule = $clinic->doctor_schedule()->findOrFail($schedule_id);
+        $patient = $schedule->patient;
+        $doctor = $schedule->user; // This users with the roles of doctor or optimist
+        $appointment = $schedule->appointment;
+        $payment_details = $appointment->payment_detail;
+        $diagnosis = $schedule->diagnosis;
+        if ($diagnosis) {
+            $lens_power = $diagnosis->lens_power;
+            if ($lens_power) {
+                $lens_prescription = $lens_power->lens_prescription;
+                $frame_prescription = $lens_power->frame_prescription;
+            } else {
                 $lens_prescription = null;
                 $frame_prescription = null;
-                $procedure = null;
-                $appointment = null;
-                $payment_bill = null;
             }
-            $page_title = 'View Schedule';
-            return view('admin.schedules.view', [
-                'page_title' => $page_title,
-                'schedule' => $schedule,
-                'clinic' => $clinic,
-                'patients' => $patients,
-                'patient' => $patient,
-                'doctor' => $doctor,
-                'appointment' => $appointment,
-                'payment_details' => $payment_details,
-                'diagnosis' => $diagnosis,
-                'lens_power' => $lens_power,
-                'lens_prescription' => $lens_prescription,
-                'frame_prescription' => $frame_prescription,
-                'procedure' => $procedure,
-                'payment_bill' => $payment_bill,
-            ]);
+            $procedure = $diagnosis->procedure;
+            $appointment = $diagnosis->appointment;
+            $payment_bill = $appointment->payment_bill;
+        } else {
+            $lens_power = null;
+            $lens_prescription = null;
+            $frame_prescription = null;
+            $procedure = null;
+            $appointment = null;
+            $payment_bill = null;
         }
-        return redirect()->route('admin.doctor.schedules.index', $clinic->id);
+        $page_title = trans('pages.schedule');
+
+        return view('admin.schedules.view', [
+            'page_title' => $page_title,
+            'schedule' => $schedule,
+            'clinic' => $clinic,
+            'patient' => $patient,
+            'doctor' => $doctor,
+            'appointment' => $appointment,
+            'payment_details' => $payment_details,
+            'diagnosis' => $diagnosis,
+            'lens_power' => $lens_power,
+            'lens_prescription' => $lens_prescription,
+            'frame_prescription' => $frame_prescription,
+            'procedure' => $procedure,
+            'payment_bill' => $payment_bill,
+        ]);
     }
 }

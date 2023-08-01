@@ -44,14 +44,24 @@ class UsersController extends Controller
                     return $row['status'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteUsersBtn"><i class="fa fa-trash"></i></a>';
+                    $btn = '<div class="btn-group">';
+                    $btn = $btn . '<button type="button" class="btn btn-default">Action</button>';
+                    $btn = $btn . '<button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">';
+                    $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
+                    $btn = $btn . '</button>';
+                    $btn = $btn . '<div class="dropdown-menu" role="menu">';
+                    $btn = $btn . '<a class="dropdown-item" href="javascript:void(0)">View</a>';
+                    $btn = $btn . '<a class="dropdown-item" href="javascript:void(0)">Deactivate</a>';
+                    $btn = $btn . '<a class="dropdown-item delete deleteUsersBtn" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
+                    $btn = $btn . '</div>';
+                    $btn = $btn . '</div>';
                     return $btn;
                 })
                 ->rawColumns(['action', 'full_names', 'status'])
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Users';
+        $page_title = trans('pages.users');
         return view('admin.users.index', [
             'admin' => $admin,
             'clinic' => $clinic,

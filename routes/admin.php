@@ -383,9 +383,20 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/delete', [InsurancesController::class, 'destroy'])->name('delete');
     });
 
-    Route::prefix('personal')->name('personal.')->group(function () {
+    // admins 
+    Route::prefix('admins')->name('admins.')->group(function(){
 
         Route::get('/index', [AdminsController::class, 'index'])->name('index');
+
+        Route::get('/create', [AdminsController::class, 'create'])->name('create');
+
+        Route::post('/create', [AdminsController::class, 'store']);
+
+    });
+
+    Route::prefix('personal')->name('personal.')->group(function () {
+
+        Route::get('/profile', [AdminsController::class, 'profile'])->name('profile');
 
         Route::post('/update', [AdminsController::class, 'update'])->name('update');
 
@@ -430,9 +441,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::post('/store', [PatientsController::class, 'store'])->name('store');
 
-        Route::post('/show', [PatientsController::class, 'show'])->name('show');
+        Route::get('/{patient_id}/show', [PatientsController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [PatientsController::class, 'view'])->name('view');
+        Route::get('/{id}/{patient_id}/view', [PatientsController::class, 'view'])->name('view');
+
+        Route::get('/{id}/{patient_id}/appointments', [PatientsController::class, 'appointments'])->name('appointments');
+
+        Route::get('/{id}/{patient_id}/schedules', [PatientsController::class, 'schedules'])->name('schedules');
+
+        Route::get('/{id}/{patient_id}/payments', [PatientsController::class, 'payments'])->name('payments');
+
+        Route::get('/{id}/{patient_id}/orders', [PatientsController::class, 'orders'])->name('orders');
 
         Route::get('/{id}/edit', [PatientsController::class, 'edit'])->name('edit');
 
@@ -440,7 +459,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}/export', [PatientsController::class, 'export'])->name('export');
 
-        Route::post('/delete', [PatientsController::class, 'destroy'])->name('delete');
+        Route::delete('/{id}/delete', [PatientsController::class, 'destroy'])->name('delete');
     });
 
     Route::prefix('payments')->name('payments.')->group(function () {
@@ -449,18 +468,19 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             Route::get('/{id}', [PaymentsController::class, 'index'])->name('index');
 
-            Route::post('/show', [PaymentsController::class, 'show'])->name('show');
+            Route::get('/{payment_id}/show', [PaymentsController::class, 'show'])->name('show');
 
-            Route::get('/{id}/view', [PaymentsController::class, 'view'])->name('view');
+            Route::get('/{id}/{payment_id}/view', [PaymentsController::class, 'view'])->name('view');
 
             Route::get('/{id}/print', [PaymentsController::class, 'print'])->name('print');
+
         });
 
         Route::prefix('closed/bills')->name('closed.bills.')->group(function () {
 
             Route::get('/{id}', [ClosedBillsController::class, 'index'])->name('index');
 
-            Route::post('/show', [ClosedBillsController::class, 'show'])->name('show');
+            Route::get('/show', [ClosedBillsController::class, 'show'])->name('show');
 
             Route::get('/{id}/view', [ClosedBillsController::class, 'view'])->name('view');
 
@@ -483,9 +503,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}', [OrdersOrdersController::class, 'index'])->name('index');
 
-        Route::post('/show', [OrdersOrdersController::class, 'show'])->name('show');
+        Route::get('/{order_id}/show', [OrdersOrdersController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [OrdersOrdersController::class, 'view'])->name('view');
+        Route::get('/{id}/{order_id}/view', [OrdersOrdersController::class, 'view'])->name('view');
     });
 
     Route::prefix('payments/details')->name('payments.details.')->group(function () {
@@ -509,9 +529,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}', [SchedulesDoctorSchedulesController::class, 'index'])->name('index');
 
-        Route::post('/show', [SchedulesDoctorSchedulesController::class, 'show'])->name('show');
+        Route::get('/{schedule_id}/show', [SchedulesDoctorSchedulesController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
+        Route::get('/{id}/{schedule_id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
     });
 
     Route::prefix('lens')->name('lens.')->group(function () {
@@ -597,9 +617,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::post('/store', [FramesController::class, 'store'])->name('store');
 
-        Route::post('/show', [FramesController::class, 'show'])->name('show');
+        Route::get('/{id}/show', [FramesController::class, 'show'])->name('show');
 
-        Route::post('/update', [FramesController::class, 'update'])->name('update');
+        Route::post('/{id}/update', [FramesController::class, 'update'])->name('update');
 
         Route::delete('/delete', [FramesController::class, 'destroy'])->name('delete');
     });

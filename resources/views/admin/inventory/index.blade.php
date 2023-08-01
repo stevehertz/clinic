@@ -62,7 +62,7 @@
                 </div>
                 <!-- ./col -->
 
-                <div class="col-lg-3 col-6">
+                {{-- <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-secondary">
                         <div class="inner">
@@ -78,25 +78,7 @@
                         </a>
                     </div>
                 </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $num_received }}</h3>
-
-                            <p>Received Stocks</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-copy"></i>
-                        </div>
-                        <a href="javascript:void(0)" class="small-box-footer receivedStockBtn">
-                            Receive Stock <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- ./col -->
+                <!-- ./col --> --}}
             </div>
 
             <div class="row">
@@ -121,20 +103,12 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
                                         href="#custom-tabs-four-settings" role="tab"
                                         aria-controls="custom-tabs-four-settings" aria-selected="false">Transfer Stocks
                                     </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-five-settings-tab" data-toggle="pill"
-                                        href="#custom-tabs-five-settings" role="tab"
-                                        aria-controls="custom-tabs-five-settings" aria-selected="false">
-                                        Received Stocks
-                                    </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                         <!---.card-header p-0 border-bottom-0-->
@@ -154,7 +128,6 @@
                                                     <th>Opening</th>
                                                     <th>Purchased</th>
                                                     <th>Transfered</th>
-                                                    <th>Received</th>
                                                     <th>Total</th>
                                                     <th>Sold</th>
                                                     <th>Closing</th>
@@ -169,6 +142,7 @@
                                     </div>
 
                                 </div>
+                                <!--/.tab-pane -->
 
                                 <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-messages-tab">
@@ -194,8 +168,9 @@
                                     </div>
 
                                 </div>
+                                <!--/.tab-pane -->
 
-                                <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
+                                {{-- <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-settings-tab">
 
                                     <div class="table-responsive">
@@ -217,32 +192,8 @@
                                         </table>
                                     </div>
 
-                                </div>
-
-                                <div class="tab-pane fade" id="custom-tabs-five-settings" role="tabpanel"
-                                    aria-labelledby="custom-tabs-five-settings-tab">
-
-                                    <div class="table-responsive">
-                                        <table id="frameReceivedData" class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Received Date</th>
-                                                    <th>Frame Code</th>
-                                                    <th>From Clinic</th>
-                                                    <th>To Clinic</th>
-                                                    <th>Quantity</th>
-                                                    <th>Status</th>
-                                                    <th>Condition</th>
-                                                    <th>Remarks</th>
-                                                    <th>Send By(Doctor/Optometrist)</th>
-                                                    <th>Received By(Doctor/Optometrist)</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-
-                                </div>
+                                </div> --}}
+                                <!--/.tab-pane -->
                             </div>
                             <!--.tab-content-->
                         </div>
@@ -752,156 +703,6 @@
         </div>
         <!--.modal -->
 
-        <!-- Received Stock -->
-        <div class="modal fade" id="receivedStockModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Received Stock
-                        </h4>
-
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="receivedStockForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <!--
-                                                will send transfer id to the back
-                                                load frame codes from frame transfers table
-                                                where send to is current clinic
-                                            -->
-                                        <label for="receivedStockTransferId">Frame Code</label>
-                                        <select name="transfer_id" id="receivedStockTransferId"
-                                            class="form-control select2">
-                                            <option disabled selected>Choose Frame Code</option>
-                                            @forelse ($transfers_to_current_clinic as $transfers)
-                                                <option value="{{ $transfers->id }}">
-                                                    {{ $transfers->frame_code }} -
-                                                    {{ $transfers->frame_stock->gender }} -
-                                                    {{ $transfers->frame_stock->frame_color->color }} -
-                                                    {{ $transfers->frame_stock->frame_shape->shape }}
-                                                </option>
-                                            @empty
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="receivedStockDate">
-                                            Received Date
-                                        </label>
-                                        <input type="text" id="receivedStockDate" name="received_date"
-                                            class="form-control datepicker" placeholder="Received Date" />
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                                {{-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="receivedStockQuantity">
-                                            Quantity
-                                        </label>
-                                        <input type="text" id="receivedStockQuantity" name="quantity"
-                                            class="form-control" placeholder="Quantity Transfered" />
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div> --}}
-                            </div>
-                            <!--.row -->
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="receivedStockStatus">
-                                            Received Status
-                                        </label>
-                                        <select name="received_status" id="receivedStockStatus"
-                                            class="form-control select2">
-                                            <option disabled='disabled' selected="selected">Received Status</option>
-                                            <option value="RECEIVED">RECEIVED</option>
-                                            <option value="NOT RECEIVED">NOT RECEIVED</option>
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="receivedStockCondition">
-                                            Stock Condition
-                                        </label>
-                                        <select name="condition" id="receivedStockCondition"
-                                            class="form-control select2">
-                                            <option disabled='disabled' selected="selected">
-                                                Received Stock Condition
-                                            </option>
-                                            <option value="Broken">Broken</option>
-                                            <option value="Irrepairable">Irrepairable</option>
-                                            <option value="Working">Working</option>
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-                            <!--.row -->
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="receivedStockRemarks">
-                                            Remarks
-                                        </label>
-                                        <textarea name="remarks" id="receivedStockRemarks" class="form-control" placeholder="Remarks"></textarea>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-                            </div>
-                            <!--.row -->
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="receivedStockUserId">Doctor/ Optimetrist Confirmed Transfer</label>
-                                        <select name="received_user_id" id="receivedStockUserId"
-                                            class="form-control select2">
-                                            @forelse ($transfer_doctors as $doctor)
-                                                <option value="{{ $doctor->id }}">
-                                                    {{ $doctor->first_name }} {{ $doctor->last_name }}
-                                                </option>
-                                            @empty
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--.row -->
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" id="receivedStockSubmitBtn" class="btn btn-primary">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!--.modal -->
-
     </section><!-- /.content -->
 @endsection
 
@@ -947,10 +748,6 @@
                         {
                             data: 'transfered_stock',
                             name: 'transfered_stock'
-                        },
-                        {
-                            data: 'received_stock',
-                            name: 'received_stock'
                         },
                         {
                             data: 'total_stock',
@@ -1321,130 +1118,6 @@
                             toastr.error(error);
                         });
 
-                    }
-                });
-            });
-
-            // Received Stocks
-            // view all transfered stocks
-            find_received_stocks();
-
-            function find_received_stocks() {
-                let path = '{{ route('admin.frame.received.index', $clinic->id) }}';
-                $('#frameReceivedData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: path,
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'received_date',
-                            name: 'received_date'
-                        },
-                        {
-                            data: 'frame_code',
-                            name: 'frame_code'
-                        },
-                        {
-                            data: 'from_clinic',
-                            name: 'from_clinic'
-                        },
-                        {
-                            data: 'to_clinic',
-                            name: 'to_clinic'
-                        },
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'received_status',
-                            name: 'received_status'
-                        },
-                        {
-                            data: 'condition',
-                            name: 'condition'
-                        },
-                        {
-                            data: 'remarks',
-                            name: 'remarks'
-                        },
-                        {
-                            data: 'send_by',
-                            name: 'send_by'
-                        },
-                        {
-                            data: 'received_by',
-                            name: 'received_by'
-                        }
-                    ],
-                    'responsive': true,
-                    "autoWidth": false,
-                });
-            }
-
-            // receive stock 
-            $(document).on('click', '.receivedStockBtn', function(e) {
-                e.preventDefault();
-                let path = '{{ route('admin.frame.received.check.transfers', $clinic->id) }}';
-                $.ajax({
-                    type: "GET",
-                    url: path,
-                    dataType: "json",
-                    success: function(data) {
-                        if (data['status']) {
-                            $('#receivedStockModal').modal('show');
-                        }
-                    },
-                    error: function(error) {
-                        $.each(error.responseJSON.errors, function(i, error) {
-                            toastr.error(error);
-                        });
-                    }
-                });
-            });
-
-            $('#receivedStockForm').submit(function(e) {
-                e.preventDefault();
-                let path = '{{ route('admin.frame.received.store') }}';
-                let formData = new FormData($(this)[0]);
-                $.ajax({
-                    url: path,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('#receivedStockSubmitBtn').html(
-                            '<i class="fa fa-spinner fa-spin"></i>'
-                        );
-                        $('#receivedStockSubmitBtn').attr('disabled', true);
-                    },
-                    complete: function() {
-                        $('#receivedStockSubmitBtn').html('Save');
-                        $('#receivedStockSubmitBtn').attr('disabled', false);
-                    },
-                    success: function(data) {
-                        if (data['status']) {
-                            toastr.success(data['message']);
-                            $('#receivedStockForm')[0].reset();
-                            $('#receivedStockModal').modal('hide');
-                            $('#frameReceivedData').DataTable().ajax.reload();
-                            $('#purchasedStocks').DataTable().ajax.reload();
-                            $('#frameStocksData').DataTable().ajax.reload();
-                            $('#framesData').DataTable().ajax.reload();
-                            $('#frameTransferData').DataTable().ajax.reload();
-                            location.reload();
-                        }
-                    },
-                    error: function(error) {
-                        $.each(error.responseJSON.errors, function(i, error) {
-                            toastr.error(error);
-                        });
                     }
                 });
             });

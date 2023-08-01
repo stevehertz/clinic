@@ -97,12 +97,16 @@ class OrdersController extends Controller
 
         $lens_power = LensPower::find($data['lens_power_id']);
 
+        // find frame prescription (Frame selected)
         $frame_prescription = FramePrescription::findOrFail($lens_power->frame_prescription->id);
 
+        // Quantity of frames selected
         $quantity = $frame_prescription->quantity;
 
+        // find the frame in stock
         $frame_stock = FrameStock::findOrFail($frame_prescription->stock_id);
 
+        // update quantity
         $opening = $frame_stock->opening_stock;
 
         $purchased = $frame_stock->purchase_stock;
@@ -115,7 +119,7 @@ class OrdersController extends Controller
 
         $closing = $total - $sold;
         
-
+        // remove the frame from stock
         $frame_stock->update([
             'opening_stock' => $opening,
             'purchase_stock' => $purchased,
@@ -125,6 +129,7 @@ class OrdersController extends Controller
             'closing_stock' => $closing
         ]);
 
+        // create order
         $order = $payment_bill->order()->create([
             'clinic_id' => $payment_bill->clinic_id,
             'patient_id' => $payment_bill->patient_id,

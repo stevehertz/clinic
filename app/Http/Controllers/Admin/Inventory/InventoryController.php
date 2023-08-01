@@ -29,7 +29,6 @@ class InventoryController extends Controller
         $num_frame_stocks = $clinic->frame_stock->count(); // number of frame stocks
         $num_frame_purchases = $clinic->frame_purchase->count(); // num of frame purchases
         $num_transfers = $clinic->frame_transfer_from->count(); // num of frame transfers
-        $num_received = $clinic->frame_received_to->count();
         $frame_colors = $organization->frame_color->sortBy('created_at', SORT_DESC);
         $frame_shapes = $organization->frame_shape->sortBy('created_at', SORT_DESC);
         $frames = $organization->frame->sortBy('created_at', SORT_DESC);
@@ -47,7 +46,6 @@ class InventoryController extends Controller
             'num_stocks' => $num_frame_stocks,
             'num_purchases' => $num_frame_purchases,
             'num_transfers' => $num_transfers,
-            'num_received' => $num_received,
             'frame_colors' => $frame_colors,
             'frame_shapes' => $frame_shapes,
             'clinic_frames' => $frames,
