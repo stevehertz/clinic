@@ -1,92 +1,9 @@
 @extends('admin.layouts.temp')
 
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Reports</h1>
-                    <small>{{ $clinic->clinic }}</small>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">Reports</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
+    
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="{{ route('admin.reports.export', $clinic->id) }}" method="GET">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" name="from_date" id="fromDate"
-                                                placeholder="Enter From Date" class="form-control datepicker">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" name="to_date" id="toDate"
-                                                placeholder="Enter Date Date" class="form-control datepicker">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="button" name="filter" id="filter"
-                                            class="btn btn-primary">Filter</button>
-                                        <button type="button" name="refresh" id="refresh"
-                                            class="btn btn-default">Refresh</button>
-
-                                        <button type="submit" class="btn btn-primary">
-                                            Get Excel
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body table-responsive">
-                            <table id="reportsData" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Date</th>
-                                        <th>Patient</th>
-                                        <th>Appointment Date</th>
-                                        <th>Client Type</th>
-                                        <th>Insurance Name</th>
-                                        <th>Scheme Name</th>
-                                        <th>Scheduled Date</th>
-                                        <th>Consultation Amount</th>
-                                        <th>Agreed Amount</th>
-                                        <th>Doctor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div><!-- /.card-body -->
-                    </div><!-- /.card -->
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section><!-- /.content -->
+    
 @endsection
 
 @section('scripts')
@@ -95,67 +12,7 @@
 
             find_reports();
 
-            function find_reports(from_date = '', to_date = '') {
-                var path = '{{ route('admin.reports.index', $clinic->id) }}';
-                $('#reportsData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: path,
-                        data: {
-                            from_date: from_date,
-                            to_date: to_date
-                        }
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'date_in',
-                            name: 'date_in'
-                        },
-                        {
-                            data: 'full_name',
-                            name: 'full_name'
-                        },
-                        {
-                            data: 'appointment_date',
-                            name: 'appointment_date'
-                        },
-                        {
-                            data: 'type',
-                            name: 'type'
-                        },
-                        {
-                            data: 'insurance',
-                            name: 'insurance'
-                        },
-                        {
-                            data: 'scheme',
-                            name: 'scheme'
-                        },
-                        {
-                            data: 'scheduled_date',
-                            name: 'scheduled_date'
-                        },
-                        {
-                            data: 'consultation_fee',
-                            name: 'consultation_fee'
-                        },
-                        {
-                            data: 'agreed_amount',
-                            name: 'agreed_amount'
-                        },
-                        {
-                            data: 'doctor_full_name',
-                            name: 'doctor_full_name'
-                        },
-                    ],
-                    'responsive': true,
-                    'autoWidth': false,
-                });
-            };
+            
 
             $(document).on('click', '#filter', function(e) {
                 e.preventDefault();

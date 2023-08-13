@@ -6,5 +6,9 @@ return [
     'schedule' => 'Doctors Schedule',
     'payments' => 'Payments/Billing',
     'orders' => 'Orders',
-    'users' => 'Doctors/Optometrists'
+    'users' => 'Doctors/Optometrists',
+    'reports' => [
+        'orders' => 'Orders Report',
+        'clinic-main' => 'Main Report'
+    ]
 ]; 

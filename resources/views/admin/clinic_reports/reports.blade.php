@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Clinic</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Clinic Name</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Patient Names</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Phone Number</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Email Address</th>
@@ -13,9 +13,10 @@
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Appointment Date</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Client Type</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Insurance</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Insurance Card Number</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Scheme Name</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Scheduled Date</th>
-            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Doctor</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Doctor/Optometrist</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Signs</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Symptoms</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Diagnosis</th>
@@ -69,6 +70,13 @@
                     @if ($report->payment_detail)
                         @if ($report->payment_detail->insurance)
                             {{ $report->payment_detail->insurance->title }}
+                        @endif
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_detail)
+                        @if ($report->payment_detail->insurance)
+                            {{ $report->payment_detail->card_number }}
                         @endif
                     @endif
                 </td>

@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Appointments</h1>
+                    <h1>Orders Report</h1>
                     <small>{{ $clinic->clinic }}</small>
                 </div>
                 <div class="col-sm-6">
@@ -13,21 +13,28 @@
                         <li class="breadcrumb-item">
                             <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Appointments</li>
+                        <li class="breadcrumb-item active">Orders Report</li>
                     </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fa fa-calendar"></i>
+                                Daily Report
+                            </h3>
+                        </div>
+                        <!--/.card-header -->
+
                         <div class="card-body">
-                            <form action="{{ route('admin.appointments.export', $clinic->id) }}" method="GET">
+                            <form action="#" method="GET">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -48,7 +55,7 @@
                                             class="btn btn-default">Refresh</button>
 
                                         <button type="submit" class="btn btn-primary">
-                                            Get PDF
+                                            Get Excel
                                         </button>
                                     </div>
 
@@ -57,21 +64,24 @@
                         </div>
                     </div>
                 </div>
+                <!--/.col -->
             </div>
+            <!--/.row -->
 
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body table-responsive">
-                            <table id="appointmentsData" class="table table-bordered table-striped table-hover">
+                            <table id="ordersReportData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Full Names</th>
+                                        <th></th>
                                         <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Client Type</th>
+                                        <th>Receipt #</th>
+                                        <th>Clinic </th>
+                                        <th>Patient</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Workshop</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,57 +89,59 @@
                             </table>
                         </div><!-- /.card-body -->
                     </div><!-- /.card -->
-
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </section><!-- /.content -->
+    </section>
+    <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
-            find_appointments();
-            function find_appointments(from_date, to_date) {
-                var path = '{{ route('admin.appointments.index', $clinic->id) }}';
-                $('#appointmentsData').DataTable({
+
+            find_orders();
+
+            function find_orders(order_id, status) {
+                var path = '{{ route('admin.order.reports.index', $clinic->id) }}';
+                $('#ordersReportData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url:path,
-                        data:{
-                            from_date: from_date,
-                            to_date: to_date,
+                        url: path,
+                        data: {
+                            order_id: order_id,
+                            status: status
                         }
                     },
                     columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'order_date',
+                            name: 'order_date'
+                        },
+                        {
+                            data: 'receipt_number',
+                            name: 'receipt_number',
+                        },
+                        {
+                            data: 'clinic',
+                            name: 'clinic',
+                        },
+                        {
                             data: 'full_names',
-                            name: 'full_names'
+                            name: 'full_names',
                         },
                         {
-                            data: 'date',
-                            name: 'date',
+                            data: 'status',
+                            name: 'status'
                         },
                         {
-                            data: 'appointment_time',
-                            name: 'appointment_time'
-                        },
-                        {
-                            data: 'type',
-                            name: 'type'
-                        },
-                        {
-                            data: 'appointment_status',
-                            name: 'appointment_status',
-                            orderable: false,
-                            searchable: false,
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false,
+                            data: 'workshop',
+                            name: 'workshop'
                         },
                     ],
                     "autoWidth": false,
@@ -137,50 +149,6 @@
                 });
             }
 
-            // filter
-            $(document).on('click', '#filter', function(e){
-                e.preventDefault();
-                var from_date = $('#fromDate').val();
-                var to_date = $('#toDate').val();
-                if (from_date != '' && to_date != '') {
-                    $('#appointmentsData').DataTable().destroy();
-                    find_appointments(from_date, to_date);
-                } else {
-                    toastr.error('Both Date is required');
-                }
-            });
-
-            // refresh afrter filter
-            $(document).on('click', '#refresh', function(e) {
-                e.preventDefault();
-                $('#fromDate').val('');
-                $('#toDate').val('')
-                $('#appointmentsData').DataTable().destroy();
-                find_appointments();
-            });
-
-            $(document).on('click', '.viewAdminAppointmentBtn', function(e){
-                e.preventDefault();
-                let appointment_id = $(this).data('id');
-                let path = '{{ route('admin.appointments.show', ':appointment_id') }}';
-                path = path.replace(':appointment_id', appointment_id);
-                $.ajax({
-                    url: path,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        if(data['status']){
-                            let url = '{{ route('admin.appointments.view', [':id', ':appointment_id']) }}';
-                            url = url.replace(':id', {{ $clinic->id }})
-                            url = url.replace(':appointment_id', data['data']['id']);
-                            setTimeout(() => {
-                                window.location.href = url;
-                            }, 1000);
-                        }
-                    },
-                });
-            });
-
         });
     </script>
-@endsection
+@endpush

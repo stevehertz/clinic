@@ -1,25 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Reports;
+namespace App\Http\Controllers\Admin\Reports\Clinics;
 
-use App\Exports\ClinicReports;
-use App\Exports\ReportsExport;
-use App\Http\Controllers\Controller;
 use App\Models\Clinic;
+use App\Models\Workshop;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ClinicReports;
+use App\Http\Controllers\Controller;
 
 class ReportsController extends Controller
 {
-    //
+
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request, $id)
     {
-        # code...
+        //
         $clinic = Clinic::findOrFail($id);
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
@@ -29,33 +33,25 @@ class ReportsController extends Controller
             } else {
                 $data = $clinic->report()->latest()->get();
             }
+
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('date_in', function($row){
+                ->addColumn('date_in', function ($row) {
                     return date('d-m-Y', strtotime($row->patient->date_in));
                 })
                 ->addColumn('full_name', function ($row) {
                     return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
-                ->addColumn('appointment_date', function ($row) {
-                    return date('d-m-Y', strtotime($row->appointment_date));
-                })
+
                 ->addColumn('type', function ($row) {
                     if ($row->payment_detail) {
                         return $row->payment_detail->client_type->type;
                     }
                 })
-                ->addColumn('insurance', function($row){
+                ->addColumn('insurance', function ($row) {
                     if ($row->payment_detail) {
                         if ($row->payment_detail->insurance) {
                             return $row->payment_detail->insurance->title;
-                        }
-                    }
-                })
-                ->addColumn('scheme', function($row){
-                    if ($row->payment_detail) {
-                        if ($row->payment_detail->insurance) {
-                            return $row->payment_detail->scheme;
                         }
                     }
                 })
@@ -69,35 +65,84 @@ class ReportsController extends Controller
                         return $row->doctor_schedule->user->first_name . ' ' . $row->doctor_schedule->user->last_name;
                     }
                 })
+                ->addColumn('scheme', function ($row) {
+                    if ($row->payment_detail) {
+                        if ($row->payment_detail->insurance) {
+                            return $row->payment_detail->scheme;
+                        }
+                    }
+                })
+
+                ->addColumn('order_date', function ($row) {
+                    if ($row->order) {
+                        return date('d F Y', strtotime($row->order->order_date));
+                    }
+                })
+
+                ->addColumn('order_status', function ($row) {
+                    if ($row->order) {
+                        return $row->order->status;
+                    }
+                })
+
+
+                ->addColumn('workshop', function ($row) {
+                    $order = $row->order;
+                    if($order)
+                    {
+                        $workshop_id = $order->workshop_id;
+                        $workshop = Workshop::findorfail($workshop_id)->first();
+                        if($workshop)
+                        {
+                            return $workshop->name;
+                        }
+                    }
+                })
+
+
                 ->rawColumns([
                     'date_in',
                     'full_name',
-                    'appointment_date',
                     'type',
                     'insurance',
                     'scheme',
                     'scheduled_date',
                     'doctor_full_name',
+                    'order_date',
+                    'order_status',
                 ])
                 ->make(true);
         }
-        $patients = $clinic->patient->count();
-        $page_title = "reports";
-        $sub_page = "main-reports";
-        return view('admin.reports.index', [
+        $page_title = trans('pages.reports.clinic-main');
+        return view('admin.reports.clinic.main-report', [
             'clinic' => $clinic,
-            'patients' => $patients,
-            'page_title' => $page_title,
-            'sub_page' => $sub_page
+            'page_title' => $page_title
         ]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Export a newly report
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function export(Request $request, $id)
     {
-        # code...
+        //
         $clinic = Clinic::findOrFail($id);
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
         return (new ClinicReports($clinic->id, $from_date, $to_date))->download('reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
+
 }

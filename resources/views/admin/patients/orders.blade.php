@@ -102,27 +102,30 @@
                                                 </button>
                                             </div>
                                             <!--/.col -->
-
-                                            <div class="col-12">
-                                                <div class="table-responsive">
-                                                    <table id="ordersData" class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th>Order #</th>
-                                                                <th>Date</th>
-                                                                <th>Receipt #</th>
-                                                                <th>Clinic</th>
-                                                                <th>Status</th>
-                                                                <th>Workshop</th>
-                                                                <th>View</th>
-                                                            </tr>
-                                                        </thead>
-                                                    </table>
-                                                </div>
+                                        </div>
+                                        <!--/.row -->
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="ordersData" class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Order #</th>
+                                                            <th>Date</th>
+                                                            <th>Receipt #</th>
+                                                            <th>Clinic</th>
+                                                            <th>Status</th>
+                                                            <th>Workshop</th>
+                                                            <th>View</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -223,31 +226,25 @@
                 e.preventDefault();
                 let order_id = $('#orderNumberSelect').val();
                 let status = $('#orderStatusSelect').val();
-                if(order_id != null && status != null){
+                if (order_id != null && status != null) {
                     $('#ordersData').DataTable().destroy();
                     find_orders(status, order_id)
                 }
 
-                if(order_id == null && status != null){
+                if (order_id == null && status != null) {
                     $('#ordersData').DataTable().destroy();
                     find_orders(status, order_id)
                 }
 
-                if(order_id != null && status == null){
+                if (order_id != null && status == null) {
                     $('#ordersData').DataTable().destroy();
                     find_orders(status, order_id)
                 }
 
-                if(order_id == null && status == null){
+                if (order_id == null && status == null) {
                     toastr.error('Please select one')
                 }
             });
-
-            if (status != '') {
-                    $('#ordersData').DataTable().destroy();
-                    find_orders(status);
-                }
-
             $(document).on('click', '#orderRefreshBtn', function(e) {
                 $('#orderStatusSelect').val('');
                 $('#ordersData').DataTable().destroy();

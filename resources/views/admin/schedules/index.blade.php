@@ -95,20 +95,18 @@
 
             $(document).on('click', '.viewDoctorSchedule', function(e){
                 e.preventDefault();
-                var schedule_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.doctor.schedules.show') }}';
+                let schedule_id = $(this).data('id');
+                let path = '{{ route('admin.doctor.schedules.show', ':schedule_id') }}';
+                path = path.replace(':schedule_id', schedule_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        schedule_id: schedule_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType:"json",
                     success:function(data){
                         if(data['status']){
-                            let url = '{{ route('admin.doctor.schedules.view', $clinic->id) }}';
+                            let url = '{{ route('admin.doctor.schedules.view', [':id', ':schedule_id']) }}';
+                            url = url.replace(':id', {{ $clinic->id }});
+                            url = url.replace(':schedule_id', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);

@@ -97,6 +97,7 @@
                 <!-- /.col-md-6 -->
             </div>
             <!-- /.row -->
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -160,45 +161,36 @@
                 </div>
             </div>
             <!--/.row -->
+
         </div>
         <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
             $(document).on('click', '.viewAppointmentBtn', function(e) {
                 e.preventDefault();
-                var appointment_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.appointments.show') }}';
+                let appointment_id = $(this).data('id');
+                let path = '{{ route('admin.appointments.show', ':appointment_id') }}';
+                path = path.replace(':appointment_id', appointment_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        appointment_id: appointment_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('admin.appointments.view', $clinic->id) }}';
+                            let url =
+                                '{{ route('admin.appointments.view', [':id', ':appointment_id']) }}';
+                            url = url.replace(':id', {{ $clinic->id }});
+                            url = url.replace(':appointment_id', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     }
                 });
             });
@@ -281,7 +273,7 @@
             }
 
             find_remittance_report();
-
+            
             function find_remittance_report() {
                 var $visitorsChart = $('#visitors-chart');
                 var visitorsChart = new Chart($visitorsChart, {
@@ -350,6 +342,7 @@
                 });
             }
 
+
         });
     </script>
-@endsection
+@endpush

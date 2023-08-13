@@ -23,7 +23,7 @@
                                 Profile</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.patients.index', $clinic->id) }}">
+                            <a href="{{ route('admin.doctor.schedules.index', $clinic->id) }}">
                                 Doctors Schedules
                             </a>
                         </li>

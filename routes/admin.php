@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
-use App\Http\Controllers\Admin\Reports\ReportsController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
@@ -48,6 +47,7 @@ use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Assets\AssetConditionsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
+use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
@@ -57,6 +57,7 @@ use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
+use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
@@ -223,10 +224,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::delete('/{id}/delete', [FrameShapesController::class, 'destroy'])->name('delete');
                 });
 
-                Route::prefix('all')->name('all.')->group(function(){
+                Route::prefix('all')->name('all.')->group(function () {
 
                     Route::get('index', [FramesController::class, 'index'])->name('index');
-
                 });
             });
 
@@ -384,14 +384,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // admins 
-    Route::prefix('admins')->name('admins.')->group(function(){
+    Route::prefix('admins')->name('admins.')->group(function () {
 
         Route::get('/index', [AdminsController::class, 'index'])->name('index');
 
         Route::get('/create', [AdminsController::class, 'create'])->name('create');
 
         Route::post('/create', [AdminsController::class, 'store']);
-
     });
 
     Route::prefix('personal')->name('personal.')->group(function () {
@@ -473,7 +472,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::get('/{id}/{payment_id}/view', [PaymentsController::class, 'view'])->name('view');
 
             Route::get('/{id}/print', [PaymentsController::class, 'print'])->name('print');
-
         });
 
         Route::prefix('closed/bills')->name('closed.bills.')->group(function () {
@@ -508,6 +506,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/{order_id}/view', [OrdersOrdersController::class, 'view'])->name('view');
     });
 
+    // Orders Reports
+    Route::prefix('orders/report')->name('order.reports.')->group(function () {
+
+        Route::get('/{id}', [OrdersReportsController::class, 'index'])->name('index');
+        
+    });
+
+
     Route::prefix('payments/details')->name('payments.details.')->group(function () {
 
         Route::post('/store', [PaymentDetailsController::class, 'store'])->name('store');
@@ -517,9 +523,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}', [AppointmentsController::class, 'index'])->name('index');
 
-        Route::post('/show', [AppointmentsController::class, 'show'])->name('show');
+        Route::get('/{appointment_id}/show', [AppointmentsController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [AppointmentsController::class, 'view'])->name('view');
+        Route::get('/{id}/{appointment_id}/view', [AppointmentsController::class, 'view'])->name('view');
 
         Route::get('/{id}/export', [AppointmentsController::class, 'export'])->name('export');
     });
@@ -625,10 +631,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // Inventory
-    Route::prefix('inventory')->name('inventory.')->group(function(){
+    Route::prefix('inventory')->name('inventory.')->group(function () {
 
         Route::get('/{id}', [InventoryController::class, 'index'])->name('index');
-
     });
 
     // frame stocks
@@ -665,14 +670,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // frames received
-    Route::prefix('frame/received')->name('frame.received.')->group(function(){
+    Route::prefix('frame/received')->name('frame.received.')->group(function () {
 
         Route::get('/{id}', [ReceivedFramesController::class, 'index'])->name('index');
 
         Route::get('/{id}/check/transfers', [ReceivedFramesController::class, 'check_stock_transfered'])->name('check.transfers');
 
         Route::post('/store', [ReceivedFramesController::class, 'store'])->name('store');
-
     });
 
 
@@ -714,14 +718,15 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/delete', [UsersUsersController::class, 'destroy'])->name('delete');
     });
 
-    // Reports
-    Route::prefix('reports')->name('reports.')->group(function () {
-
-        Route::get('/{id}/export', [ReportsController::class, 'export'])->name('export');
+    Route::prefix('reports/main')->name('reports.main.')->group(function(){
 
         Route::get('/{id}', [ReportsController::class, 'index'])->name('index');
+
+        Route::get('/{id}/exports', [ReportsController::class, 'export'])->name('exports');
+
     });
 
+    
     // Technicians
     Route::prefix('workshop/technicians')->name('workshop.technicians.')->group(function () {
 

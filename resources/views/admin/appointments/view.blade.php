@@ -285,34 +285,22 @@
 
             $(document).on('click', '.viewScheduleBtn', function(e) {
                 e.preventDefault();
-                var schedule_id = $(this).attr('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.doctor.schedules.show') }}';
+                let schedule_id = $(this).attr('id');
+                let path = '{{ route('admin.doctor.schedules.show', ':schedule_id') }}';
+                path = path.replace(':schedule_id', schedule_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        schedule_id: schedule_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
                         if(data['status']){
-                            let url = '{{ route('admin.doctor.schedules.view', ':id') }}';
-                            url = url.replace(':id', data['data']['clinic_id']);
+                            let url = '{{ route('admin.doctor.schedules.view', [':id', ':schedule_id']) }}';
+                            url = url.replace(':id', {{ $clinic->id }});
+                            url = url.replace(':schedule_id', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     }
                 });
             });

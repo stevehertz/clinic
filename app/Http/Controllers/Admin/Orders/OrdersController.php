@@ -22,30 +22,54 @@ class OrdersController extends Controller
         # code...
         $clinic = Clinic::findOrFail($id);
         if ($request->ajax()) {
-            $data = $clinic->order()
-                ->join('clinics', 'clinics.id', '=', 'orders.clinic_id')
-                ->join('patients', 'patients.id', '=', 'orders.patient_id')
-                ->join('workshops', 'workshops.id', '=', 'orders.workshop_id')
-                ->select('orders.*', 'clinics.clinic', 'patients.first_name as patient_first', 'patients.last_name as patient_last', 'workshops.name as workshop')
-                ->orderBy('orders.created_at', 'desc')
-                ->get();
+            if (!empty($request->order_id) && !empty($request->status)) {
+                $data = $clinic->order()
+                    ->where('id', $request->order_id)
+                    ->where('status', $request->status)
+                    ->latest()
+                    ->get();
+            } elseif (!empty($request->order_id) && empty($request->status)) {
+                $data = $clinic->order()
+                    ->where('id', $request->order_id)
+                    ->latest()
+                    ->get();
+            } elseif (empty($request->order_id) && !empty($request->status)) {
+                $data = $clinic->order()
+                    ->where('status', $request->status)
+                    ->latest()
+                    ->get();
+            } else {
+                $data = $clinic->order()
+                    ->latest()
+                    ->get();
+            }
+
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
-                    return $row->patient_first . ' ' . $row->patient_last;
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('order_date', function($row){
+                    return date('d, F, Y', strtotime($row->order_date));
+                })
+                ->addColumn('clinic', function($row){
+                    return $row->clinic->clinic;
+                })
+                ->addColumn('workshop', function($row){
+                    return $row->workshop->name;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'full_names'])
+                ->rawColumns(['action', 'full_names', 'order_date', 'clinic', 'workshop'])
                 ->make(true);
         }
-        $patients = $clinic->patient->count();
+        $orders = $clinic->order()->latest()->get();
         $page_title = trans('pages.orders');
         return view('admin.orders.clinics.index', [
             'clinic' => $clinic,
-            'patients' => $patients,
+            'orders' => $orders,
             'page_title' => $page_title,
         ]);
     }

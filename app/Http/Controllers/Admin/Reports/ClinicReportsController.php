@@ -69,6 +69,9 @@ class ClinicReportsController extends Controller
                 ->addColumn('consultation_fee', function ($row) {
                     return number_format($row->consultation_fee, 2, '.', ',');
                 })
+                ->addColumn('claimed_amount', function ($row) {
+                    return number_format($row->claimed_amount, 2, '.', ',');
+                })
                 ->addColumn('agreed_amount', function ($row) {
                     return number_format($row->agreed_amount, 2, '.', ',');
                 })
@@ -77,12 +80,22 @@ class ClinicReportsController extends Controller
                 })
                 ->addColumn('order_date', function ($row) {
                     if ($row->order) {
-                        return date('d-m-Y', strtotime($row->order->order_date));
+                        return date('d F Y', strtotime($row->order->order_date));
                     }
                 })
                 ->addColumn('order_status', function ($row) {
                     if ($row->order) {
-                        return date('d-m-Y', strtotime($row->order->status));
+                        return date('d F Y', strtotime($row->order->status));
+                    }
+                })
+                ->addColumn('workshop', function($row){
+                    if ($row->order) {
+                        $order = $row->order;
+                        $workshop = $order->workshop;
+                        if($workshop)
+                        {
+                            return $workshop->name;
+                        }
                     }
                 })
                 ->rawColumns([
@@ -92,9 +105,11 @@ class ClinicReportsController extends Controller
                     'scheduled_date',
                     'doctor_full_name',
                     'consultation_fee',
+                    'claimed_amount',
                     'agreed_amount',
                     'order_date',
-                    'order_status'
+                    'order_status',
+                    'workshop'
                 ])
                 ->make(true);
         }

@@ -34,7 +34,7 @@ class ClinicReports implements FromView
         } else {
             $data = Report::where('clinic_id', $this->clinic_id)->latest()->get();
         }
-        return view('admin.reports.reports', [
+        return view('admin.reports.clinic.reports', [
             'reports' => $data
         ]);
     }

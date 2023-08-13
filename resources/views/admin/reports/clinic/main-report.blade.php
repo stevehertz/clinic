@@ -1,19 +1,19 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.temp')
 
 @section('content')
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Clinic Reports</h1>
+                    <h1>Reports</h1>
+                    <small>{{ $clinic->clinic }}</small>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.organization.index') }}">Home</a>
+                            <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Clinic Reports</li>
+                        <li class="breadcrumb-item active">Reports</li>
                     </ol>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('admin.clinics.reports.export') }}" method="GET">
+                            <form action="{{ route('admin.reports.main.exports', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -65,22 +65,21 @@
                             <table id="reportsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Clinic Name</th>
+                                        <th>#</th>
+                                        <th>Date</th>
                                         <th>Patient Name</th>
-                                        <th>Appointment Date</th>
                                         <th>Client Type</th>
-                                        <th>Insurance Name</th>
-                                        <th>Scheme Name</th>
+                                        <th>Insurance</th>
                                         <th>Scheduled Date</th>
-                                        <th>Doctor / Optometrist</th>
-                                        <th>Bill Status</th>
+                                        <th>Doctor/Optometrist</th>
+                                        <th>Bill status</th>
                                         <th>Consultation Fee</th>
                                         <th>Claimed Amount</th>
                                         <th>Agreed Amount</th>
                                         <th>Paid Amount</th>
                                         <th>Order Date</th>
                                         <th>Order Status</th>
-                                        <th>Workshop Name</th>
+                                        <th>Workshop</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,13 +93,13 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
             find_reports();
             function find_reports(from_date = '', to_date = '') {
-                var path = '{{ route('admin.clinics.reports.index') }}';
+                var path = '{{ route('admin.reports.main.index', $clinic->id) }}';
                 $('#reportsData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -111,18 +110,17 @@
                             to_date: to_date
                         }
                     },
-                    columns: [
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
                         {
-                            data:"clinic",
-                            name: "clinic",
+                            data: 'date_in',
+                            name: 'date_in'
                         },
                         {
                             data: 'full_name',
                             name: 'full_name'
-                        },
-                        {
-                            data: 'appointment_date',
-                            name: 'appointment_date'
                         },
                         {
                             data: 'type',
@@ -131,10 +129,6 @@
                         {
                             data: 'insurance',
                             name: 'insurance'
-                        },
-                        {
-                            data: 'scheme',
-                            name: 'scheme'
                         },
                         {
                             data: 'scheduled_date',
@@ -175,35 +169,13 @@
                         {
                             data: 'workshop',
                             name: 'workshop'
-                        }
+                        },
                     ],
                     'responsive': true,
                     'autoWidth': false,
                 });
-            }
-
-            $(document).on('click', '#filter', function(e) {
-                e.preventDefault();
-                var from_date = $('#fromDate').val();
-                var to_date = $('#toDate').val();
-                if (from_date != '' && to_date != '') {
-                    $('#reportsData').DataTable().destroy();
-                    find_reports(from_date, to_date);
-                } else {
-                    toastr.error('Both Date is required');
-                }
-            });
-
-            $(document).on('click', '#refresh', function(e) {
-                e.preventDefault();
-                $('#fromDate').val('');
-                $('#toDate').val('')
-                $('#reportsData').DataTable().destroy();
-                find_reports();
-            });
-
-
+            };
 
         });
     </script>
-@endsection
+@endpush

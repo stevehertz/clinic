@@ -178,17 +178,17 @@
                 <li class="nav-header">REPORTS</li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.reports.index', $clinic->id) }}"
-                        class="nav-link @if ($page_title == 'reports') active @endif">
+                    <a href="{{ route('admin.reports.main.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.reports.clinic-main')) active @endif">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            Main Report
+                            @lang('pages.reports.clinic-main')
                         </p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.reports.index', $clinic->id) }}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
                             Payments Report
@@ -197,7 +197,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.reports.index', $clinic->id) }}" class="nav-link">
+                    <a href="{{ route('admin.order.reports.index', $clinic->id) }}"
+                        class="nav-link @if ($page_title == trans('pages.reports.orders')) active @endif">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
                             Orders Report

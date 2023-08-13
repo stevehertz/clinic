@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Appointments;
 
 use App\Exports\AppointmentsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Appointment as ResourcesAppointment;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
@@ -69,62 +70,37 @@ class AppointmentsController extends Controller
         return view('admin.appointments.index', compact('clinic', 'page_title', 'patients'));
     }
 
-    public function show(Request $request)
+    public function show($appointment_id)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'appointment_id' => 'required|integer|exists:appointments,id',
-        ]);
-
-        if ($validator->fails()) {
-            # code...
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $appointment = Appointment::findOrFail($data['appointment_id']);
-        $request->session()->put('appointment_id', $appointment->id);
-
-        $response['status'] = true;
-        $response['data'] = $appointment;
-        return response()->json($response, 200);
+        $appointment = Appointment::findOrFail($appointment_id);
+        return new ResourcesAppointment($appointment);
     }
 
-    public function view(Request $request, $id)
+    public function view($id, $appointment_id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
-        $patients = $clinic->patient->count();
-        if ($request->session()->has('appointment_id')) {
-            $appointment = Appointment::findOrFail($request->session()->get('appointment_id'));
-            $request->session()->forget('appointment_id');
-            $patient = $appointment->patient;
-            $payment_details = $appointment->payment_detail;
-            $doctor_schedule = $appointment->doctor_schedule;
-            $page_title = 'View Appointment';
-            return view('admin.appointments.view', [
-                'clinic' => $clinic,
-                'patients' => $patients,
-                'appointment' => $appointment,
-                'patient' => $patient,
-                'payment_details' => $payment_details,
-                'doctor_schedule' => $doctor_schedule,
-                'page_title' => $page_title,
-            ]);
-        }
-        return redirect()->route('admin.appointments.index', $clinic->id);
+        $appointment = Appointment::findOrFail($appointment_id);
+        $patient = $appointment->patient;
+        $payment_details = $appointment->payment_detail;
+        $doctor_schedule = $appointment->doctor_schedule;
+        $page_title = 'View Appointment';
+        return view('admin.appointments.view', [
+            'clinic' => $clinic,
+            'appointment' => $appointment,
+            'patient' => $patient,
+            'payment_details' => $payment_details,
+            'doctor_schedule' => $doctor_schedule,
+            'page_title' => $page_title,
+        ]);
     }
-
     public function export(Request $request, $id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
-        return (new AppointmentsExport($clinic->id, $from_date, $to_date))->download('appointments'.time().'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        return (new AppointmentsExport($clinic->id, $from_date, $to_date))->download('appointments' . time() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 }
