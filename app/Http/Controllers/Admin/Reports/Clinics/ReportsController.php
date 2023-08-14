@@ -43,6 +43,10 @@ class ReportsController extends Controller
                     return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
 
+                ->addColumn('card_number', function ($row) {
+                    return $row->patient->card_number;
+                })
+
                 ->addColumn('type', function ($row) {
                     if ($row->payment_detail) {
                         return $row->payment_detail->client_type->type;
@@ -118,16 +122,6 @@ class ReportsController extends Controller
             'clinic' => $clinic,
             'page_title' => $page_title
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**

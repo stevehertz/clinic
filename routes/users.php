@@ -92,6 +92,10 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}/view', [PatientsPatientsController::class, 'view'])->name('view');
 
+        Route::get('/{id}/appointments', [PatientsPatientsController::class, 'appointments'])->name('appointments');
+
+        Route::get('/{id}/schedules', [PatientsPatientsController::class, 'schedules'])->name('schedules');
+
         Route::get('/{id}/edit', [PatientsPatientsController::class, 'edit'])->name('edit');
 
         Route::post('/{id}/edit', [PatientsPatientsController::class, 'update']);

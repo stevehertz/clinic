@@ -148,6 +148,7 @@ to get the desired effect
         });
     </script>
     @yield('scripts')
+    @stack('scripts')
 
 </body>
 

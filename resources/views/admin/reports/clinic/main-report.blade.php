@@ -68,6 +68,7 @@
                                         <th>#</th>
                                         <th>Date</th>
                                         <th>Patient Name</th>
+                                        <th>Card Number</th>
                                         <th>Client Type</th>
                                         <th>Insurance</th>
                                         <th>Scheduled Date</th>
@@ -121,6 +122,10 @@
                         {
                             data: 'full_name',
                             name: 'full_name'
+                        },
+                        {
+                            data: 'card_number',
+                            name: 'card_number'
                         },
                         {
                             data: 'type',

@@ -129,6 +129,16 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="newPatientCardNumber">Card Number</label>
+                                            <input type="text" class="form-control" name="card_number"
+                                                id="newPatientCardNumber" placeholder="Enter card number">
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                             <!-- /.card-body -->
 

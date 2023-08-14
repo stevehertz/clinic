@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Clinic</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Card Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Patient Names</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Phone Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Email Address</th>
@@ -52,6 +53,7 @@
         @forelse ($reports as $report)
             <tr>
                 <td>{{ $report->clinic->clinic }}</td>
+                <td>{{ $report->patient->card_number }}</td>
                 <td>{{ $report->patient->first_name }} {{ $report->patient->last_name }}</td>
                 <td>{{ $report->patient->phone }}</td>
                 <td>{{ $report->patient->email }}</td>

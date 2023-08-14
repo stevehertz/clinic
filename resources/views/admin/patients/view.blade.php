@@ -182,8 +182,22 @@
                             </div>
                         </div>
                         <!--/.col -->
+
+                        <div class="col-md-6">
+                            <div class="callout callout-info">
+                                <h5>
+                                    Card Number
+                                </h5>
+
+                                <p>
+                                   {{ $patient->card_number  }}
+                                </p>
+                            </div>
+                        </div>
+                        <!--/.col -->
                     </div>
                     <!--/.row -->
+                    
                 </div>
                 <!-- /.col -->
             </div>

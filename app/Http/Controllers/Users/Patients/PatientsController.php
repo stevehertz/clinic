@@ -93,6 +93,7 @@ class PatientsController extends Controller
             'dob' => 'required|string|max:255|date_format:Y-m-d',
             'gender' => 'required|string',
             'next_of_kin_contact' => 'nullable|numeric|min:10',
+            'card_number' => 'required|unique:patients,card_number',
         ], [
             'dob.date_format' => 'Date of Birth Must Match The Format: Y-m-d'
         ]);
@@ -121,6 +122,7 @@ class PatientsController extends Controller
         $patient->next_of_kin = $data['next_of_kin'];
         $patient->next_of_kin_contact = $data['next_of_kin_contact'];
         $patient->date_in = Carbon::now()->format('Y-m-d');
+        $patient->card_number = $clinic->initials.''.$data['card_number'];
 
         if ($patient->save()) {
             $request->session()->put('patient_id', $patient->id);
@@ -160,17 +162,49 @@ class PatientsController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         $patient = Patient::findOrFail($id);
-        $appointments = $patient->appointment->sortBy('created_at', SORT_DESC);
-        $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->get();
-        $schedules = $patient->docor_schedule->sortBy('created_at', SORT_DESC);
         $page_title = 'View Patient';
+        $patient_sidebar = trans('patient.profile');
         return view('users.patients.view', [
             'page_title' => $page_title,
             'clinic' => $clinic,
             'patient' => $patient,
-            'appointments' => $appointments,
+            'patient_sidebar' => $patient_sidebar
+        ]);
+    }
+
+    public function appointments($id) 
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
+        $patient = Patient::findOrFail($id);
+        $appointments = $patient->appointment->sortBy('created_at', SORT_DESC);
+        $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->get();
+        $page_title = trans('pages.patients');
+        $patient_sidebar = trans('patient.appointment');
+        return view('users.patients.appointment', [
+            'page_title' => $page_title,
             'doctors' => $doctors,
+            'clinic' => $clinic,
+            'patient' => $patient,
+            'appointments' => $appointments,
+            'patient_sidebar' => $patient_sidebar
+        ]);
+    }
+
+    public function schedules($id) 
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
+        $patient = Patient::findOrFail($id);
+        $schedules = $patient->docor_schedule->sortBy('created_at', SORT_DESC);
+        $page_title = trans('pages.patients');
+        $patient_sidebar = trans('patient.schedule');
+        return view('users.patients.schedules', [
+            'page_title' => $page_title,
             'schedules' => $schedules,
+            'clinic' => $clinic,
+            'patient' => $patient,
+            'patient_sidebar' => $patient_sidebar
         ]);
     }
 
@@ -195,6 +229,8 @@ class PatientsController extends Controller
     public function update(Request $request, $id)
     {
         # code...
+        $patient = Patient::findOrFail($id);
+
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -207,6 +243,7 @@ class PatientsController extends Controller
             'dob' => 'required|string|max:255|date_format:Y-m-d',
             'gender' => 'required|string',
             'next_of_kin_contact' => 'nullable|numeric|min:10',
+            'card_number' => 'required|unique:patients,card_number, ' . $patient->id,
         ], [
             'dob.date_format' => 'Date of Birth Must Match The Format: Y-m-d'
         ]);
@@ -219,8 +256,6 @@ class PatientsController extends Controller
         }
 
         $clinic = Clinic::findOrFail($data['clinic_id']);
-
-        $patient = $clinic->patient()->findOrFail($id);
 
         $patient->id = $patient->id;
         $patient->user_id = $patient->user_id; //doctor id
@@ -236,6 +271,7 @@ class PatientsController extends Controller
         $patient->next_of_kin = $data['next_of_kin'];
         $patient->next_of_kin_contact = $data['next_of_kin_contact'];
         $patient->updated_by = Auth::user()->id;
+        $patient->card_number = $clinic->initials.''.$data['card_number'];
 
         $patient->save();
 
