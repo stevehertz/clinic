@@ -69,8 +69,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview @if ($page_title == trans('pages.payments')) menu-open @endif">
+                    <a href="#" class="nav-link @if ($page_title == trans('pages.payments')) active @endif">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
                             Payments/ Billing
@@ -79,21 +79,21 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.payments.bills.index', $clinic->id) }}" class="nav-link">
+                            <a href="{{ route('admin.payments.bills.index', $clinic->id) }}" class="nav-link @if (isset($payments_page) && $payments_page == trans('pages.payment_subpage.payments')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Payments</p>
+                                <p>@lang('pages.payment_subpage.payments')</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.payments.closed.bills.index', $clinic->id) }}" class="nav-link">
+                            <a href="{{ route('admin.payments.closed.bills.index', $clinic->id) }}" class="nav-link @if (isset($payments_page) && $payments_page == trans('pages.payment_subpage.closed')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Closed Bills</p>
+                                <p>@lang('pages.payment_subpage.closed')</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.payments.remittance.index', $clinic->id) }}" class="nav-link">
+                            <a href="{{ route('admin.payments.remittance.index', $clinic->id) }}" class="nav-link @if (isset($payments_page) && $payments_page == trans('pages.payment_subpage.remittance')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Remittance</p>
+                                <p>@lang('pages.payment_subpage.remittance')</p>
                             </a>
                         </li>
                     </ul>

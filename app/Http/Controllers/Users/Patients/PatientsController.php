@@ -28,9 +28,12 @@ class PatientsController extends Controller
         $clinic = $user->clinic;
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
-                $data = $clinic->patient()->whereBetween('date_in', [$request->from_date, $request->to_date])->latest();
+                $data = $clinic->patient()
+                ->where('status', 1)
+                ->whereBetween('date_in', [$request->from_date, $request->to_date])
+                ->latest();
             } else {
-                $data = $clinic->patient->sortBy('created_at', SORT_DESC);
+                $data = $clinic->patient()->where('status', 1)->latest();
             }
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -54,7 +57,7 @@ class PatientsController extends Controller
                 ->rawColumns(['full_names', 'action'])
                 ->make(true);
         }
-        $page_title = 'Patients';
+        $page_title = trans('pages.patients');
         return view('users.patients.index', [
             'page_title' => $page_title,
             'clinic' => $clinic,

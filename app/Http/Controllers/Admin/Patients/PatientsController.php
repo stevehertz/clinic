@@ -45,6 +45,14 @@ class PatientsController extends Controller
                 ->addColumn('doctor_full_names', function ($row) {
                     return $row->user->first_name . ' ' . $row->user->last_name;
                 })
+                ->addColumn('status', function($row){
+                    if($row->status)
+                    {
+                        return 'ACTIVE';
+                    }else{
+                        return "IN-ACTIVE";
+                    }
+                })
                 ->addColumn('added_by', function ($row) {
                     return $row->user->first_name . ' ' . $row->user->last_name;
                 })
@@ -230,6 +238,33 @@ class PatientsController extends Controller
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
         return (new PatientsReport($clinic->id, $from_date, $to_date))->download('patients' . time() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+    }
+
+    public function activate($patient_id)
+    {
+        $patient = Patient::findOrFail($patient_id);
+
+        $patient->update([
+            'status' => 1
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'Patient activated successfully';
+        return response()->json($response, 200);
+    }
+
+
+    public function deactivate($patient_id)
+    {
+        $patient = Patient::findOrFail($patient_id);
+
+        $patient->update([
+            'status' => 0
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'Patient deactivated successfully';
+        return response()->json($response, 200);
     }
 
     public function destroy($id)

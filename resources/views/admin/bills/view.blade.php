@@ -15,7 +15,8 @@
                             <a href="{{ route('admin.dashboard.index', $clinic->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.patients.payments', [$clinic->id, $payment_bill->patient->id]) }}">Patient Profile</a>
+                            <a href="{{ route('admin.patients.payments', [$clinic->id, $payment_bill->patient->id]) }}">Patient
+                                Profile</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{ route('admin.payments.bills.index', $clinic->id) }}">Payments</a>
@@ -67,7 +68,12 @@
                                         {{ $payment_bill->patient->last_name }}</strong><br>
                                     {{ $payment_bill->patient->address }}<br>
                                     Phone: {{ $payment_bill->patient->phone }}<br>
-                                    Email: {{ $payment_bill->patient->email }}
+                                    Email: {{ $payment_bill->patient->email }} <br>
+                                    @if ($payment_bill->payment_detail->client_type->type == 'Insurance')
+                                        Insurance Name: {{ $payment_bill->payment_detail->insurance->title }}<br>
+                                        Scheme Name: {{ $payment_bill->payment_detail->scheme }}<br>
+                                    @endif
+
                                 </address>
                             </div>
                             <!-- /.col -->
@@ -281,29 +287,18 @@
                 $.ajax({
                     url: path,
                     type: 'GET',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
                     dataType: 'json',
                     success: function(data) {
-                        let url = '{{ route('admin.payments.bills.print', $clinic->id) }}';
-                        window.open(url, '_blank');
+                        let printUrl = '{{ route('admin.payments.bills.print', [':id', ':payment_id']) }}';
+                        printUrl = printUrl.replace(':id', {{ $clinic->id }});
+                        printUrl = printUrl.replace(':payment_id', data['data']['id']);
+                        window.open(printUrl, '_blank');
                     },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
                 });
             });
 
             // view order
-            $(document).on('click', '.viewOrderBtn', function(e){
+            $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
                 let order_id = $(this).data('id');
                 let path = '{{ route('admin.orders.show', ':order_id') }}';

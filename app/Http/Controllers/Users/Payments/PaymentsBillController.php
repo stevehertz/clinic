@@ -117,7 +117,7 @@ class PaymentsBillController extends Controller
             'schedule_id' => 'required|integer|exists:doctor_schedules,id',
             'claimed_amount' => 'required|numeric|min:0',
             'consultation_fee' => 'required|numeric|min:0',
-            'consultation_receipt' => 'required',
+            'consultation_receipt' => 'required|numeric|unique:payment_bills,consultation_receipt_number',
             'remarks' => 'nullable|string|max:255',
         ]);
 
@@ -144,7 +144,7 @@ class PaymentsBillController extends Controller
         $open_date = date('Y-m-d');
         $payment_bill->open_date = Carbon::createFromFormat('Y-m-d', $open_date)->format('Y-m-d');
         $payment_bill->consultation_fee = $data['consultation_fee'];
-        $payment_bill->consultation_receipt_number = $data['consultation_receipt'];
+        $payment_bill->consultation_receipt_number = $doctor_schedule->clinic->initials . '/' . $data['consultation_receipt'];
 
         if ($data['claimed_amount'] == 0) {
             $approval_status = "CLOSED";
@@ -324,7 +324,7 @@ class PaymentsBillController extends Controller
         $validator = Validator::make($data, [
             'bill_id' => 'required|integer|exists:payment_bills,id',
             'consultation_fee' => 'required|numeric',
-            'consultation_receipt' => 'required',
+            'consultation_receipt' => 'required|unique:payment_bills,consultation_receipt_number,' . $data['bill_id'],
         ]);
 
         if ($validator->fails()) {
@@ -340,7 +340,7 @@ class PaymentsBillController extends Controller
 
         $payment_bill->id = $payment_bill->id;
         $payment_bill->consultation_fee = $data['consultation_fee'];
-        $payment_bill->consultation_receipt_number = $data['consultation_receipt'];
+        $payment_bill->consultation_receipt_number = $payment_bill->clinic->initials . '/' . $data['consultation_receipt'];
         $payment_bill->bill_status = 'PENDING';
         $payment_bill->agreed_amount = $payment_bill->consultation_fee;
         $payment_bill->total_amount = $payment_bill->agreed_amount;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
+use App\Http\Controllers\Users\Auth\AccountController;
 use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswordController;
 use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPasswordController;
@@ -43,7 +44,19 @@ Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
     Route::post('reset/password/store', [AuthResetPasswordController::class, 'store'])->name('reset.password.store');
 });
 
-Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
+Route::middleware(['auth:web', 'preventBackHistory'])->group(function(){
+
+    Route::get('/deactivate/account', [AccountController::class, 'index'])->name('deactivate.account');
+
+    Route::prefix('/users')->name('users.')->group(function () {
+
+        Route::post('/logout', [UsersController::class, 'logout'])->name('logout');
+        
+    });
+
+});
+
+Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(function () {
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
@@ -77,7 +90,6 @@ Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
 
         Route::post('/update/password', [UsersController::class, 'update_password'])->name('update.password');
 
-        Route::post('/logout', [UsersController::class, 'logout'])->name('logout');
     });
 
     Route::prefix('patients')->name('patients.')->group(function () {

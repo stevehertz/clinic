@@ -5,6 +5,11 @@ return [
     'appointments' => 'Appointments',
     'schedule' => 'Doctors Schedule',
     'payments' => 'Payments/Billing',
+    'payment_subpage' => [
+        'payments' => 'Payments',
+        'closed' => 'Closed Bills',
+        'remittance' => 'Remittance'
+    ],
     'orders' => 'Orders',
     'users' => 'Doctors/Optometrists',
     'reports' => [

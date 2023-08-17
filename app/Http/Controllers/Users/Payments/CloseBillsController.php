@@ -25,12 +25,12 @@ class CloseBillsController extends Controller
         if ($request->ajax()) {
 
             $data = $clinic->payment_bill()->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
-                    ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
-                    ->select('payment_bills.*', 'patients.first_name', 'patients.last_name')
-                    ->where('payment_bills.bill_status', '=', 'CLOSED')
-                    ->where('doctor_schedules.user_id', $user->id)
-                    ->orderBy('payment_bills.id', 'desc')
-                    ->get();
+                ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
+                ->select('payment_bills.*', 'patients.first_name', 'patients.last_name')
+                ->where('payment_bills.bill_status', '=', 'CLOSED')
+                ->where('doctor_schedules.user_id', $user->id)
+                ->orderBy('payment_bills.id', 'desc')
+                ->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
@@ -66,7 +66,7 @@ class CloseBillsController extends Controller
 
         $validator = Validator::make($data, [
             'bill_id' => 'required|integer|exists:payment_bills,id',
-            'invoice_number' => 'required',
+            'invoice_number' => 'required|unique:payment_bills,invoice_number,' . $data['bill_id'],
             'close_date' => 'required|date',
         ]);
 
@@ -85,7 +85,7 @@ class CloseBillsController extends Controller
 
         $payment_bill->id = $payment_bill->id;
         $payment_bill->open_date = $payment_bill->open_date;
-        $payment_bill->invoice_number = $data['invoice_number'];
+        $payment_bill->invoice_number = $clinic->initials . '/' . $data['invoice_number'];
         $payment_bill->lpo_number = $data['lpo_number'];
         $payment_bill->bill_status = 'CLOSED';
         $payment_bill->close_date = $data['close_date'];

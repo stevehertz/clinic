@@ -161,3 +161,86 @@
         });
     </script>
 @endpush
+
+@push('patients_script')
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.deactivatePatientBtn', function(e) {
+                e.preventDefault();
+                let patient_id = $(this).data('id');
+                let path = '{{ route('admin.patients.deactivate', ':id') }}';
+                path = path.replace(':id', patient_id);
+                let token = '{{ csrf_token() }}';
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You are going to deactivate current patient",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "POST",
+                            data: {
+                                patient_id: patient_id,
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 500);
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '.activatePatientBtn', function(e) {
+                e.preventDefault();
+                let patient_id = $(this).data('id');
+                let path = '{{ route('admin.patients.activate', ':id') }}';
+                path = path.replace(':id', patient_id);
+                let token = '{{ csrf_token() }}';
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You are going to activate current patient",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "POST",
+                            data: {
+                                patient_id: patient_id,
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 500);
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
+

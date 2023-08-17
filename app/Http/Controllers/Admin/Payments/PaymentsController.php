@@ -25,6 +25,7 @@ class PaymentsController extends Controller
                 ->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
                 ->select('payment_bills.*', 'patients.first_name as patient_first', 'patients.last_name as patient_last')
                 ->where('payment_bills.bill_status', '!=', 'CLOSED')
+                ->where('patients.status', 1)
                 ->orderBy('payment_bills.id', 'desc')
                 ->get();
             return datatables()->of($data)
@@ -56,9 +57,11 @@ class PaymentsController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Payments Bill';
+        $page_title = trans('pages.payments');
+        $payments_page = trans('pages.payment_subpage.payments');
         return view('admin.bills.index', [
             'page_title' => $page_title,
+            'payments_page' => $payments_page,
             'clinic' => $clinic,
             'patients' => $patients,
         ]);
@@ -80,31 +83,30 @@ class PaymentsController extends Controller
         # code...
         $clinic = Clinic::findOrFail($id);
         $payment_bill = PaymentBill::findOrFail($payment_id);
-        $page_title = 'View Bill';
+        $page_title = trans('pages.payments');
+        $payments_page = trans('pages.payment_subpage.payments');
         return view('admin.bills.view', [
             'clinic' => $clinic,
             'payment_bill' => $payment_bill,
             'page_title' => $page_title,
+            'payments_page' => $payments_page,
         ]);
     }
 
-    public function print(Request $request, $id)
+    public function print($id, $payment_id)
     {
         # code...
         $clinic = Clinic::findOrFail($id);
         $patients = $clinic->patient->count();
-        if ($request->session()->has('bill_id')) {
-            $bill_id = $request->session()->get('bill_id');
-            $payment_bill = PaymentBill::findOrFail($bill_id);
-            $request->session()->forget('bill_id');
-            $page_title = 'View Bill';
-            return view('admin.bills.print', [
-                'payment_bill' => $payment_bill,
-                'page_title' => $page_title,
-                'clinic' => $clinic,
-                'patients' => $patients,
-            ]);
-        }
+        $payment_bill = PaymentBill::findOrFail($payment_id);
+        $page_title = trans('pages.payments');
+        return view('admin.bills.print', [
+            'payment_bill' => $payment_bill,
+            'page_title' => $page_title,
+            'clinic' => $clinic,
+            'patients' => $patients,
+        ]);
+
         return redirect()->route('admin.payments.bills.index', $clinic->id);
     }
 }

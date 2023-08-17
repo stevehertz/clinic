@@ -267,7 +267,7 @@
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
                                     $('#techniciansData').DataTable().ajax.reload();
-                                } 
+                                }
                             }
                         });
                     } else if (result.isDenied) {
@@ -277,6 +277,97 @@
 
             });
 
+            $(document).on('click', '.deactivateTechnicianBtn', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You are going to deactivate Technician account!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        let technician_id = $(this).data('id');
+                        let path = "{{ route('admin.workshop.technicians.update.status', ':id') }}";
+                        path = path.replace(':id', technician_id);
+                        let status = $(this).data('status');
+                        let token = '{{ csrf_token() }}';
+                        $.ajax({
+                            url: path,
+                            type: "POST",
+                            data: {
+                                status: status,
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    $('#techniciansData').DataTable().ajax.reload();
+                                }
+                            },
+                            error: function(data) {
+                                var errors = data.responseJSON;
+                                var errorsHtml = '<ul>';
+                                $.each(errors['errors'], function(key, value) {
+                                    errorsHtml += '<li>' + value + '</li>';
+                                });
+                                errorsHtml += '</ul>';
+                                toastr.error(errorsHtml);
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '.activateTechnicianBtn', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You are going to activate Technician account!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        let technician_id = $(this).data('id');
+                        let path = "{{ route('admin.workshop.technicians.update.status', ':id') }}";
+                        path = path.replace(':id', technician_id);
+                        let status = $(this).data('status');
+                        let token = '{{ csrf_token() }}';
+                        $.ajax({
+                            url: path,
+                            type: "POST",
+                            data: {
+                                status: status,
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    Swal.fire(data['message'], '', 'success')
+                                    $('#techniciansData').DataTable().ajax.reload();
+                                }
+                            },
+                            error: function(data) {
+                                var errors = data.responseJSON;
+                                var errorsHtml = '<ul>';
+                                $.each(errors['errors'], function(key, value) {
+                                    errorsHtml += '<li>' + value + '</li>';
+                                });
+                                errorsHtml += '</ul>';
+                                toastr.error(errorsHtml);
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
 
         });
     </script>

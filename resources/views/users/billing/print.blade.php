@@ -56,7 +56,12 @@
                             {{ $payment_bill->patient->last_name }}</strong><br>
                         {{ $payment_bill->patient->address }}<br>
                         Phone: {{ $payment_bill->patient->phone }}<br>
-                        Email: {{ $payment_bill->patient->email }}
+                        Email: {{ $payment_bill->patient->email }}<br>
+                        @if ($payment_bill->payment_detail->client_type->type == 'Insurance')
+                            Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
+                            Scheme: {{ $payment_bill->payment_detail->scheme }}
+                        @endif
+
                     </address>
                 </div>
                 <!-- /.col -->

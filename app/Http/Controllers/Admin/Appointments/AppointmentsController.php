@@ -32,6 +32,7 @@ class AppointmentsController extends Controller
                     ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
                     ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
                     ->where('appointments.clinic_id', $clinic->id)
+                    ->where('patients.status', 1)
                     ->whereBetween('appointments.date', [$request->from_date, $request->to_date])
                     ->get();
             } else {
@@ -41,6 +42,7 @@ class AppointmentsController extends Controller
                     ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
                     ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
                     ->where('appointments.clinic_id', $clinic->id)
+                    ->where('patients.status', 1)
                     ->orderBy('appointments.created_at', 'desc')
                     ->get();
             }

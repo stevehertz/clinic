@@ -24,7 +24,7 @@ class BillingController extends Controller
             'bill_id' => 'required|integer|exists:payment_bills,id',
             'item' => 'required|string',
             'amount' => 'required|string',
-            'receipt' => 'required|string',
+            'receipt' => 'required|string|unique:payment_bills,receipt_number',
             'date' => 'required|date',
         ]);
 
@@ -44,10 +44,12 @@ class BillingController extends Controller
             return response()->json($response, 401);
         }
 
+        $clinic = $payment_bill->clinic;
+
         $payment_bill->billing()->create([
             'item' => $data['item'],
             'amount' => $data['amount'],
-            'receipt_number' => $data['receipt'],
+            'receipt_number' => $clinic->initials.'/'.$data['receipt'],
             'date' => $data['date'],
         ]);
 

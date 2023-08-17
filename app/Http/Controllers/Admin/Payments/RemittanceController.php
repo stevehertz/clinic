@@ -56,11 +56,13 @@ class RemittanceController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Remittance';
+        $page_title = trans('pages.payments');
+        $payments_page = trans('pages.payment_subpage.remittance');
         return view('admin.remittance.index', [
             'clinic' => $clinic,
             'patients' => $patients,
             'page_title' => $page_title,
+            'payments_page' => $payments_page,
         ]);
     }
 

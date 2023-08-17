@@ -29,9 +29,22 @@
 
             <hr>
 
-            <a href="{{ route('admin.patients.orders', [$clinic->id, $patient->id]) }}" class="text-dark @if (isset($patient_sidebar) && $patient_sidebar == 'orders') active @endif">
+            <a href="{{ route('admin.patients.orders', [$clinic->id, $patient->id]) }}"
+                class="text-dark @if (isset($patient_sidebar) && $patient_sidebar == 'orders') active @endif">
                 <i class="fa fa-cubes mr-1"></i> Orders
             </a>
+
+            <hr>
+            @if (!$patient->status)
+                <button type="button" data-id="{{ $patient->id }}" class="btn btn-block btn-outline-success activatePatientBtn">
+                    Activate
+                </button>
+            @else
+                <button type="button" data-id="{{ $patient->id }}"
+                    class="btn btn-block btn-outline-danger deactivatePatientBtn">
+                    Deactivate
+                </button>
+            @endif
 
         </div>
         <!--/.card-body -->

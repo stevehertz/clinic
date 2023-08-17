@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Users\UpdateStatusRequest;
 use App\Mail\UsersMail;
 use App\Models\Admin;
 use App\Models\Clinic;
@@ -50,9 +51,14 @@ class UsersController extends Controller
                     $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
                     $btn = $btn . '</button>';
                     $btn = $btn . '<div class="dropdown-menu" role="menu">';
-                    $btn = $btn . '<a class="dropdown-item" href="javascript:void(0)">View</a>';
-                    $btn = $btn . '<a class="dropdown-item" href="javascript:void(0)">Deactivate</a>';
-                    $btn = $btn . '<a class="dropdown-item delete deleteUsersBtn" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
+                    //$btn = $btn . '<a class="dropdown-item viewUserBtn" href="javascript:void(0)" data-id="' . $row->id . '">View</a>';
+                    if($row->status){
+                        $btn = $btn . '<a class="dropdown-item deactivateBtn" data-status="0" href="javascript:void(0)" data-id="' . $row->id . '">Deactivate</a>';
+                    }else{
+                        $btn = $btn . '<a class="dropdown-item activateBtn" data-status="1" href="javascript:void(0)" data-id="' . $row->id . '">Activate</a>';
+                    }
+                    
+                    // $btn = $btn . '<a class="dropdown-item delete deleteUsersBtn" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
                     $btn = $btn . '</div>';
                     $btn = $btn . '</div>';
                     return $btn;
@@ -134,9 +140,15 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($user_id)
     {
         //
+        $user = User::findOrFail($user_id);
+        $response = [
+            'status' => true,
+            'data' => $user
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -157,9 +169,30 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update_status(UpdateStatusRequest $request, $user_id)
     {
         //
+        $user = User::findOrFail($user_id);
+        
+        $data = $request->except("_token");
+
+        $user->update([
+            'status' => $data['status']
+        ]);
+
+        if($data['status'] == 1)
+        {
+            $message = 'You have successfully activated current account';
+        }else {
+            $message = 'You have successfully deactivated current account';
+        }
+
+        $response = [
+            'status' => true,
+            'message' => $message
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**

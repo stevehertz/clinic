@@ -62,7 +62,7 @@
 
             find_payments_bill();
 
-            function find_payments_bill(){
+            function find_payments_bill() {
                 var path = '{{ route('admin.payments.bills.index', $clinic->id) }}';
                 $('#paymentsBillsData').DataTable({
                     processing: true,
@@ -124,35 +124,25 @@
                 });
             }
 
-            $(document).on('click', '.viewPaymentBill', function(e){
+            $(document).on('click', '.viewPaymentBill', function(e) {
                 e.preventDefault();
                 var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.payments.bills.show') }}';
+                var path = '{{ route('admin.payments.bills.show', ':payment_id') }}';
+                path = path.replace(':payment_id', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
-                    success: function(data){
-                        if(data['status']){
-                            let url = '{{ route('admin.payments.bills.view', $clinic->id) }}';
+                    success: function(data) {
+                        if (data['status']) {
+                            let billPath =
+                                '{{ route('admin.payments.bills.view', [':id', ':payment_id']) }}';
+                            billPath = billPath.replace(':id', {{ $clinic->id }});
+                            billPath = billPath.replace(':payment_id', data['data']['id']);
                             setTimeout(() => {
-                                window.location.href = url;
-                            }, 1000);
+                                window.location.href = billPath;
+                            }, 500);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     }
                 });
             });

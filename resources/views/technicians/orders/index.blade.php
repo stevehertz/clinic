@@ -27,6 +27,30 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
+                    <div class="form-group">
+                        <select id="orderStatusSelect" class="form-control select2" style="width: 100%;">
+                            <option selected="selected" disabled="disabled">
+                                Select status
+                            </option>
+                            <option value="SENT TO WORKSHOP">SENT TO WORKSHOP</option>
+                            <option value="FRAME SENT TO WORKSHOP">FRAME SENT TO WORKSHOP
+                            </option>
+                            <option value="ORDER RECEIVED">ORDER RECEIVED</option>
+                            <option value="FRAME RECEIVED">FRAME RECEIVED</option>
+                            <option value="GLAZING">GLAZING</option>
+                            <option value="RIGHT LENS GLAZED">RIGHT LENS GLAZED</option>
+                            <option value="GLAZED">GLAZED</option>
+                            <option value="SEND TO CLINIC">SEND TO CLINIC</option>
+                            <option value="RECEIVED FROM WORKSHOP">RECEIVED FROM WORKSHOP
+                            </option>
+                            <option value="CALL FOR COLLECTION">CALL FOR COLLECTION</option>
+                            <option value="FRAME COLLECTED">FRAME COLLECTED</option>
+                            <option value="CLOSED">CLOSED</option>
+                        </select>
+                    </div>
+                    <!-- /.form-group -->
+                </div>
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body table-responsive">
                             <table id="ordersData" class="table table-bordered table-striped table-hover">
@@ -59,13 +83,18 @@
         $(document).ready(function() {
 
             find_orders();
-            function find_orders()
-            {
+
+            function find_orders(status) {
                 let path = '{{ route('technicians.orders.index') }}';
                 $('#ordersData').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: path,
+                    ajax: {
+                        url:path,
+                        data:{
+                            status:status
+                        }
+                    },
                     "responsive": true,
                     "autoWidth": false,
                     columns: [{
@@ -99,7 +128,17 @@
                 });
             }
 
-            $(document).on('click', '.viewOrderBtn', function(e){
+            $(document).on('change', '#orderStatusSelect', function(e){
+                e.preventDefault();
+                let status = $(this).val();
+                if(status != null)
+                {
+                    $('#ordersData').DataTable().destroy();
+                    find_orders(status);
+                }
+            });
+
+            $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
                 let order_id = $(this).data('id');
                 let path = '{{ route('technicians.orders.show', ':id') }}';
@@ -109,11 +148,11 @@
                     type: "POST",
                     url: path,
                     data: {
-                        _token:token
+                        _token: token
                     },
                     dataType: "json",
-                    success: function (data) {
-                        if(data['status']){
+                    success: function(data) {
+                        if (data['status']) {
                             let order_url = '{{ route('technicians.orders.view', ':id') }}';
                             order_url = order_url.replace(':id', data['data']['id']);
                             setTimeout(() => {

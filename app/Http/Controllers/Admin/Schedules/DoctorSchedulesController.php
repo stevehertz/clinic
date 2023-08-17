@@ -26,6 +26,7 @@ class DoctorSchedulesController extends Controller
                 ->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
                 ->join('users', 'users.id', '=', 'doctor_schedules.user_id')
                 ->select('doctor_schedules.*', 'users.first_name as dr_first', 'users.last_name as dr_last', 'patients.first_name  as patient_first', 'patients.last_name as patient_last')
+                ->where('patients.status', 1)
                 ->latest()
                 ->get();
             return datatables()->of($data)

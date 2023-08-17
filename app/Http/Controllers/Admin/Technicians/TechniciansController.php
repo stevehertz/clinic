@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Technicians;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Users\UpdateStatusRequest;
 use App\Mail\TechnicianNotification;
 use App\Mail\TechniciansMail;
 use App\Models\Admin;
@@ -41,7 +42,15 @@ class TechniciansController extends Controller
                     return $row['status'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteTechnicianBtn"><i class="fa fa-trash"></i></a>';
+                    if ($row->status) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-status="0"  data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-danger btn-sm deactivateTechnicianBtn">';
+                        $btn = $btn . 'DEACTIVATE';
+                        $btn = $btn . '</a>';
+                    } else {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-status="1" data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-success btn-sm activateTechnicianBtn">';
+                        $btn = $btn . 'ACTIVATE';
+                        $btn = $btn . '</a>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action', 'full_names', 'status'])
@@ -68,7 +77,7 @@ class TechniciansController extends Controller
             'status' => 'required|boolean',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -112,20 +121,47 @@ class TechniciansController extends Controller
         return response()->json($response);
     }
 
+    public function update_status(UpdateStatusRequest $request, $id) 
+    {
+        $technician = Technician::findOrFail($id);
+
+        $data = $request->except("_token");
+
+        $technician->update([
+            'status' => $data['status'],
+        ]);
+
+        if($data['status'])
+        {
+            $message = "You have succeccfully activated technician account";
+        } else {
+            $message = "You have succeccfully deactivated technician account";
+        }
+
+        $response = [
+            'status' => true,
+            'message' => $message
+        ];
+
+        return response()->json($response, 200);
+    }
+
     public function destroy($id)
     {
         # code...
         $technician = Technician::findOrFail($id);
-        if($technician->profile != 'noimage.png'){
-            Storage::delete('public/technicians/'. $technician->profile);
+        if ($technician->profile != 'noimage.png') {
+            Storage::delete('public/technicians/' . $technician->profile);
         }
         $technician->delete();
 
-        $details['name'] = $technician->first_name." ". $technician->last_name;
+        $details['name'] = $technician->first_name . " " . $technician->last_name;
 
         Mail::to($technician->email)->cc('info@saiseyeclinics.com')->send(new TechnicianNotification($details));
 
         $response['status'] = true;
         $response['message'] = "You have successfully removed technician";
     }
+
+    
 }

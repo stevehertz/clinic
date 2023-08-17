@@ -28,7 +28,12 @@ class OrdersController extends Controller
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
         $workshop = $technician->workshop;
         if ($request->ajax()) {
-            $data = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
+            if(!empty($request->status))
+            {
+                $data = $workshop->order->where('status', '!=', 'APPROVED')->where('status', '=', $request->status)->sortBy('created_at', SORT_DESC);
+            }else{
+                $data = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
+            }
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('patient', function ($row) {

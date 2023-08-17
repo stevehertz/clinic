@@ -71,6 +71,7 @@
                                         <th>ID Number</th>
                                         <th>Telephone</th>
                                         <th>Email</th>
+                                        <th>Status</th>
                                         <th>Added By</th>
                                         <th>Action</th>
                                     </tr>
@@ -86,7 +87,6 @@
         </div><!-- /.container-fluid -->
     </section><!-- /.content -->
 @endsection
-
 
 @push('scripts')
     <script>
@@ -125,6 +125,10 @@
                         {
                             data: 'email',
                             name: 'email'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
                         },
                         {
                             data: 'added_by',

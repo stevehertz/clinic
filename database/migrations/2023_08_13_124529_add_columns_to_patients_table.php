@@ -29,6 +29,8 @@ return new class extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
             //
+            $table->dropColumn('status');
+            $table->dropColumn('card_number');
         });
     }
 };

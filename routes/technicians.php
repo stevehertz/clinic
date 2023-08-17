@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Technicians\Assets\AssetsController;
 use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
+use App\Http\Controllers\Technicians\Auth\AccountController;
 use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
@@ -21,6 +22,19 @@ Route::middleware(['guest:technician', 'preventBackHistory'])->group(function ()
 
 Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () {
 
+    Route::get('/inactive/account', [AccountController::class, 'index'])->name('inactive.account');
+
+    Route::prefix('technicians')->name('technicians.')->group(function () {
+
+        Route::post('/logout', [TechniciansController::class, 'logout'])->name('logout');
+
+    });
+
+});
+
+Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountStatus'])->group(function () {
+
+    // Dashboard Routes...
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
         Route::get('/index', [DashboardController::class, 'index'])->name('index');
@@ -34,8 +48,6 @@ Route::middleware(['auth:technician', 'preventBackHistory'])->group(function () 
         Route::post('/update', [TechniciansController::class, 'update'])->name('update');
 
         Route::post('/update/password', [TechniciansController::class, 'update_password'])->name('update.password');
-
-        Route::post('/logout', [TechniciansController::class, 'logout'])->name('logout');
 
     });
 

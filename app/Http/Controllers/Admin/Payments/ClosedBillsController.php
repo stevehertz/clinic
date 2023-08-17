@@ -24,6 +24,7 @@ class ClosedBillsController extends Controller
             $data = $clinic->payment_bill()->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
                 ->select('payment_bills.*', 'patients.first_name', 'patients.last_name')
                 ->where('payment_bills.bill_status', '=', 'CLOSED')
+                ->where('patients.status', 1)
                 ->latest()
                 ->get();
             return datatables()->of($data)
@@ -48,11 +49,13 @@ class ClosedBillsController extends Controller
                 ->make(true);
         }
         $patients = $clinic->patient->count();
-        $page_title = 'Closed Bills';
+        $page_title = trans('pages.payments');
+        $payments_page = trans('pages.payment_subpage.closed');
         return view('admin.closed.index', [
             'clinic' => $clinic,
             'patients' => $patients,
             'page_title' => $page_title,
+            'payments_page' => $payments_page,
         ]);
     }
 

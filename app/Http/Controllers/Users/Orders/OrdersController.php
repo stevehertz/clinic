@@ -38,7 +38,12 @@ class OrdersController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            $data = $clinic->order->sortBy('created_at', SORT_DESC);
+            if(!empty($request->status)){
+                $data = $clinic->order()->where('status', $request->status)->latest()->get();
+            }else{
+                $data = $clinic->order()->latest()->get();
+            }
+            
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {

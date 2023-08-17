@@ -458,6 +458,10 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{id}/export', [PatientsController::class, 'export'])->name('export');
 
+        Route::post('/{patient_id}/activate', [PatientsController::class, 'activate'])->name('activate');
+
+        Route::post('/{patient_id}/deactivate', [PatientsController::class, 'deactivate'])->name('deactivate');
+
         Route::delete('/{id}/delete', [PatientsController::class, 'destroy'])->name('delete');
     });
 
@@ -471,7 +475,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             Route::get('/{id}/{payment_id}/view', [PaymentsController::class, 'view'])->name('view');
 
-            Route::get('/{id}/print', [PaymentsController::class, 'print'])->name('print');
+            Route::get('/{id}/{payment_id}/print', [PaymentsController::class, 'print'])->name('print');
         });
 
         Route::prefix('closed/bills')->name('closed.bills.')->group(function () {
@@ -715,6 +719,10 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::post('/store', [UsersUsersController::class, 'store'])->name('store');
 
+        Route::get('/{user_id}/show', [UsersUsersController::class, 'show'])->name('show');
+
+        Route::post('/{user_id}/update/status', [UsersUsersController::class, 'update_status'])->name('update.status');
+
         Route::delete('/delete', [UsersUsersController::class, 'destroy'])->name('delete');
     });
 
@@ -726,13 +734,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
     });
 
-    
     // Technicians
     Route::prefix('workshop/technicians')->name('workshop.technicians.')->group(function () {
 
         Route::get('/{id}/index', [TechniciansController::class, 'index'])->name('index');
 
         Route::post('/store', [TechniciansController::class, 'store'])->name('store');
+
+        Route::post('/{id}/update/status', [TechniciansController::class, 'update_status'])->name('update.status');
 
         Route::delete('/{id}/delete', [TechniciansController::class, 'destroy'])->name('delete');
     });

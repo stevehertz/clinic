@@ -40,7 +40,7 @@ class Clinic extends Model
 
     function patients_per_clinic() 
     {
-        return $this->patient()->latest()->count();   
+        return $this->patient()->where('status', 1)->latest()->count();   
     }
 
     public function appointment()

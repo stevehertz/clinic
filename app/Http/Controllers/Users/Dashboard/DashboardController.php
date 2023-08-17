@@ -24,6 +24,7 @@ class DashboardController extends Controller
             ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
             ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
             ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
+            ->where('patients.status', 1)
             ->orderBy('appointments.created_at', 'desc')
             ->limit(10)
             ->get();

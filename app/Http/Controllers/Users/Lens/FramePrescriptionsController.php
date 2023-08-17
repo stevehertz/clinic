@@ -28,7 +28,7 @@ class FramePrescriptionsController extends Controller
             'power_id' => 'required|integer|exists:lens_powers,id',
             'prescription_id' => 'required|integer|exists:lens_prescriptions,id',
             'stock_id' => 'required|integer|exists:frame_stocks,id',
-            'receipt_number' => 'required|numeric',
+            'receipt_number' => 'required|numeric|unique:frame_prescriptions,receipt_number',
             'workshop_id' => 'required|integer|exists:workshops,id',
             'remarks' => 'nullable|string|max:255',
         ]);
