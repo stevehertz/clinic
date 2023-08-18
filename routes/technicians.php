@@ -7,6 +7,7 @@ use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
 use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
+use App\Http\Controllers\Technicians\Lens\LensRequestController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
 use App\Http\Controllers\Technicians\Orders\OrdersController;
 use App\Http\Controllers\Technicians\Sales\SalesController;
@@ -86,6 +87,12 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
         Route::get('/{id}/show', [LensTransfersController::class, 'show'])->name('show');
 
         Route::delete('/{id}/delete', [LensTransfersController::class, 'destroy'])->name('delete');
+
+    });
+
+    Route::prefix('lens/request')->name('lens.request.')->group(function(){
+
+        Route::post('/store', [LensRequestController::class, 'store'])->name('store');
 
     });
 

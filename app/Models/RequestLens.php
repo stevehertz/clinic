@@ -12,8 +12,8 @@ class RequestLens extends Model
     protected $fillable = [
         'organization_id',
         'workshop_id',
+        'technician_id',
         'power',
-        'code',
         'lens_type_id',
         'lens_material_id',
         'lens_index',
@@ -22,4 +22,29 @@ class RequestLens extends Model
         'quantity',
         'status',
     ];
+
+    public function organuzation() 
+    {
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');    
+    }
+
+    public function workshop()  
+    {
+        return $this->belongsTo(Workshop::class, 'workshop_id', 'id');
+    }
+
+    public function technician()  
+    {
+        return $this->belongsTo(Technician::class, 'technician_id', 'id');   
+    }
+
+    public function lens_type()  
+    {
+        return $this->belongsTo(LensType::class, 'lens_type_id', 'id');
+    }
+
+    public function lens_material() 
+    {
+        return $this->belongsTo(LensMaterial::class, 'lens_material_id', 'id');    
+    }
 }

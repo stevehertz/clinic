@@ -15,5 +15,32 @@ return [
     'reports' => [
         'orders' => 'Orders Report',
         'clinic-main' => 'Main Report'
+    ],
+    'organization' => [
+
+    ],
+    'settings' => [
+        'page_title' => 'Settings',
+        'cases' => [
+            'colors' => 'Case Colors',
+            'size' => 'Case Sizes',
+            'shapes' => 'Case Shapes',
+            'title' => 'Cases'
+        ],
+    ],
+    'technicians' => [
+        'dashboard' => 'Dashboard',
+        'inventory' => [
+            'title' => 'Inventory',
+            'lens' => 'Lens',
+            'cases' => 'Cases'
+        ],
+        'assets' => [
+            'title' => 'Assests',
+            'transfered' => 'Transfered Assets'
+        ],
+        'orders' => [
+            'title' => 'Orders'
+        ]
     ]
 ]; 

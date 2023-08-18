@@ -79,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 {{-- <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
@@ -122,10 +122,11 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.settings.index') }}" class="nav-link">
+                    <a href="{{ route('admin.settings.index') }}"
+                        class="nav-link @if ($page_title == trans('pages.settings.page_title')) active @endif">
                         <i class="nav-icon fa fa-gear"></i>
                         <p>
-                            Settings
+                            @lang('pages.settings.page_title')
                         </p>
                     </a>
                 </li>

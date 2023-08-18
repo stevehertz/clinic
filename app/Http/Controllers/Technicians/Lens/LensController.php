@@ -48,9 +48,11 @@ class LensController extends Controller
         $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
         $num_lens_transfer_from = $workshop->lens_transfer->count();
         $transfer_workshops = $organization->workshop->where('id', '!=', $workshop->id);
-        $page_title = "Lens";
+        $page_title = trans('pages.technicians.inventory.title');
+        $lens_pages = trans('pages.technicians.inventory.lens');
         return view('technicians.lens.index', [
             'page_title' => $page_title,
+            'lens_pages' => $lens_pages,
             'num_lens' => $num_lens,
             'num_lens_purchase' => $num_lens_purchase,
             'types' => $lens_types,

@@ -20,7 +20,7 @@ class SettingsController extends Controller
         # code...
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
         $organization = $admin->organization;
-        $page_title = 'Settings';
+        $page_title = trans('pages.settings.page_title');
         return view('admin.settings.index', [
             'page_title' => $page_title,
             'organization' => $organization,

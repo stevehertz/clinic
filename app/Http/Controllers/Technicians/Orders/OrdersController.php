@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Technicians\Orders;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TechnicianOrdersMail;
+use App\Models\LensType;
 use App\Models\Order;
 use App\Models\Technician;
 use App\Models\WorkshopSale;
@@ -51,7 +52,7 @@ class OrdersController extends Controller
                 ->rawColumns(['view', 'patient', 'clinic'])
                 ->make(true);
         }
-        $page_title = "Orders";
+        $page_title = trans('pages.technicians.orders.title');
         return view('technicians.orders.index', [
             'page_title' => $page_title
         ]);
@@ -79,13 +80,19 @@ class OrdersController extends Controller
         $right_eye_lenses = $workshop->lens->where('eye', 'RIGHT')->sortBy('created_at', SORT_DESC);
         $left_eye_lenses = $workshop->lens->where('eye', 'LEFT')->sortBy('created_at', SORT_DESC);
         $sales = $order->workshop_sale->sortBy('created_at', SORT_DESC);
-        $page_title = "View Order";
+        // request for lens
+        $organization = $workshop->organization;
+        $types = $organization->lens_type()->latest()->get();
+        $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
+        $page_title = trans('pages.technicians.orders.title');
         return view('technicians.orders.view', [
             'page_title' => $page_title,
             'order' => $order,
             'right_eye_lenses' => $right_eye_lenses,
             'left_eye_lenses' => $left_eye_lenses,
             'sales' => $sales,
+            'types' => $types,
+            'materials' => $lens_materials,
         ]);
     }
 

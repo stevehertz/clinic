@@ -51,7 +51,7 @@ class DashboardController extends Controller
         $orders = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
         $sum_lenses = $workshop->lens->sum('closing');
         $num_sales = $workshop->workshop_sale->count();
-        $page_title = "Dashboard";
+        $page_title = trans('pages.technicians.dashboard');
         return view('technicians.dashboard.index', [
             'page_title' => $page_title,
             'workshop' => $workshop,

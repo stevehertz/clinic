@@ -31,6 +31,15 @@
 .content .container-fluid .col-md-3 .card-outline .card-body .active {
   color: #264dfa !important;
 }
+.content .container-fluid .filterReportsByDatesRow {
+  display: none;
+}
+.content .container-fluid .filterReportsByPaymentsRow {
+  display: none;
+}
+.content .container-fluid .filterReportsByOrdersRow {
+  display: none;
+}
 .content .card .card-body .lensPowerDiv {
   margin-bottom: 1rem;
   display: none;

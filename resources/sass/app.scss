@@ -43,6 +43,18 @@
                 }
             }
         }
+
+        .filterReportsByDatesRow{
+            display: none;
+        }
+
+        .filterReportsByPaymentsRow{
+            display: none;
+        }
+
+        .filterReportsByOrdersRow{
+            display: none;
+        }
     }
     .card{
         .card-body{

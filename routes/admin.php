@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
 use App\Http\Controllers\Admin\Lens\LensIndicesController;
+use App\Http\Controllers\Admin\Lens\LensRequestController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
 use App\Http\Controllers\Admin\Assets\AssetTypesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
@@ -575,6 +576,12 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('lens/prescription')->name('lens.prescription.')->group(function () {
 
         Route::post('/show', [LensLensPrescriptionController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('lens/requests')->name('lens.requests.')->group(function () {
+
+        Route::get('/{id}/index', [LensRequestController::class, 'index'])->name('index');
+
     });
 
     // medicine

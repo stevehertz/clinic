@@ -63,6 +63,27 @@
                     </div>
                 </div>
                 <!-- ./col -->
+
+                
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>
+                                <span id="numLensRequest"></span>
+                            </h3>
+
+                            <p>Requested Lens</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">
+                            Recieve Request <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
             </div>
 
             <div class="row">
@@ -78,11 +99,20 @@
                                         Lens Stocks
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
                                         href="#custom-tabs-four-profile" role="tab"
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">
                                         Stock Purchases
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-lens-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-lens" role="tab"
+                                        aria-controls="custom-tabs-four-lens" aria-selected="false">
+                                        Lens Requests
                                     </a>
                                 </li>
                             </ul>
@@ -145,6 +175,31 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
+
+                                </div>
+
+                                <div class="tab-pane fade" id="custom-tabs-four-lens" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-lens-tab">
+                                    
+                                    <div class="table-responsive">
+
+                                        <table id="lensRequestsData" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Power</th>
+                                                    <th>Lens Type</th>
+                                                    <th>Lens Material</th>
+                                                    <th>Lens Index</th>
+                                                    <th>Eye</th>
+                                                    <th>Quantity</th>
+                                                    <th>Date Requested</th>
+                                                    <th>Technician</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -551,6 +606,7 @@
             function find_num_lenses() {
                 $('#numLensStock').html('{{ $num_lens }}');
                 $('#numLensPurchasesStock').html('{{ $num_lens_purchase }}');
+                $('#numLensRequest').html('{{ $num_lens_request }}');
             }
 
             function find_lenses() {
@@ -952,7 +1008,56 @@
                         Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
+
+
             });
+
+            find_lens_request();
+            function find_lens_request() {
+                let path = '{{ route('admin.lens.requests.index', $workshop->id) }}';
+                $('#lensRequestsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    "responsive": true,
+                    "autoWidth": false,
+                    columns: [{
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'lens_type',
+                            name: 'lens_type'
+                        },
+                        {
+                            data: 'lens_material',
+                            name: 'lens_material'
+                        },
+                        {
+                            data: 'lens_index',
+                            name: 'lens_index'
+                        },
+                        {
+                            data: 'eye',
+                            name: 'eye'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'date_requested',
+                            name: 'date_requested'
+                        },
+                        {
+                            data: 'technician',
+                            name: 'technician'
+                        },
+                    ]
+
+                });
+            }
+
 
         });
     </script>

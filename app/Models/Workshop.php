@@ -102,4 +102,9 @@ class Workshop extends Model
         # code...
         return $this->hasMany(WorkshopSale::class, 'workshop_id', 'id');
     }
+
+    public function request_lens()  
+    {
+        return $this->hasMany(RequestLens::class, 'workshop_id', 'id');    
+    }
 }

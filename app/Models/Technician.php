@@ -69,4 +69,8 @@ class Technician extends Authenticatable
         return $this->hasMany(LensTransfer::class, 'technician_id', 'id');
     }
 
+    public function request_lens() 
+    {
+        return $this->hasMany(RequestLens::class, 'technician_id', 'id');    
+    }
 }

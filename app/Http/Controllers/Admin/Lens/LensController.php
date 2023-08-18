@@ -56,6 +56,7 @@ class LensController extends Controller
         $lens_types = $organization->lens_type->sortBy('created_at', SORT_DESC);
         $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
         $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
+        $num_lens_request = $workshop->request_lens()->where('status', 'REQUESTED')->count();
         $page_title = "Lenses";
         return view('admin.lens.index', [
             'workshop' => $workshop,
@@ -67,6 +68,7 @@ class LensController extends Controller
             'materials' => $lens_materials,
             'lenses' => $lenses,
             'vendors' => $vendors,
+            'num_lens_request' => $num_lens_request,
         ]);
     }
 
@@ -148,9 +150,7 @@ class LensController extends Controller
     {
         $data = $request->except('_token');
 
-        $validator = Validator::make($data, [
-
-        ]);
+        $validator = Validator::make($data, []);
     }
 
     /**
@@ -168,7 +168,7 @@ class LensController extends Controller
             'lens_id' => 'required|integer|exists:lenses,id'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -228,7 +228,6 @@ class LensController extends Controller
         $response['message'] = "You have successfully updated lens details";
 
         return response()->json($response);
-
     }
 
     /**
@@ -246,7 +245,7 @@ class LensController extends Controller
             'lens_id' => 'required|integer|exists:lenses,id'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;

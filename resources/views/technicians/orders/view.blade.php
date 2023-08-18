@@ -29,98 +29,7 @@
     <section class="content">
         <div class="row">
 
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Lens Power
-                        </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <td></td>
-                                    <td>Rigth Eye</td>
-                                    <td>Left Eye</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Sphere</td>
-                                    <td>{{ $order->lens_power->right_sphere }}</td>
-                                    <td>{{ $order->lens_power->left_sphere }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Cylinder</td>
-                                    <td>{{ $order->lens_power->right_cylinder }}</td>
-                                    <td>{{ $order->lens_power->left_cylinder }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Axis</td>
-                                    <td>{{ $order->lens_power->right_axis }}</td>
-                                    <td>{{ $order->lens_power->left_axis }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Additional</td>
-                                    <td>{{ $order->lens_power->right_add }}</td>
-                                    <td>{{ $order->lens_power->left_add }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!--.card -->
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            From Clinic
-                        </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card-body table-responsive">
-                        <strong><i class="fa fa-industry mr-1"></i> Clinic Name</strong>
-
-                        <p class="text-muted">
-                            {{ $order->clinic->clinic }}
-                        </p>
-
-                        <hr>
-
-                        <strong><i class="fa fa-mobile-phone mr-1"></i> Phone Number</strong>
-
-                        <p class="text-muted">
-                            {{ $order->clinic->phone }}
-                        </p>
-
-                        <hr>
-
-                        <strong><i class="fa fa-envelope mr-1"></i> Email Address</strong>
-
-                        <p class="text-muted">
-                            {{ $order->clinic->email }}
-                        </p>
-
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <!--.col-md-3 -->
+            @include('technicians.includes.orders.left')
 
             <div class="col-md-6">
                 <div class="card card-outline card-primary">
@@ -353,8 +262,7 @@
                                     </button>
                                 @elseif ($order->status == 'RIGHT LENS GLAZED')
                                     <button type="button" id="leftLensGlazingBtn" data-id="{{ $order->id }}"
-                                        data-value="LEFT LENS GLAZING"
-                                        class="btn btn-block btn-success leftLensGlazingBtn">
+                                        data-value="LEFT LENS GLAZING" class="btn btn-block btn-success leftLensGlazingBtn">
                                         <i class="fa fa-send"></i> LEFT LENS GLAZING
                                     </button>
                                 @elseif ($order->status == 'GLAZED')
@@ -379,95 +287,7 @@
             </div>
             <!--.col-md-6 -->
 
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Order For Patient
-                        </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="nav nav-pills flex-column">
-                            <li class="nav-item active">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-user"></i> {{ $order->patient->first_name }}
-                                    {{ $order->patient->last_name }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-phone"></i> {{ $order->patient->phone }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-envelope"></i> {{ $order->patient->email }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-calendar"></i> {{ $order->patient->dob }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-male"></i> {{ $order->patient->gender }}
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-map-signs"></i> {{ $order->patient->address }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--.card-body p-0 -->
-                </div>
-                <!--.card -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Doctor/ Optimist</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="nav nav-pills flex-column">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-user text-danger"></i>
-                                    {{ $order->doctor_schedule->user->first_name }}
-                                    {{ $order->doctor_schedule->user->last_name }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-phone text-warning"></i> {{ $order->doctor_schedule->user->phone }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fa fa-envelope text-primary"></i>
-                                    {{ $order->doctor_schedule->user->email }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!--.card -->
-            </div>
-            <!--.col-md-3 -->
+            @include('technicians.includes.orders.right')
 
         </div>
         <!-- /.row -->
@@ -542,7 +362,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @csrf
-                                    <input type="hidden" name="order_id" id="rightLensGlazingOrderId" class="form-control">
+                                    <input type="hidden" name="order_id" id="rightLensGlazingOrderId"
+                                        class="form-control">
                                     <input type="hidden" name="status" value="RIGHT LENS GLAZED" class="form-control">
                                 </div>
                             </div>
@@ -558,8 +379,10 @@
                                             </option>
                                             @forelse ($right_eye_lenses as $right_eye_lens)
                                                 <option value="{{ $right_eye_lens->id }}">{{ $right_eye_lens->code }} :
-                                                    {{ $right_eye_lens->power }} : {{ $right_eye_lens->lens_type->type }} :
-                                                    {{ $right_eye_lens->lens_material->title }} : {{ $right_eye_lens->lens_index }} :
+                                                    {{ $right_eye_lens->power }} : {{ $right_eye_lens->lens_type->type }}
+                                                    :
+                                                    {{ $right_eye_lens->lens_material->title }} :
+                                                    {{ $right_eye_lens->lens_index }} :
                                                     {{ $right_eye_lens->eye }}
                                                 </option>
                                             @empty
@@ -571,7 +394,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="submit" id="rightLensGlazingSubmitBtn" class="btn btn-primary">Save</button>
@@ -603,7 +426,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @csrf
-                                    <input type="hidden" name="order_id" id="leftLensGlazingOrderId" class="form-control">
+                                    <input type="hidden" name="order_id" id="leftLensGlazingOrderId"
+                                        class="form-control">
                                     <input type="hidden" name="status" value="GLAZED" class="form-control">
                                 </div>
                             </div>
@@ -620,7 +444,8 @@
                                             @forelse ($left_eye_lenses as $left_eye_lens)
                                                 <option value="{{ $left_eye_lens->id }}">{{ $left_eye_lens->code }} :
                                                     {{ $left_eye_lens->power }} : {{ $left_eye_lens->lens_type->type }} :
-                                                    {{ $left_eye_lens->lens_material->title }} : {{ $left_eye_lens->lens_index }} :
+                                                    {{ $left_eye_lens->lens_material->title }} :
+                                                    {{ $left_eye_lens->lens_index }} :
                                                     {{ $left_eye_lens->eye }}
                                                 </option>
                                             @empty
@@ -632,7 +457,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="submit" id="leftLensGlazingSubmitBtn" class="btn btn-primary">Save</button>
@@ -741,6 +566,137 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
+        <div class="modal fade" id="requestLensModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Request For Lens
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="requestLensForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="workshop_id"
+                                            value="{{ Auth::guard('technician')->user()->workshop->id }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="requestLensPower">Lens Power</label>
+                                        <input type="text" class="form-control" name="power" id="requestLensPower"
+                                            placeholder="Enter Lens Power">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/.row -->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="requestLensType">
+                                            Lens Type
+                                        </label>
+                                        <select id="requestLensType" name="lens_type_id"
+                                            class="form-control select2 select2-primary"
+                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">Choose Lens Type</option>
+                                            @forelse ($types as $type)
+                                                <option value="{{ $type->id }}">
+                                                    {{ $type->type }}
+                                                </option>
+                                            @empty
+                                                <option disabled>No Lens Type Added</option>
+                                            @endforelse
+
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <!--/.col -->
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="requestLensMaterial">
+                                            Lens Material
+                                        </label>
+                                        <select id="requestLensMaterial" name="lens_material_id"
+                                            class="form-control select2 select2-primary"
+                                            data-dropdown-css-class="select2-primary" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">Choose Lens Material</option>
+                                            @forelse ($materials as $material)
+                                                <option value="{{ $material->id }}">
+                                                    {{ $material->title }}
+                                                </option>
+                                            @empty
+                                                <option disabled>No Lens Material Added</option>
+                                            @endforelse
+
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <!--/.col -->
+                            </div>
+                            <!--/.row -->
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="requestLensIndex">Lens Index</label>
+                                        <input type="text" class="form-control" name="lens_index"
+                                            id="requestLensIndex" placeholder="Enter Lens Index">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="requestLensEye">Eye</label>
+                                        <select id="requestLensEye" name="eye"
+                                            class="form-control select2 select2-danger"
+                                            data-dropdown-css-class="select2-danger" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">Choose Eye</option>
+                                            <option value="RIGHT">RIGHT</option>
+                                            <option value="LEFT">LEFT</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!--/.row -->
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="requestLensQuantity">Quantity</label>
+                                        <input type="number" class="form-control" name="quantity"
+                                            id="requestLensQuantity" placeholder="Enter Quantity">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/.row -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Send Request</button>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
     </section>
     <!-- /.content -->
 @endsection
@@ -748,6 +704,54 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+
+            $(document).on('click', '.requestLensBtn', function(e) {
+                e.preventDefault();
+                $('#requestLensModal').modal('show');
+            });
+
+            $('#requestLensForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('technicians.lens.request.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Send Request');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+
             $(document).on('click', '#trackOrderBtn', function(e) {
                 e.preventDefault();
                 $('#trackOrderModal').modal('show');
