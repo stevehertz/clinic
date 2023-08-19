@@ -30,6 +30,13 @@ class ReportsController extends Controller
                 $data = $clinic->report()
                     ->whereBetween('appointment_date', [$request->from_date, $request->to_date])
                     ->get();
+            } elseif (!empty($request->payment_status)) {
+
+                $data = $clinic->report()->where('bill_status', $request->payment_status)
+                    ->latest()->get();
+            } elseif (!empty($request->order_status)) {
+                $data = $clinic->report()->where('order_status', $request->order_status)
+                    ->latest()->get();
             } else {
                 $data = $clinic->report()->latest()->get();
             }
@@ -89,20 +96,16 @@ class ReportsController extends Controller
                     }
                 })
 
-
                 ->addColumn('workshop', function ($row) {
                     $order = $row->order;
-                    if($order)
-                    {
+                    if ($order) {
                         $workshop_id = $order->workshop_id;
                         $workshop = Workshop::findorfail($workshop_id)->first();
-                        if($workshop)
-                        {
+                        if ($workshop) {
                             return $workshop->name;
                         }
                     }
                 })
-
 
                 ->rawColumns([
                     'date_in',
@@ -136,7 +139,8 @@ class ReportsController extends Controller
         $clinic = Clinic::findOrFail($id);
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
-        return (new ClinicReports($clinic->id, $from_date, $to_date))->download('reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        $payment_status = $request->input('payment_status') ? $request->input('payment_status') : '';
+        $order_status = $request->input('order_status') ? $request->input('order_status') : '';
+        return (new ClinicReports($clinic->id, $from_date, $to_date, $payment_status, $order_status))->download('reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
-
 }

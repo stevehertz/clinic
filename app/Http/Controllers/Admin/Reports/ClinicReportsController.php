@@ -23,7 +23,12 @@ class ClinicReportsController extends Controller
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = Report::whereBetween('appointment_date', [$request->from_date, $request->to_date])->get();
-            } else {
+            } elseif (!empty($request->payment_status)) {
+                $data = Report::where('bill_status', $request->payment_status)->latest()->get();
+            } elseif(!empty($request->order_status)){
+                $data = Report::where('order_status', $request->order_status)->latest()->get();
+            }
+            else {
                 $data = Report::latest()->get();
             }
             return datatables()->of($data)
@@ -85,15 +90,14 @@ class ClinicReportsController extends Controller
                 })
                 ->addColumn('order_status', function ($row) {
                     if ($row->order) {
-                        return date('d F Y', strtotime($row->order->status));
+                        return $row->order->status;
                     }
                 })
-                ->addColumn('workshop', function($row){
+                ->addColumn('workshop', function ($row) {
                     if ($row->order) {
                         $order = $row->order;
                         $workshop = $order->workshop;
-                        if($workshop)
-                        {
+                        if ($workshop) {
                             return $workshop->name;
                         }
                     }
@@ -113,7 +117,10 @@ class ClinicReportsController extends Controller
                 ])
                 ->make(true);
         }
-        return view('admin.clinic_reports.index');
+        $page_title = trans('pages.reports.clinic');
+        return view('admin.clinic_reports.index', [
+            'page_title' => $page_title
+        ]);
     }
 
     public function export(Request $request)
@@ -121,6 +128,8 @@ class ClinicReportsController extends Controller
         # code...
         $from_date = $request->input('from_date') ? $request->input('from_date') : '';
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
-        return (new ReportsExport($from_date, $to_date))->download('reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        $payment_status = $request->input('payment_status')  ? $request->input('payment_status') : '';
+        $order_status = $request->input('order_status')  ? $request->input('order_status') : '';
+        return (new ReportsExport($from_date, $to_date, $payment_status, $order_status))->download('reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 }

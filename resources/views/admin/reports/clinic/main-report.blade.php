@@ -24,7 +24,6 @@
     <section class="content">
         <div class="container-fluid">
 
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -83,11 +82,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="" method="GET">
+                            <form action="{{ route('admin.reports.main.exports', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="form-group">
-                                            <select id="paymentStatus" class="form-control select2" style="width: 100%;">
+                                            <select id="paymentStatus" name="payment_status" class="form-control select2" style="width: 100%;">
                                                 <option selected="selected" disabled="disabled">Choose Payments Status
                                                 </option>
                                                 <option value="PENDING">PENDING</option>
@@ -121,11 +120,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="" method="GET">
+                            <form action="{{ route('admin.reports.main.exports', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="form-group">
-                                            <select id="ordersStatus" class="form-control select2" style="width: 100%;">
+                                            <select id="ordersStatus" name="order_status" class="form-control select2" style="width: 100%;">
                                                 <option selected="selected" disabled="disabled">
                                                     Select Order Status
                                                 </option>
@@ -211,7 +210,7 @@
 
             find_reports();
 
-            function find_reports(from_date = '', to_date = '') {
+            function find_reports(from_date = '', to_date = '', payment_status = '', order_status='') {
                 var path = '{{ route('admin.reports.main.index', $clinic->id) }}';
                 $('#reportsData').DataTable({
                     processing: true,
@@ -220,7 +219,9 @@
                         url: path,
                         data: {
                             from_date: from_date,
-                            to_date: to_date
+                            to_date: to_date,
+                            payment_status: payment_status,
+                            order_status: order_status
                         }
                     },
                     columns: [{
@@ -326,6 +327,25 @@
                 }
             });
 
+            $(document).on('click', '#filterReportsByPayments', function(e){
+                e.preventDefault();
+                $('.filterReportsByDatesRow').fadeOut(500);
+                $('.filterReportsByPaymentsRow').fadeIn(800);
+                $('.filterReportsByOrdersRow').fadeOut(500);
+            });
+
+            $(document).on('click', '#filtePaymentStatus', function(e){
+                e.preventDefault();
+                let paymentStatus = $('#paymentStatus').val();
+                if(paymentStatus != null)
+                {
+                    $('#reportsData').DataTable().destroy();
+                    find_reports(from_date = '', to_date = '', paymentStatus);
+                }else{
+                    toastr.warning("Please select a Payment Status");
+                }
+            });
+
             $(document).on('click', '#refresh', function(e) {
                 e.preventDefault();
                 $('#fromDate').val('');
@@ -333,6 +353,26 @@
                 $('#reportsData').DataTable().destroy();
                 find_reports();
             });
+
+            $(document).on('click', '#filterReportsByOrders', function(e){
+                e.preventDefault();
+                $('.filterReportsByDatesRow').fadeOut(500);
+                $('.filterReportsByPaymentsRow').fadeOut(500);
+                $('.filterReportsByOrdersRow').fadeIn(800);
+            });
+
+            $(document).on('click', '#filteOrderStatus', function(e){
+                e.preventDefault();
+                let orderStatus = $('#ordersStatus').val();
+                if(orderStatus != null)
+                {
+                    $('#reportsData').DataTable().destroy();
+                    find_reports(from_date = '', to_date = '', payment_status = '', orderStatus);
+                }else{
+                    toastr.warning("Please select an Order Status");
+                }
+            });
+           
 
         });
     </script>

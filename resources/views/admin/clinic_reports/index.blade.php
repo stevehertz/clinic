@@ -24,6 +24,24 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <button id="filterReportsByDate" class="btn btn-info">Filter By Dates</button>
+                            <button id="filterReportsByPayments" class="btn btn-info">Filter By Payments</button>
+                            <button id="filterReportsByOrders" class="btn btn-info">Filter By Orders</button>
+                            <button id="refreshReportsAllReports" class="btn btn-info">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--/.col -->
+            </div>
+            <!--/.row -->
+
+            <div class="row filterReportsByDatesRow">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -58,6 +76,99 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row filterReportsByPaymentsRow">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="{{ route('admin.clinics.reports.export') }}" method="GET">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <select id="paymentStatus" name="payment_status" class="form-control select2"
+                                                style="width: 100%;">
+                                                <option selected="selected" disabled="disabled">Choose Payments Status
+                                                </option>
+                                                <option value="PENDING">PENDING</option>
+                                                <option value="CLOSED">CLOSED</option>
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <!--/.col -->
+                                    <div class="col-md-4">
+                                        <button type="button" name="filter" id="filtePaymentStatus"
+                                            class="btn btn-primary">Filter</button>
+                                        <button type="button" name="refreshPaymentStatus" id="refresh"
+                                            class="btn btn-default">Refresh</button>
+
+                                        <button type="submit" class="btn btn-primary">
+                                            Get Excel
+                                        </button>
+                                    </div>
+                                    <!--/.col -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--/.col -->
+            </div>
+            <!--/.row -->
+
+            <div class="row filterReportsByOrdersRow">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="{{ route('admin.clinics.reports.export') }}" method="GET">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <select id="ordersStatus" name="order_status" class="form-control select2"
+                                                style="width: 100%;">
+                                                <option selected="selected" disabled="disabled">
+                                                    Select Order Status
+                                                </option>
+                                                <option value="APPROVED">APPROVED</option>
+                                                <option value="SENT TO WORKSHOP">SENT TO WORKSHOP</option>
+                                                <option value="FRAME SENT TO WORKSHOP">FRAME SENT TO WORKSHOP
+                                                </option>
+                                                <option value="ORDER RECEIVED">ORDER RECEIVED</option>
+                                                <option value="FRAME RECEIVED">FRAME RECEIVED</option>
+                                                <option value="GLAZING">GLAZING</option>
+                                                <option value="RIGHT LENS GLAZED">RIGHT LENS GLAZED</option>
+                                                <option value="GLAZED">GLAZED</option>
+                                                <option value="SEND TO CLINIC">SEND TO CLINIC</option>
+                                                <option value="RECEIVED FROM WORKSHOP">RECEIVED FROM WORKSHOP
+                                                </option>
+                                                <option value="CALL FOR COLLECTION">CALL FOR COLLECTION</option>
+                                                <option value="FRAME COLLECTED">FRAME COLLECTED</option>
+                                                <option value="CLOSED">CLOSED</option>
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <!--/.col -->
+                                    <div class="col-md-4">
+                                        <button type="button" name="filter" id="filteOrderStatus"
+                                            class="btn btn-primary">Filter</button>
+                                        <button type="button" name="refreshOrderStatus" id="refresh"
+                                            class="btn btn-default">Refresh</button>
+
+                                        <button type="submit" class="btn btn-primary">
+                                            Get Excel
+                                        </button>
+                                    </div>
+                                    <!--/.col -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--/.col -->
+            </div>
+            <!--/.row -->
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -99,7 +210,8 @@
         $(document).ready(function() {
 
             find_reports();
-            function find_reports(from_date = '', to_date = '') {
+
+            function find_reports(from_date = '', to_date = '', payment_status = '', order_status = '') {
                 var path = '{{ route('admin.clinics.reports.index') }}';
                 $('#reportsData').DataTable({
                     processing: true,
@@ -108,12 +220,13 @@
                         url: path,
                         data: {
                             from_date: from_date,
-                            to_date: to_date
+                            to_date: to_date,
+                            payment_status: payment_status,
+                            order_status: order_status
                         }
                     },
-                    columns: [
-                        {
-                            data:"clinic",
+                    columns: [{
+                            data: "clinic",
                             name: "clinic",
                         },
                         {
@@ -182,6 +295,35 @@
                 });
             }
 
+            $('.filterReportsByDatesRow').fadeOut(500);
+            $('.filterReportsByPaymentsRow').fadeOut(500);
+            $('.filterReportsByOrdersRow').fadeOut(500);
+
+            $(document).on('click', '#refresh', function(e) {
+                e.preventDefault();
+                $('#fromDate').val('');
+                $('#toDate').val('')
+                $('#reportsData').DataTable().destroy();
+                find_reports();
+            });
+
+            $(document).on('click', '#refreshReportsAllReports', function(e) {
+                e.preventDefault();
+                $('.filterReportsByDatesRow').fadeOut(500);
+                $('.filterReportsByPaymentsRow').fadeOut(500);
+                $('.filterReportsByOrdersRow').fadeOut(500);
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            });
+
+            $(document).on('click', '#filterReportsByDate', function(e) {
+                e.preventDefault();
+                $('.filterReportsByDatesRow').fadeIn(800);
+                $('.filterReportsByPaymentsRow').fadeOut(500);
+                $('.filterReportsByOrdersRow').fadeOut(500);
+            });
+
             $(document).on('click', '#filter', function(e) {
                 e.preventDefault();
                 var from_date = $('#fromDate').val();
@@ -194,16 +336,43 @@
                 }
             });
 
-            $(document).on('click', '#refresh', function(e) {
+            $(document).on('click', '#filterReportsByPayments', function(e) {
                 e.preventDefault();
-                $('#fromDate').val('');
-                $('#toDate').val('')
-                $('#reportsData').DataTable().destroy();
-                find_reports();
+                $('.filterReportsByDatesRow').fadeOut(500);
+                $('.filterReportsByPaymentsRow').fadeIn(800);
+                $('.filterReportsByOrdersRow').fadeOut(500);
             });
 
+            $(document).on('click', '#filtePaymentStatus', function(e){
+                e.preventDefault();
+                let paymentStatus = $('#paymentStatus').val();
+                if(paymentStatus != null)
+                {
+                    $('#reportsData').DataTable().destroy();
+                    find_reports(from_date = '', to_date = '', paymentStatus);
+                }else{
+                    toastr.warning("Please select a Payment Status");
+                }
+            });
 
+            $(document).on('click', '#filterReportsByOrders', function(e){
+                e.preventDefault();
+                $('.filterReportsByDatesRow').fadeOut(500);
+                $('.filterReportsByPaymentsRow').fadeOut(500);
+                $('.filterReportsByOrdersRow').fadeIn(800);
+            });
 
+            $(document).on('click', '#filteOrderStatus', function(e){
+                e.preventDefault();
+                let orderStatus = $('#ordersStatus').val();
+                if(orderStatus != null)
+                {
+                    $('#reportsData').DataTable().destroy();
+                    find_reports(from_date = '', to_date = '', payment_status = '', orderStatus);
+                }else{
+                    toastr.warning("Please select an Order Status");
+                }
+            });
         });
     </script>
 @endsection

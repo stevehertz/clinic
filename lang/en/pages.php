@@ -1,6 +1,6 @@
 <?php
 return [
-    'dashboard' => 'Dashboard', 
+    'dashboard' => 'Dashboard',
     'patients' => 'Patients',
     'appointments' => 'Appointments',
     'schedule' => 'Doctors Schedule',
@@ -12,13 +12,7 @@ return [
     ],
     'orders' => 'Orders',
     'users' => 'Doctors/Optometrists',
-    'reports' => [
-        'orders' => 'Orders Report',
-        'clinic-main' => 'Main Report'
-    ],
-    'organization' => [
-
-    ],
+    'organization' => [],
     'settings' => [
         'page_title' => 'Settings',
         'cases' => [
@@ -41,6 +35,13 @@ return [
         ],
         'orders' => [
             'title' => 'Orders'
-        ]
-    ]
-]; 
+        ],
+    ],
+
+    'reports' => [
+        'clinic' => 'Clinic Reports',
+        'orders' => 'Orders Report',
+        'clinic-main' => 'Main Report'
+    ],
+
+];

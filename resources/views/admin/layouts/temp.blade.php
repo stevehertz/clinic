@@ -11,7 +11,7 @@
 
     <title>{{ config('app.name') }} | Admin</title>
 
-    @include('admin.components.clinic_styles')
+    @include('admin.components.styles')
 </head>
 <body class="hold-transition sidebar-mini accent-primary">
     <div class="wrapper">
@@ -31,7 +31,7 @@
     </div>
     <!-- ./wrapper -->
     <!-- REQUIRED SCRIPTS -->
-    @include('admin.components.clinic_scripts')
+    @include('admin.components.scripts')
     @yield('scripts')
     @stack('scripts')
     @stack('patients_script')
