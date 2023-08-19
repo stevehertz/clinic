@@ -24,10 +24,30 @@ class OrdersReportsController extends Controller
         //
         $clinic = Clinic::findOrFail($id);
         if ($request->ajax()) {
-            $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
-                ->orderBy('orders.created_at', 'desc')
-                ->get();
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
+                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
+                    ->whereBetween('order_tracks.track_date', [$request->from_date, $request->to_date])
+                    ->orderBy('orders.created_at', 'desc')
+                    ->get();
+            } elseif (!empty($request->order_id)) {
+                $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
+                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
+                    ->where('orders.id', $request->order_id)
+                    ->orderBy('orders.created_at', 'desc')
+                    ->get();
+            } elseif (!empty($request->status)) {
+                $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
+                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
+                    ->where('order_tracks.track_status', $request->status)
+                    ->orderBy('orders.created_at', 'desc')
+                    ->get();
+            } else {
+                $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
+                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
+                    ->orderBy('orders.created_at', 'desc')
+                    ->get();
+            }
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('order_date', function ($row) {
@@ -40,7 +60,7 @@ class OrdersReportsController extends Controller
                     $clinic = Clinic::findOrFail($row->clinic_id);
                     return $clinic->clinic;
                 })
-                ->addColumn('full_names', function($row){
+                ->addColumn('full_names', function ($row) {
                     $patient = Patient::findOrFail($row->patient_id);
                     return ucwords("{$patient->first_name} {$patient->last_name}");
                 })
@@ -54,10 +74,12 @@ class OrdersReportsController extends Controller
                 ->rawColumns(['order_number', 'clinic', 'order_date', 'workshop'])
                 ->make(true);
         }
+        $orders = $clinic->order()->latest()->get();
         $page_title = trans('pages.reports.orders');
         return view('admin.reports.orders.index', [
             'page_title' => $page_title,
             'clinic' => $clinic,
+            'orders' => $orders,
         ]);
     }
 
@@ -66,63 +88,7 @@ class OrdersReportsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function export()
     {
         //
     }

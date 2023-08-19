@@ -1,3 +1,18 @@
+.content .container-fluid .card .card-body .lensPowerDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .container-fluid .card .card-body .lensPrescriptionDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .container-fluid .card .card-body .frameCodesDiv {
+  margin-bottom: 1rem;
+  display: none;
+}
+.content .container-fluid .approvalCard {
+  display: none;
+}
 .content .container-fluid #newPatientCard {
   display: none;
 }
@@ -40,18 +55,12 @@
 .content .container-fluid .filterReportsByOrdersRow {
   display: none;
 }
-.content .card .card-body .lensPowerDiv {
-  margin-bottom: 1rem;
+.content .container-fluid .ordersReportsByDateRow {
   display: none;
 }
-.content .card .card-body .lensPrescriptionDiv {
-  margin-bottom: 1rem;
+.content .container-fluid .ordersReportsByReceiptNumberRow {
   display: none;
 }
-.content .card .card-body .frameCodesDiv {
-  margin-bottom: 1rem;
-  display: none;
-}
-.content .approvalCard {
+.content .container-fluid .ordersReportsByStatusRow {
   display: none;
 }

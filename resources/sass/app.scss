@@ -1,83 +1,106 @@
 // Variables
 @import 'variables';
 
-.content{
-    .container-fluid{
-        #newPatientCard{
-            display: none;
-        }
-        #patientPaymentDetailsCard{
-            display: none;
-            .insuranceCompany{
-                display: none;
-            }
-            .schemeName{
-                display: none;
-            }
-            .principalMemberName{
-                display: none;
-            }
-            .principalMemberPhone{
-                display: none;
-            }
-            .principalMemberWorkplace{
-                display: none;
-            }
-            .insuranceCardNumber{
-                display: none;
-            }
-            .hospitalClientNumber{
-                display: none;
+.content {
+    .container-fluid {
+
+        .card {
+            .card-body {
+                .lensPowerDiv {
+                    margin-bottom: 1rem;
+                    display      : none;
+                }
+
+                .lensPrescriptionDiv {
+                    margin-bottom: 1rem;
+                    display      : none;
+                }
+
+                .frameCodesDiv {
+                    margin-bottom: 1rem;
+                    display      : none;
+                }
             }
         }
+
+        .approvalCard {
+            display: none;
+        }
+
+        #newPatientCard {
+            display: none;
+        }
+
+        #patientPaymentDetailsCard {
+            display: none;
+
+            .insuranceCompany {
+                display: none;
+            }
+
+            .schemeName {
+                display: none;
+            }
+
+            .principalMemberName {
+                display: none;
+            }
+
+            .principalMemberPhone {
+                display: none;
+            }
+
+            .principalMemberWorkplace {
+                display: none;
+            }
+
+            .insuranceCardNumber {
+                display: none;
+            }
+
+            .hospitalClientNumber {
+                display: none;
+            }
+        }
+
         #insuranceSpan {
             display: none;
         }
 
-        .col-md-3{
-            .card-outline{
-                .card-body{
-                    .active{
-                        color:#264dfa!important;
+        .col-md-3 {
+            .card-outline {
+                .card-body {
+                    .active {
+                        color: #264dfa !important;
                     }
                 }
             }
         }
 
-        .filterReportsByDatesRow{
+        .filterReportsByDatesRow {
             display: none;
         }
 
-        .filterReportsByPaymentsRow{
+        .filterReportsByPaymentsRow {
             display: none;
         }
 
-        .filterReportsByOrdersRow{
+        .filterReportsByOrdersRow {
+            display: none;
+        }
+
+        .ordersReportsByDateRow {
+            display: none;
+        }
+
+        .ordersReportsByReceiptNumberRow {
+            display: none;
+        }
+
+        .ordersReportsByStatusRow {
             display: none;
         }
     }
-    .card{
-        .card-body{
-            .lensPowerDiv{
-                margin-bottom: 1rem;
-                display: none;
-            }
 
-            .lensPrescriptionDiv {
-                margin-bottom: 1rem;
-                display: none;
-            }
 
-            .frameCodesDiv{
-                margin-bottom: 1rem;
-                display: none;
-            }
-        }
-    }
-    .approvalCard{
-        display: none;
-    }
 }
-
-
-
