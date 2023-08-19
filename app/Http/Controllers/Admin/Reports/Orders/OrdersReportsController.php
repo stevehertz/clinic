@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Reports\Orders;
 
+use App\Exports\ClinicOrdersReport;
 use App\Models\Clinic;
 use App\Models\Workshop;
 use Illuminate\Http\Request;
@@ -88,8 +89,14 @@ class OrdersReportsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()
+    public function export(Request $request, $id)
     {
         //
+        $clinic = Clinic::findOrFail($id);
+        $from_date = $request->input('from_date') ? $request->input('from_date') : '';
+        $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
+        $order_id = $request->input('order_id') ? $request->input('order_id') : '';
+        $order_status = $request->input('order_status') ? $request->input('order_status') : '';
+        return (new ClinicOrdersReport($clinic->id, $from_date, $to_date, $order_id, $order_status))->download('orders_reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 }

@@ -515,6 +515,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('orders/report')->name('order.reports.')->group(function () {
 
         Route::get('/{id}', [OrdersReportsController::class, 'index'])->name('index');
+
+        Route::get('/{id}/export', [OrdersReportsController::class, 'export'])->name('export');
         
     });
 

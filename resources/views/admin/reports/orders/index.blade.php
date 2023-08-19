@@ -52,7 +52,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="#" method="GET">
+                            <form action="{{ route('admin.order.reports.export', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -90,7 +90,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="#" method="GET">
+                            <form action="{{ route('admin.order.reports.export', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="form-group">
@@ -133,11 +133,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form method="GET">
+                            <form action="{{ route('admin.order.reports.export', $clinic->id) }}" method="GET">
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="form-group">
-                                            <select id="orderStatusSelect" name="status" class="form-control select2"
+                                            <select id="orderStatusSelect" name="order_status" class="form-control select2"
                                                 style="width: 100%;">
                                                 <option selected="selected" disabled="disabled">
                                                     Select status

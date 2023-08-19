@@ -37,11 +37,11 @@ class Workshop extends Model
         return $this->hasMany(Order::class, 'workshop_id', 'id');
     }
 
-    public function workshop()
-    {
-        # code...
-        return $this->hasMany(Workshop::class, 'workshop_id', 'id');
-    }
+    // public function workshop()
+    // {
+    //     # code...
+    //     return $this->hasMany(Workshop::class, 'workshop_id', 'id');
+    // }
 
     public function treatment()
     {

@@ -24,7 +24,7 @@ class ClinicReports implements FromView
     {
         $this->clinic_id = $clinic_id;
         $this->from_date = $from_date;
-        $this->to_date = $to_date;
+        $this->to_date = $to_date;  
         $this->payment_status = $payment_status;
         $this->order_status = $order_status;
     }
