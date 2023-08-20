@@ -64,3 +64,9 @@
 .content .container-fluid .ordersReportsByStatusRow {
   display: none;
 }
+.content .container-fluid .fliterByDatesRow {
+  display: none;
+}
+.content .container-fluid .filterReportsByStatusRow {
+  display: none;
+}

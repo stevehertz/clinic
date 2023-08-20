@@ -46,6 +46,8 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Balance</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Invoice Number</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">LPO Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Approval Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Approval Status</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Closing Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Status</th>
@@ -225,6 +227,16 @@
                 <td>
                     @if ($report->payment_bill)
                         {{ $report->payment_bill->lpo_number }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_bill)
+                        {{ $report->payment_bill->approval_number }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->payment_bill)
+                        {{ $report->payment_bill->approval_status }}
                     @endif
                 </td>
                 <td>

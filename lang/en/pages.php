@@ -41,7 +41,8 @@ return [
     'reports' => [
         'clinic' => 'Clinic Reports',
         'orders' => 'Orders Report',
-        'clinic-main' => 'Main Report'
+        'clinic-main' => 'Main Report',
+        'clinic-payments' => 'Payments Report',
     ],
 
 ];

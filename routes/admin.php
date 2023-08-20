@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\Organization\OrganizationController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
+use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
@@ -517,13 +518,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}', [OrdersReportsController::class, 'index'])->name('index');
 
         Route::get('/{id}/export', [OrdersReportsController::class, 'export'])->name('export');
-        
     });
 
 
     Route::prefix('payments/details')->name('payments.details.')->group(function () {
 
         Route::post('/store', [PaymentDetailsController::class, 'store'])->name('store');
+    });
+
+    // Payments Reports
+    Route::prefix('payments/reports')->name('payments.reports.')->group(function () {
+
+        Route::get('/{id}', [PaymentsReportController::class, 'index'])->name('index');
+
+        Route::get('/{id}/export', [PaymentsReportController::class, 'export'])->name('export');
+
     });
 
     Route::prefix('appointments')->name('appointments.')->group(function () {
@@ -583,7 +592,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('lens/requests')->name('lens.requests.')->group(function () {
 
         Route::get('/{id}/index', [LensRequestController::class, 'index'])->name('index');
-
     });
 
     // medicine
@@ -735,12 +743,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/delete', [UsersUsersController::class, 'destroy'])->name('delete');
     });
 
-    Route::prefix('reports/main')->name('reports.main.')->group(function(){
+    Route::prefix('reports/main')->name('reports.main.')->group(function () {
 
         Route::get('/{id}', [ReportsController::class, 'index'])->name('index');
 
         Route::get('/{id}/exports', [ReportsController::class, 'export'])->name('exports');
-
     });
 
     // Technicians
