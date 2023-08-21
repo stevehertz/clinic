@@ -27,7 +27,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link  @if ($page_title == trans('pages.technicians.dashboard')) active @endif ">
+                    <a href="{{ route('technicians.dashboard.index') }}" class="nav-link  @if ($page_title == trans('pages.technicians.dashboard')) active @endif ">
                         <i class="nav-icon fa fa-dashboard"></i>
                         <p>
                             @lang('pages.technicians.dashboard')

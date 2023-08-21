@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users\Orders;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderTrack;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,11 +35,18 @@ class OrderTracksController extends Controller
 
         $order = Order::findOrFail($data['order_id']);
 
+        $updated_date = $order->updated_at;
+
+        $now = Carbon::now();
+
+        $diffDays = $updated_date->diffInDays($now);
+
         $order->order_track()->create([
             'user_id' => $order->doctor_schedule->user->id,
             'workshop_id' => $order->workshop->id,
             'track_date' => $order->order_date,
             'track_status' => $order->status,
+            'tat' => $diffDays,
         ]);
 
         $response['status'] = true;

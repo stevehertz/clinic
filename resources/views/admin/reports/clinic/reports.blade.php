@@ -51,6 +51,7 @@
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Closing Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Status</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">TAT</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Workshop</th>
         </tr>
     </thead>

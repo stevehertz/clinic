@@ -114,6 +114,12 @@ class OrdersController extends Controller
 
         $order = Order::findOrFail($id);
 
+        $last_order_truck = $order->order_track()->latest()->first();
+
+        $now = Carbon::now();
+
+        $diffInDays = $last_order_truck->created_at->diffInDays($now);
+
         $appointment = $order->appointment;
 
         $order->id = $order->id;
@@ -163,6 +169,7 @@ class OrdersController extends Controller
                 'workshop_id' => $order->workshop->id,
                 'track_date' => Carbon::now()->format('Y-m-d'),
                 'track_status' => $order->status,
+                'tat' => $diffInDays,
             ]);
 
             $clinic = $order->clinic;

@@ -24,7 +24,7 @@ class BillingController extends Controller
             'bill_id' => 'required|integer|exists:payment_bills,id',
             'item' => 'required|string',
             'amount' => 'required|string',
-            'receipt' => 'required|string|unique:payment_bills,receipt_number',
+            'receipt' => 'required|string|unique:billings,receipt_number',
             'date' => 'required|date',
         ]);
 

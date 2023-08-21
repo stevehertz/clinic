@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\Lens\LensIndicesController;
 use App\Http\Controllers\Admin\Lens\LensRequestController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
 use App\Http\Controllers\Admin\Assets\AssetTypesController;
+use App\Http\Controllers\Admin\Cases\CasesColorsController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Patients\PatientsController;
@@ -60,6 +61,7 @@ use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
 use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
+use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
@@ -340,6 +342,26 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/update', [LensMaterialsController::class, 'update'])->name('update');
 
                 Route::delete('/delete', [LensMaterialsController::class, 'destroy'])->name('delete');
+            });
+
+            Route::prefix('cases')->name('cases.')->group(function(){
+
+                Route::prefix('color')->name('color.')->group(function(){
+
+                    Route::get('/index', [CasesColorsController::class, 'index'])->name('index');
+
+                    Route::post('/store', [CasesColorsController::class, 'store'])->name('store');
+
+                    Route::get('/{id}/show', [CasesColorsController::class, 'show'])->name('show');
+
+                    Route::post('/{id}/update', [CasesColorsController::class, 'update'])->name('update');
+
+                    Route::delete('/{id}/delete', [CasesColorsController::class, 'destroy'])->name('delete');
+                    
+                });
+
+                
+
             });
         });
 

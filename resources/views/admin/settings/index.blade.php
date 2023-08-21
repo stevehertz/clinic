@@ -438,6 +438,68 @@
                 <!-- /.col -->
 
             </div>
+
+            <h5 class="mb-2">Cases</h5>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.workshops.cases.color.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info">
+                                <i class="fa fa-pie-chart"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    @lang('pages.settings.cases.colors')
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.clinics.glasses.sizes.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary">
+                                <i class="fa fa-anchor"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    @lang('pages.settings.cases.size')
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.clinics.glasses.shapes.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger">
+                                <i class="fa fa-circle-thin"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    @lang('pages.settings.cases.shapes')
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
+                
+            </div>
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

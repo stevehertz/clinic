@@ -15,6 +15,7 @@ class OrderTrack extends Model
         'workshop_id',
         'track_date',
         'track_status',
+        'tat',
     ];
 
     public function order()

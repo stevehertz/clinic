@@ -203,6 +203,7 @@
                                         <th>Clinic </th>
                                         <th>Patient</th>
                                         <th>Status</th>
+                                        <th>TAT</th>
                                         <th>Workshop</th>
                                     </tr>
                                 </thead>
@@ -262,6 +263,10 @@
                         {
                             data: 'status',
                             name: 'status'
+                        },
+                        {
+                            data: 'tat',
+                            name: 'tat'
                         },
                         {
                             data: 'workshop',

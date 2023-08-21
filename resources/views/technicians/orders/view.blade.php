@@ -312,6 +312,7 @@
                                     <th>Doctor</th>
                                     <th>Status</th>
                                     <th>Workshop</th>
+                                    <th>TAT</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -328,6 +329,9 @@
                                         </td>
                                         <td>
                                             {{ $track->workshop->name }}
+                                        </td>
+                                        <td>
+                                            {{ $track->tat }}
                                         </td>
                                     </tr>
                                 @empty
