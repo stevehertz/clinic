@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Assets\AssetsController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Frames\FramesController;
 use App\Http\Controllers\Admin\Status\StatusController;
+use App\Http\Controllers\Admin\Cases\CaseSizesController;
 use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
@@ -360,7 +361,19 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     
                 });
 
-                
+                Route::prefix('sizes')->name('sizes.')->group(function(){
+
+                    Route::get('/index', [CaseSizesController::class, 'index'])->name('index');
+
+                    Route::post('/store', [CaseSizesController::class, 'store'])->name('store');
+
+                    Route::get('/{id}/show', [CaseSizesController::class, 'show'])->name('show');
+
+                    Route::post('/{id}/update', [CaseSizesController::class, 'update'])->name('update');
+
+                    Route::delete('/{id}/delete', [CaseSizesController::class, 'destroy'])->name('delete');
+
+                });
 
             });
         });
