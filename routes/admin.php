@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
+use App\Http\Controllers\Admin\Cases\FrameCasesController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
 use App\Http\Controllers\Admin\Lens\LensIndicesController;
@@ -387,6 +388,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [CasesShapesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [CasesShapesController::class, 'destroy'])->name('delete');
+
+                });
+
+
+                Route::prefix('frame/cases')->name('frame.cases.')->group(function(){
+
+                    Route::get('/index', [FrameCasesController::class, 'index'])->name('index');
+
+                    Route::post('/store', [FrameCasesController::class, 'store'])->name('store');
+
+                    Route::get('/{id}/show', [FrameCasesController::class, 'show'])->name('show');
+
+                    Route::post('/{id}/update', [FrameCasesController::class, 'update'])->name('update');
+
+                    Route::delete('/{id}/delete', [FrameCasesController::class, 'destroy'])->name('delete');
 
                 });
 

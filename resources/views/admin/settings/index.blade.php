@@ -498,6 +498,25 @@
                     </a>
                 </div>
                 <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <a href="{{ route('admin.settings.workshops.cases.frame.cases.index') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-secondary">
+                                <i class="fa fa-circle-thin"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">
+                                    Cases
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </a>
+                </div>
+                <!-- /.col -->
                 
             </div>
         </div><!-- /.container-fluid -->

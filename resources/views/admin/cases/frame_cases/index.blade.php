@@ -7,7 +7,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                        Case Colors
+                        Cases
                     </h1>
                 </div>
                 <div class="col-sm-6">
@@ -21,7 +21,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Case Colors
+                            Cases
                         </li>
                     </ol>
                 </div>
@@ -37,19 +37,20 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-tools">
-                                <a href="javascript:void(0)" id="newCaseColorBtn" class="btn btn-outline-primary btn-sm">
-                                    <i class="fa fa-plus-circle"></i> New Case Color
+                                <a href="javascript:void(0)" id="newCaseBtn" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa fa-plus-circle"></i> New Case
                                 </a>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="caseColorsData" class="table table-bordered table-striped table-hover">
+                            <table id="casesData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
-                                        <th>Slug</th>
-                                        <th>Description</th>
+                                        <th>Code</th>
+                                        <th>Color</th>
+                                        <th>Size</th>
+                                        <th>Shape</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -63,12 +64,12 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
 
-        <div class="modal fade" id="newCaseColorModal">
+        <div class="modal fade" id="newCaseModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form id="newCaseColorForm">
+                    <form id="newCaseForm">
                         <div class="modal-header">
-                            <h4 class="modal-title">New Case Color</h4>
+                            <h4 class="modal-title">New Case</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -76,14 +77,48 @@
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
-                                <label for="newCaseColorTitle">Title</label>
-                                <input type="text" name="title" class="form-control" id="newCaseColorTitle"
-                                    placeholder="Enter Color Title">
+                                <label for="newCaseCode">Code</label>
+                                <input type="text" name="code" class="form-control" id="newCaseCode"
+                                    placeholder="Enter Case Code">
                             </div>
 
                             <div class="form-group">
-                                <label for="newCaseColorDescription">Description</label>
-                                <textarea name="description" id="newCaseColorDescription" class="form-control" placeholder="Enter Color Description"></textarea>
+                                <label for="newCaseColor">Color</label>
+                                <select name="color_id" id="newCaseColor" class="form-control select2" style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Color</option>
+                                    @forelse ($case_colors as $color)
+                                        <option value="{{ $color->id }}">
+                                            {{ $color->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newCaseSize">Size</label>
+                                <select name="size_id" id="newCaseSize" class="form-control select2" style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Size</option>
+                                    @forelse ($case_sizes as $size)
+                                        <option value="{{ $size->id }}">
+                                            {{ $size->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newCaseShape">Shape</label>
+                                <select name="shape_id" id="newCaseShape" class="form-control select2" style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Shape</option>
+                                    @forelse ($case_shapes as $shape)
+                                        <option value="{{ $shape->id }}">
+                                            {{ $shape->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -98,12 +133,12 @@
         </div>
         <!-- /.modal -->
 
-        <div class="modal fade" id="updateCaseColorModal">
+        <div class="modal fade" id="updateCaseModal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form id="updateCaseColorForm">
+                    <form id="updateCaseForm">
                         <div class="modal-header">
-                            <h4 class="modal-title">Update Case Color</h4>
+                            <h4 class="modal-title">Update Case</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -111,18 +146,55 @@
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
-                                <input type="hidden" class="form-control" id="updateCaseColorId"
-                                    placeholder="Enter Color Title">
-                            </div>
-                            <div class="form-group">
-                                <label for="newCaseColorTitle">Title</label>
-                                <input type="text" name="title" class="form-control" id="updateCaseColorTitle"
-                                    placeholder="Enter Color Title">
+                                <input type="hidden" class="form-control" id="updateCaseId">
                             </div>
 
                             <div class="form-group">
-                                <label for="newCaseColorDescription">Description</label>
-                                <textarea name="description" id="updateCaseColorDescription" class="form-control" placeholder="Enter Color Description"></textarea>
+                                <label for="updateCaseCode">Code</label>
+                                <input type="text" name="code" class="form-control" id="updateCaseCode"
+                                    placeholder="Enter Case Code">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="updateCaseColor">Color</label>
+                                <select name="color_id" id="updateCaseColor" class="form-control select2"
+                                    style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Color</option>
+                                    @forelse ($case_colors as $color)
+                                        <option value="{{ $color->id }}">
+                                            {{ $color->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="updateCaseSize">Size</label>
+                                <select name="size_id" id="updateCaseSize" class="form-control select2"
+                                    style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Size</option>
+                                    @forelse ($case_sizes as $size)
+                                        <option value="{{ $size->id }}">
+                                            {{ $size->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="updateCaseShape">Shape</label>
+                                <select name="shape_id" id="updateCaseShape" class="form-control select2"
+                                    style="width: 100%;">
+                                    <option selected="selected" disabled="disabled">Select Shape</option>
+                                    @forelse ($case_shapes as $shape)
+                                        <option value="{{ $shape->id }}">
+                                            {{ $shape->title }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -144,27 +216,31 @@
     <script>
         $(document).ready(function() {
 
-            find_case_colors();
+            find_cases();
 
-            function find_case_colors() {
-                var path = "{{ route('admin.settings.workshops.cases.color.index') }}";
-                $('#caseColorsData').DataTable({
+            function find_cases() {
+                var path = "{{ route('admin.settings.workshops.cases.frame.cases.index') }}";
+                $('#casesData').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "ajax": path,
                     'responsive': true,
                     'autoWidth': false,
                     "columns": [{
-                            data: 'title',
-                            name: 'title'
+                            data: 'code',
+                            name: 'code'
                         },
                         {
-                            data: 'slug',
-                            name: 'slug'
+                            data: 'color',
+                            name: 'color'
                         },
                         {
-                            data: 'description',
-                            name: 'description'
+                            data: 'size',
+                            name: 'size'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
                         },
                         {
                             data: 'actions',
@@ -176,17 +252,18 @@
                 });
             }
 
-            $(document).on('click', '#newCaseColorBtn', function(e) {
+
+            $(document).on('click', '#newCaseBtn', function(e) {
                 e.preventDefault();
-                $('#newCaseColorModal').modal('show');
-                $('#newCaseColorForm').trigger("reset");
+                $('#newCaseModal').modal('show');
+                $('#newCaseForm').trigger("reset");
             });
 
-            $('#newCaseColorForm').submit(function(e) {
+            $('#newCaseForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let path = '{{ route('admin.settings.workshops.cases.color.store') }}';
+                let path = '{{ route('admin.settings.workshops.cases.frame.cases.store') }}';
                 $.ajax({
                     type: "POST",
                     url: path,
@@ -206,9 +283,9 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newCaseColorModal').modal('hide');
-                            $('#newCaseColorForm')[0].reset();
-                            $('#caseColorsData').DataTable().ajax.reload();
+                            $('#newCaseModal').modal('hide');
+                            $('#newCaseForm')[0].reset();
+                            $('#casesData').DataTable().ajax.reload();
                         }
                     },
                     error: function(data) {
@@ -223,7 +300,7 @@
                 });
             });
 
-            $(document).on('click', '.deleteCaseColorBtn', function(e) {
+            $(document).on('click', '.deleteCaseBtn', function(e) {
                 e.preventDefault();
                 Swal.fire({
                     title: "Are you sure?",
@@ -233,10 +310,10 @@
                     dangerMode: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        let color_id = $(this).data('id');
+                        let case_id = $(this).data('id');
                         let path =
-                            '{{ route('admin.settings.workshops.cases.color.delete', ':id') }}';
-                        path = path.replace(':id', color_id);
+                            '{{ route('admin.settings.workshops.cases.frame.cases.delete', ':id') }}';
+                        path = path.replace(':id', case_id);
                         let token = '{{ csrf_token() }}';
                         $.ajax({
                             url: path,
@@ -248,7 +325,7 @@
                             success: function(data) {
                                 if (data['status']) {
                                     Swal.fire(data['message'], '', 'success')
-                                    $('#caseColorsData').DataTable().ajax.reload();
+                                    $('#casesData').DataTable().ajax.reload();
                                 }
                             }
                         });
@@ -258,33 +335,35 @@
                 });
             });
 
-            $(document).on('click', '.updateCaseColorBtn', function(e) {
+            $(document).on('click', '.updateCaseBtn', function(e) {
                 e.preventDefault();
-                let color_id = $(this).data('id');
-                let path = '{{ route('admin.settings.workshops.cases.color.show', ':id') }}'
-                path = path.replace(':id', color_id);
+                let case_id = $(this).data('id');
+                let path = '{{ route('admin.settings.workshops.cases.frame.cases.show', ':id') }}'
+                path = path.replace(':id', case_id);
                 $.ajax({
                     type: "GET",
                     url: path,
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            $('#updateCaseColorModal').modal('show');
-                            $('#updateCaseColorId').val(data['data']['id']);
-                            $('#updateCaseColorTitle').val(data['data']['title']);
-                            $('#updateCaseColorDescription').val(data['data']['description']);
+                            $('#updateCaseModal').modal('show');
+                            $('#updateCaseId').val(data['data']['id']);
+                            $('#updateCaseCode').val(data['data']['code']);
+                            $('#updateCaseColor').val(data['data']['color_id']).trigger('change');
+                            $('#updateCaseSize').val(data['data']['size_id']).trigger('change');
+                            $('#updateCaseShape').val(data['data']['shape_id']).trigger('change');
                         }
                     }
                 });
             });
 
-            $('#updateCaseColorForm').submit(function(e) {
+            $('#updateCaseForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let color_id = $('#updateCaseColorId').val();
-                let path = '{{ route('admin.settings.workshops.cases.color.update', ':id') }}';
-                path = path.replace(':id', color_id);
+                let case_id = $('#updateCaseId').val();
+                let path = '{{ route('admin.settings.workshops.cases.frame.cases.update', ':id') }}';
+                path = path.replace(':id', case_id);
                 $.ajax({
                     type: "POST",
                     url: path,
@@ -307,9 +386,9 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#updateCaseColorModal').modal('hide');
-                            $('#updateCaseColorForm')[0].reset();
-                            $('#caseColorsData').DataTable().ajax.reload();
+                            $('#updateCaseModal').modal('hide');
+                            $('#updateCaseForm')[0].reset();
+                            $('#casesData').DataTable().ajax.reload();
                         }
                     },
                     error: function(data) {
