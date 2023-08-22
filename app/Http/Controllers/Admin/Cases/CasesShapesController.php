@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Cases;
 
-use App\Models\CaseSize;
+use App\Models\CaseShape;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Settings\Cases\SizesRequest;
-use App\Http\Requests\Admin\Settings\Cases\UpdateSizesRequest;
+use App\Http\Requests\Admin\Settings\Cases\ShapesRequest;
 
-class CaseSizesController extends Controller
+class CasesShapesController extends Controller
 {
-
-    function __construct()
+    public function __construct()
     {
         $this->middleware('auth:admin');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,14 +23,14 @@ class CaseSizesController extends Controller
     {
         //
         if ($request->ajax()) {
-            $data = CaseSize::latest()->get();
+            $data = CaseShape::latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('actions', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-id="'. $row->id .'" class="btn btn-sm btn-outline-primary updateCaseSizeBtn">';
+                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-sm btn-outline-primary updateCaseShapeBtn">';
                     $btn = $btn . '<i class="fa fa-edit"></i>';
                     $btn = $btn . '</a>';
-                    $btn = $btn . '<a href="javascript:void(0)" data-id="'. $row->id .'" class="btn btn-sm btn-outline-danger deleteCaseSizeBtn">';
+                    $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-sm btn-outline-danger deleteCaseShapeBtn">';
                     $btn = $btn . '<i class="fa fa-trash"></i>';
                     $btn = $btn . '</a>';
                     return $btn;
@@ -42,7 +39,7 @@ class CaseSizesController extends Controller
                 ->make(true);
         }
         $page_title = trans('pages.settings.page_title');
-        return view('admin.cases.sizes.index', [
+        return view('admin.cases.shapes.index', [
             'page_title' => $page_title
         ]);
     }
@@ -53,12 +50,12 @@ class CaseSizesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SizesRequest $request)
+    public function store(ShapesRequest $request)
     {
         //
         $data = $request->except("_token");
 
-        $sizes = new CaseSize;
+        $sizes = new CaseShape;
 
         $sizes->create([
             'title' => $data['title'],
@@ -68,7 +65,7 @@ class CaseSizesController extends Controller
 
         $response = [
             'status' => true,
-            'message' => 'Case Size successfully added'
+            'message' => 'Case Shape successfully added'
         ];
 
         return response()->json($response, 200);
@@ -83,15 +80,16 @@ class CaseSizesController extends Controller
     public function show($id)
     {
         //
-        $size = CaseSize::findOrFail($id);
+        $shape = CaseShape::findOrFail($id);
 
         $response = [
             'status' => true,
-            'data' => $size
+            'data' => $shape
         ];
 
         return response()->json($response, 200);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -100,14 +98,14 @@ class CaseSizesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSizesRequest $request, $id)
+    public function update(Request $request, $id)
     {
         //
-        $size = CaseSize::findOrFail($id);
+        $shape = CaseShape::findOrFail($id);
 
         $data = $request->except("_token");
 
-        $size->update([
+        $shape->update([
             'title' => $data['title'],
             'slug' => Str::slug($data['title']),
             'description' => $data['description']
@@ -115,7 +113,7 @@ class CaseSizesController extends Controller
 
         $response = [
             'status' => true,
-            'message' => 'Case Size successfully updated'
+            'message' => 'Case shape successfully updated'
         ];
 
         return response()->json($response, 200);
@@ -130,13 +128,13 @@ class CaseSizesController extends Controller
     public function destroy($id)
     {
         //
-        $size = CaseSize::findOrFail($id);
+        $shape = CaseShape::findOrFail($id);
 
-        $size->delete();
+        $shape->delete();
 
         $response = [
             'status' => true,
-            'message' => 'Case Size successfully removed'
+            'message' => 'Case shape successfully removed'
         ];
 
         return response()->json($response, 200);

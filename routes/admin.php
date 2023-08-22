@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Lens\LensRequestController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
 use App\Http\Controllers\Admin\Assets\AssetTypesController;
 use App\Http\Controllers\Admin\Cases\CasesColorsController;
+use App\Http\Controllers\Admin\Cases\CasesShapesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Patients\PatientsController;
@@ -372,6 +373,20 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [CaseSizesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [CaseSizesController::class, 'destroy'])->name('delete');
+
+                });
+
+                Route::prefix('shapes')->name('shapes.')->group(function(){
+
+                    Route::get('/index', [CasesShapesController::class, 'index'])->name('index');
+
+                    Route::post('/store', [CasesShapesController::class, 'store'])->name('store');
+
+                    Route::get('/{id}/show', [CasesShapesController::class, 'show'])->name('show');
+
+                    Route::post('/{id}/update', [CasesShapesController::class, 'update'])->name('update');
+
+                    Route::delete('/{id}/delete', [CasesShapesController::class, 'destroy'])->name('delete');
 
                 });
 

@@ -481,7 +481,7 @@
                 <!-- /.col -->
 
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="{{ route('admin.settings.clinics.glasses.shapes.index') }}">
+                    <a href="{{ route('admin.settings.workshops.cases.shapes.index') }}">
                         <div class="info-box">
                             <span class="info-box-icon bg-danger">
                                 <i class="fa fa-circle-thin"></i>
