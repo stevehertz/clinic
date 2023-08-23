@@ -137,6 +137,13 @@
                                 <p>Sun glasses</p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.frame.cases.index', $clinic->id) }}" class="nav-link  @if (isset($sub_page) && $sub_page == 'cases') active @endif">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>Cases</p>
+                            </a>
+                        </li>
                     </ul>
 
                 </li>

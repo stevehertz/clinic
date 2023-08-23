@@ -50,6 +50,7 @@ use App\Http\Controllers\Admin\Insurances\InsurancesController;
 use App\Http\Controllers\Admin\Orders\WorkshopOrdersController;
 use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Assets\AssetConditionsController;
+use App\Http\Controllers\Admin\Cases\ClinicCasesStockController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
@@ -764,6 +765,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/check/transfers', [ReceivedFramesController::class, 'check_stock_transfered'])->name('check.transfers');
 
         Route::post('/store', [ReceivedFramesController::class, 'store'])->name('store');
+    });
+
+    // Frame Case 
+    Route::prefix('frame/cases')->name('frame.cases.')->group(function () {
+
+        Route::get('/{id}', [ClinicCasesStockController::class, 'index'])->name('index');
+
+        Route::post('/store', [ClinicCasesStockController::class, 'store'])->name('store');
     });
 
 

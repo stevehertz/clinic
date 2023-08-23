@@ -166,4 +166,9 @@ class Clinic extends Model
     {
         return $this->hasMany(ReceivedFrame::class, 'to_clinic_id', 'id');
     }
+
+    public function clinic_frame_case_stock() 
+    {
+        return $this->hasMany(ClinicFrameCaseStock::class, 'clinic_id', 'id');
+    }
 }
