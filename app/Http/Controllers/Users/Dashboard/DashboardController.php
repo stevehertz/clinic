@@ -18,22 +18,18 @@ class DashboardController extends Controller
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
+        $num_my_schedules = $user->doctor_schedule->count();
+        $schedules = $user->doctor_schedule()->latest()->paginate(10);
         $clinic = $user->clinic;
-        $appointments = $clinic->appointment()
-            ->join('patients', 'appointments.patient_id', '=', 'patients.id')
-            ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
-            ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
-            ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
-            ->where('patients.status', 1)
-            ->orderBy('appointments.created_at', 'desc')
-            ->limit(10)
-            ->get();
-        $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->latest()->get();
+        $num_all_schedules = $clinic->doctor_schedule()->count();
         $patients = $clinic->patient->count();
-        $num_appointments = $clinic->appointment->count();
-        $schedules = $clinic->doctor_schedule->where('user_id', $user->id)->count();
-        $orders = $clinic->order->count();
-        $page_title = 'Dashboard';
-        return view('users.dashboard.index', compact('clinic', 'page_title', 'appointments', 'doctors', 'patients', 'num_appointments', 'schedules', 'orders'));
+        $page_title = trans('users.page.dashboard.title');
+        return view('users.dashboard.index',[
+            'page_title' => $page_title,
+            'clinic' => $clinic,
+            'num_my_schedules' => $num_my_schedules,
+            'schedules' => $schedules,
+            'num_all_schedules' => $num_all_schedules
+        ]);
     }
 }

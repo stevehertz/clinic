@@ -66,7 +66,7 @@ class CloseBillsController extends Controller
 
         $validator = Validator::make($data, [
             'bill_id' => 'required|integer|exists:payment_bills,id',
-            'invoice_number' => 'required|unique:payment_bills,invoice_number,' . $data['bill_id'],
+            'invoice_number' => 'required|numeric',
             'close_date' => 'required|date',
         ]);
 

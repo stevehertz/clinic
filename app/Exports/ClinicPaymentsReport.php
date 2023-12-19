@@ -30,9 +30,11 @@ class ClinicPaymentsReport implements FromView
     {
         $clinic = Clinic::findOrFail($this->clinic_id);
         if (!empty($this->from_date) && !empty($this->to_date)) {
-            $data = $clinic->payment_bill()
-                ->whereBetween('open_date', [$this->from_date, $this->to_date])
-                ->latest()->get();
+            $data = $clinic->payment_bill()->join('billings', 'payment_bills.id', '=', 'billings.payment_bill_id')
+                ->select('payment_bills.*', 'billings.item', 'billings.amount', 'billings.receipt_number')
+                ->whereBetween('payment_bills.open_date', [$this->from_date, $this->to_date])
+                ->orderBy('payment_bills.created_at', 'desc')
+                ->get();
         } elseif (!empty($this->bill_status)) {
             $data = $clinic->payment_bill()
                 ->where('bill_status', $this->bill_status)

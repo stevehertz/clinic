@@ -117,7 +117,7 @@ class PaymentsBillController extends Controller
             'schedule_id' => 'required|integer|exists:doctor_schedules,id',
             'claimed_amount' => 'required|numeric|min:0',
             'consultation_fee' => 'required|numeric|min:0',
-            'consultation_receipt' => 'required|numeric|unique:payment_bills,consultation_receipt_number',
+            'consultation_receipt' => 'required|numeric',
             'remarks' => 'nullable|string|max:255',
         ]);
 
@@ -324,7 +324,7 @@ class PaymentsBillController extends Controller
         $validator = Validator::make($data, [
             'bill_id' => 'required|integer|exists:payment_bills,id',
             'consultation_fee' => 'required|numeric',
-            'consultation_receipt' => 'required|unique:payment_bills,consultation_receipt_number,' . $data['bill_id'],
+            'consultation_receipt' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {

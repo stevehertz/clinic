@@ -10,6 +10,7 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Insurande Card Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Consultation Fee</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Consultation Receipt Number</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Receipt Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Invoice Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">LPO Number</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Approval Number</th>
@@ -54,6 +55,9 @@
                 </td>
                 <td>
                     {{ $report->consultation_receipt_number }}
+                </td>
+                <td>
+                    
                 </td>
                 <td>
                     {{ $report->invoice_number }}

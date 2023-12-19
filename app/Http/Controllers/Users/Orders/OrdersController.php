@@ -38,22 +38,22 @@ class OrdersController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            if(!empty($request->status)){
+            if (!empty($request->status)) {
                 $data = $clinic->order()->where('status', $request->status)->latest()->get();
-            }else{
+            } else {
                 $data = $clinic->order()->latest()->get();
             }
-            
+
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
                     return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
-                ->addColumn('clinic', function($row){
+                ->addColumn('clinic', function ($row) {
                     $clinic = $row->clinic->clinic;
                     return $clinic;
                 })
-                ->addColumn('workshop', function($row){
+                ->addColumn('workshop', function ($row) {
                     $workshop = $row->workshop->name;
                     return $workshop;
                 })
@@ -98,6 +98,19 @@ class OrdersController extends Controller
 
         $payment_bill = PaymentBill::find($data['bill_id']);
 
+        // check if order has been created for current patient and bill
+        $check_patient_order = Order::where('clinic_id', $payment_bill->clinic_id)
+            ->where('patient_id', $payment_bill->patient_id)
+            ->where('payment_bill_id', $payment_bill->id)
+            ->where('status', 'APPROVED')->first();
+
+        if ($check_patient_order) {
+            $response['status'] = true;
+            $response['order_id'] = $check_patient_order->id;
+            $response['message'] = 'Order created successfully';
+            return response()->json($response, 200);
+        }
+
         $workshop = Workshop::find($data['workshop_id']);
 
         $lens_power = LensPower::find($data['lens_power_id']);
@@ -123,7 +136,7 @@ class OrdersController extends Controller
         $sold = $frame_stock->sold_stock + $quantity;
 
         $closing = $total - $sold;
-        
+
         // remove the frame from stock
         $frame_stock->update([
             'opening_stock' => $opening,
@@ -263,9 +276,8 @@ class OrdersController extends Controller
 
         $order->status = $data['status'];
 
-        if($order->status == 'SENT TO WORKSHOP') 
-        {
-            $workshop = $order->workshop;  
+        if ($order->status == 'SENT TO WORKSHOP') {
+            $workshop = $order->workshop;
             $email = $workshop->email;
             $details['title'] = 'Order Details';
             $details['body'] = 'An order has been send to the workshop. Please check';
@@ -273,9 +285,8 @@ class OrdersController extends Controller
             Mail::to($email)->send(new OrderTechnicianMail($details));
         }
 
-        if($order->status == 'FRAME SENT TO WORKSHOP')
-        {
-            $workshop = $order->workshop;   
+        if ($order->status == 'FRAME SENT TO WORKSHOP') {
+            $workshop = $order->workshop;
             $email = $workshop->email;
             $details['title'] = 'Order Details';
             $details['body'] = 'Frame has been send to the workshop. Please check';
@@ -283,9 +294,8 @@ class OrdersController extends Controller
             Mail::to($email)->send(new OrderTechnicianMail($details));
         }
 
-        if($order->status == 'RECEIVED FROM WORKSHOP')
-        {
-            $workshop = $order->workshop;   
+        if ($order->status == 'RECEIVED FROM WORKSHOP') {
+            $workshop = $order->workshop;
             $email = $workshop->email;
             $details['title'] = 'Order Details';
             $details['body'] = 'Order and Frame has been received. Thank you';
@@ -293,18 +303,18 @@ class OrdersController extends Controller
             Mail::to($email)->send(new OrderTechnicianMail($details));
         }
 
-        if($order->status == 'CALL FOR COLLECTION')
-        {
-            $patient = $order->patient;
-            $email = $patient->email;
+        // if($order->status == 'CALL FOR COLLECTION')
+        // {
+        //     $patient = $order->patient;
+        //     $email = $patient->email;
 
-            $details['title'] = 'Order Details';
+        //     $details['title'] = 'Order Details';
 
-            $details['body'] = 'Your lens that you ordered is ready to be picked up. You are welcome to come an pick them up';
+        //     $details['body'] = 'Your lens that you ordered is ready to be picked up. You are welcome to come an pick them up';
 
-            Mail::to($patient->email)->send(new OrdersMail($details));
-            
-        }
+        //     Mail::to($patient->email)->send(new OrdersMail($details));
+
+        // }
 
         if ($order->status == 'CLOSED') {
             $order->closed_date = Carbon::now();

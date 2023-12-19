@@ -96,7 +96,7 @@ class PatientsController extends Controller
             'dob' => 'required|string|max:255|date_format:Y-m-d',
             'gender' => 'required|string',
             'next_of_kin_contact' => 'nullable|numeric|min:10',
-            'card_number' => 'required|unique:patients,card_number',
+            'card_number' => 'required|unique:patients,card_number|numeric',
         ], [
             'dob.date_format' => 'Date of Birth Must Match The Format: Y-m-d'
         ]);
@@ -125,7 +125,7 @@ class PatientsController extends Controller
         $patient->next_of_kin = $data['next_of_kin'];
         $patient->next_of_kin_contact = $data['next_of_kin_contact'];
         $patient->date_in = Carbon::now()->format('Y-m-d');
-        $patient->card_number = $clinic->initials.''.$data['card_number'];
+        $patient->card_number = $data['card_number'];
 
         if ($patient->save()) {
             $request->session()->put('patient_id', $patient->id);

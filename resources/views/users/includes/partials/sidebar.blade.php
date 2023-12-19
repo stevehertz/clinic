@@ -26,23 +26,13 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fa fa-dashboard"></i>
+                <li class="nav-item">
+                    <a href="{{ route('users.dashboard.index') }}" class="nav-link {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard
-                            <i class="right fa fa-angle-left"></i>
+                            @lang('users.page.dashboard.title')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('users.dashboard.index') }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-
-                    </ul>
                 </li>
 
                 <li class="nav-item has-treeview">
@@ -81,21 +71,30 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview @if(Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) menu-open @endif">
+                    <a href="#" class="nav-link @if(Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) active @endif">
                         <i class="nav-icon fa fa-calendar"></i>
                         <p>
-                            Doctor Schedules
+                            @lang('users.page.schedules.title')
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.doctor.schedules.index') }}" class="nav-link">
+                            <a href="{{ route('users.doctor.schedules.index') }}" class="nav-link @if(Route::is('users.doctor.schedules.index')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Schedule</p>
+                                <p>@lang('users.page.schedules.sub_page.schedules')</p>
                             </a>
                         </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('users.doctor.schedules.personal') }}" class="nav-link @if(Route::is('users.doctor.schedules.personal')) active @endif">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>@lang('users.page.schedules.sub_page.my_schedules')</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 

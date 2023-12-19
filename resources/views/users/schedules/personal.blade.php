@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $clinic->clinic  }}</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -81,11 +81,10 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
             find_doctor_schedules();
 
             function find_doctor_schedules(from_date, to_date) {
-                var path = '{{ route('users.doctor.schedules.index') }}';
+                var path = '{{ route('users.doctor.schedules.personal') }}';
                 $('#schedulesData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -185,4 +184,3 @@
         });
     </script>
 @endpush
-

@@ -183,6 +183,8 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::get('/index', [DoctorSchedulesController::class, 'index'])->name('index');
 
+        Route::get('/personal', [DoctorSchedulesController::class, 'my_schedules'])->name('personal');
+
         Route::post('/store', [DoctorSchedulesController::class, 'store'])->name('store');
 
         Route::post('/show', [DoctorSchedulesController::class, 'show'])->name('show');

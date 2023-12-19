@@ -10,6 +10,7 @@ use App\Models\Patient;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DoctorSchedulesController extends Controller
@@ -28,29 +29,24 @@ class DoctorSchedulesController extends Controller
         if ($request->ajax()) {
 
             if (!empty($request->from_date) && !empty($request->to_date)) {
-                $data = $clinic->doctor_schedule()->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
-                    ->join('users', 'users.id', '=', 'doctor_schedules.user_id')
-                    ->select('doctor_schedules.*', 'users.first_name as dr_first', 'users.last_name as dr_last', 'patients.first_name  as patient_first', 'patients.last_name as patient_last')
-                    ->where('doctor_schedules.user_id', $user->id)
-                    ->whereBetween('doctor_schedules.date', [$request->from_date, $request->to_date])
+                $data = $clinic->doctor_schedule()
+                    ->whereBetween('date', [$request->from_date, $request->to_date])
                     ->get();
             } else {
-                $data = $clinic->doctor_schedule()->join('patients', 'patients.id', '=', 'doctor_schedules.patient_id')
-                    ->join('users', 'users.id', '=', 'doctor_schedules.user_id')
-                    ->select('doctor_schedules.*', 'users.first_name as dr_first', 'users.last_name as dr_last', 'patients.first_name  as patient_first', 'patients.last_name as patient_last')
-                    ->where('doctor_schedules.user_id', $user->id)
-                    ->get();
+                $data = $clinic->doctor_schedule()->latest()->get();
             }
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('patient_name', function ($row) {
-                    return $row->patient_first . ' ' . $row->patient_last;
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
                 ->addColumn('dr_name', function ($row) {
-                    return $row->dr_first . ' ' . $row->dr_last;
+                    return $row->user->first_name . ' ' . $row->user->last_name;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="btn btn-tool btn-sm viewDoctorSchedule"><i class="fa fa-eye"></i></a>';
+                    $btn = "";
+                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="btn btn-tool btn-sm viewDoctorSchedule">';
+                    $btn = $btn . '<i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action', 'patient_name', 'dr_name'])
@@ -58,6 +54,43 @@ class DoctorSchedulesController extends Controller
         }
         $page_title = 'Doctor Schedules';
         return view('users.schedules.index', compact('clinic', 'page_title'));
+    }
+
+    public function my_schedules(Request $request)
+    {
+        $user = User::findOrFail(auth()->user()->id);
+        $clinic = $user->clinic;
+        if ($request->ajax()) {
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $user->doctor_schedule()
+                    ->whereBetween('date', [$request->from_date, $request->to_date])
+                    ->get();
+            } else {
+                $data = $user->doctor_schedule()->latest()->get();
+            }
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('patient_name', function ($row) {
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('dr_name', function ($row) {
+                    return $row->user->first_name . ' ' . $row->user->last_name;
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = "";
+                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="btn btn-tool btn-sm viewDoctorSchedule">';
+                    $btn = $btn . '<i class="fa fa-eye"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action', 'patient_name', 'dr_name'])
+                ->make(true);
+        }
+        $page_title = trans('users.page.schedules.sub_page.my_schedules');
+        return view('users.schedules.personal', [
+            'page_title' => $page_title,
+            'clinic' => $clinic
+        ]);
     }
 
     public function store(Request $request)
@@ -143,7 +176,7 @@ class DoctorSchedulesController extends Controller
         $organization = $clinic->organization;
         $types = $organization->lens_type->sortBy('created_at', SORT_DESC);
         $materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
-        $workshops = $organization->    workshop->sortBy('created_at', SORT_DESC);
+        $workshops = $organization->workshop->sortBy('created_at', SORT_DESC);
 
         $schedule = DoctorSchedule::findOrFail($id);
         $patient = $schedule->patient;

@@ -61,6 +61,8 @@
                             Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
                             Scheme: {{ $payment_bill->payment_detail->scheme }}
                         @endif
+                        Prescription Invoice Number:
+                        {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
 
                     </address>
                 </div>
@@ -152,9 +154,12 @@
                     @if ($payment_bill->payment_detail->insurance)
                         {{ $payment_bill->payment_detail->client_type->type }}:
                         {{ $payment_bill->payment_detail->insurance->title }} <br>
+                        Scheme Name: {{ $payment_bill->payment_detail->scheme }} <br>
                         Approval Number: {{ $payment_bill->approval_number }} <br>
                         Approval Status: @if ($payment_bill->approval_status == 'APPROVED')
-                            <span class="badge badge-success">{{ $payment_bill->approval_status }}</span>
+                            <span class="badge badge-success">
+                                {{ $payment_bill->approval_status }}
+                            </span>
                         @elseif ($payment_bill->approval_status == 'PENDING')
                             <span class="badge badge-warning">{{ $payment_bill->approval_status }}</span>
                         @else

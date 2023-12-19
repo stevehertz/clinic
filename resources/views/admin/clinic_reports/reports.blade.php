@@ -1,3 +1,13 @@
+@php
+    function removeNonBreakingSpace($inputString)
+    {
+        // Replace &nbsp; with a regular space
+        $outputString = str_replace('&nbsp;', ' ', $inputString);
+
+        return $outputString;
+    }
+@endphp
+
 <table>
     <thead>
         <tr>
@@ -107,17 +117,17 @@
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ strip_tags($report->diagnosis->signs) }}
+                        {{ strip_tags(removeNonBreakingSpace($report->diagnosis->signs)) }}
                     @endif
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ strip_tags($report->diagnosis->symptoms) }}
+                        {{ strip_tags(removeNonBreakingSpace($report->diagnosis->symptoms)) }}
                     @endif
                 </td>
                 <td>
                     @if ($report->diagnosis)
-                        {{ strip_tags($report->diagnosis->diagnosis) }}
+                        {{ strip_tags(removeNonBreakingSpace($report->diagnosis->diagnosis)) }}
                     @endif
                 </td>
                 <td>
@@ -162,7 +172,7 @@
                 </td>
                 <td>
                     @if ($report->lens_power)
-                        {{ strip_tags($report->lens_power->notes) }}
+                        {{ strip_tags(removeNonBreakingSpace($report->lens_power->notes)) }}
                     @endif
                 </td>
                 <td>
@@ -247,7 +257,9 @@
                 </td>
                 <td>
                     @if ($report->payment_bill)
-                        {{ date('d-M-Y', strtotime($report->payment_bill->close_date)) }}
+                        @if ($report->payment_bill->close_date != null && $report->payment_bill->close_date != '')
+                            {{ date('d-M-Y', strtotime($report->payment_bill->close_date)) }}
+                        @endif
                     @endif
                 </td>
                 <td>
