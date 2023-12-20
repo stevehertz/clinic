@@ -175,6 +175,12 @@
                     <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
                         {{ $payment_bill->remarks }}
                     </p>
+
+                    <br><br>
+                    <h5>Doctor/Optometrist</h5>
+                    <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                        {{ $payment_bill->user->first_name }} {{ $payment_bill->user->last_name }}
+                    </p>
                 </div>
                 <!-- /.col -->
                 <div class="col-12 col-md-6">

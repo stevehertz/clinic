@@ -90,4 +90,9 @@ class User extends Authenticatable
         # code...
         return $this->hasMany(OrderTrack::class, 'user_id', 'id');
     }
+
+    public function payment_bill()  
+    {
+        return $this->hasMany(PaymentBill::class, 'user_id', 'id');    
+    }
 }

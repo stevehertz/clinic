@@ -126,21 +126,23 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::get('/index', [PaymentsBillController::class, 'index'])->name('index');
 
+            Route::get('/scheduled/payments', [PaymentsBillController::class, 'get_scheduled'])->name('scheduled.payments');
+
             Route::get('/{id}/create', [PaymentsBillController::class, 'create'])->name('create');
 
             Route::post('/store', [PaymentsBillController::class, 'store'])->name('store');
 
-            Route::post('/show', [PaymentsBillController::class, 'show'])->name('show');
+            Route::get('/{paymentBill}/show', [PaymentsBillController::class, 'show'])->name('show');
 
-            Route::get('/{id}/view', [PaymentsBillController::class, 'view'])->name('view');
+            Route::get('/{paymentBill}/view', [PaymentsBillController::class, 'view'])->name('view');
 
-            Route::get('/{id}/edit', [PaymentsBillController::class, 'edit'])->name('edit');
+            Route::get('/{paymentBill}/edit', [PaymentsBillController::class, 'edit'])->name('edit');
 
             Route::post('/update/agreed/amount', [PaymentsBillController::class, 'update_agreed'])->name('update.agreed.amount');
 
             Route::post('/update/consultation', [PaymentsBillController::class, 'update_consultation'])->name('update.consultation');
 
-            Route::get('/{d}/print', [PaymentsBillController::class, 'print'])->name('print');
+            Route::get('/{paymentBill}/print', [PaymentsBillController::class, 'print'])->name('print');
         });
 
         Route::prefix('close/bills')->name('close.bills.')->group(function () {

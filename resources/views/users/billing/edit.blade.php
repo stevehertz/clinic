@@ -249,28 +249,45 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
-                                @if ($payment_bill->claimed_amount > 0 && $payment_bill->agreed_amount <= 0)
-                                    <a href="#" data-id='{{ $payment_bill->id }}'
-                                        class="btn btn-default enterAgreedAmountBtn">
-                                        <i class="fa fa-money"></i> Enter Agreed Amount
-                                    </a>
-                                @endif
-
-                                <!-- Consultation Fee Button  incase amount is rejected-->
-                                @if ($payment_bill->payment_detail->insurance)
-                                    @if ($payment_bill->approval_status == 'REJECTED')
-                                        <!--Check if consultation fee was paid -->
-                                        @if ($payment_bill->consultation_fee == 0)
-                                            <a href="#" data-id='{{ $payment_bill->id }}'
-                                                class="btn btn-warning rejectedInsuranceBtn">
-                                                <i class="fa fa-check"></i> Consultation Fee
-                                            </a>
-                                        @endif
+                                @if ($payment_bill->user_id !== null && Auth::user()->id == $payment_bill->user_id)
+                                    @if ($payment_bill->claimed_amount > 0 && $payment_bill->agreed_amount <= 0)
+                                        <a href="#" data-id='{{ $payment_bill->id }}'
+                                            class="btn btn-default enterAgreedAmountBtn">
+                                            <i class="fa fa-money"></i> Enter Agreed Amount
+                                        </a>
                                     @endif
                                 @endif
 
-                                @if ($payment_bill->payment_detail->insurance)
-                                    @if ($payment_bill->approval_status != 'REJECTED')
+
+                                <!-- Consultation Fee Button  incase amount is rejected-->
+                                @if ($payment_bill->user_id !== null && Auth::user()->id == $payment_bill->user_id)
+                                    @if ($payment_bill->payment_detail->insurance)
+                                        @if ($payment_bill->approval_status == 'REJECTED')
+                                            <!--Check if consultation fee was paid -->
+                                            @if ($payment_bill->consultation_fee == 0)
+                                                <a href="#" data-id='{{ $payment_bill->id }}'
+                                                    class="btn btn-warning rejectedInsuranceBtn">
+                                                    <i class="fa fa-check"></i> Consultation Fee
+                                                </a>
+                                            @endif
+                                        @endif
+                                    @endif
+
+                                    @if ($payment_bill->payment_detail->insurance)
+                                        @if ($payment_bill->approval_status != 'REJECTED')
+                                            @if ($payment_bill->balance > 0)
+                                                <button type="button" id="{{ $payment_bill->id }}"
+                                                    class="btn btn-success float-right addPaymentsBtn">
+                                                    <i class="fa fa-credit-card"></i> Submit Payment
+                                                </button>
+                                            @else
+                                                <a href="{{ route('users.payments.bills.view', $payment_bill->id) }}"
+                                                    class="btn btn-default float-right" style="margin-right: 5px;">
+                                                    <i class="fa fa-eye"></i> View Bill
+                                                </a>
+                                            @endif
+                                        @endif
+                                    @else
                                         @if ($payment_bill->balance > 0)
                                             <button type="button" id="{{ $payment_bill->id }}"
                                                 class="btn btn-success float-right addPaymentsBtn">
@@ -282,18 +299,6 @@
                                                 <i class="fa fa-eye"></i> View Bill
                                             </a>
                                         @endif
-                                    @endif
-                                @else
-                                    @if ($payment_bill->balance > 0)
-                                        <button type="button" id="{{ $payment_bill->id }}"
-                                            class="btn btn-success float-right addPaymentsBtn">
-                                            <i class="fa fa-credit-card"></i> Submit Payment
-                                        </button>
-                                    @else
-                                        <a href="{{ route('users.payments.bills.view', $payment_bill->id) }}"
-                                            class="btn btn-default float-right" style="margin-right: 5px;">
-                                            <i class="fa fa-eye"></i> View Bill
-                                        </a>
                                     @endif
                                 @endif
 
@@ -471,22 +476,18 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
             $(document).on('click', '.enterAgreedAmountBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
@@ -505,6 +506,7 @@
                     },
                 });
             });
+
 
             $('#enterAgreedAmountForm').submit(function(e) {
                 e.preventDefault();
@@ -562,16 +564,12 @@
 
             $(document).on('click', '.addPaymentsBtn', function(e) {
                 e.preventDefault();
-                var payment_bill_id = $(this).attr('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.bills.show') }}';
+                let payment_bill_id = $(this).attr('id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', payment_bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        '_token': token,
-                        'bill_id': payment_bill_id
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
@@ -631,7 +629,6 @@
                 });
             });
 
-
             function find_total_paid() {
                 var bill_id = '{{ $payment_bill->id }}';
                 var path = '{{ route('users.payments.billing.update.paid') }}';
@@ -663,16 +660,12 @@
 
             $(document).on('click', '.rejectedInsuranceBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
@@ -731,6 +724,7 @@
                     }
                 });
             });
+
         });
     </script>
-@endsection
+@endpush

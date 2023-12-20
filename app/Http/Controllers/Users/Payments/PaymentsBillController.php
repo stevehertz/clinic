@@ -29,35 +29,11 @@ class PaymentsBillController extends Controller
         $clinic = $user->clinic;
         if ($request->ajax()) {
 
-            $data = $clinic->payment_bill()->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
-                ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
-                ->select('payment_bills.*', 'patients.first_name as patient_first', 'patients.last_name as patient_last')
-                ->where('payment_bills.bill_status', '!=', 'CLOSED')
-                ->where('doctor_schedules.user_id', $user->id)
-                ->orderBy('payment_bills.id', 'desc')
-                ->get();
+            $data = $clinic->payment_bill()->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
-                    return $row->patient_first . ' ' . $row->patient_last;
-                })
-                ->addColumn('consultation_fee', function ($row) {
-                    return number_format($row->consultation_fee, 2, '.', ',');
-                })
-                ->addColumn('claimed_amount', function ($row) {
-                    return number_format($row->claimed_amount, 2, '.', ',');
-                })
-                ->addColumn('agreed_amount', function ($row) {
-                    return number_format($row->agreed_amount, 2, '.', ',');
-                })
-                ->addColumn('total_amount', function ($row) {
-                    return number_format($row->total_amount, 2, '.', ',');
-                })
-                ->addColumn('paid_amount', function ($row) {
-                    return number_format($row->paid_amount, 2, '.', ',');
-                })
-                ->addColumn('balance', function ($row) {
-                    return number_format($row->balance, 2, '.', ',');
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
                 ->addColumn('open_date', function ($row) {
                     $open_date = date('d-m-Y', strtotime($row->open_date));
@@ -73,7 +49,11 @@ class PaymentsBillController extends Controller
                     }
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tools btn-sm editPaymentBill"><i class="fa fa-edit"></i></a>';
+                    $btn = '';
+                    if ($row->user_id !== null && $row->user->id == Auth::user()->id) {
+                        $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tools btn-sm editPaymentBill"><i class="fa fa-edit"></i></a>';
+                    }
+
                     $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="view btn btn-tools btn-sm viewPaymentBill"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
@@ -91,6 +71,49 @@ class PaymentsBillController extends Controller
             'user' => $user,
             'clinic' => $clinic,
         ]);
+    }
+
+
+    public function get_scheduled(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        if ($request->ajax()) {
+            $data = $user->payment_bill()->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('full_names', function ($row) {
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('open_date', function ($row) {
+                    $open_date = date('d-m-Y', strtotime($row->open_date));
+                    return $open_date;
+                })
+                ->addColumn('bill_status', function ($row) {
+                    if ($row['bill_status'] == 'OPEN') {
+                        return '<span class="badge badge-primary">OPEN</span>';
+                    } elseif ($row['bill_status'] == 'PENDING') {
+                        return '<span class="badge badge-warning">PENDING</span>';
+                    } else {
+                        return '<span class="badge badge-success">CLOSED</span>';
+                    }
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+                    if ($row->user_id !== null && $row->user->id == Auth::user()->id) {
+                        $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-tools btn-sm editPaymentBill"><i class="fa fa-edit"></i></a>';
+                    }
+
+                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $row->id . '" data-original-title="View" class="view btn btn-tools btn-sm viewPaymentBill"><i class="fa fa-eye"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(
+                    [
+                        'action',
+                        'full_names', 'open_date', 'consultation_fee', 'claimed_amount', 'agreed_amount', 'total_amount', 'paid_amount', 'balance', 'bill_status'
+                    ]
+                )
+                ->make(true);
+        }
     }
 
     public function create($id)
@@ -136,6 +159,7 @@ class PaymentsBillController extends Controller
 
         $payment_bill = new PaymentBill;
 
+        $payment_bill->user_id = $doctor_schedule->user->id;
         $payment_bill->clinic_id = $doctor_schedule->clinic->id;
         $payment_bill->patient_id = $doctor_schedule->patient->id;
         $payment_bill->appointment_id = $doctor_schedule->appointment->id;
@@ -197,71 +221,63 @@ class PaymentsBillController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(PaymentBill $paymentBill)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-
         $response['status'] = true;
-        $response['data'] = $payment_bill;
-
+        $response['data'] = $paymentBill;
         return response()->json($response, 200);
     }
 
-    public function view($id)
+    public function view(PaymentBill $paymentBill)
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
-        $payment_bill = PaymentBill::findOrFail($id);
-        $doctor_schedule = $payment_bill->doctor_schedule;
+        $doctor_schedule = $paymentBill->doctor_schedule;
         $diagnosis = $doctor_schedule->diagnosis;
         $treatment = $diagnosis->treatment;
-        $page_title = 'View Bill';
+        $page_title = trans('users.page.payments.sub_page.view');
+        if ($paymentBill->user_id == null) {
+            $paymentBill->update([
+                'user_id' => $doctor_schedule->user_id
+            ]);
+        }
         return view('users.billing.view', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
-            'payment_bill' => $payment_bill,
+            'payment_bill' => $paymentBill,
             'treatment' => $treatment
         ]);
     }
 
-    public function edit($id)
+    public function edit(PaymentBill $paymentBill)
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
+        $doctor_schedule = $paymentBill->doctor_schedule;
+        if ($paymentBill->user_id == null) {
+            $paymentBill->update([
+                'user_id' => $doctor_schedule->user_id
+            ]);
+        }
         $page_title = 'Edit Bill';
-        $payment_bill = PaymentBill::findOrFail($id);
         return view('users.billing.edit', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
-            'payment_bill' => $payment_bill,
+            'payment_bill' => $paymentBill,
         ]);
     }
 
-    public function update_agreed(Request $request)
+    public function update_agreed(PaymentBill $paymentBill, Request $request)
     {
         # code...
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
             'amount' => 'required|numeric'
         ]);
 
@@ -272,41 +288,39 @@ class PaymentsBillController extends Controller
             return response()->json($response, 401);
         }
 
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
+        $appointment = $paymentBill->appontment;
 
-        $appointment = $payment_bill->appontment;
-
-        $payment_bill->id = $payment_bill->id;
-        $payment_bill->bill_status = 'PENDING';
-        if ($payment_bill->payment_detail->insurance) {
-            $payment_bill->approval_status = $data['approval_status'];
-            $payment_bill->approval_number = $data['approval_number'];
+        $paymentBill->id = $paymentBill->id;
+        $paymentBill->bill_status = 'PENDING';
+        if ($paymentBill->payment_detail->insurance) {
+            $paymentBill->approval_status = $data['approval_status'];
+            $paymentBill->approval_number = $data['approval_number'];
         }
-        if ($payment_bill->approval_status == 'REJECTED') {
-            $payment_bill->agreed_amount = $data['amount'];
-            $payment_bill->total_amount = 0 + $payment_bill->consultation_fee;
+        if ($paymentBill->approval_status == 'REJECTED') {
+            $paymentBill->agreed_amount = $data['amount'];
+            $paymentBill->total_amount = 0 + $paymentBill->consultation_fee;
         } else {
-            $payment_bill->agreed_amount = $data['amount'];
-            $payment_bill->total_amount = $payment_bill->agreed_amount + $payment_bill->consultation_fee;
+            $paymentBill->agreed_amount = $data['amount'];
+            $paymentBill->total_amount = $paymentBill->agreed_amount + $paymentBill->consultation_fee;
         }
-        $payment_bill->paid_amount = $payment_bill->paid_amount;
-        $payment_bill->balance = $payment_bill->total_amount - $payment_bill->paid_amount;
+        $paymentBill->paid_amount = $paymentBill->paid_amount;
+        $paymentBill->balance = $paymentBill->total_amount - $paymentBill->paid_amount;
 
 
-        if ($payment_bill->save()) {
+        if ($paymentBill->save()) {
 
-            $clinic = $payment_bill->clinic;
+            $clinic = $paymentBill->clinic;
 
             $report_id = $appointment->report_id;
 
             $report = $clinic->report()->findOrFail($report_id);
 
             $report->update([
-                'bill_status' => $payment_bill->bill_status,
-                'agreed_amount' => $payment_bill->agreed_amount,
-                'total_amount' => $payment_bill->total_amount,
-                'paid_amount' => $payment_bill->paid_amount,
-                'balance' => $payment_bill->balance,
+                'bill_status' => $paymentBill->bill_status,
+                'agreed_amount' => $paymentBill->agreed_amount,
+                'total_amount' => $paymentBill->total_amount,
+                'paid_amount' => $paymentBill->paid_amount,
+                'balance' => $paymentBill->balance,
             ]);
 
             $response['status'] = true;
@@ -316,7 +330,7 @@ class PaymentsBillController extends Controller
         }
     }
 
-    public function update_consultation(Request $request)
+    public function update_consultation(PaymentBill $paymentBill, Request $request)
     {
         # code...
         $data = $request->all();
@@ -333,19 +347,16 @@ class PaymentsBillController extends Controller
             $response['errors'] = $errors;
             return response()->json($response, 401);
         }
+        $appointment = $paymentBill->appontment;
 
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-
-        $appointment = $payment_bill->appontment;
-
-        $payment_bill->id = $payment_bill->id;
-        $payment_bill->consultation_fee = $data['consultation_fee'];
-        $payment_bill->consultation_receipt_number = $payment_bill->clinic->initials . '/' . $data['consultation_receipt'];
-        $payment_bill->bill_status = 'PENDING';
-        $payment_bill->agreed_amount = $payment_bill->consultation_fee;
-        $payment_bill->total_amount = $payment_bill->agreed_amount;
-        $payment_bill->paid_amount = $payment_bill->consultation_fee;
-        $payment_bill->balance = $payment_bill->total_amount - $payment_bill->paid_amount;
+        $paymentBill->id = $paymentBill->id;
+        $paymentBill->consultation_fee = $data['consultation_fee'];
+        $paymentBill->consultation_receipt_number = $paymentBill->clinic->initials . '/' . $data['consultation_receipt'];
+        $paymentBill->bill_status = 'PENDING';
+        $paymentBill->agreed_amount = $paymentBill->consultation_fee;
+        $paymentBill->total_amount = $paymentBill->agreed_amount;
+        $paymentBill->paid_amount = $paymentBill->consultation_fee;
+        $paymentBill->balance = $paymentBill->total_amount - $paymentBill->paid_amount;
 
         return $appointment;
 
@@ -373,18 +384,17 @@ class PaymentsBillController extends Controller
         // }
     }
 
-    public function print($id)
+    public function print(PaymentBill $paymentBill)
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
-        $payment_bill = PaymentBill::findOrFail($id);
         $page_title = 'Print Bill';
         return view('users.billing.print', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
-            'payment_bill' => $payment_bill,
+            'payment_bill' => $paymentBill,
         ]);
     }
 }

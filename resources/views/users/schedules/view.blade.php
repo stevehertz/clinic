@@ -2675,7 +2675,6 @@
                                 $('#openBillScheduleId').val(data['data']['id']);
                                 $('#openBillModal').modal('show');
                             }
-                            console.table(data);
                         },
                         error: function(data) {
                             var errors = data.responseJSON;
@@ -2736,25 +2735,21 @@
                 // view bill
                 $(document).on('click', '.viewPaymentBillBtn', function(e) {
                     e.preventDefault();
-                    var bill_id = $(this).data('id');
-                    var token = '{{ csrf_token() }}';
-                    var path = '{{ route('users.payments.bills.show') }}';
+                    let bill_id = $(this).data('id');
+                    let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                    path = path.replace(':paymentBill', bill_id);
                     $.ajax({
                         url: path,
-                        type: "POST",
+                        type: "GET",
                         dataType: "json",
-                        data: {
-                            bill_id: bill_id,
-                            _token: token,
-                        },
                         success: function(data) {
                             if (data['status']) {
                                 // later change it to view
-                                let url = '{{ route('users.payments.bills.view', ':id') }}';
-                                url = url.replace(':id', data['data']['id']);
+                                let url = '{{ route('users.payments.bills.view', ':paymentBill') }}';
+                                url = url.replace(':paymentBill', data['data']['id']);
                                 setTimeout(() => {
                                     window.location.href = url;
-                                }, 1000);
+                                }, 500);
                             }
                         },
                         error: function(data) {
@@ -2768,8 +2763,6 @@
                         },
                     });
                 });
-
-                // consultation fee
             });
         </script>
     @endif

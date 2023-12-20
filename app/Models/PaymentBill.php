@@ -10,6 +10,7 @@ class PaymentBill extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'clinic_id',
         'patient_id',
         'appointment_id',
@@ -34,6 +35,12 @@ class PaymentBill extends Model
         'remarks',
         'terms',
     ];
+
+    public function user()  
+    {
+        # code...
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
     public function clinic()
     {

@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>View Bill</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -18,7 +18,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
-                            View Bill
+                            {{ $page_title }}
                         </li>
                     </ol>
                 </div>
@@ -175,8 +175,14 @@
                                 <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
                                     {{ $payment_bill->remarks }}
                                 </p>
+                                <br><br>
+                                <h5>Doctor/Optometrist</h5>
+                                <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                                    {{ $payment_bill->user->first_name }} {{ $payment_bill->user->last_name }}
+                                </p>
                             </div>
                             <!--.col-12 col-md-6 -->
+
                             <div class="col-12 col-md-6">
 
                                 @if ($payment_bill->closing_date)
@@ -249,50 +255,52 @@
                         </div>
                         <!--.row -->
 
-                        <!-- this row will not appear when printing -->
-                        <div class="row no-print">
+                        @if ($payment_bill->user_id !== null && Auth::user()->id == $payment_bill->user->id)
+                            <!-- this row will not appear when printing -->
+                            <div class="row no-print">
 
-                            <div class="col-12">
+                                <div class="col-12">
 
-                                <a href="{{ route('users.payments.bills.edit', $payment_bill->id) }}"
-                                    class="btn btn-default">
-                                    <i class="fa fa-edit"></i> Edit
-                                </a>
+                                    <a href="{{ route('users.payments.bills.edit', $payment_bill->id) }}"
+                                        class="btn btn-default">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
 
-                                <button type="button" data-id="{{ $payment_bill->id }}"
-                                    class="btn btn-danger float-right closeBillBtn" style="margin-right: 5px;">
-                                    <i class="fa fa-close "></i> Close Bill
-                                </button>
+                                    <button type="button" data-id="{{ $payment_bill->id }}"
+                                        class="btn btn-danger float-right closeBillBtn" style="margin-right: 5px;">
+                                        <i class="fa fa-close "></i> Close Bill
+                                    </button>
 
-                                @if ($payment_bill->approval_status == 'APPROVED')
-                                    @if ($payment_bill->order)
-                                        <a href="#" data-id="{{ $payment_bill->order->id }}"
-                                            class="btn btn-primary float-right viewOrderBtn" style="margin-right: 5px;">
-                                            <i class="fa fa-sticky-note"></i> View Order
-                                        </a>
-                                    @else
-                                        @if ($treatment->lens_power)
-                                            <button type="button" data-id="{{ $payment_bill->id }}"
-                                                data-lens_power='{{ $payment_bill->doctor_schedule->lens_power->id }}'
-                                                data-workshop="{{ $payment_bill->doctor_schedule->lens_power->frame_prescription->workshop->id }}"
-                                                class="btn btn-success float-right proceedOrdersBtn"
-                                                style="margin-right: 5px;">
-                                                <i class="fa fa-check"></i> Proceed to Orders
-                                            </button>
+                                    @if ($payment_bill->approval_status == 'APPROVED')
+                                        @if ($payment_bill->order)
+                                            <a href="#" data-id="{{ $payment_bill->order->id }}"
+                                                class="btn btn-primary float-right viewOrderBtn" style="margin-right: 5px;">
+                                                <i class="fa fa-sticky-note"></i> View Order
+                                            </a>
+                                        @else
+                                            @if ($treatment->lens_power)
+                                                <button type="button" data-id="{{ $payment_bill->id }}"
+                                                    data-lens_power='{{ $payment_bill->doctor_schedule->lens_power->id }}'
+                                                    data-workshop="{{ $payment_bill->doctor_schedule->lens_power->frame_prescription->workshop->id }}"
+                                                    class="btn btn-success float-right proceedOrdersBtn"
+                                                    style="margin-right: 5px;">
+                                                    <i class="fa fa-check"></i> Proceed to Orders
+                                                </button>
+                                            @endif
                                         @endif
                                     @endif
-                                @endif
 
-                                <button type="button" data-id="{{ $payment_bill->id }}"
-                                    class="btn btn-warning float-right printPaymentsBtn " style="margin-right: 5px;">
-                                    <i class="fa fa-print"></i> Print
-                                </button>
+                                    <button type="button" data-id="{{ $payment_bill->id }}"
+                                        class="btn btn-warning float-right printPaymentsBtn " style="margin-right: 5px;">
+                                        <i class="fa fa-print"></i> Print
+                                    </button>
+
+                                </div>
+                                <!--.col-12 -->
 
                             </div>
-                            <!--.col-12 -->
-
-                        </div>
-                        <!--.row no-print -->
+                            <!--.row no-print -->
+                        @endif
 
                     </div>
                     <!--.invoice p-3 mb-3  -->
@@ -326,8 +334,8 @@
                                 <label for="closeBillInvoiceNumber">
                                     Invoice Number
                                 </label>
-                                <input type="text" name="invoice_number" class="form-control" id="closeBillInvoiceNumber"
-                                    placeholder="Enter Bill Invoice Number">
+                                <input type="text" name="invoice_number" class="form-control"
+                                    id="closeBillInvoiceNumber" placeholder="Enter Bill Invoice Number">
                             </div>
 
                             <div class="form-group">
@@ -364,7 +372,7 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -401,6 +409,7 @@
                 });
             });
 
+
             function find_order_track(order_id) {
 
                 var path = '{{ route('users.order.track.store') }}';
@@ -434,23 +443,50 @@
                 });
             }
 
-            $(document).on('click', '.printPaymentsBtn', function(e) {
+            $(document).on('click', '.editPaymentBill', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.bills.show') }}';
+                let bill_id = $(this).attr('data-id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        _token: token,
-                        bill_id: bill_id
+                    type: 'GET',
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
+                            let edit_path = '{{ route('users.payments.bills.edit', ':paymentBill') }}';
+                            edit_path = edit_path.replace(':paymentBill', data['data']['id']);
+                            setTimeout(() => {
+                                window.location.href = edit_path;
+                            }, 500);
+                        }
                     },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    },
+                });
+            });
+
+            $(document).on('click', '.printPaymentsBtn', function(e) {
+                e.preventDefault();
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
+                $.ajax({
+                    url: path,
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.payments.bills.print', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url =
+                                '{{ route('users.payments.bills.print', ':paymentBill') }}';
+                            url = url.replace(':paymentBill', data['data']['id']);
                             window.open(url, '_blank');
                         }
                     },
@@ -469,16 +505,12 @@
             // close date
             $(document).on('click', '.closeBillBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        _token: token,
-                        bill_id: bill_id
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
@@ -575,6 +607,7 @@
                     }
                 });
             });
+
         });
     </script>
-@endsection
+@endpush
