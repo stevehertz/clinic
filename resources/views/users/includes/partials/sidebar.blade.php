@@ -27,7 +27,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('users.dashboard.index') }}" class="nav-link {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
+                    <a href="{{ route('users.dashboard.index') }}"
+                        class="nav-link {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             @lang('users.page.dashboard.title')
@@ -71,8 +72,14 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview @if(Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) menu-open @endif">
-                    <a href="#" class="nav-link @if(Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) active @endif">
+                <li
+                    class="nav-item has-treeview  
+                    @if (Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) menu-open @endif 
+                    @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view')) menu-open @endif 
+                    @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view_personal')) menu-open @endif
+                    ">
+                    <a href="#"
+                        class="nav-link @if (Route::is('users.doctor.schedules.index') || Route::is('users.doctor.schedules.personal')) active @endif @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view')) active @endif @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view_personal')) active @endif">
                         <i class="nav-icon fa fa-calendar"></i>
                         <p>
                             @lang('users.page.schedules.title')
@@ -81,7 +88,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.doctor.schedules.index') }}" class="nav-link @if(Route::is('users.doctor.schedules.index')) active @endif">
+                            <a href="{{ route('users.doctor.schedules.index') }}"
+                                class="nav-link @if (Route::is('users.doctor.schedules.index')) active @endif @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.schedules.sub_page.schedules')</p>
                             </a>
@@ -89,7 +97,8 @@
 
 
                         <li class="nav-item">
-                            <a href="{{ route('users.doctor.schedules.personal') }}" class="nav-link @if(Route::is('users.doctor.schedules.personal')) active @endif">
+                            <a href="{{ route('users.doctor.schedules.personal') }}"
+                                class="nav-link @if (Route::is('users.doctor.schedules.personal')) active @endif @if (isset($page_title) && $page_title == trans('users.page.schedules.sub_page.view_personal')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.schedules.sub_page.my_schedules')</p>
                             </a>

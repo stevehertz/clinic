@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Schedule</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                     <small>
                         {{ $schedule->day }} || {{ $schedule->date }} || {{ $schedule->time }}
                     </small>
@@ -21,7 +21,7 @@
                                 Doctor Schedules
                             </a>
                         </li>
-                        <li class="breadcrumb-item active">Doctor Schedule</li>
+                        <li class="breadcrumb-item active">{{ $page_title }}</li>
                     </ol>
                 </div>
             </div>
@@ -38,12 +38,6 @@
                         <h3 class="card-title">
                             Patient Details
                         </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
                     </div>
                     <!--.card-header -->
                     <div class="card-body p-0">
@@ -89,12 +83,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Doctor/ Optometrist</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
                     </div>
 
                     <div class="card-body p-0">
@@ -215,14 +203,16 @@
                                                 <div class="timeline-body">
                                                     {!! $diagnosis->diagnosis !!}
                                                 </div>
-                                                <div class="timeline-footer">
-                                                    @if ($treatment->status != 'ordered')
-                                                        <a href="#" data-id="{{ $diagnosis->id }}"
-                                                            class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
-                                                            <i class="fa fa-edit"></i> Edit Diagnosis
-                                                        </a>
-                                                    @endif
-                                                </div>
+                                                @if (Auth::user()->id == $schedule->user_id)
+                                                    <div class="timeline-footer">
+                                                        @if ($treatment->status != 'ordered')
+                                                            <a href="#" data-id="{{ $diagnosis->id }}"
+                                                                class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
+                                                                <i class="fa fa-edit"></i> Edit Diagnosis
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <!-- END timeline item -->
@@ -237,15 +227,16 @@
                                                 </h3>
 
                                                 <div class="timeline-body">
-                                                    Please perform this patients diagnosis first.
+                                                    No diagnosis performed on the patient.
                                                 </div>
-
-                                                <div class="timeline-footer">
-                                                    <a href="#" id="{{ $schedule->id }}"
-                                                        class="btn btn-primary btn-block btn-sm addDiagnosisBtn">
-                                                        <i class="fa fa-plus"></i> Perform Diagnosis
-                                                    </a>
-                                                </div>
+                                                @if (Auth::user()->id == $schedule->user_id)
+                                                    <div class="timeline-footer">
+                                                        <a href="#" id="{{ $schedule->id }}"
+                                                            class="btn btn-primary btn-block btn-sm addDiagnosisBtn">
+                                                            <i class="fa fa-plus"></i> Perform Diagnosis
+                                                        </a>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <!-- END timeline item -->
@@ -361,7 +352,6 @@
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
-
                                                         </table>
 
                                                     </div>
@@ -389,25 +379,30 @@
                                                     </div>
 
                                                     @if (!$lens_prescription)
-                                                        <div class="timeline-footer">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <a href="#" data-id="{{ $lens_power->id }}"
-                                                                        class="btn btn-block btn-warning btn-flat btn-sm newLensPrescriptionBtn">
-                                                                        Add Lens Prescription
-                                                                    </a>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    @if ($treatment->status != 'ordered')
+                                                        @if (Auth::user()->id == $schedule->user_id)
+                                                            <div class="timeline-footer">
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
                                                                         <a href="#" data-id="{{ $lens_power->id }}"
-                                                                            class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
-                                                                            Edit Lens Power
+                                                                            class="btn btn-block btn-warning btn-flat btn-sm newLensPrescriptionBtn">
+                                                                            Add Lens Prescription
                                                                         </a>
-                                                                    @endif
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        @if (Auth::user()->id && $schedule->user_id)
+                                                                            @if (isset($treatment) && $treatment->status !== null && $treatment->status != 'ordered')
+                                                                                <a href="#"
+                                                                                    data-id="{{ $lens_power->id }}"
+                                                                                    class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                                    Edit Lens Power
+                                                                                </a>
+                                                                            @endif
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     @else
                                                         <div class="timeline-footer">
                                                             <div class="row">
@@ -419,12 +414,16 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    @if ($treatment->status != 'ordered')
-                                                                        <a href="#" data-id="{{ $lens_power->id }}"
-                                                                            class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
-                                                                            Edit Lens Power
-                                                                        </a>
+                                                                    @if (Auth::user()->id && $schedule->user_id)
+                                                                        @if (isset($treatment) && $treatment->status !== null && $treatment->status != 'ordered')
+                                                                            <a href="#"
+                                                                                data-id="{{ $lens_power->id }}"
+                                                                                class="btn btn-block btn-sm btn-secondary editLensPowerBtn">
+                                                                                Edit Lens Power
+                                                                            </a>
+                                                                        @endif
                                                                     @endif
+
                                                                 </div>
                                                             </div>
 
@@ -442,122 +441,132 @@
                                         </div>
                                         <!--.timeline .timeline-inverse -->
                                     @else
-                                        <form id="lensPowerForm">
-                                            @csrf
-                                            @if ($diagnosis)
-                                                <input type="hidden" value="{{ $diagnosis->id }}" name="diagnosis_id">
-                                                <input type="hidden" value="{{ $treatment->id }}" name="treatment_id">
-                                            @endif
-                                            <p>Right Eye</p>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            <form id="lensPowerForm">
+                                                @csrf
+                                                @if ($diagnosis)
+                                                    <input type="hidden" value="{{ $diagnosis->id }}"
+                                                        name="diagnosis_id">
+                                                    <input type="hidden" value="{{ $treatment->id }}"
+                                                        name="treatment_id">
+                                                @endif
+                                                <p>Right Eye</p>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerRightSphere">Sphere</label>
-                                                                <input type="text" name="right_sphere"
-                                                                    class="form-control" id="lensPowerRightSphere"
-                                                                    placeholder="Sphere">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerRightSphere">Sphere</label>
+                                                                    <input type="text" name="right_sphere"
+                                                                        class="form-control" id="lensPowerRightSphere"
+                                                                        placeholder="Sphere">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerRightCylinder">Cylinder</label>
-                                                                <input type="text" name="right_cylinder"
-                                                                    class="form-control" id="lensPowerRightCylinder"
-                                                                    placeholder="Cylinder">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerRightCylinder">Cylinder</label>
+                                                                    <input type="text" name="right_cylinder"
+                                                                        class="form-control" id="lensPowerRightCylinder"
+                                                                        placeholder="Cylinder">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerRightAxis">Axis</label>
-                                                                <input type="text" name="right_axis"
-                                                                    class="form-control" id="lensPowerRightAxis"
-                                                                    placeholder="Axis">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerRightAxis">Axis</label>
+                                                                    <input type="text" name="right_axis"
+                                                                        class="form-control" id="lensPowerRightAxis"
+                                                                        placeholder="Axis">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerRightAdditional">Additional</label>
-                                                                <input type="text" name="right_add"
-                                                                    class="form-control" id="lensPowerRightAdditional"
-                                                                    placeholder="Additional">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="lensPowerRightAdditional">Additional</label>
+                                                                    <input type="text" name="right_add"
+                                                                        class="form-control" id="lensPowerRightAdditional"
+                                                                        placeholder="Additional">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
+                                                        </div>
+                                                        <!--row -->
                                                     </div>
-                                                    <!--row -->
+                                                    <!-- /.card-body -->
                                                 </div>
-                                                <!-- /.card-body -->
-                                            </div>
-                                            <!--card-->
+                                                <!--card-->
 
-                                            <p>Left Eye</p>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
+                                                <p>Left Eye</p>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerLeftSphere">Sphere</label>
-                                                                <input type="text" name="left_sphere"
-                                                                    class="form-control" id="lensPowerLeftSphere"
-                                                                    placeholder="Sphere">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerLeftSphere">Sphere</label>
+                                                                    <input type="text" name="left_sphere"
+                                                                        class="form-control" id="lensPowerLeftSphere"
+                                                                        placeholder="Sphere">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerLeftCylinder">Cylinder</label>
-                                                                <input type="text" name="left_cylinder"
-                                                                    class="form-control" id="lensPowerLeftCylinder"
-                                                                    placeholder="Cylinder">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerLeftCylinder">Cylinder</label>
+                                                                    <input type="text" name="left_cylinder"
+                                                                        class="form-control" id="lensPowerLeftCylinder"
+                                                                        placeholder="Cylinder">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerLeftAxis">Axis</label>
-                                                                <input type="text" name="left_axis"
-                                                                    class="form-control" id="lensPowerLeftAxis"
-                                                                    placeholder="Axis">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerLeftAxis">Axis</label>
+                                                                    <input type="text" name="left_axis"
+                                                                        class="form-control" id="lensPowerLeftAxis"
+                                                                        placeholder="Axis">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="lensPowerLeftAdditional">Additional</label>
-                                                                <input type="text" name="left_add"
-                                                                    class="form-control" id="lensPowerLeftAdditional"
-                                                                    placeholder="Additional">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="lensPowerLeftAdditional">Additional</label>
+                                                                    <input type="text" name="left_add"
+                                                                        class="form-control" id="lensPowerLeftAdditional"
+                                                                        placeholder="Additional">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
+                                                        </div>
+                                                        <!--row -->
                                                     </div>
-                                                    <!--row -->
+                                                    <!-- /.card-body -->
                                                 </div>
-                                                <!-- /.card-body -->
-                                            </div>
-                                            <!--card-->
+                                                <!--card-->
 
-                                            <div class="form-group">
-                                                <label for="lensPowerAdditionalInfo">
-                                                    Additional Information
-                                                </label>
-                                                <textarea name="notes" id="lensPowerAdditionalInfo" class="form-control" placeholder="Additional Information"></textarea>
-                                            </div>
+                                                <div class="form-group">
+                                                    <label for="lensPowerAdditionalInfo">
+                                                        Additional Information
+                                                    </label>
+                                                    <textarea name="notes" id="lensPowerAdditionalInfo" class="form-control" placeholder="Additional Information"></textarea>
+                                                </div>
 
 
-                                            <button type="submit" id="lensPowerSubmitBtn"
-                                                class="btn btn-block btn-primary">
-                                                Add Power
-                                            </button>
+                                                <button type="submit" id="lensPowerSubmitBtn"
+                                                    class="btn btn-block btn-primary">
+                                                    Add Power
+                                                </button>
 
-                                        </form>
+                                            </form>
+                                        @else
+                                            <span>
+                                                No Lens Powers Available For This Prescription!
+                                            </span>
+                                        @endif
+
                                     @endif
 
                                 </div>
@@ -681,12 +690,14 @@
                                                                     </a>
                                                                 </div>
                                                                 <div class="col-md-8">
-                                                                    @if ($treatment->status != 'ordered')
-                                                                        <a href="#"
-                                                                            data-id="{{ $lens_prescription->id }}"
-                                                                            class="btn btn-block btn-sm btn-secondary editPrescriptionBtn">
-                                                                            Edit Prescription
-                                                                        </a>
+                                                                    @if (Auth::user()->id == $schedule->user_id)
+                                                                        @if (isset($treatment) && $treatment->status !== null && $treatment->status != 'ordered')
+                                                                            <a href="#"
+                                                                                data-id="{{ $lens_prescription->id }}"
+                                                                                class="btn btn-block btn-sm btn-secondary editPrescriptionBtn">
+                                                                                Edit Prescription
+                                                                            </a>
+                                                                        @endif
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -695,22 +706,25 @@
                                                     @else
                                                         <div class="timeline-footer">
                                                             <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <a href="#"
-                                                                        data-id="{{ $lens_prescription->id }}"
-                                                                        class="btn btn-block btn-warning btn-flat btn-sm newFrameCodeBtn">
-                                                                        Add Frame Code
-                                                                    </a>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    @if ($treatment->status != 'ordered')
+                                                                @if (Auth::user()->id == $schedule->user_id)
+                                                                    <div class="col-md-4">
                                                                         <a href="#"
-                                                                            id="{{ $lens_prescription->id }}"
-                                                                            class="btn btn-block btn-sm btn-secondary">
-                                                                            Edit Prescription
+                                                                            data-id="{{ $lens_prescription->id }}"
+                                                                            class="btn btn-block btn-warning btn-flat btn-sm newFrameCodeBtn">
+                                                                            Add Frame Code
                                                                         </a>
-                                                                    @endif
-                                                                </div>
+                                                                    </div>
+                                                                    <div class="col-md-8">
+
+                                                                        @if (isset($treatment) && $treatment->status !== null && $treatment->status != 'ordered')
+                                                                            <a href="#"
+                                                                                id="{{ $lens_prescription->id }}"
+                                                                                class="btn btn-block btn-sm btn-secondary">
+                                                                                Edit Prescription
+                                                                            </a>
+                                                                        @endif
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     @endif
@@ -725,115 +739,128 @@
                                         </div>
                                         <!--.timeline .timeline-inverse -->
                                     @else
-                                        <form id="lensPrescriptionForm">
-                                            @csrf
-                                            <input type="hidden" name="power_id" id="lensPrescriptionPowerId"
-                                                class="form-control" />
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Lens Prescription</h5>
-                                                    <br><br>
-                                                    <div class="form-group">
-                                                        <label for="lensPrescriptionType">Lens Type</label>
-                                                        <select id="lensPrescriptionType" name="type_id"
-                                                            class="form-control select2 select2-purple"
-                                                            style="width: 100%;" data-dropdown-css-class="select2-purple">
-                                                            <option selected="selected" disabled="disabled">Choose Lens
-                                                                Type
-                                                            </option>
-                                                            @forelse ($types as $type)
-                                                                <option value="{{ $type->id }}">
-                                                                    {{ $type->type }}
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            <form id="lensPrescriptionForm">
+                                                @csrf
+                                                <input type="hidden" name="power_id" id="lensPrescriptionPowerId"
+                                                    class="form-control" />
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Lens Prescription</h5>
+                                                        <br><br>
+                                                        <div class="form-group">
+                                                            <label for="lensPrescriptionType">Lens Type</label>
+                                                            <select id="lensPrescriptionType" name="type_id"
+                                                                class="form-control select2 select2-purple"
+                                                                style="width: 100%;"
+                                                                data-dropdown-css-class="select2-purple">
+                                                                <option selected="selected" disabled="disabled">Choose
+                                                                    Lens
+                                                                    Type
                                                                 </option>
-                                                            @empty
-                                                                <option disabled="disabled">No Lens Type Found</option>
-                                                            @endforelse
-                                                        </select>
-                                                    </div>
-                                                    <!-- /.form-group -->
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="lensPrescriptionMaterial">Lens Material</label>
-                                                                <select id="lensPrescriptionMaterial" name="material_id"
-                                                                    class="form-control select2 select2-danger"
-                                                                    style="width: 100%;"
-                                                                    data-dropdown-css-class="select2-danger">
-                                                                    <option selected="selected" disabled="disabled">
-                                                                        Choose Lens Material
+                                                                @forelse ($types as $type)
+                                                                    <option value="{{ $type->id }}">
+                                                                        {{ $type->type }}
                                                                     </option>
-                                                                    @forelse ($materials as $material)
-                                                                        <option value="{{ $material->id }}">
-                                                                            {{ $material->title }}
+                                                                @empty
+                                                                    <option disabled="disabled">No Lens Type Found</option>
+                                                                @endforelse
+                                                            </select>
+                                                        </div>
+                                                        <!-- /.form-group -->
+
+                                                        <div class="row">
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="lensPrescriptionMaterial">Lens
+                                                                        Material</label>
+                                                                    <select id="lensPrescriptionMaterial"
+                                                                        name="material_id"
+                                                                        class="form-control select2 select2-danger"
+                                                                        style="width: 100%;"
+                                                                        data-dropdown-css-class="select2-danger">
+                                                                        <option selected="selected" disabled="disabled">
+                                                                            Choose Lens Material
                                                                         </option>
-                                                                    @empty
-                                                                        <option disabled="disabled">
-                                                                            No Lens Material Found
-                                                                        </option>
-                                                                    @endforelse
-                                                                </select>
+                                                                        @forelse ($materials as $material)
+                                                                            <option value="{{ $material->id }}">
+                                                                                {{ $material->title }}
+                                                                            </option>
+                                                                        @empty
+                                                                            <option disabled="disabled">
+                                                                                No Lens Material Found
+                                                                            </option>
+                                                                        @endforelse
+                                                                    </select>
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="lensPrescriptionIndex">Lens
-                                                                    Index/Thickness</label>
-                                                                <input type="text" name="index" class="form-control"
-                                                                    id="lensPrescriptionIndex"
-                                                                    placeholder="Lens Index/Thickness">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="lensPrescriptionIndex">Lens
+                                                                        Index/Thickness</label>
+                                                                    <input type="text" name="index"
+                                                                        class="form-control" id="lensPrescriptionIndex"
+                                                                        placeholder="Lens Index/Thickness">
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="lensPrescriptionTint">Tint</label>
-                                                                <input type="text" name="tint" class="form-control"
-                                                                    id="lensPrescriptionTint" placeholder="Lens Tint">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="lensPrescriptionTint">Tint</label>
+                                                                    <input type="text" name="tint"
+                                                                        class="form-control" id="lensPrescriptionTint"
+                                                                        placeholder="Lens Tint">
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="lensPrescriptionPupil">Pupil
-                                                                    Diameter(mm)</label>
-                                                                <input type="text" name="pupil" class="form-control"
-                                                                    id="lensPrescriptionPupil"
-                                                                    placeholder="Pupil Diameter">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="lensPrescriptionPupil">Pupil
+                                                                        Diameter(mm)</label>
+                                                                    <input type="text" name="pupil"
+                                                                        class="form-control" id="lensPrescriptionPupil"
+                                                                        placeholder="Pupil Diameter">
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
 
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="lensPrescriptionFocalHeight">Focal
-                                                                    Height</label>
-                                                                <input type="text" name="focal_height"
-                                                                    class="form-control" id="lensPrescriptionFocalHeight"
-                                                                    placeholder="Focal Height">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="lensPrescriptionFocalHeight">Focal
+                                                                        Height</label>
+                                                                    <input type="text" name="focal_height"
+                                                                        class="form-control"
+                                                                        id="lensPrescriptionFocalHeight"
+                                                                        placeholder="Focal Height">
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
+
                                                         </div>
+                                                        <!--.row -->
+
+                                                        <button type="submit" id="lensPrescriptionSubmitBtn"
+                                                            class="btn btn-block btn-primary">
+                                                            Next
+                                                        </button>
 
                                                     </div>
-                                                    <!--.row -->
-
-                                                    <button type="submit" id="lensPrescriptionSubmitBtn"
-                                                        class="btn btn-block btn-primary">
-                                                        Next
-                                                    </button>
-
+                                                    <!--.card-body -->
                                                 </div>
-                                                <!--.card-body -->
-                                            </div>
-                                            <!--.card -->
-                                        </form>
-                                        <!--#lensPrescriptionForm -->
+                                                <!--.card -->
+                                            </form>
+                                            <!--#lensPrescriptionForm -->
+                                        @else
+                                            <span>
+                                                No Lens Prescription prescribed yet
+                                            </span>
+                                        @endif
+
                                     @endif
 
                                 </div>
@@ -863,7 +890,7 @@
 
                                                     <div class="timeline-body table-responsive">
                                                         <p>
-                                                            {{ $frame_prescription->frame_code }} 
+                                                            {{ $frame_prescription->frame_code }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -922,11 +949,14 @@
                                                             </a>
                                                         </div>
                                                         <div class="col-md-8">
-                                                            @if ($treatment->status != 'ordered')
-                                                                <a href="#" data-id="{{ $frame_prescription->id }}"
-                                                                    class="btn btn-sm btn-block btn-secondary editFramePrescriptionBtn">
-                                                                    Update Frame Code
-                                                                </a>
+                                                            @if (Auth::user()->id == $schedule->user_id)
+                                                                @if (isset($treatment) && $treatment->status !== null && $treatment->status != 'ordered')
+                                                                    <a href="#"
+                                                                        data-id="{{ $frame_prescription->id }}"
+                                                                        class="btn btn-sm btn-block btn-secondary editFramePrescriptionBtn">
+                                                                        Update Frame Code
+                                                                    </a>
+                                                                @endif
                                                             @endif
                                                         </div>
                                                     </div>
@@ -941,101 +971,114 @@
                                         </div>
                                         <!--.timeline .timeline-inverse -->
                                     @else
-                                        <form id="frameCodeForm">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        @csrf
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="power_id"
-                                                                    id="frameCodePowerId" class="form-control" />
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            <form id="frameCodeForm">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            @csrf
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <input type="hidden" name="power_id"
+                                                                        id="frameCodePowerId" class="form-control" />
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="prescription_id"
-                                                                    id="frameCodePrescriptionId" class="form-control" />
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <input type="hidden" name="prescription_id"
+                                                                        id="frameCodePrescriptionId"
+                                                                        class="form-control" />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="frameCode">Frame Code</label>
-                                                                <select name="stock_id" id="frameCode"
-                                                                    class="form-control select2" style="width:100%;">
-                                                                    <option selected="selected" disabled="disabled">Choose
-                                                                        Frame Code</option>
-                                                                    @forelse ($frame_stocks as $frame_stock)
-                                                                        <option value="{{ $frame_stock->id }}">
-                                                                            {{ $frame_stock->frame->code }} - {{ $frame_stock->gender }} - {{ $frame_stock->frame_color->color }} - {{ $frame_stock->frame_shape->shape }}
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="frameCode">Frame Code</label>
+                                                                    <select name="stock_id" id="frameCode"
+                                                                        class="form-control select2" style="width:100%;">
+                                                                        <option selected="selected" disabled="disabled">
+                                                                            Choose
+                                                                            Frame Code</option>
+                                                                        @forelse ($frame_stocks as $frame_stock)
+                                                                            <option value="{{ $frame_stock->id }}">
+                                                                                {{ $frame_stock->frame->code }} -
+                                                                                {{ $frame_stock->gender }} -
+                                                                                {{ $frame_stock->frame_color->color }} -
+                                                                                {{ $frame_stock->frame_shape->shape }}
+                                                                            </option>
+                                                                        @empty
+                                                                            <option disabled="disabled">No Frame Code
+                                                                                Available
+                                                                            </option>
+                                                                        @endforelse
+                                                                    </select>
+                                                                </div>
+                                                                <!-- /.form-group -->
+                                                            </div>
+                                                            <!-- /.col-md-6 -->
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="frameCodeReceiptNumber">Receipt
+                                                                        Number</label>
+                                                                    <input type="text" name="receipt_number"
+                                                                        id="frameCodeReceiptNumber"
+                                                                        placeholder="Enter Receipt Number"
+                                                                        class="form-control" required />
+                                                                </div>
+                                                                <!-- /.form-group -->
+                                                            </div>
+                                                            <!-- /.col-md-6 -->
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="frameCodeWorkShop">
+                                                                        Workshop
+                                                                    </label>
+                                                                    <select id="frameCodeWorkShop" name="workshop_id"
+                                                                        class="form-control select2 select2-info"
+                                                                        style="width: 100%;"
+                                                                        data-dropdown-css-class="select2-info">
+                                                                        <option selected="selected" disabled="disabled">
+                                                                            Choose Workshop
                                                                         </option>
-                                                                    @empty
-                                                                        <option disabled="disabled">No Frame Code Available
-                                                                        </option>
-                                                                    @endforelse
-                                                                </select>
+                                                                        @forelse ($workshops as $workshop)
+                                                                            <option value="{{ $workshop->id }}">
+                                                                                {{ $workshop->name }}</option>
+                                                                        @empty
+                                                                            <option disabled="disabled">No Workshos Added
+                                                                                yet!
+                                                                            </option>
+                                                                        @endforelse
+                                                                    </select>
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
-                                                        <!-- /.col-md-6 -->
+                                                            <!-- /.col-md-12 -->
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="frameCodeReceiptNumber">Receipt Number</label>
-                                                                <input type="text" name="receipt_number"
-                                                                    id="frameCodeReceiptNumber"
-                                                                    placeholder="Enter Receipt Number"
-                                                                    class="form-control" required />
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="frameCodeRemarks">
+                                                                        Remarks
+                                                                    </label>
+                                                                    <textarea name="remarks" id="frameCodeRemarks" class="form-control" placeholder="Remarks"></textarea>
+                                                                </div>
+                                                                <!-- /.form-group -->
                                                             </div>
-                                                            <!-- /.form-group -->
+                                                            <!-- /.col-md-12 -->
                                                         </div>
-                                                        <!-- /.col-md-6 -->
+                                                        <!-- /.row -->
+                                                        <button type="submit" id="frameCodeSubmitBtn"
+                                                            class="btn btn-block btn-primary">
+                                                            Save
+                                                        </button>
+                                                    </div><!-- /.card-body -->
+                                                </div><!-- /.card -->
+                                            </form>
+                                        @else
+                                            <span>No Frame has been prescribed yet</span>
+                                        @endif
 
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="frameCodeWorkShop">
-                                                                    Workshop
-                                                                </label>
-                                                                <select id="frameCodeWorkShop" name="workshop_id"
-                                                                    class="form-control select2 select2-info"
-                                                                    style="width: 100%;"
-                                                                    data-dropdown-css-class="select2-info">
-                                                                    <option selected="selected" disabled="disabled">
-                                                                        Choose Workshop
-                                                                    </option>
-                                                                    @forelse ($workshops as $workshop)
-                                                                        <option value="{{ $workshop->id }}">
-                                                                            {{ $workshop->name }}</option>
-                                                                    @empty
-                                                                        <option disabled="disabled">No Workshos Added yet!
-                                                                        </option>
-                                                                    @endforelse
-                                                                </select>
-                                                            </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
-                                                        <!-- /.col-md-12 -->
-
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="frameCodeRemarks">
-                                                                    Remarks
-                                                                </label>
-                                                                <textarea name="remarks" id="frameCodeRemarks" class="form-control" placeholder="Remarks"></textarea>
-                                                            </div>
-                                                            <!-- /.form-group -->
-                                                        </div>
-                                                        <!-- /.col-md-12 -->
-                                                    </div>
-                                                    <!-- /.row -->
-                                                    <button type="submit" id="frameCodeSubmitBtn"
-                                                        class="btn btn-block btn-primary">
-                                                        Save
-                                                    </button>
-                                                </div><!-- /.card-body -->
-                                            </div><!-- /.card -->
-                                        </form>
                                     @endif
                                 </div>
                                 <!--#frameCodesDiv -->
@@ -1045,10 +1088,12 @@
 
                             <div class="tab-pane" id="medicineTab">
                                 <div class="table-responsive">
-                                    <button id="addMedicineBtn" class="btn btn-block btn-success">
-                                        <i class="fa fa-plus-circle"></i> Add Medicine
-                                    </button>
-                                    <hr>
+                                    @if (Auth::user()->id == $schedule->user_id)
+                                        <button id="addMedicineBtn" class="btn btn-block btn-success">
+                                            <i class="fa fa-plus-circle"></i> Add Medicine
+                                        </button>
+                                        <hr>
+                                    @endif
                                     <table id="medicineData" class="table table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
@@ -1071,26 +1116,30 @@
                                         {!! $procedure->procedure !!}
                                     </div>
                                 @else
-                                    <form id="procedureForm">
-                                        @csrf
-                                        @if ($diagnosis)
+                                    @if (Auth::user()->id == $schedule->user_id)
+                                        <form id="procedureForm">
+                                            @csrf
+                                            @if ($diagnosis)
+                                                <div class="form-group">
+                                                    <input type="hidden" name="diagnosis_id"
+                                                        value="{{ $diagnosis->id }}" class="form-control" />
+                                                </div>
+                                            @endif
                                             <div class="form-group">
-                                                <input type="hidden" name="diagnosis_id" value="{{ $diagnosis->id }}"
-                                                    class="form-control" />
+                                                <label for="procudereText">Procedure</label>
+                                                <textarea name="procedure" id="procudereText" class="form-control textarea"></textarea>
                                             </div>
-                                        @endif
-                                        <div class="form-group">
-                                            <label for="procudereText">Procedure</label>
-                                            <textarea name="procedure" id="procudereText" class="form-control textarea"></textarea>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <button type="submit" id="procudereSubmitBtn"
-                                                    class="btn btn-primary btn-block">Save</button>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button type="submit" id="procudereSubmitBtn"
+                                                        class="btn btn-primary btn-block">Save</button>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    </form>
+                                        </form>
+                                    @else
+                                        <span>No procedure added yet</span>
+                                    @endif
                                 @endif
                                 <hr>
                                 @if ($treatment)
@@ -1100,15 +1149,18 @@
                                             View Payment Bill
                                         </a>
                                     @else
-                                        @if ($diagnosis)
-                                            <a href="#" id="{{ $diagnosis->schedule_id }}"
-                                                class="btn btn-block btn-success openBillBtn" rel="noopener noreferrer">
-                                                @if ($treatment->payments == 'consultation')
-                                                    Pay Consultation Fee
-                                                @else
-                                                    Open Bill
-                                                @endif
-                                            </a>
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            @if ($diagnosis)
+                                                <a href="#" id="{{ $diagnosis->schedule_id }}"
+                                                    class="btn btn-block btn-success openBillBtn"
+                                                    rel="noopener noreferrer">
+                                                    @if ($treatment->payments == 'consultation')
+                                                        Pay Consultation Fee
+                                                    @else
+                                                        Open Bill
+                                                    @endif
+                                                </a>
+                                            @endif
                                         @endif
                                     @endif
                                 @endif
@@ -1132,12 +1184,6 @@
                         <h3 class="card-title">
                             Payment Details
                         </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                            </button>
-                        </div>
                     </div>
 
                     <div class="card-body">
@@ -1632,8 +1678,11 @@
                                             <select name="stock_id" id="editFramePrescriptionFrameCode"
                                                 class="form-control select2" style="width:100%;">
                                                 @forelse ($frame_stocks as $frame_stock)
-                                                    <option value="{{ $frame_stock->id }}" @if ($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
-                                                        {{ $frame_stock->frame->code }} - {{ $frame_stock->gender }} - {{ $frame_stock->frame_color->color }} - {{ $frame_stock->frame_shape->shape }}
+                                                    <option value="{{ $frame_stock->id }}"
+                                                        @if ($frame_prescription->stock_id == $frame_stock->id) selected="selected" @endif>
+                                                        {{ $frame_stock->frame->code }} - {{ $frame_stock->gender }} -
+                                                        {{ $frame_stock->frame_color->color }} -
+                                                        {{ $frame_stock->frame_shape->shape }}
                                                     </option>
                                                 @empty
                                                     <option disabled="disabled">No Frame Code Available
@@ -1843,12 +1892,12 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-        
+
     </section>
 
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -2724,4 +2773,4 @@
             });
         </script>
     @endif
-@endsection
+@endpush
