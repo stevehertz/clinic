@@ -203,7 +203,7 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
             $('#patientPaymentDetailsPatient').select2({
@@ -216,28 +216,28 @@
                 theme: 'bootstrap4'
             });
             $('#insuranceSpan').fadeOut();
-            $(document).on('change', '#patientPaymentDetailsClientType', function(e){
+            $(document).on('change', '#patientPaymentDetailsClientType', function(e) {
                 e.preventDefault();
                 var type_id = $(this).val();
                 var path = '{{ route('users.client.type.show') }}';
                 var token = '{{ csrf_token() }}';
                 $.ajax({
-                    url:path,
-                    type:"POST",
-                    data:{
-                        type_id:type_id,
-                        _token:token
+                    url: path,
+                    type: "POST",
+                    data: {
+                        type_id: type_id,
+                        _token: token
                     },
                     dataType: "json",
-                    success:function(data){
-                        if(data['status']){
-                            if(data['data']['type'] == "Insurance"){
-                                $('#insuranceSpan').fadeIn();
-                            } 
-                            if(data['data']['type'] == "Cash and Insurance"){
+                    success: function(data) {
+                        if (data['status']) {
+                            if (data['data']['type'] == "Insurance") {
                                 $('#insuranceSpan').fadeIn();
                             }
-                            if(data['data']['type'] == "Cash"){
+                            if (data['data']['type'] == "Cash and Insurance") {
+                                $('#insuranceSpan').fadeIn();
+                            }
+                            if (data['data']['type'] == "Cash") {
                                 $('#insuranceSpan').fadeOut();
                             }
                         }
@@ -284,4 +284,4 @@
             });
         });
     </script>
-@endsection
+@endpush

@@ -136,37 +136,20 @@ class PatientsController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(Patient $patient)
     {
-        # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'patient_id' => 'required|integer|exists:patients,id'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $patient = Patient::findOrFail($data['patient_id']);
-
+        # code..
         $response['status'] = true;
         $response['data'] = $patient;
         return response()->json($response, 200);
     }
 
-    public function view($id)
+    public function view(Patient $patient)
     {
         # code...
-        $user = User::findOrFail(Auth::user()->id);
-        $clinic = $user->clinic;
-        $patient = Patient::findOrFail($id);
-        $page_title = 'View Patient';
-        $patient_sidebar = trans('patient.profile');
+        $clinic = $patient->clinic;
+        $page_title = trans('users.page.patients.sub_page.view');
+        $patient_sidebar = trans('users.page.patients.sub_page.view');
         return view('users.patients.view', [
             'page_title' => $page_title,
             'clinic' => $clinic,
@@ -182,8 +165,8 @@ class PatientsController extends Controller
         $patient = Patient::findOrFail($id);
         $appointments = $patient->appointment->sortBy('created_at', SORT_DESC);
         $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->get();
-        $page_title = trans('pages.patients');
-        $patient_sidebar = trans('patient.appointment');
+        $page_title = trans('users.page.patients.sub_page.view');
+        $patient_sidebar = trans('users.page.patients.sub_page.appointment');
         return view('users.patients.appointment', [
             'page_title' => $page_title,
             'doctors' => $doctors,
@@ -211,15 +194,13 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit(Patient $patient)
     {
-        $user = User::findOrFail(Auth::user()->id);
-        $clinic = $user->clinic;
+        $clinic = $patient->clinic;
         $organization = $clinic->organization;
         $client_types = $organization->client_type->sortBy('created_at', SORT_DESC);
         $insurances = $organization->insurance->sortBy('created_at', SORT_DESC);
-        $patient = Patient::findOrFail($id);
-        $page_title = 'Update Patient Details';
+        $page_title = trans('users.page.patients.sub_page.edit');
         return view('users.patients.edit', [
             'page_title' => $page_title,
             'clinic' => $clinic,
@@ -229,10 +210,9 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Patient $patient)
     {
         # code...
-        $patient = Patient::findOrFail($id);
 
         $data = $request->all();
 
@@ -240,7 +220,7 @@ class PatientsController extends Controller
             'clinic_id' => 'required|integer|exists:clinics,id',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'id_number' => 'required|string|unique:patients,id_number,' . $id,
+            'id_number' => 'required|string|unique:patients,id_number,' . $patient->id,
             'phone' => 'required|numeric|min:10',
             'email' => 'nullable|string|email|max:255',
             'dob' => 'required|string|max:255|date_format:Y-m-d',
@@ -274,7 +254,7 @@ class PatientsController extends Controller
         $patient->next_of_kin = $data['next_of_kin'];
         $patient->next_of_kin_contact = $data['next_of_kin_contact'];
         $patient->updated_by = Auth::user()->id;
-        $patient->card_number = $clinic->initials.''.$data['card_number'];
+        $patient->card_number = $data['card_number'];
 
         $patient->save();
 
@@ -285,24 +265,9 @@ class PatientsController extends Controller
     }
 
 
-    public function destroy(Request $request)
+    public function destroy(Patient $patient)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'patient_id' => 'required|integer|exists:patients,id'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $patient = Patient::findOrFail($data['patient_id']);
-
         if ($patient->delete()) {
             $response['status'] = true;
             $response['message'] = 'Patient deleted successfully';

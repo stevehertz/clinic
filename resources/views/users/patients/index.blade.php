@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Patients</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -174,109 +174,45 @@
 
             $(document).on('click', '.viewBtn', function(e) {
                 e.preventDefault();
-                var patient_id = $(this).attr('id');
-                var path = '{{ route('users.patients.show') }}';
-                var token = '{{ csrf_token() }}';
+                let patient_id = $(this).attr('id');
+                let path = '{{ route('users.patients.show', ':patient') }}';
+                path = path.replace(":patient", patient_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        patient_id: patient_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.patients.view', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url = '{{ route('users.patients.view', ':patient') }}';
+                            url = url.replace(':patient', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     }
                 });
             });
 
             $(document).on('click', '.editBtn', function(e) {
                 e.preventDefault();
-                var patient_id = $(this).attr('id');
-                var path = '{{ route('users.patients.show') }}';
-                var token = '{{ csrf_token() }}';
+                let patient_id = $(this).attr('id');
+                let path = '{{ route('users.patients.show', ':patient') }}';
+                path = path.replace(':patient', patient_id);
                 $.ajax({
                     url: path,
-                    type: "POST",
-                    data: {
-                        patient_id: patient_id,
-                        _token: token
-                    },
+                    type: "GET",
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.patients.edit', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url = '{{ route('users.patients.edit', ':patient') }}';
+                            url = url.replace(':patient', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);
                         }
                     },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
                 });
             });
-
-            $(document).on('click', '.deleteBtn', function(e) {
-                e.preventDefault();
-                var path = '{{ route('users.patients.delete') }}';
-                var patient_id = $(this).attr('id');
-                var token = '{{ csrf_token() }}';
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this patient!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: "POST",
-                            data: {
-                                patient_id: patient_id,
-                                _token: token,
-                            },
-                            dataType: "json",
-                            success: function(data) {
-                                if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success')
-                                    $('#patientsData').DataTable().ajax.reload();
-                                } else {
-                                    console.log(data);
-                                }
-                            }
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
         });
     </script>
 @endpush

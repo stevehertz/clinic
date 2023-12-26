@@ -27,8 +27,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('users.dashboard.index') }}"
-                        class="nav-link {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
+                    <a href="{{ route('users.dashboard.index') }}" class="nav-link 
+                    {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             @lang('users.page.dashboard.title')
@@ -36,37 +36,85 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li
+                    class="nav-item has-treeview 
+                @if (Route::is('users.patients.index')) menu-open @endif
+                @if (Route::is('users.patients.create')) menu-open @endif
+                @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.view')) menu-open @endif
+                @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.edit')) menu-open @endif
+                ">
+                    <a href="#"
+                        class="nav-link 
+                    @if (Route::is('users.patients.index')) active @endif
+                    @if (Route::is('users.patients.create')) active @endif
+                    @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.view')) active @endif
+                    @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.edit')) active @endif
+                    ">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
-                            Patients
+                            @lang('users.page.patients.title')
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.patients.index') }}" class="nav-link">
+                            <a href="{{ route('users.patients.index') }}"
+                                class="nav-link
+                            @if (Route::is('users.patients.index')) active @endif
+                            @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.view')) active @endif
+                            @if (isset($page_title) && $page_title == trans('users.page.patients.sub_page.edit')) active @endif
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Patients</p>
+                                <p>@lang('users.page.patients.sub_page.patients')</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('users.patients.create') }}"
+                                class="nav-link
+                            @if (Route::is('users.patients.create')) active @endif
+                            ">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>@lang('users.page.patients.sub_page.add_new')</p>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview
+                {{ Route::is('users.appointments.index') ? 'menu-open' : '' }}
+                {{ Route::is('users.appointments.create') ? 'menu-open' : '' }}
+                @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) menu-open @endif
+                ">
+                    <a href="#" class="nav-link
+                    {{ Route::is('users.appointments.index') ? 'active' : '' }}
+                    {{ Route::is('users.appointments.create') ? 'active' : '' }}
+                    @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) active @endif
+                    ">
                         <i class="nav-icon fa fa-check-square"></i>
                         <p>
-                            Appointments
+                            @lang('users.page.appointments.title')
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.appointments.index') }}" class="nav-link">
+                            <a href="{{ route('users.appointments.index') }}" class="nav-link
+                            {{ Route::is('users.appointments.index') ? 'active' : '' }}
+                            @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) active @endif
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>Appointments</p>
+                                <p>@lang('users.page.appointments.sub_page.appointment')</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('users.appointments.create') }}" class="nav-link
+                            {{ Route::is('users.appointments.create') ? 'active' : '' }}
+                            ">
+                                <i class="fa fa-circle nav-icon"></i>
+                                <p>@lang('users.page.appointments.sub_page.new')</p>
                             </a>
                         </li>
                     </ul>
@@ -149,7 +197,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.close.bills.index') }}" class="nav-link
+                            <a href="{{ route('users.payments.close.bills.index') }}"
+                                class="nav-link
                             @if (Route::is('users.payments.close.bills.index')) active @endif
                             @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) active @endif
                             ">

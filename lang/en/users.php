@@ -9,7 +9,21 @@ return [
             'title' => 'Patients',
             'sub_page' => [
                 'patients' => 'Patients',
-                'add_new' => 'Add New',
+                'add_new' => 'New Patient',
+                'view' => 'Profile',
+                'appointment' => 'Appointments',
+                'schedule' => 'Doctor\'s Schedules',
+                'payments' => 'Payments',
+                'orders' => 'Orders',
+                'edit' => 'Update Patient Details'
+            ],
+        ],
+        'appointments' => [
+            'title' => 'Appointments',
+            'sub_page' => [
+                'appointment' => 'Appointment',
+                'new' => 'New Appointment',
+                'view' => 'Appointment Details'
             ],
         ],
         'schedules' => [

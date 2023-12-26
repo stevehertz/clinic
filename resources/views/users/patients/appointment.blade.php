@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $patient->first_name }} {{ $patient->last_name }} Profile</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item">
                             <a href="{{ route('users.patients.index') }}">Patients</a>
                         </li>
-                        <li class="breadcrumb-item active">Patient Profile</li>
+                        <li class="breadcrumb-item active">{{ $patient->first_name }} {{ $patient->last_name }} Profile</li>
                     </ol>
                 </div>
             </div>
@@ -194,9 +194,9 @@
 
             $('#scheduleAppointmentForm').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var form_data = new FormData(form[0]);
-                var path = '{{ route('users.doctor.schedules.store') }}';
+                let form = $(this);
+                let form_data = new FormData(form[0]);
+                let path = '{{ route('users.doctor.schedules.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',

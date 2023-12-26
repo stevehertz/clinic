@@ -23,13 +23,16 @@ class DashboardController extends Controller
         $clinic = $user->clinic;
         $num_all_schedules = $clinic->doctor_schedule()->count();
         $patients = $clinic->patient->count();
+        $orders = $clinic->order->count();
         $page_title = trans('users.page.dashboard.title');
         return view('users.dashboard.index',[
             'page_title' => $page_title,
             'clinic' => $clinic,
             'num_my_schedules' => $num_my_schedules,
             'schedules' => $schedules,
-            'num_all_schedules' => $num_all_schedules
+            'num_all_schedules' => $num_all_schedules,
+            'patients' => $patients,
+            'orders' => $orders
         ]);
     }
 }

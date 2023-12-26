@@ -72,9 +72,9 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::post('/store', [AppointmentsAppointmentsController::class, 'store'])->name('store');
 
-        Route::post('/show', [AppointmentsAppointmentsController::class, 'show'])->name('show');
+        Route::get('/{appointment}/show', [AppointmentsAppointmentsController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [AppointmentsAppointmentsController::class, 'view'])->name('view');
+        Route::get('/{appointment}/view', [AppointmentsAppointmentsController::class, 'view'])->name('view');
     });
 
     Route::prefix('client/type')->name('client.type.')->group(function(){
@@ -101,19 +101,19 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::post('/create', [PatientsPatientsController::class, 'store']);
 
-        Route::post('/show', [PatientsPatientsController::class, 'show'])->name('show');
+        Route::get('/{patient}/show', [PatientsPatientsController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [PatientsPatientsController::class, 'view'])->name('view');
+        Route::get('/{patient}/view', [PatientsPatientsController::class, 'view'])->name('view');
 
         Route::get('/{id}/appointments', [PatientsPatientsController::class, 'appointments'])->name('appointments');
 
         Route::get('/{id}/schedules', [PatientsPatientsController::class, 'schedules'])->name('schedules');
 
-        Route::get('/{id}/edit', [PatientsPatientsController::class, 'edit'])->name('edit');
+        Route::get('/{patient}/edit', [PatientsPatientsController::class, 'edit'])->name('edit');
 
-        Route::post('/{id}/edit', [PatientsPatientsController::class, 'update']);
+        Route::post('/{patient}/edit', [PatientsPatientsController::class, 'update']);
 
-        Route::post('/delete', [PatientsPatientsController::class, 'destroy'])->name('delete');
+        Route::delete('/{patient}/delete', [PatientsPatientsController::class, 'destroy'])->name('delete');
     });
 
     Route::prefix('payments')->name('payments.')->group(function () {

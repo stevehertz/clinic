@@ -34,29 +34,17 @@ class AppointmentsController extends Controller
         $clinic = $user->clinic;
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
-                $data = $clinic->appointment()
-                    ->join('patients', 'appointments.patient_id', '=', 'patients.id')
-                    ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
-                    ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
-                    ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
-                    ->where('appointments.clinic_id', $clinic->id)
-                    ->where('patients.status', 1)
-                    ->whereBetween('appointments.date', [$request->from_date, $request->to_date])
-                    ->get();
+                $data = $clinic->appointment()->where('status', 1)->whereBetween('date', [$request->from_date, $request->to_date])->get();
             } else {
-                $data = Appointment::join('patients', 'appointments.patient_id', '=', 'patients.id')
-                    ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
-                    ->join('client_types', 'payment_details.client_type_id', '=', 'client_types.id')
-                    ->select('appointments.*', 'patients.first_name', 'patients.last_name', 'client_types.type')
-                    ->where('appointments.clinic_id', $clinic->id)
-                    ->where('patients.status', 1)
-                    ->orderBy('appointments.created_at', 'desc')
-                    ->get();
+                $data = $clinic->appointment()->where('status', 1)->latest()->get();
             }
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
-                    return $row->first_name . ' ' . $row->last_name;
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('type', function ($row) {
+                    return $row->payment_detail->client_type->type;
                 })
                 ->addColumn('appointment_status', function ($row) {
                     if ($row->status == 0) {
@@ -72,11 +60,11 @@ class AppointmentsController extends Controller
                     $btn = '<a href="#" id="' . $row['id'] . '" class="btn btn-tool viewBtn"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['full_names', 'appointment_status', 'action'])
+                ->rawColumns(['full_names', 'type', 'appointment_status', 'action'])
                 ->make(true);
         }
         $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->latest()->get();
-        $page_title = 'Appointments';
+        $page_title = trans('users.page.appointments.sub_page.appointment');
         return view('users.appointments.index', [
             'user' => $user,
             'clinic' => $clinic,
@@ -214,25 +202,9 @@ class AppointmentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Appointment $appointment)
     {
         //
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'appointment_id' => 'required|integer|exists:appointments,id',
-        ]);
-
-        if ($validator->fails()) {
-            # code...
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $appointment = Appointment::findOrFail($data['appointment_id']);
-
         $response['status'] = true;
         $response['data'] = $appointment;
         return response()->json($response, 200);
@@ -244,16 +216,15 @@ class AppointmentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function view($id)
+    public function view(Appointment $appointment)
     {
         # code...
         $user = User::find(auth()->user()->id);
-        $clinic = $user->clinic;
-        $appointment = Appointment::findOrFail($id);
+        $clinic = $appointment->clinic;
         $patient = $appointment->patient;
         $payment_details = $appointment->payment_detail;
         $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->latest()->get();
-        $page_title = 'Appointment Details';
+        $page_title = trans('users.page.appointments.sub_page.view');
         $doctor_schedule = $appointment->doctor_schedule;
         return view('users.appointments.view', [
             'user' => $user,

@@ -18,6 +18,12 @@ class PaymentsAttachmentController extends Controller
 
     use FileUploadTrait;
 
+
+    public function __construct()
+    {
+        $this->middleware('auth');   
+    }
+
     /**
      * Store a newly created resource in storage.
      *

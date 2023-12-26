@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>
-                        Appointments
+                        {{ $clinic->clinic }}
                     </h1>
                 </div>
                 <div class="col-sm-6">
@@ -148,7 +148,8 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -232,9 +233,9 @@
 
             $('#scheduleAppointmentForm').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var form_data = new FormData(form[0]);
-                var path = '{{ route('users.doctor.schedules.store') }}';
+                let form = $(this);
+                let form_data = new FormData(form[0]);
+                $(selector).scrollLeft(value); path = '{{ route('users.doctor.schedules.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -276,38 +277,25 @@
 
             $(document).on('click', '.viewBtn', function(e) {
                 e.preventDefault();
-                var appointment_id = $(this).attr('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.appointments.show') }}';
+                let appointment_id = $(this).attr('id');
+                let path = '{{ route('users.appointments.show', ':appointment') }}';
+                path = path.replace(':appointment', appointment_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        appointment_id: appointment_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.appointments.view', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url = '{{ route('users.appointments.view', ':appointment') }}';
+                            url = url.replace(':appointment', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
-                            }, 1000);
+                            }, 500);
                         }
                     },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
                 });
             });
 
         });
     </script>
-@endsection
+@endpush

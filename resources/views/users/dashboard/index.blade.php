@@ -63,6 +63,40 @@
                 </div>
                 <!-- ./col -->
 
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $patients }}</h3>
+                            <p>Patients</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <a href="{{ route('users.patients.index') }}" class="small-box-footer">
+                            More info <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>{{ $orders }}</h3>
+                            <p>Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-table"></i>
+                        </div>
+                        <a href="{{ route('users.orders.index') }}" class="small-box-footer">
+                            More info <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
             </div>
             <!-- /.row -->
             <div class="row">

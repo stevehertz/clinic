@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $patient->first_name }} {{ $patient->last_name }} Profile</h1>
+                    <h1> {{ $clinic->clinic }} </h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item">
                             <a href="{{ route('users.patients.index') }}">Patients</a>
                         </li>
-                        <li class="breadcrumb-item active">Patient Profile</li>
+                        <li class="breadcrumb-item active">{{ $patient->first_name }} {{ $patient->last_name }} Profile</li>
                     </ol>
                 </div>
             </div>
@@ -142,7 +142,8 @@
                                         <div class="form-group">
                                             <label for="updatePatientCardNumber">Card Number</label>
                                             <input type="text" class="form-control" name="card_number"
-                                                id="updatePatientCardNumber"  value="{{ $patient->card_number }}" placeholder="Enter card number">
+                                                id="updatePatientCardNumber" value="{{ $patient->card_number }}"
+                                                placeholder="Enter card number">
                                         </div>
                                     </div>
                                 </div>
@@ -167,16 +168,15 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
-
             $('#updatePatientForm').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('users.patients.edit', $patient->id) }}';
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.patients.edit', $patient->id) }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -184,7 +184,8 @@
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        $('#updatePatientSubmitBtn').html('<i class="fa fa-spinner fa-spin"></i>');
+                        $('#updatePatientSubmitBtn').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
                         $('#updatePatientSubmitBtn').attr('disabled', true);
                     },
                     complete: function() {
@@ -196,7 +197,8 @@
                             toastr.success(data['message']);
                             $('#updatePatientForm')[0].reset();
                             setTimeout(function() {
-                                let viewURL = '{{ route('users.patients.view', $patient->id) }}';
+                                let viewURL =
+                                    '{{ route('users.patients.view', $patient->id) }}';
                                 window.location.href = viewURL;
                             }, 1000);
                         }
@@ -215,4 +217,4 @@
 
         });
     </script>
-@endsection
+@endpush
