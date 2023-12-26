@@ -24,17 +24,11 @@ class CloseBillsController extends Controller
         $clinic = $user->clinic;
         if ($request->ajax()) {
 
-            $data = $clinic->payment_bill()->join('patients', 'payment_bills.patient_id', '=', 'patients.id')
-                ->join('doctor_schedules', 'payment_bills.schedule_id', '=', 'doctor_schedules.id')
-                ->select('payment_bills.*', 'patients.first_name', 'patients.last_name')
-                ->where('payment_bills.bill_status', '=', 'CLOSED')
-                ->where('doctor_schedules.user_id', $user->id)
-                ->orderBy('payment_bills.id', 'desc')
-                ->get();
+            $data = $clinic->payment_bill()->where('bill_status', '=', 'CLOSED')->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
-                    return $row->first_name . ' ' . $row->last_name;
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
                 })
                 ->addColumn('total_amount', function ($row) {
                     return number_format($row->total_amount, 2, '.', ',');
@@ -43,13 +37,24 @@ class CloseBillsController extends Controller
                     return number_format($row->paid_amount, 2, '.', ',');
                 })
                 ->addColumn('close_date', function ($row) {
-                    return date('d-M-Y', strtotime($row->close_date));
+                    if ($row->close_date !== null) {
+                        return date('d-M-Y', strtotime($row->close_date));
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('doctor', function ($row) {
+                    if ($row->user_id !== null) {
+                        return $row->user->first_name . ' ' . $row->user->last_name;
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row['id'] . '" data-original-title="View" class="view btn btn-tools btn-sm viewBtn"><i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'full_names', 'total_amount', 'total_paid', 'close_date'])
+                ->rawColumns(['action', 'full_names', 'total_amount', 'total_paid', 'close_date', 'doctor'])
                 ->make(true);
         }
         $page_title = 'Close Bills';
@@ -59,13 +64,52 @@ class CloseBillsController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function scheduled_bills(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $clinic = $user->clinic;
+        if ($request->ajax()) {
+            $data = $user->payment_bill()->where('bill_status', 'CLOSED')->latest()->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('full_names', function ($row) {
+                    return $row->patient->first_name . ' ' . $row->patient->last_name;
+                })
+                ->addColumn('total_amount', function ($row) {
+                    return number_format($row->total_amount, 2, '.', ',');
+                })
+                ->addColumn('total_paid', function ($row) {
+                    return number_format($row->paid_amount, 2, '.', ',');
+                })
+                ->addColumn('close_date', function ($row) {
+                    if ($row->close_date !== null) {
+                        return date('d-M-Y', strtotime($row->close_date));
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('doctor', function ($row) {
+                    if ($row->user_id !== null) {
+                        return $row->user->first_name . ' ' . $row->user->last_name;
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row['id'] . '" data-original-title="View" class="view btn btn-tools btn-sm viewBtn"><i class="fa fa-eye"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action', 'full_names', 'total_amount', 'total_paid', 'close_date', 'doctor'])
+                ->make(true);
+        }
+    }
+
+    public function store(PaymentBill $paymentBill, Request $request)
     {
         # code...
-        $data = $request->all();
+        $data = $request->except("_token");
 
         $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
             'invoice_number' => 'required|numeric',
             'close_date' => 'required|date',
         ]);
@@ -77,28 +121,26 @@ class CloseBillsController extends Controller
             return response()->json($response, 401);
         }
 
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
+        $clinic = $paymentBill->clinic;
 
-        $clinic = $payment_bill->clinic;
+        $appointment = $paymentBill->appontment;
 
-        $appointment = $payment_bill->appontment;
+        $paymentBill->id = $paymentBill->id;
+        $paymentBill->open_date = $paymentBill->open_date;
+        $paymentBill->invoice_number = $clinic->initials . '/' . $data['invoice_number'];
+        $paymentBill->lpo_number = $data['lpo_number'];
+        $paymentBill->bill_status = 'CLOSED';
+        $paymentBill->close_date = $data['close_date'];
 
-        $payment_bill->id = $payment_bill->id;
-        $payment_bill->open_date = $payment_bill->open_date;
-        $payment_bill->invoice_number = $clinic->initials . '/' . $data['invoice_number'];
-        $payment_bill->lpo_number = $data['lpo_number'];
-        $payment_bill->bill_status = 'CLOSED';
-        $payment_bill->close_date = $data['close_date'];
-
-        if ($payment_bill->save()) {
+        if ($paymentBill->save()) {
 
             $report_id = $appointment->report_id;
 
             $report = $clinic->report()->findOrFail($report_id);
 
             $report->update([
-                'bill_status' => $payment_bill->bill_status,
-                'bill_closed_date' => $payment_bill->close_date,
+                'bill_status' => $paymentBill->bill_status,
+                'bill_closed_date' => $paymentBill->close_date,
             ]);
 
             $response['status'] = true;
@@ -108,52 +150,37 @@ class CloseBillsController extends Controller
         }
     }
 
-    public function show(Request $request)
+    public function show(PaymentBill $paymentBill)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-
         $response['status'] = true;
-        $response['data'] = $payment_bill;
+        $response['data'] = $paymentBill;
 
         return response()->json($response, 200);
     }
 
-    public function view($id)
+    public function view(PaymentBill $paymentBill)
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
-        $payment_bill = PaymentBill::findOrFail($id);
-        $page_title = 'View Closed Bill';
+        $paymentAttachments = $paymentBill->payment_attachment()->latest()->get();
+        $page_title = trans('users.page.payments.sub_page.view_closed');
         return view('users.closed.view', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
-            'payment_bill' => $payment_bill,
+            'payment_bill' => $paymentBill,
+            'payment_attachments' => $paymentAttachments
         ]);
     }
 
-    public function update_lpo(Request $request)
+    public function update_lpo(PaymentBill $paymentBill, Request $request)
     {
         # code...
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
             'lpo_number' => 'required',
         ]);
 
@@ -164,10 +191,8 @@ class CloseBillsController extends Controller
             return response()->json($response, 401);
         }
 
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-
-        $payment_bill->lpo_number = $data['lpo_number'];
-        $payment_bill->save();
+        $paymentBill->lpo_number = $data['lpo_number'];
+        $paymentBill->save();
 
         $response['status'] = true;
         $response['message'] = 'You have updated the LPO number';
@@ -175,18 +200,17 @@ class CloseBillsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function print($id)
+    public function print(PaymentBill $paymentBill)
     {
         # code...
         $user = User::findOrFail(auth()->user()->id);
         $clinic = $user->clinic;
-        $payment_bill = PaymentBill::findOrFail($id);
         $page_title = 'Print Closed Bill';
         return view('users.closed.print', [
             'page_title' => $page_title,
             'user' => $user,
             'clinic' => $clinic,
-            'payment_bill' => $payment_bill,
+            'payment_bill' => $paymentBill,
         ]);
     }
 }

@@ -61,6 +61,7 @@
                                                     <th>Open Date</th>
                                                     <th>Patient Names</th>
                                                     <th>Bill Status</th>
+                                                    <th>DOctor/ Optimetrist</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -79,6 +80,7 @@
                                                 <th>Open Date</th>
                                                 <th>Patient Names</th>
                                                 <th>Bill Status</th>
+                                                <th>DOctor/ Optimetrist</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -90,6 +92,8 @@
                         </div>
                         <!-- /.card -->
                     </div>
+                    <!--/.card -->
+                    
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -123,6 +127,10 @@
                         {
                             data: 'bill_status',
                             name: 'bill_status'
+                        },
+                        {
+                            data: 'doctor',
+                            name: 'doctor'
                         },
                         {
                             data: 'action',
@@ -160,6 +168,10 @@
                             name: 'bill_status'
                         },
                         {
+                            data: 'doctor',
+                            name: 'doctor'
+                        },
+                        {
                             data: 'action',
                             name: 'action',
                             orderable: false,
@@ -188,6 +200,36 @@
                             setTimeout(() => {
                                 window.location.href = view_url;
                             }, 500);
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    },
+                });
+            });
+
+            $(document).on('click', '.editPaymentBill', function(e) {
+                e.preventDefault();
+                let bill_id = $(this).attr('data-id');
+                let path = '{{ route('users.payments.bills.show', ':paymentBill') }}';
+                path  = path.replace(':paymentBill', bill_id);
+                $.ajax({
+                    url: path,
+                    type: 'GET',
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
+                            let edit_path = '{{ route('users.payments.bills.edit', ':paymentBill') }}';
+                            edit_path = edit_path.replace(':paymentBill', data['data']['id']);
+                            setTimeout(() => {
+                                window.location.href = edit_path;
+                            }, 1000);
                         }
                     },
                     error: function(data) {

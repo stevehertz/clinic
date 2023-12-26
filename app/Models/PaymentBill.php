@@ -101,4 +101,9 @@ class PaymentBill extends Model
         # code...
         return $this->hasMany(WorkshopSale::class, 'payment_bill_id', 'id');
     }
+
+    public function payment_attachment()  
+    {
+        return $this->hasMany(PaymentAttachment::class, 'bill_id', 'id');    
+    }
 }

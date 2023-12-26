@@ -66,7 +66,13 @@
                                         {{ $payment_bill->patient->last_name }}</strong><br>
                                     {{ $payment_bill->patient->address }}<br>
                                     Phone: {{ $payment_bill->patient->phone }}<br>
-                                    Email: {{ $payment_bill->patient->email }}
+                                    Email: {{ $payment_bill->patient->email }} <br>
+                                    @if ($payment_bill->payment_detail->client_type->type == 'Insurance')
+                                        Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
+                                        Scheme: {{ $payment_bill->payment_detail->scheme }}
+                                    @endif
+                                    Prescription Invoice Number:
+                                    {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
                                 </address>
                             </div>
                             <!-- /.col -->
@@ -266,10 +272,13 @@
                                         <i class="fa fa-edit"></i> Edit
                                     </a>
 
-                                    <button type="button" data-id="{{ $payment_bill->id }}"
-                                        class="btn btn-danger float-right closeBillBtn" style="margin-right: 5px;">
-                                        <i class="fa fa-close "></i> Close Bill
-                                    </button>
+                                    @if ($payment_bill->balance <= 0)
+                                        <button type="button" data-id="{{ $payment_bill->id }}"
+                                            class="btn btn-danger float-right closeBillBtn" style="margin-right: 5px;">
+                                            <i class="fa fa-close "></i> Close Bill
+                                        </button>
+                                    @endif
+
 
                                     @if ($payment_bill->approval_status == 'APPROVED')
                                         @if ($payment_bill->order)
@@ -454,7 +463,8 @@
                     dataType: "json",
                     success: function(data) {
                         if (data['status']) {
-                            let edit_path = '{{ route('users.payments.bills.edit', ':paymentBill') }}';
+                            let edit_path =
+                                '{{ route('users.payments.bills.edit', ':paymentBill') }}';
                             edit_path = edit_path.replace(':paymentBill', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = edit_path;
@@ -534,7 +544,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('users.payments.close.bills.store') }}';
+                var path = '{{ route('users.payments.close.bills.store', $payment_bill->id) }}';
                 $.ajax({
                     url: path,
                     type: 'POST',

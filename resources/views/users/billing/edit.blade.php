@@ -510,9 +510,9 @@
 
             $('#enterAgreedAmountForm').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('users.payments.bills.update.agreed.amount') }}';
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.payments.bills.update.agreed.amount', $payment_bill->id) }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -593,7 +593,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('users.payments.billing.store') }}';
+                var path = '{{ route('users.payments.billing.store', $payment_bill->id) }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -631,7 +631,7 @@
 
             function find_total_paid() {
                 var bill_id = '{{ $payment_bill->id }}';
-                var path = '{{ route('users.payments.billing.update.paid') }}';
+                var path = '{{ route('users.payments.billing.update.paid', $payment_bill->id) }}';
                 var token = '{{ csrf_token() }}';
                 $.ajax({
                     url: path,

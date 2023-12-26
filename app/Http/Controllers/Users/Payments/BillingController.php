@@ -15,13 +15,12 @@ class BillingController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request)
+    public function store(PaymentBill $paymentBill,  Request $request)
     {
         # code...
-        $data = $request->all();
+        $data = $request->except("_token");
 
         $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
             'item' => 'required|string',
             'amount' => 'required|string',
             'receipt' => 'required|string|unique:billings,receipt_number',
@@ -35,18 +34,16 @@ class BillingController extends Controller
             return response()->json($response, 401);
         }
 
-        $payment_bill = PaymentBill::find($data['bill_id']);
-
         // check if the bill is already paid
-        if ($payment_bill->balance <= 0) {
+        if ($paymentBill->balance <= 0) {
             $response['status'] = false;
             $response['errors'] = 'The bill is already paid';
             return response()->json($response, 401);
         }
 
-        $clinic = $payment_bill->clinic;
+        $clinic = $paymentBill->clinic;
 
-        $payment_bill->billing()->create([
+        $paymentBill->billing()->create([
             'item' => $data['item'],
             'amount' => $data['amount'],
             'receipt_number' => $clinic->initials.'/'.$data['receipt'],
@@ -60,48 +57,33 @@ class BillingController extends Controller
     }
 
     // Update Payment Bill total paid amount
-    public function update_payment_bill(Request $request)
+    public function update_payment_bill(PaymentBill $paymentBill, Request $request)
     {
         # code...
-        $data = $request->all();
+        $appointment = $paymentBill->appontment;
 
-        $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
-        ]);
+        $paid = $paymentBill->billing()->sum('amount');
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
+        $total_paid = $paymentBill->consultation_fee + $paid;
 
-        $payment_bill = PaymentBill::find($data['bill_id']);
+        $paymentBill->id = $paymentBill->id;
+        $paymentBill->bill_status = 'PENDING';
+        $paymentBill->total_amount = $paymentBill->total_amount;
+        $paymentBill->paid_amount = $total_paid;
+        $paymentBill->balance = $paymentBill->total_amount - $paymentBill->paid_amount;
 
-        $appointment = $payment_bill->appontment;
+        if ($paymentBill->save()) {
 
-        $paid = $payment_bill->billing()->sum('amount');
-
-        $total_paid = $payment_bill->consultation_fee + $paid;
-
-        $payment_bill->id = $payment_bill->id;
-        $payment_bill->bill_status = 'PENDING';
-        $payment_bill->total_amount = $payment_bill->total_amount;
-        $payment_bill->paid_amount = $total_paid;
-        $payment_bill->balance = $payment_bill->total_amount - $payment_bill->paid_amount;
-
-        if ($payment_bill->save()) {
-
-            $clinic = $payment_bill->clinic;
+            $clinic = $paymentBill->clinic;
 
             $report_id = $appointment->report_id;
 
             $report = $clinic->report()->findOrFail($report_id);
 
             $report->update([
-                'total_amount' => $payment_bill->total_amount,
-                'paid_amount' => $payment_bill->paid_amount,
-                'balance' => $payment_bill->balance
+                'total_amount' => $paymentBill->total_amount,
+                'paid_amount' => $paymentBill->paid_amount,
+                'balance' => $paymentBill->balance
             ]);
 
             $response['status'] = true;

@@ -29,7 +29,7 @@ class PaymentsBillController extends Controller
         $clinic = $user->clinic;
         if ($request->ajax()) {
 
-            $data = $clinic->payment_bill()->latest()->get();
+            $data = $clinic->payment_bill()->where('bill_status', '!=', 'CLOSED')->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
@@ -48,6 +48,15 @@ class PaymentsBillController extends Controller
                         return '<span class="badge badge-success">CLOSED</span>';
                     }
                 })
+
+                ->addColumn('doctor', function ($row) {
+                    if($row->user_id !== null)
+                    {
+                        return $row->user->first_name . ' ' . $row->user->last_name;
+                    } else{
+                        return '';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '';
                     if ($row->user_id !== null && $row->user->id == Auth::user()->id) {
@@ -60,7 +69,16 @@ class PaymentsBillController extends Controller
                 ->rawColumns(
                     [
                         'action',
-                        'full_names', 'open_date', 'consultation_fee', 'claimed_amount', 'agreed_amount', 'total_amount', 'paid_amount', 'balance', 'bill_status'
+                        'full_names', 
+                        'open_date', 
+                        'consultation_fee', 
+                        'claimed_amount', 
+                        'agreed_amount', 
+                        'total_amount', 
+                        'paid_amount', 
+                        'balance', 
+                        'bill_status',
+                        'doctor'
                     ]
                 )
                 ->make(true);
@@ -78,7 +96,7 @@ class PaymentsBillController extends Controller
     {
         $user = User::find(Auth::user()->id);
         if ($request->ajax()) {
-            $data = $user->payment_bill()->latest()->get();
+            $data = $user->payment_bill()->where('bill_status', '!=', 'CLOSED')->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('full_names', function ($row) {
@@ -97,6 +115,16 @@ class PaymentsBillController extends Controller
                         return '<span class="badge badge-success">CLOSED</span>';
                     }
                 })
+
+                ->addColumn('doctor', function ($row) {
+                    if($row->user_id !== null)
+                    {
+                        return $row->user->first_name . ' ' . $row->user->last_name;
+                    } else{
+                        return '';
+                    }
+                })
+
                 ->addColumn('action', function ($row) {
                     $btn = '';
                     if ($row->user_id !== null && $row->user->id == Auth::user()->id) {
@@ -109,7 +137,16 @@ class PaymentsBillController extends Controller
                 ->rawColumns(
                     [
                         'action',
-                        'full_names', 'open_date', 'consultation_fee', 'claimed_amount', 'agreed_amount', 'total_amount', 'paid_amount', 'balance', 'bill_status'
+                        'full_names', 
+                        'open_date', 
+                        'consultation_fee', 
+                        'claimed_amount', 
+                        'agreed_amount', 
+                        'total_amount', 
+                        'paid_amount', 
+                        'balance', 
+                        'bill_status',
+                        'doctor'
                     ]
                 )
                 ->make(true);
@@ -336,7 +373,6 @@ class PaymentsBillController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
             'consultation_fee' => 'required|numeric',
             'consultation_receipt' => 'required|numeric',
         ]);
@@ -347,6 +383,7 @@ class PaymentsBillController extends Controller
             $response['errors'] = $errors;
             return response()->json($response, 401);
         }
+
         $appointment = $paymentBill->appontment;
 
         $paymentBill->id = $paymentBill->id;

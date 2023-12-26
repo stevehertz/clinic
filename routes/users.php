@@ -1,32 +1,33 @@
 <?php
 
-use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Users\Users\UsersController;
 use App\Http\Controllers\Users\Auth\AccountController;
-use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswordController;
-use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
-use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPasswordController;
-use App\Http\Controllers\Users\ClientType\ClientTypeController;
-use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
-use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
 use App\Http\Controllers\Users\Frames\FramesController;
-use App\Http\Controllers\Users\Frames\FrameStocksController;
-use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
-use App\Http\Controllers\Users\Lens\LensPowerController;
-use App\Http\Controllers\Users\Lens\LensPrescriptionController;
-use App\Http\Controllers\Users\Medicine\MedicineController;
 use App\Http\Controllers\Users\Orders\OrdersController;
-use App\Http\Controllers\Users\Orders\OrderTracksController;
-use App\Http\Controllers\Users\Patients\PatientsController as PatientsPatientsController;
+use App\Http\Controllers\Users\Lens\LensPowerController;
 use App\Http\Controllers\Users\Payments\BillingController;
+use App\Http\Controllers\Users\Medicine\MedicineController;
+use App\Http\Controllers\Users\Frames\FrameStocksController;
+use App\Http\Controllers\Users\Orders\OrderTracksController;
+use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
 use App\Http\Controllers\Users\Payments\CloseBillsController;
-use App\Http\Controllers\Users\Payments\PaymentDetailsController as PaymentsPaymentDetailsController;
-use App\Http\Controllers\Users\Payments\PaymentsBillController;
 use App\Http\Controllers\Users\Payments\RemittanceController;
 use App\Http\Controllers\Users\Procedure\ProcedureController;
-use App\Http\Controllers\Users\Schedule\DoctorSchedulesController;
 use App\Http\Controllers\Users\Treatment\TreatmentController;
-use App\Http\Controllers\Users\Users\UsersController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Users\ClientType\ClientTypeController;
+use App\Http\Controllers\Users\Lens\LensPrescriptionController;
+use App\Http\Controllers\Users\Payments\PaymentsBillController;
+use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
+use App\Http\Controllers\Users\Schedule\DoctorSchedulesController;
+use App\Http\Controllers\Users\Payments\PaymentsAttachmentController;
+use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
+use App\Http\Controllers\Users\Patients\PatientsController as PatientsPatientsController;
+use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPasswordController;
+use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswordController;
+use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
+use App\Http\Controllers\Users\Payments\PaymentDetailsController as PaymentsPaymentDetailsController;
+use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
 
 
 Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
@@ -138,7 +139,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::get('/{paymentBill}/edit', [PaymentsBillController::class, 'edit'])->name('edit');
 
-            Route::post('/update/agreed/amount', [PaymentsBillController::class, 'update_agreed'])->name('update.agreed.amount');
+            Route::post('/{paymentBill}/update/agreed/amount', [PaymentsBillController::class, 'update_agreed'])->name('update.agreed.amount');
 
             Route::post('/update/consultation', [PaymentsBillController::class, 'update_consultation'])->name('update.consultation');
 
@@ -149,22 +150,38 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::get('/index', [CloseBillsController::class, 'index'])->name('index');
 
-            Route::post('/store', [CloseBillsController::class, 'store'])->name('store');
+            Route::get('/scheduled', [CloseBillsController::class, 'scheduled_bills'])->name('scheduled');
 
-            Route::post('/show', [CloseBillsController::class, 'show'])->name('show');
+            Route::post('/{paymentBill}/store', [CloseBillsController::class, 'store'])->name('store');
 
-            Route::get('/{id}/view', [CloseBillsController::class, 'view'])->name('view');
+            Route::get('/{paymentBill}/show', [CloseBillsController::class, 'show'])->name('show');
 
-            Route::post('/update/lpo', [CloseBillsController::class, 'update_lpo'])->name('update.lpo');
+            Route::get('/{paymentBill}/view', [CloseBillsController::class, 'view'])->name('view');
+
+            Route::post('/{paymentBill}/update/lpo', [CloseBillsController::class, 'update_lpo'])->name('update.lpo');
 
             Route::get('/{id}/print', [CloseBillsController::class, 'print'])->name('print');
         });
 
+        Route::prefix('attachments')->name('attachments.')->group(function(){
+
+            Route::post('/{paymentBill}/store', [PaymentsAttachmentController::class, 'store'])->name('store');
+
+            Route::get('/{paymentAttachment}/show', [PaymentsAttachmentController::class, 'show'])->name('show');
+
+            Route::get('/{paymentAttachment}/open/file', [PaymentsAttachmentController::class, 'openFile'])->name('open.file');
+           
+            Route::post('/{paymentAttachment}/update', [PaymentsAttachmentController::class, 'update'])->name('update');
+
+            Route::delete('/{paymentAttachment}/delete', [PaymentsAttachmentController::class, 'destroy'])->name('delete');
+
+        });
+
         Route::prefix('billing')->name('billing.')->group(function () {
 
-            Route::post('/store', [BillingController::class, 'store'])->name('store');
+            Route::post('/{paymentBill}/store', [BillingController::class, 'store'])->name('store');
 
-            Route::post('/update/paid', [BillingController::class, 'update_payment_bill'])->name('update.paid');
+            Route::post('/{paymentBill}/update/paid', [BillingController::class, 'update_payment_bill'])->name('update.paid');
         });
 
         Route::prefix('remittance')->name('remittance.')->group(function () {

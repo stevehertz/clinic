@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>View Closed Bill</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -14,11 +14,11 @@
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{ route('users.payments.close.bills.index') }}">
-                                Closed Bills
+                                @lang('users.page.payments.sub_page.closed')
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
-                            View Closed Bill
+                            {{ $page_title }}
                         </li>
                     </ol>
                 </div>
@@ -39,8 +39,8 @@
                             <div class="col-12">
                                 <h4>
                                     <i class="fa fa-globe"></i> {{ $payment_bill->clinic->clinic }}
-                                    <small class="float-right">Open Date:
-                                        {{ date('d-m-Y', strtotime($payment_bill->open_date)) }}</small>
+                                    <small class="float-right">Closed Date:
+                                        {{ date('d-m-Y', strtotime($payment_bill->close_date)) }}</small>
                                 </h4>
                             </div>
                             <!-- /.col -->
@@ -66,7 +66,13 @@
                                         {{ $payment_bill->patient->last_name }}</strong><br>
                                     {{ $payment_bill->patient->address }}<br>
                                     Phone: {{ $payment_bill->patient->phone }}<br>
-                                    Email: {{ $payment_bill->patient->email }}
+                                    Email: {{ $payment_bill->patient->email }} <br>
+                                    @if ($payment_bill->payment_detail->client_type->type == 'Insurance')
+                                        Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
+                                        Scheme: {{ $payment_bill->payment_detail->scheme }}
+                                    @endif
+                                    Prescription Invoice Number:
+                                    {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
                                 </address>
                             </div>
                             <!-- /.col -->
@@ -217,7 +223,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            @if( $payment_bill->approval_status == 'REJECTED' )
+                                            @if ($payment_bill->approval_status == 'REJECTED')
                                                 <th>
                                                     Rejected Amount
                                                 </th>
@@ -281,6 +287,16 @@
                                 <button type="button" data-id="{{ $payment_bill->id }}"
                                     class="btn btn-warning float-right printPaymentsBtn" style="margin-right: 5px;">
                                     <i class="fa fa-print"></i> Print
+                                </button>
+
+                                <button type="button" data-id="{{ $payment_bill->id }}"
+                                    class="btn btn-primary float-right attachmentsBtn" style="margin-right: 5px;">
+                                    <i class="fas fa-file-pdf"></i> Attachments
+                                </button>
+
+                                <button type="button" data-id="{{ $payment_bill->id }}"
+                                    class="btn btn-secondary float-right addAttachmentsBtn" style="margin-right: 5px;">
+                                    <i class="fas fa-folder-plus"></i> Add Attachments
                                 </button>
                             </div>
                         </div>
@@ -389,50 +405,133 @@
         </div>
         <!-- /.modal -->
 
+        <div class="modal fade" id="addAttachmentModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Attachments</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addAttachmentForm">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="addAttachmentPaymentId" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="addAttachmentPaymentTitle">Title</label>
+                                <input type="text" class="form-control" name="title" id="addAttachmentPaymentTitle"
+                                    placeholder="Enter Title">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="addAttachmentFile">File Name</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="file" class="custom-file-input"
+                                            id="addAttachmentFile">
+                                        <label class="custom-file-label" for="addAttachmentFile">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="attachmentsModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">View Payment Attachments</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($payment_attachments as $attachment)
+                                        <tr>
+                                            <td>
+                                                {{ $attachment->title }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('users.payments.attachments.open.file', $attachment->id) }}" target="_blank">
+                                                    {{ $attachment->file }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                    @endforelse
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
     </section>
     <!-- /.content -->
 
 @endsection
 
-@section('scripts')
+
+@push('scripts')
     <script>
         $(document).ready(function() {
 
             $(document).on('click', '.updateLPONumberBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.close.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.close.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     success: function(data) {
                         if (data['status']) {
                             $('#updateLPONumberBillId').val(data['data']['id']);
                             $('#updateLPONumberModal').modal('show');
                         }
                     },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
                 });
             });
 
             $('#updateLPONumberForm').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var formData = new FormData(form[0]);
-                var path = '{{ route('users.payments.close.bills.update.lpo') }}';
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.payments.close.bills.update.lpo', $payment_bill->id) }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -476,16 +575,12 @@
 
             $(document).on('click', '.printPaymentsBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.close.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.close.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
@@ -495,46 +590,25 @@
                                 window.open(url, '_blank');
                             }, 1000);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     }
                 });
             });
 
             $(document).on('click', '.createRemittanceBtn', function(e) {
                 e.preventDefault();
-                var bill_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.payments.close.bills.show') }}';
+                let bill_id = $(this).data('id');
+                let path = '{{ route('users.payments.close.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     success: function(data) {
                         if (data['status']) {
                             $('#createRemittanceBillId').val(data['data']['id']);
                             $('#createRemittanceModal').modal('show');
                         }
                     },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
-                    }
+
                 });
             });
 
@@ -609,6 +683,76 @@
                     }
                 });
             }
+
+            $(document).on('click', '.addAttachmentsBtn', function(e) {
+                e.preventDefault();
+                // $('#fileUpload').trigger('click');
+                let paymentBill = $(this).data('id');
+                let path = '{{ route('users.payments.close.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', paymentBill);
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) {
+                            $('#addAttachmentModal').modal('show');
+                            $('#addAttachmentPaymentId').val(data['data']['id']);
+                        }
+                    }
+                });
+            });
+
+            $('#addAttachmentForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let paymentBill = $('#addAttachmentPaymentId').val();
+                let path = '{{ route('users.payments.attachments.store', ':paymentBill') }}';
+                path = path.replace(':paymentBill', paymentBill);
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>');
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html(
+                            'Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#addAttachmentModal').modal('hide');
+                            $('#addAttachmentForm')[0].reset();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+            $('.attachmentsBtn').click(function(e) {
+                e.preventDefault();
+                $('#attachmentsModal').modal('show');
+            });
         });
     </script>
-@endsection
+@endpush

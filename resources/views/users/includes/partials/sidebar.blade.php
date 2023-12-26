@@ -119,12 +119,16 @@
                 @if (Route::is('users.payments.bills.index')) menu-open @endif
                 @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view')) menu-open @endif
                 @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.edit')) menu-open @endif
+                @if (Route::is('users.payments.close.bills.index')) menu-open @endif
+                @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) menu-open @endif
                 ">
                     <a href="#"
                         class="nav-link
                     @if (Route::is('users.payments.bills.index')) active @endif
                     @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view')) active @endif
                     @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.edit')) active @endif
+                    @if (Route::is('users.payments.close.bills.index')) active @endif
+                    @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) active @endif
                     ">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
@@ -145,7 +149,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.close.bills.index') }}" class="nav-link">
+                            <a href="{{ route('users.payments.close.bills.index') }}" class="nav-link
+                            @if (Route::is('users.payments.close.bills.index')) active @endif
+                            @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) active @endif
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.payments.sub_page.closed')</p>
                             </a>

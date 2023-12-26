@@ -5,6 +5,13 @@ return [
         'dashboard' => [
             'title' => 'Dashboard'
         ],
+        'patients' => [
+            'title' => 'Patients',
+            'sub_page' => [
+                'patients' => 'Patients',
+                'add_new' => 'Add New',
+            ],
+        ],
         'schedules' => [
             'title' => 'Schedules',
             'sub_page' => [
@@ -21,6 +28,7 @@ return [
                 'view' => 'View Bill',
                 'edit' => 'Edit Bill',
                 'closed' => 'Closed Bills',
+                'view_closed' => 'View Closed Bill',
                 'remittance' => 'Remittance',
             ],
         ],

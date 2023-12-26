@@ -92,7 +92,7 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -110,8 +110,7 @@
                             to_date: to_date,
                         }
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: 'date_in',
                             name: 'date_in'
                         },
@@ -280,4 +279,4 @@
 
         });
     </script>
-@endsection
+@endpush

@@ -95,4 +95,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PaymentBill::class, 'user_id', 'id');    
     }
+
+    public function payment_attachment()  
+    {
+        return $this->hasMany(PaymentAttachment::class, 'user_id', 'id');  
+    }
 }
