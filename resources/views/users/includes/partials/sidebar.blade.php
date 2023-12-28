@@ -27,7 +27,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('users.dashboard.index') }}" class="nav-link 
+                    <a href="{{ route('users.dashboard.index') }}"
+                        class="nav-link 
                     {{ Route::is('users.dashboard.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
@@ -81,15 +82,17 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview
+                <li
+                    class="nav-item has-treeview
                 {{ Route::is('users.appointments.index') ? 'menu-open' : '' }}
                 {{ Route::is('users.appointments.create') ? 'menu-open' : '' }}
-                @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) menu-open @endif
+                @if (isset($page_title) && $page_title == trans('users.page.appointments.sub_page.view')) menu-open @endif
                 ">
-                    <a href="#" class="nav-link
+                    <a href="#"
+                        class="nav-link
                     {{ Route::is('users.appointments.index') ? 'active' : '' }}
                     {{ Route::is('users.appointments.create') ? 'active' : '' }}
-                    @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) active @endif
+                    @if (isset($page_title) && $page_title == trans('users.page.appointments.sub_page.view')) active @endif
                     ">
                         <i class="nav-icon fa fa-check-square"></i>
                         <p>
@@ -99,9 +102,10 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.appointments.index') }}" class="nav-link
+                            <a href="{{ route('users.appointments.index') }}"
+                                class="nav-link
                             {{ Route::is('users.appointments.index') ? 'active' : '' }}
-                            @if(isset($page_title) && $page_title = trans('users.page.appointments.sub_page.view')) active @endif
+                            @if (isset($page_title) && ($page_title = trans('users.page.appointments.sub_page.view'))) active @endif
                             ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.appointments.sub_page.appointment')</p>
@@ -110,7 +114,8 @@
 
 
                         <li class="nav-item">
-                            <a href="{{ route('users.appointments.create') }}" class="nav-link
+                            <a href="{{ route('users.appointments.create') }}"
+                                class="nav-link
                             {{ Route::is('users.appointments.create') ? 'active' : '' }}
                             ">
                                 <i class="fa fa-circle nav-icon"></i>
@@ -215,42 +220,69 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('users.orders.index') }}"
+                        class="nav-link 
+                    {{ Route::is('users.orders.index') ? 'active' : '' }}
+                    @if (isset($page_title) && ($page_title == trans('users.page.orders.sub_page.view'))) active @endif
+                    ">
                         <i class="nav-icon fa fa-table"></i>
                         <p>
-                            Orders
+                            @lang('users.page.orders.title')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item has-treeview 
+                {{ Route::is('users.frame.stocks.index') ? 'menu-open' : '' }}
+                {{ Route::is('users.case.stock.index') ? 'menu-open' : '' }}
+                ">
+                    <a href="#" class="nav-link 
+                    {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
+                    {{ Route::is('users.case.stock.index') ? 'active' : '' }}
+                    ">
+                        <i class="nav-icon fa fa-balance-scale"></i>
+                        <p>
+                            @lang('users.page.inventory.title')
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.orders.index') }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Orders</p>
+                            <a href="{{ route('users.frame.stocks.index') }}" class="nav-link
+                            {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
+                            ">
+                                <i class="nav-icon fa fa-circle"></i>
+                                <p>
+                                    @lang('users.page.inventory.sub_page.frames')
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('users.case.stock.index') }}" class="nav-link
+                            {{ Route::is('users.case.stock.index') ? 'active' : '' }}
+                            ">
+                                <i class="nav-icon fa fa-circle"></i>
+                                <p>
+                                    @lang('users.page.inventory.sub_page.cases')
+                                </p>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-balance-scale"></i>
+                <li class="nav-item">
+
+                    <a href="{{ route('users.doctors.index') }}" class="nav-link
+                    {{ Route::is('users.doctors.index') ? 'active' : '' }}
+                    ">
+                        <i class="nav-icon fas fa-user-friends"></i>
                         <p>
-                            Inventory
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('users.page.doctors.title') 
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('users.frame.stocks.index') }}" class="nav-link">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    Frames
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
+
                 </li>
 
             </ul>

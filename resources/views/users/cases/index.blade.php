@@ -13,7 +13,7 @@
                             <a href="{{ route('users.dashboard.index') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            @lang('users.page.inventory.sub_page.frames')
+                            @lang('users.page.inventory.sub_page.cases')
                         </li>
                     </ol>
                 </div>
@@ -28,11 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body table-responsive">
-                            <table id="frameStocksData" class="table table-bordered table-striped table-hover">
+                            <table id="casesStocksData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Frame Code</th>
+                                        <th>Case Code</th>
                                         <th>Gender</th>
                                         <th>Color</th>
                                         <th>Shape</th>
@@ -56,52 +56,6 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
-            find_frame_stocks();
-
-            function find_frame_stocks() {
-                let path = '{{ route('users.frame.stocks.index') }}';
-                $('#frameStocksData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'frame_code',
-                            name: 'frame_code'
-                        },
-                        {
-                            data: 'gender',
-                            name: 'gender'
-                        },
-                        {
-                            data: 'color',
-                            name: 'color'
-                        },
-                        {
-                            data: 'shape',
-                            name: 'shape'
-                        },
-                        {
-                            data: 'total_stock',
-                            name: 'total_stock'
-                        },
-                        {
-                            data: 'sold_stock',
-                            name: 'sold_stock'
-                        },
-                        {
-                            data: 'closing_stock',
-                            name: 'closing_stock'
-                        }
-                    ],
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-            }
 
         });
     </script>

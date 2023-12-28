@@ -46,6 +46,24 @@ return [
                 'remittance' => 'Remittance',
             ],
         ],
+        'orders' => [
+            'title' => 'Orders',
+            'sub_page' => [
+                'view' => 'Order Details'
+            ]
+        ],
+
+        'inventory' => [
+            'title' => 'Inventory',
+            'sub_page' => [
+                'frames' => 'Frames',
+                'cases' => 'Cases'
+            ],
+        ],
+
+        'doctors' => [
+            'title' => 'Doctors/ Optimetrist'
+        ],
 
     ],
 ];

@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Orders</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -78,7 +78,7 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -90,9 +90,9 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url:path,
-                        data:{
-                            status:status
+                        url: path,
+                        data: {
+                            status: status
                         }
                     },
                     columns: [{
@@ -127,11 +127,10 @@
                 });
             }
 
-            $(document).on('change', '#orderStatusSelect', function(e){
+            $(document).on('change', '#orderStatusSelect', function(e) {
                 e.preventDefault();
                 let status = $(this).val();
-                if(status != null)
-                {
+                if (status != null) {
                     $('#ordersData').DataTable().destroy();
                     find_orders(status);
                 }
@@ -139,22 +138,20 @@
 
             $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.orders.show') }}';
+                let order_id = $(this).data('id');
+                let path = '{{ route('users.orders.show', ':order') }}';
+                path = path.replace(':order', order_id);
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: path,
-                    data: {
-                        order_id: order_id,
-                        _token: token
-                    },
                     dataType: "json",
                     success: function(data) {
-                        if(data['status']){
+                        if (data['status']) {
                             setTimeout(() => {
-                                var order_path = '{{ route('users.orders.view', ':id') }}';
-                                order_path = order_path.replace(':id', data['data']['id']);
+                                var order_path =
+                                    '{{ route('users.orders.view', ':order') }}';
+                                order_path = order_path.replace(':order', data['data'][
+                                    'id']);
                                 window.location.href = order_path;
                             }, 1000);
                         }
@@ -164,4 +161,4 @@
 
         });
     </script>
-@endsection
+@endpush

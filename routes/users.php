@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users\Users\UsersController;
 use App\Http\Controllers\Users\Auth\AccountController;
-use App\Http\Controllers\Users\Frames\FramesController;
 use App\Http\Controllers\Users\Orders\OrdersController;
 use App\Http\Controllers\Users\Lens\LensPowerController;
 use App\Http\Controllers\Users\Payments\BillingController;
@@ -28,7 +27,8 @@ use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswo
 use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
 use App\Http\Controllers\Users\Payments\PaymentDetailsController as PaymentsPaymentDetailsController;
 use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
-
+use App\Http\Controllers\Users\Cases\CaseStocksController;
+use App\Http\Controllers\Users\Doctors\DoctorsController;
 
 Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
 
@@ -280,9 +280,9 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::post('/store', [OrdersController::class, 'store'])->name('store');
 
-        Route::post('/show', [OrdersController::class, 'show'])->name('show');
+        Route::get('/{order}/show', [OrdersController::class, 'show'])->name('show');
 
-        Route::get('/{id}/view', [OrdersController::class, 'view'])->name('view');
+        Route::get('/{order}/view', [OrdersController::class, 'view'])->name('view');
 
         Route::post('/{id}/update', [OrdersController::class, 'update'])->name('update');
 
@@ -294,15 +294,21 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         Route::post('/store', [OrderTracksController::class, 'store'])->name('store');
     });
 
-    Route::prefix('frames')->name('frames.')->group(function(){
-
-        Route::get('/index', [FramesController::class, 'index'])->name('index');
-
-    });
-
     Route::prefix('frame/stocks')->name('frame.stocks.')->group(function(){
 
         Route::get('/index', [FrameStocksController::class, 'index'])->name('index');
+
+    });
+
+    Route::prefix('case/stock')->name('case.stock.')->group(function(){
+
+        Route::get('/index', [CaseStocksController::class, 'index'])->name('index');
+
+    });
+
+    Route::prefix('doctors')->name('doctors.')->group(function(){
+
+        Route::get('/index', [DoctorsController::class, 'index'])->name('index');
 
     });
 });

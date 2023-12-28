@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Order</h1>
+                    <h1>{{ $clinic->clinic  }}</h1>
                     <small>
                         Order Date: {{ date('d-m-Y', strtotime($order->order_date)) }}
                     </small>
@@ -17,7 +17,7 @@
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{ route('users.orders.index') }}">
-                                Orders
+                                @lang('users.page.orders.title')
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
@@ -454,337 +454,337 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
-    <script>
-        $(document).ready(function() {
+@push('scripts')
+<script>
+    $(document).ready(function() {
 
-            $(document).on('click', '.orderSentToWorkshopBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
+        $(document).on('click', '.orderSentToWorkshopBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
 
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You are about to move order to workshop!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#sendOrderToWorkshopBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#sendOrderToWorkshopBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#sendOrderToWorkshopBtn').html(
-                                    'ORDER SENT TO WORKSHOP'
-                                );
-                                $('#sendOrderToWorkshopBtn').attr('disabled', false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You are about to move order to workshop!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#sendOrderToWorkshopBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#sendOrderToWorkshopBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#sendOrderToWorkshopBtn').html(
+                                'ORDER SENT TO WORKSHOP'
+                            );
+                            $('#sendOrderToWorkshopBtn').attr('disabled', false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
 
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.orderfRAMESentToWorkshopBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You are about to move frame to workshop!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#sendFrameSentToWorkshopBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#sendFrameSentToWorkshopBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#sendFrameSentToWorkshopBtn').html(
-                                    'FRAME SENT TO WORKSHOP'
-                                );
-                                $('#sendFrameSentToWorkshopBtn').attr('disabled',
-                                    false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.receivedFromWorkshopBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You have received the order and frame from workshop!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#receivedFromWorkshopBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#receivedFromWorkshopBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#receivedFromWorkshopBtn').html(
-                                    'RECEIVED FROM WORKSHOP'
-                                );
-                                $('#receivedFromWorkshopBtn').attr('disabled',
-                                    false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.callForCollectionBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to call the patient to collect the order!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#callForCollectionBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#callForCollectionBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#callForCollectionBtn').html(
-                                    'CALL FOR COLLECTION'
-                                );
-                                $('#callForCollectionBtn').attr('disabled',
-                                    false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.frameCollectedBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Frame has already been collected!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#frameCollectedBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#frameCollectedBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#frameCollectedBtn').html(
-                                    'CALL FOR COLLECTION'
-                                );
-                                $('#frameCollectedBtn').attr('disabled',
-                                    false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '.closedBtn', function(e) {
-                e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var status = $(this).data('value');
-                var path = '{{ route('users.orders.update', $order->id) }}';
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to close this order",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: {
-                                order_id: order_id,
-                                status: status,
-                                _token: token
-                            },
-                            dataType: "json",
-                            beforeSend: function() {
-                                $('#closedBtn').html(
-                                    '<i class="fa fa-spinner fa-spin"></i>'
-                                );
-                                $('#closedBtn').attr('disabled', true);
-                            },
-                            complete: function() {
-                                $('#closedBtn').html(
-                                    'CLOSED'
-                                );
-                                $('#closedBtn').attr('disabled',
-                                    false);
-                            },
-                            success: function(data) {
-                                if (data['status']) {
-                                    toastr.success(data['message']);
-                                    setTimeout(() => {
-                                        window.location.reload();
-                                    }, 1000);
-                                }
-                            },
-
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
-
-            $(document).on('click', '#trackOrderBtn', function(e) {
-                e.preventDefault();
-                $('#trackOrderModal').modal('show');
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
             });
         });
-    </script>
-@endsection
+
+        $(document).on('click', '.orderfRAMESentToWorkshopBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You are about to move frame to workshop!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#sendFrameSentToWorkshopBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#sendFrameSentToWorkshopBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#sendFrameSentToWorkshopBtn').html(
+                                'FRAME SENT TO WORKSHOP'
+                            );
+                            $('#sendFrameSentToWorkshopBtn').attr('disabled',
+                                false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
+
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
+            });
+        });
+
+        $(document).on('click', '.receivedFromWorkshopBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You have received the order and frame from workshop!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#receivedFromWorkshopBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#receivedFromWorkshopBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#receivedFromWorkshopBtn').html(
+                                'RECEIVED FROM WORKSHOP'
+                            );
+                            $('#receivedFromWorkshopBtn').attr('disabled',
+                                false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
+
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
+            });
+        });
+
+        $(document).on('click', '.callForCollectionBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You want to call the patient to collect the order!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#callForCollectionBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#callForCollectionBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#callForCollectionBtn').html(
+                                'CALL FOR COLLECTION'
+                            );
+                            $('#callForCollectionBtn').attr('disabled',
+                                false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
+
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
+            });
+        });
+
+        $(document).on('click', '.frameCollectedBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Frame has already been collected!",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#frameCollectedBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#frameCollectedBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#frameCollectedBtn').html(
+                                'CALL FOR COLLECTION'
+                            );
+                            $('#frameCollectedBtn').attr('disabled',
+                                false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
+
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
+            });
+        });
+
+        $(document).on('click', '.closedBtn', function(e) {
+            e.preventDefault();
+            var order_id = $(this).data('id');
+            var token = '{{ csrf_token() }}';
+            var status = $(this).data('value');
+            var path = '{{ route('users.orders.update', $order->id) }}';
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You want to close this order",
+                icon: "success",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        data: {
+                            order_id: order_id,
+                            status: status,
+                            _token: token
+                        },
+                        dataType: "json",
+                        beforeSend: function() {
+                            $('#closedBtn').html(
+                                '<i class="fa fa-spinner fa-spin"></i>'
+                            );
+                            $('#closedBtn').attr('disabled', true);
+                        },
+                        complete: function() {
+                            $('#closedBtn').html(
+                                'CLOSED'
+                            );
+                            $('#closedBtn').attr('disabled',
+                                false);
+                        },
+                        success: function(data) {
+                            if (data['status']) {
+                                toastr.success(data['message']);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        },
+
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info');
+                }
+            });
+        });
+
+        $(document).on('click', '#trackOrderBtn', function(e) {
+            e.preventDefault();
+            $('#trackOrderModal').modal('show');
+        });
+    });
+</script>
+@endpush

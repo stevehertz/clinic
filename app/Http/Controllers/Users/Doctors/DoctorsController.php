@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Users\Frames;
+namespace App\Http\Controllers\Users\Doctors;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class FramesController extends Controller
+class DoctorsController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth');
     }
 
     /**
@@ -21,6 +23,23 @@ class FramesController extends Controller
     public function index(Request $request)
     {
         //
+        $user = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
+        if ($request->ajax()) {
+            $data = $clinic->user()->where('status', 1)->latest()->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('full_names', function ($row) {
+                    return $row->first_name  . ' ' . $row->last_name; 
+                })
+                ->rawColumns(['full_names'])
+                ->make(true);
+        }
+        $page_title = trans('users.page.doctors.title');
+        return view('users.doctors.index', [
+            'page_title' => $page_title,
+            'clinic' => $clinic
+        ]);
     }
 
     /**

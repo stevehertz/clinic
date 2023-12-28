@@ -64,7 +64,7 @@ class OrdersController extends Controller
                 ->rawColumns(['action', 'full_names', 'clinic', 'workshop'])
                 ->make(true);
         }
-        $page_title = 'Orders';
+        $page_title = trans('users.page.orders.title');
         return view('users.orders.index', [
             'user' => $user,
             'clinic' => $clinic,
@@ -196,24 +196,9 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Order $order)
     {
         //
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'order_id' => 'required|integer|exists:orders,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $order = Order::find($data['order_id']);
-
         $response['status'] = true;
         $response['data'] = $order;
         return response()->json($response, 200);
@@ -225,13 +210,11 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function view($id)
+    public function view(Order $order)
     {
         # code...
-        $order = Order::findOrFail($id);
-        $user = User::findOrFail(Auth::user()->id);
-        $clinic = $user->clinic;
-        $page_title = 'Order Details';
+        $clinic = $order->clinic;
+        $page_title = trans('users.page.orders.sub_page.view');
         return view('users.orders.view', [
             'page_title' => $page_title,
             'order' => $order,
