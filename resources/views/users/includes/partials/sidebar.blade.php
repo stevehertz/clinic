@@ -105,7 +105,7 @@
                             <a href="{{ route('users.appointments.index') }}"
                                 class="nav-link
                             {{ Route::is('users.appointments.index') ? 'active' : '' }}
-                            @if (isset($page_title) && ($page_title = trans('users.page.appointments.sub_page.view'))) active @endif
+                            @if (isset($page_title) && ($page_title == trans('users.page.appointments.sub_page.view'))) active @endif
                             ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.appointments.sub_page.appointment')</p>
@@ -224,7 +224,7 @@
                     <a href="{{ route('users.orders.index') }}"
                         class="nav-link 
                     {{ Route::is('users.orders.index') ? 'active' : '' }}
-                    @if (isset($page_title) && ($page_title == trans('users.page.orders.sub_page.view'))) active @endif
+                    @if (isset($page_title) && $page_title == trans('users.page.orders.sub_page.view')) active @endif
                     ">
                         <i class="nav-icon fa fa-table"></i>
                         <p>
@@ -233,11 +233,13 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview 
+                <li
+                    class="nav-item has-treeview 
                 {{ Route::is('users.frame.stocks.index') ? 'menu-open' : '' }}
                 {{ Route::is('users.case.stock.index') ? 'menu-open' : '' }}
                 ">
-                    <a href="#" class="nav-link 
+                    <a href="#"
+                        class="nav-link 
                     {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
                     {{ Route::is('users.case.stock.index') ? 'active' : '' }}
                     ">
@@ -249,7 +251,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.frame.stocks.index') }}" class="nav-link
+                            <a href="{{ route('users.frame.stocks.index') }}"
+                                class="nav-link
                             {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
                             ">
                                 <i class="nav-icon fa fa-circle"></i>
@@ -260,7 +263,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('users.case.stock.index') }}" class="nav-link
+                            <a href="{{ route('users.case.stock.index') }}"
+                                class="nav-link
                             {{ Route::is('users.case.stock.index') ? 'active' : '' }}
                             ">
                                 <i class="nav-icon fa fa-circle"></i>
@@ -274,12 +278,13 @@
 
                 <li class="nav-item">
 
-                    <a href="{{ route('users.doctors.index') }}" class="nav-link
+                    <a href="{{ route('users.doctors.index') }}"
+                        class="nav-link
                     {{ Route::is('users.doctors.index') ? 'active' : '' }}
                     ">
                         <i class="nav-icon fas fa-user-friends"></i>
                         <p>
-                            @lang('users.page.doctors.title') 
+                            @lang('users.page.doctors.title')
                         </p>
                     </a>
 

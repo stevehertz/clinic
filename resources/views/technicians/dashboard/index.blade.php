@@ -37,8 +37,8 @@
                              <i class="ion ion-bag"></i>
                          </div>
                          <a href="{{ route('technicians.lens.index') }}" class="small-box-footer">
-                            More info <i class="fa fa-arrow-circle-right"></i>
-                        </a>
+                             More info <i class="fa fa-arrow-circle-right"></i>
+                         </a>
                      </div>
                  </div>
                  <!-- ./col -->
@@ -54,7 +54,8 @@
                          <div class="icon">
                              <i class="ion ion-stats-bars"></i>
                          </div>
-                         <a href="{{ route('technicians.orders.index') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                         <a href="{{ route('technicians.orders.index') }}" class="small-box-footer">More info <i
+                                 class="fa fa-arrow-circle-right"></i></a>
                      </div>
                  </div>
                  <!-- ./col -->
@@ -85,7 +86,7 @@
                              <table id="ordersData" class="table table-striped table-bordered table-valign-middle">
                                  <thead>
                                      <tr>
-                                        <th></th>
+                                         <th></th>
                                          <th>Date</th>
                                          <th>Receipt Number</th>
                                          <th>Patient</th>
@@ -134,10 +135,10 @@
                              data: 'receipt_number',
                              name: 'receipt_number'
                          },
-                          {
-                              data: 'patient',
-                              name: 'patient'
-                          },
+                         {
+                             data: 'patient',
+                             name: 'patient'
+                         },
                          {
                              data: 'clinic',
                              name: 'clinic'

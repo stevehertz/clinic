@@ -52,6 +52,7 @@ use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Assets\AssetConditionsController;
 use App\Http\Controllers\Admin\Cases\ClinicCasesStockController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
+use App\Http\Controllers\Admin\HQ\Frames\HQFrameStocksController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
@@ -61,6 +62,8 @@ use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
 use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
+use App\Http\Controllers\Admin\HQ\Frames\HQFramePurchasesController;
+use App\Http\Controllers\Admin\HQ\Frames\HQFrameTransfersController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
@@ -114,6 +117,32 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/view', [OrganizationController::class, 'view'])->name('view');
 
         Route::post('/update', [OrganizationController::class, 'update'])->name('update');
+    });
+
+    // HQ Inventories
+    Route::prefix('hq')->name('hq.')->group(function(){
+
+        Route::prefix('frame')->name('frame.')->group(function(){
+
+            Route::prefix('stocks')->name('stocks.')->group(function(){
+
+                Route::get('/index', [HQFrameStocksController::class, 'index'])->name('index');
+
+            });
+
+            Route::prefix('tranfers')->name('transfers.')->group(function(){
+
+                Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
+
+            });
+
+            Route::prefix('purchases')->name('purchases.')->group(function(){
+
+                Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
+
+            });
+        });
+
     });
 
     // settings

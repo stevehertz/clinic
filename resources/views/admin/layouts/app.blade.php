@@ -9,17 +9,18 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
     <title>{{ config('app.name') }} | Admin</title>
+
     @include('admin.components.styles')
 </head>
 
 <body class="hold-transition sidebar-mini accent-primary">
     <div class="wrapper">
         <!-- Navbar -->
-        @include('admin.components.main_nav')
+        @include('admin.includes.partials.main.nav')
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('admin.components.main_sidebar')
+        @include('admin.includes.partials.main.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

@@ -1,7 +1,7 @@
 <aside class="main-sidebar elevation-4 sidebar-light-primary">
     <!-- Brand Logo -->
     <a href="{{ route('admin.dashboard.index', $clinic->id) }}" class="brand-link navbar-primary">
-        <img src="{{ asset('storage/logo/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+        <img src="{{ asset('storage/logo/AdminLTELogo.png') }}" alt="{{ config('app.name') }}"
             class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Clinic App</span>
     </a>
@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard.index', $clinic->id) }}"
                         class="nav-link @if ($page_title == trans('pages.dashboard')) active @endif">
-                        <i class="nav-icon fa fa-dashboard"></i>
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             @lang('pages.dashboard')
                         </p>
@@ -229,7 +229,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.organization.index') }}" class="nav-link">
-                        <i class="nav-icon fa fa-dashboard"></i>
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             HQ Dashboard
                         </p>

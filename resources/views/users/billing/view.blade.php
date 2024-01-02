@@ -586,21 +586,17 @@
             // view order
             $(document).on('click', '.viewOrderBtn', function(e) {
                 e.preventDefault();
-                var order_id = $(this).data('id');
-                var token = '{{ csrf_token() }}';
-                var path = '{{ route('users.orders.show') }}';
+                let order_id = $(this).data('id');
+                let path = '{{ route('users.orders.show', ':order') }}';
+                path = path.replace(':order', order_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        _token: token,
-                        order_id: order_id
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.orders.view', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url = '{{ route('users.orders.view', ':order') }}';
+                            url = url.replace(':order', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;
                             }, 1000);
