@@ -120,29 +120,33 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // HQ Inventories
-    Route::prefix('hq')->name('hq.')->group(function(){
+    Route::prefix('hq')->name('hq.')->group(function () {
 
-        Route::prefix('frame')->name('frame.')->group(function(){
+        Route::prefix('frame')->name('frame.')->group(function () {
 
-            Route::prefix('stocks')->name('stocks.')->group(function(){
+            Route::prefix('stocks')->name('stocks.')->group(function () {
 
                 Route::get('/index', [HQFrameStocksController::class, 'index'])->name('index');
 
+                Route::post('/store', [HQFrameStocksController::class, 'store'])->name('store');
+
+                Route::get('/{hqFrameStock}/show', [HQFrameStocksController::class, 'show'])->name('show');
+
+                Route::post('/{hqFrameStock}/update', [HQFrameStocksController::class, 'update'])->name('update');
+
+                Route::delete('/{hqFrameStock}/delete', [HQFrameStocksController::class, 'destroy'])->name('delete');
             });
 
-            Route::prefix('tranfers')->name('transfers.')->group(function(){
+            Route::prefix('tranfers')->name('transfers.')->group(function () {
 
                 Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
-
             });
 
-            Route::prefix('purchases')->name('purchases.')->group(function(){
+            Route::prefix('purchases')->name('purchases.')->group(function () {
 
                 Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
-
             });
         });
-
     });
 
     // settings
@@ -377,9 +381,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::delete('/delete', [LensMaterialsController::class, 'destroy'])->name('delete');
             });
 
-            Route::prefix('cases')->name('cases.')->group(function(){
+            Route::prefix('cases')->name('cases.')->group(function () {
 
-                Route::prefix('color')->name('color.')->group(function(){
+                Route::prefix('color')->name('color.')->group(function () {
 
                     Route::get('/index', [CasesColorsController::class, 'index'])->name('index');
 
@@ -390,10 +394,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [CasesColorsController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [CasesColorsController::class, 'destroy'])->name('delete');
-                    
                 });
 
-                Route::prefix('sizes')->name('sizes.')->group(function(){
+                Route::prefix('sizes')->name('sizes.')->group(function () {
 
                     Route::get('/index', [CaseSizesController::class, 'index'])->name('index');
 
@@ -404,10 +407,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [CaseSizesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [CaseSizesController::class, 'destroy'])->name('delete');
-
                 });
 
-                Route::prefix('shapes')->name('shapes.')->group(function(){
+                Route::prefix('shapes')->name('shapes.')->group(function () {
 
                     Route::get('/index', [CasesShapesController::class, 'index'])->name('index');
 
@@ -418,11 +420,10 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [CasesShapesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [CasesShapesController::class, 'destroy'])->name('delete');
-
                 });
 
 
-                Route::prefix('frame/cases')->name('frame.cases.')->group(function(){
+                Route::prefix('frame/cases')->name('frame.cases.')->group(function () {
 
                     Route::get('/index', [FrameCasesController::class, 'index'])->name('index');
 
@@ -433,9 +434,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                     Route::post('/{id}/update', [FrameCasesController::class, 'update'])->name('update');
 
                     Route::delete('/{id}/delete', [FrameCasesController::class, 'destroy'])->name('delete');
-
                 });
-
             });
         });
 
@@ -628,7 +627,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}', [PaymentsReportController::class, 'index'])->name('index');
 
         Route::get('/{id}/export', [PaymentsReportController::class, 'export'])->name('export');
-
     });
 
     Route::prefix('appointments')->name('appointments.')->group(function () {

@@ -10,7 +10,6 @@ class Organization extends Model
     use HasFactory;
 
     protected $fillable = [
-        'admin_id',
         'organization',
         'tagline',
         'logo',
@@ -25,7 +24,7 @@ class Organization extends Model
     public function admin()
     {
         # code...
-        return $this->belongsTo(Admin::class);
+        return $this->hasMany(Admin::class, 'organization_id', 'id');
     }
 
     public function clinic()
@@ -217,5 +216,10 @@ class Organization extends Model
     public function received_frame()
     {
         return $this->hasMany(ReceivedFrame::class, 'organization_id', 'id');
+    }
+
+    public function hq_frame_stock()  
+    {
+        return $this->hasMany(HqFrameStock::class, 'organization_id', 'id');
     }
 }

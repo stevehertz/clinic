@@ -21,6 +21,7 @@ class Admin extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'organization_id',
         'first_name',
         'last_name',
         'profile',
@@ -57,7 +58,7 @@ class Admin extends Authenticatable
     public function organization()
     {
         # code...
-        return $this->hasOne(Organization::class);
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 
     public function sendMail($email, $password)
@@ -74,5 +75,10 @@ class Admin extends Authenticatable
         } catch (Exception $e) {
             info("Error: " . $e->getMessage());
         }
+    }
+
+    public function hq_frame_stock()  
+    {
+        return $this->hasMany(HqFrameStock::class, 'admin_id', 'id');
     }
 }
