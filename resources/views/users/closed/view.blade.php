@@ -584,11 +584,12 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.payments.close.bills.print', ':id') }}';
-                            url = url.replace(':id', data['data']['id']);
+                            let url = '{{ route('users.payments.close.bills.print', ':paymentBill') }}';
+                            url = url.replace(':paymentBill', data['data']['id']);
                             setTimeout(() => {
-                                window.open(url, '_blank');
-                            }, 1000);
+                                window.open(url, "mywindow",
+                                    "status=1,toolbar=1");
+                            }, 500);
                         }
                     }
                 });

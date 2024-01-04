@@ -497,7 +497,10 @@
                             let url =
                                 '{{ route('users.payments.bills.print', ':paymentBill') }}';
                             url = url.replace(':paymentBill', data['data']['id']);
-                            window.open(url, '_blank');
+                            setTimeout(() => {
+                                window.open(url, "mywindow",
+                                    "status=1,toolbar=1");
+                            }, 500);
                         }
                     },
                     error: function(data) {

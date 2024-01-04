@@ -244,8 +244,14 @@
     </div>
     <!-- ./wrapper -->
 
-    <script type="text/javascript">
-        window.addEventListener("load", window.print());
+    <script>
+        // window.addEventListener("load", window.print());
+        function loadPrint() {
+            window.addEventListener("load", window.print());
+            window.addEventListener("load", window.onafterprint = window.close);
+
+        }
+        loadPrint();
     </script>
 </body>
 

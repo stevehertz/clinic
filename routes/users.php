@@ -160,7 +160,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::post('/{paymentBill}/update/lpo', [CloseBillsController::class, 'update_lpo'])->name('update.lpo');
 
-            Route::get('/{id}/print', [CloseBillsController::class, 'print'])->name('print');
+            Route::get('/{paymentBill}/print', [CloseBillsController::class, 'print'])->name('print');
         });
 
         Route::prefix('attachments')->name('attachments.')->group(function(){
