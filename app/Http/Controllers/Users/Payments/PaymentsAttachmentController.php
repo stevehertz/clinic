@@ -82,29 +82,10 @@ class PaymentsAttachmentController extends Controller
      */
     public function openFile(PaymentAttachment $paymentAttachment)
     {
-        // Define the storage path for your files
-        $storagePath = storage_path('app/public/attachments');
 
-        // Full path to the file
-        $filePath = $storagePath . '/' . $paymentAttachment->file;
-
-        // Check if the file exists
-        if (file_exists($filePath)) {
-
-            // Get the file extension
-            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            // Set the appropriate Content-Type header
-            $contentType = $fileExtension === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-         
-            // Send the file as a response with headers
-            return Response::make(file_get_contents($filePath), 200, [
-                'Content-Type' => $contentType,
-                'Content-Disposition' => 'inline; filename="' . $paymentAttachment->file . '"',
-            ]);
-        }
-
-        return $filePath;
+        $file = $paymentAttachment->file;
+        $storage_path = 'attachments';
+        return $this->openFile($file, $storage_path);
     }
 
     /**

@@ -222,4 +222,9 @@ class Organization extends Model
     {
         return $this->hasMany(HqFrameStock::class, 'organization_id', 'id');
     }
+
+    public function hq_frame_purchase()  
+    {
+        return $this->hasMany(HqFramePurchase::class, 'organization_id', 'id');
+    }
 }
