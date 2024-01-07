@@ -227,4 +227,9 @@ class Organization extends Model
     {
         return $this->hasMany(HqFramePurchase::class, 'organization_id', 'id');
     }
+
+    public function hq_frame_transfer() 
+    {
+        return $this->hasMany(HqFrameTransfer::class, 'organization_id', 'id');    
+    }
 }

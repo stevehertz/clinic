@@ -140,6 +140,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::prefix('tranfers')->name('transfers.')->group(function () {
 
                 Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
+
+                Route::post('/store', [HQFrameTransfersController::class, 'store'])->name('store');
+
+                Route::get('/{hqFrameTransfer}/show', [HQFrameTransfersController::class, 'show'])->name('show');
+
+                Route::delete('/{hqFrameTransfer}/delete', [HQFrameTransfersController::class, 'destroy'])->name('delete');
+
             });
 
             Route::prefix('purchases')->name('purchases.')->group(function () {
