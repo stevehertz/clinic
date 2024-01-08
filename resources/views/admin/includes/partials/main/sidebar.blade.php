@@ -117,8 +117,12 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview
+                {{ Route::is('admin.hq.lenses.stocks.index') ? 'menu-open' : '' }}
+                ">
+                    <a href="#" class="nav-link
+                    {{ Route::is('admin.hq.lenses.stocks.index') ? 'active' : '' }}
+                    ">
                         <i class="nav-icon fas fa-eye"></i>
                         <p>
                             @lang('admin.page.lenses.title')
@@ -127,7 +131,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('admin.hq.lenses.stocks.index') }}" class="nav-link 
+                            {{ Route::is('admin.hq.lenses.stocks.index') ? 'active' : '' }}
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('admin.page.lenses.sub_page.lense_stock')</p>
                             </a>

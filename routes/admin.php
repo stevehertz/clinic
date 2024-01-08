@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
 use App\Http\Controllers\Admin\Cases\FrameCasesController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
+use App\Http\Controllers\Admin\HQ\Lens\HQLensesController;
 use App\Http\Controllers\Admin\Lens\ContactLensController;
 use App\Http\Controllers\Admin\Lens\LensIndicesController;
 use App\Http\Controllers\Admin\Lens\LensRequestController;
@@ -162,6 +163,23 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::delete('/{hqFramePurchase}/delete', [HQFramePurchasesController::class, 'destroy'])->name('delete');
 
             });
+        });
+
+        Route::prefix('lenses')->name('lenses.')->group(function(){
+
+            Route::prefix('stocks')->name('stocks.')->group(function () {
+
+                Route::get('/index', [HQLensesController::class, 'index'])->name('index');
+
+                Route::post('/store', [HQLensesController::class, 'store'])->name('store');
+
+                Route::get('/{hqLens}/show', [HQLensesController::class, 'show'])->name('show');
+
+                Route::post('/{hqLens}/update', [HQLensesController::class, 'update'])->name('update');
+
+                Route::delete('/{hqLens}/delete', [HQLensesController::class, 'destroy'])->name('delete');
+            });
+
         });
     });
 

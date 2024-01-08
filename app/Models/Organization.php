@@ -232,4 +232,9 @@ class Organization extends Model
     {
         return $this->hasMany(HqFrameTransfer::class, 'organization_id', 'id');    
     }
+
+    public function hq_lens()  
+    {
+        return $this->hasMany(HqLens::class, 'organization_id', 'id');    
+    }
 }
