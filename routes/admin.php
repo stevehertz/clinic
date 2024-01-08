@@ -54,6 +54,7 @@ use App\Http\Controllers\Admin\Assets\AssetConditionsController;
 use App\Http\Controllers\Admin\Cases\ClinicCasesStockController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
 use App\Http\Controllers\Admin\HQ\Frames\HQFrameStocksController;
+use App\Http\Controllers\Admin\HQ\Lens\HQLensPurchasesController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
@@ -178,6 +179,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/{hqLens}/update', [HQLensesController::class, 'update'])->name('update');
 
                 Route::delete('/{hqLens}/delete', [HQLensesController::class, 'destroy'])->name('delete');
+            });
+
+
+            Route::prefix('purchases')->name('purchases.')->group(function () {
+
+                Route::get('/index', [HQLensPurchasesController::class, 'index'])->name('index');
+
+                Route::post('/store', [HQLensPurchasesController::class, 'store'])->name('store');
+
+                Route::get('/{hqLensPurchase}/show', [HQLensPurchasesController::class, 'show'])->name('show');
+
+                Route::get('/{hqLensPurchase}/attachment', [HQLensPurchasesController::class, 'attachment'])->name('attachment');
+
+                Route::delete('/{hqLensPurchase}/delete', [HQLensPurchasesController::class, 'destroy'])->name('delete');
+
             });
 
         });

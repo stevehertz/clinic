@@ -159,19 +159,7 @@ class HQFramePurchasesController extends Controller
         $storage_path = 'frame_purchases';
         return $this->openFile($file, $storage_path);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *
