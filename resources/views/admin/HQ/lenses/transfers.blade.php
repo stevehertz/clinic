@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="#">Home</a>
+                            <a href="{{ route('admin.organization.index') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
                             {{ $page_title }}
@@ -24,40 +24,43 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+
             <div class="row">
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-secondary">
+                    <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ count($transfers) }}</h3>
 
-                            <p>Transfered Stocks</p>
+                            <p>Lens Transfers</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-document-text"></i>
+                            <i class="fas fa-eye"></i>
                         </div>
-                        <a href="#" class="small-box-footer newHqFrameTransferBtn">
-                            Transfer Stock <i class="fa fa-plus"></i>
+                        <a href="javascript:void(0)" class="small-box-footer newLensTransferBtn">
+                            New Lens Transfer <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
+                <!-- ./col -->
             </div>
-            <!--/.row -->
 
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="frameTransferData" class="table table-striped table-hover">
+                                <table id="lensTransfersData" class="table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Transfered Date</th>
-                                            <th>Frame Code</th>
-                                            <th>To Clinic</th>
+                                            <th>Transfer Date</th>
+                                            <th>Lens Code</th>
+                                            <th>Lens Power</th>
+                                            <th>Eye</th>
+                                            <th>To Workshop</th>
                                             <th>Quantity</th>
                                             <th>Status</th>
-                                            <th>Condition</th>
+                                            <th>Condtion</th>
                                             <th>Remarks</th>
                                             <th>Actions</th>
                                         </tr>
@@ -72,8 +75,7 @@
                     </div>
                     <!--/.card -->
                 </div><!-- /.col -->
-            </div>
-            <!-- /.row -->
+            </div><!-- /.row -->
         </div>
         <!--/.container-fluid -->
     </section>
@@ -81,35 +83,42 @@
 @endsection
 
 @push('modals')
-    @include('admin.includes.partials.modals.new_hq_frame_transfer')
+    @include('admin.includes.partials.modals.new_lens_transfer')
 @endpush
 
 @push('scripts')
     <script>
         $(document).ready(function() {
 
-            find_all_transfers();
-
-            function find_all_transfers() {
-                let path = '{{ route('admin.hq.frame.transfers.index') }}';
-                $('#frameTransferData').DataTable({
+            find_lens_transfer();
+            function find_lens_transfer()
+            {
+                let path = '{{ route('admin.hq.lenses.transfers.index') }}';
+                $('#lensTransfersData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
                     'responsive': true,
                     'autoWidth': false,
                     columns: [{
-                            data: 'transfer_date',
-                            name: 'transfer_date'
-                        },
-
-                        {
-                            data: 'frame_code',
-                            name: 'frame_code'
+                            data: 'transfered_date',
+                            name: 'transfered_date'
                         },
                         {
-                            data: 'to_clinic',
-                            name: 'to_clinic'
+                            data: 'lens_code',
+                            name: 'lens_code'
+                        },
+                        {
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'eye',
+                            name: 'eye'
+                        },
+                        {
+                            data: 'to_workshop',
+                            name: 'to_workshop'
                         },
                         {
                             data: 'quantity',
@@ -137,18 +146,17 @@
                 });
             }
 
-            // Transfer Frames
-            $(document).on('click', '.newHqFrameTransferBtn', function(e) {
+            $(document).on('click', '.newLensTransferBtn', function(e){
                 e.preventDefault();
-                $('#newHqFrameTransferModal').modal('show');
-                $('#newHqFrameTransferForm').trigger('reset');
+                $('#newLensTransferModal').modal('show');
+                $("#newLensTransferForm").trigger("reset");
             });
 
-            $('#newHqFrameTransferForm').submit(function(e) {
+            $("#newLensTransferForm").submit(function (e) { 
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let path = '{{ route('admin.hq.frame.transfers.store') }}';
+                let path = '{{ route('admin.hq.lenses.transfers.store') }}';
                 $.ajax({
                     url: path,
                     type: "POST",
@@ -168,9 +176,9 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newHqFrameTransferForm')[0].reset();
-                            $('#newHqFrameTransferModal').modal('hide');
-                            $('#frameTransferData').DataTable().ajax.reload();
+                            $('#newLensTransferForm')[0].reset();
+                            $('#newLensTransferModal').modal('hide');
+                            $('#lensTransfersData').DataTable().ajax.reload();
                             setTimeout(() => {
                                 location.reload();
                             }, 500);
@@ -186,12 +194,12 @@
                 });
             });
 
-            $(document).on('click', '.deleteFrameTransferBtn', function(e){
+            $(document).on('click', '.deleteLensTransferBtn', function(e){
                 e.preventDefault();
                 let transfer_id = $(this).data('id');
                 let token = "{{ csrf_token() }}";
-                let path = "{{ route('admin.hq.frame.transfers.delete', ':hqFrameTransfer') }}";
-                path  = path.replace(':hqFrameTransfer', transfer_id);
+                let path = "{{ route('admin.hq.lenses.transfers.delete', ':hqLensTransfer') }}";
+                path  = path.replace(':hqLensTransfer', transfer_id);
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this record!",
@@ -209,8 +217,8 @@
                             dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success')
-                                    $('#frameTransferData').DataTable().ajax.reload();
+                                    toastr.success(data['message'])
+                                    $('#lensTransfersData').DataTable().ajax.reload();
                                     setTimeout(() => {
                                         location.reload();
                                     }, 500);
@@ -223,6 +231,7 @@
                     }
                 });
             })
+
         });
     </script>
 @endpush

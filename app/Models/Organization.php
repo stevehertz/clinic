@@ -242,4 +242,9 @@ class Organization extends Model
     {
         return $this->hasMany(HqLensPurchase::class, 'organization_id', 'id');    
     }
+
+    public function hq_lens_transfer()  
+    {
+        return $this->hasMany(HqLensTransfer::class, 'organization_id', 'id');
+    }
 }
