@@ -163,8 +163,12 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview
+                {{ Route::is('admin.hq.cases.stocks.index') ? 'menu-open' : '' }}
+                ">
+                    <a href="#" class="nav-link
+                    {{ Route::is('admin.hq.cases.stocks.index') ? 'active' : '' }}
+                    ">
                         <i class="nav-icon fas fa-briefcase-medical"></i>
                         <p>
                             @lang('admin.page.cases.title')
@@ -173,7 +177,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('admin.hq.cases.stocks.index') }}" class="nav-link
+                            {{ Route::is('admin.hq.cases.stocks.index') ? 'active' : '' }}
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('admin.page.cases.sub_page.case_stocks')</p>
                             </a>

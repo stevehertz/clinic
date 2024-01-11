@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Settings\Cases;
+namespace App\Http\Requests\Admin\HQ\Cases;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateFrameCaseRequest extends FormRequest
+class UpdateCaseStockRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +25,10 @@ class UpdateFrameCaseRequest extends FormRequest
     {
         return [
             //
-            'color_id' => ['required', 'exists:case_colors,id', 'integer'],
-            'size_id' => ['required', 'integer', 'exists:case_sizes,id'],
-            'shape_id' => ['required', 'integer', 'exists:case_shapes,id']
+            'case_id' => ['required', 'integer', 'exists:frame_cases,id'],
+            'opening' => ['required', 'integer'],
+            'supplier_price' => ['required'],
+            'price' => ['required']
         ];
     }
 }

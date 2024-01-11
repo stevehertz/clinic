@@ -218,6 +218,11 @@ class Organization extends Model
         return $this->hasMany(ReceivedFrame::class, 'organization_id', 'id');
     }
 
+    public function frame_case()
+    {
+        return $this->hasMany(FrameCase::class, 'organization_id', 'id');
+    }
+
     public function hq_frame_stock()  
     {
         return $this->hasMany(HqFrameStock::class, 'organization_id', 'id');
@@ -246,5 +251,10 @@ class Organization extends Model
     public function hq_lens_transfer()  
     {
         return $this->hasMany(HqLensTransfer::class, 'organization_id', 'id');
+    }
+
+    public function hq_case_stock()  
+    {
+        return $this->hasMany(HqCaseStock::class, 'organization_id', 'id');
     }
 }

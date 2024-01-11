@@ -11,6 +11,7 @@ class FrameCase extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'organization_id',
         'color_id',
         'size_id',
         'shape_id',
@@ -18,6 +19,12 @@ class FrameCase extends Model
     ];
 
     protected $dates = ['deleted_at'];
+
+
+    public function organization()  
+    {
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
 
     public function case_color()  
     {

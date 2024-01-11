@@ -25,7 +25,6 @@ class FrameCaseRequest extends FormRequest
     {
         return [
             //
-            'code' => ['required', 'unique:frame_cases,code'],
             'color_id' => ['required', 'exists:case_colors,id', 'integer'],
             'size_id' => ['required', 'integer', 'exists:case_sizes,id'],
             'shape_id' => ['required', 'integer', 'exists:case_shapes,id']

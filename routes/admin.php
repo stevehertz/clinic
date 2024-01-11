@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\ClientType\ClientTypeController;
 use App\Http\Controllers\Admin\Frames\FrameMaterialsController;
 use App\Http\Controllers\Admin\Frames\FramePurchasesController;
 use App\Http\Controllers\Admin\Frames\FrameTransfersController;
+use App\Http\Controllers\Admin\HQ\Cases\HqCaseStocksController;
 use App\Http\Controllers\Admin\Insurances\InsurancesController;
 use App\Http\Controllers\Admin\Orders\WorkshopOrdersController;
 use App\Http\Controllers\Admin\Reports\ClinicReportsController;
@@ -208,6 +209,48 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             });
 
+        });
+
+        Route::prefix('cases')->name('cases.')->group(function () {
+
+            Route::prefix('stocks')->name('stocks.')->group(function () {
+
+                Route::get('/index', [HqCaseStocksController::class, 'index'])->name('index');
+
+                Route::post('/store', [HqCaseStocksController::class, 'store'])->name('store');
+
+                Route::get('/{hqCaseStock}/show', [HqCaseStocksController::class, 'show'])->name('show');
+
+                Route::post('/{hqCaseStock}/update', [HqCaseStocksController::class, 'update'])->name('update');
+
+                Route::delete('/{hqCaseStock}/delete', [HqCaseStocksController::class, 'destroy'])->name('delete');
+            });
+
+            Route::prefix('tranfers')->name('transfers.')->group(function () {
+
+                Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
+
+                Route::post('/store', [HQFrameTransfersController::class, 'store'])->name('store');
+
+                Route::get('/{hqFrameTransfer}/show', [HQFrameTransfersController::class, 'show'])->name('show');
+
+                Route::delete('/{hqFrameTransfer}/delete', [HQFrameTransfersController::class, 'destroy'])->name('delete');
+
+            });
+
+            Route::prefix('purchases')->name('purchases.')->group(function () {
+
+                Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
+
+                Route::post('/store', [HQFramePurchasesController::class, 'store'])->name('store');
+
+                Route::get('/{hqFramePurchase}/show', [HQFramePurchasesController::class, 'show'])->name('show');
+
+                Route::get('/{hqFramePurchase}/attachment', [HQFramePurchasesController::class, 'attachment'])->name('attachment');
+
+                Route::delete('/{hqFramePurchase}/delete', [HQFramePurchasesController::class, 'destroy'])->name('delete');
+
+            });
         });
     });
 
@@ -491,11 +534,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                     Route::post('/store', [FrameCasesController::class, 'store'])->name('store');
 
-                    Route::get('/{id}/show', [FrameCasesController::class, 'show'])->name('show');
+                    Route::get('/{frameCase}/show', [FrameCasesController::class, 'show'])->name('show');
 
-                    Route::post('/{id}/update', [FrameCasesController::class, 'update'])->name('update');
+                    Route::post('/{frameCase}/update', [FrameCasesController::class, 'update'])->name('update');
 
-                    Route::delete('/{id}/delete', [FrameCasesController::class, 'destroy'])->name('delete');
+                    Route::delete('/{frameCase}/delete', [FrameCasesController::class, 'destroy'])->name('delete');
                 });
             });
         });

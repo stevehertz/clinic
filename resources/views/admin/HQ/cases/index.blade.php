@@ -30,15 +30,15 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ count($stocks) }}</h3>
+                            <h3>{{ count($cases) }}</h3>
 
-                            <p>Frame Stocks</p>
+                            <p>Case Stocks</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-address-card"></i>
+                            <i class="fas fa-briefcase-medical"></i>
                         </div>
-                        <a href="javascript:void(0)" class="small-box-footer newFrameStockBtn">
-                            New Frame Stock <i class="fa fa-plus"></i>
+                        <a href="javascript:void(0)" class="small-box-footer newCaseStockBtn">
+                            New Case Stock <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
@@ -50,13 +50,13 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="frameStocksData" class="table table-striped table-hover">
+                                <table id="caseStocksData" class="table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Frame Code</th>
-                                            <th>Gender</th>
+                                            <th>Case Code</th>
                                             <th>Color</th>
                                             <th>Shape</th>
+                                            <th>Size</th>
                                             <th>Opening</th>
                                             <th>Purchased</th>
                                             <th>Transfered</th>
@@ -67,7 +67,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -85,8 +84,8 @@
 @endsection
 
 @push('modals')
-    @include('admin.includes.partials.modals.new_hq_frame_stocks')
-    @include('admin.includes.partials.modals.update_hq_frame_stocks')
+    @include('admin.includes.partials.modals.new_hq_case_stock')
+    @include('admin.includes.partials.modals.update_hq_case_stock')
 @endpush
 
 @push('scripts')
@@ -96,18 +95,14 @@
             find_stocks();
 
             function find_stocks() {
-                let path = '{{ route('admin.hq.frame.stocks.index') }}';
-                $('#frameStocksData').DataTable({
+                let path = '{{ route('admin.hq.cases.stocks.index') }}';
+                $('#caseStocksData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
                     columns: [{
-                            data: 'frame_code',
-                            name: 'frame_code'
-                        },
-                        {
-                            data: 'gender',
-                            name: 'gender'
+                            data: 'case_code',
+                            name: 'case_code'
                         },
                         {
                             data: 'color',
@@ -116,6 +111,10 @@
                         {
                             data: 'shape',
                             name: 'shape'
+                        },
+                        {
+                            data: 'size',
+                            name: 'size'
                         },
                         {
                             data: 'opening',
@@ -154,19 +153,17 @@
 
             }
 
-            // New Frame Stock
-            $(document).on('click', '.newFrameStockBtn', function(e) {
+            $(document).on('click', '.newCaseStockBtn', function(e) {
                 e.preventDefault();
-                $('#newFrameStockModal').modal('show');
-                $('#newFrameStockForm').trigger('reset');
+                $('#newCaseStockModal').modal('show');
+                $('#newCaseStockForm').trigger("reset");
             });
 
-            // New Frame Stock Post
-            $('#newFrameStockForm').submit(function(e) {
+            $('#newCaseStockForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let path = '{{ route('admin.hq.frame.stocks.store') }}';
+                let path = '{{ route('admin.hq.cases.stocks.store') }}';
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -186,9 +183,9 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newFrameStockForm')[0].reset();
-                            $('#newFrameStockModal').modal('hide');
-                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#newCaseStockForm')[0].reset();
+                            $('#newCaseStockModal').modal('hide');
+                            $('#caseStocksData').DataTable().ajax.reload();
                             location.reload();
                         }
                     },
@@ -204,15 +201,16 @@
                         toastr.error(errorsHtml);
                     }
                 });
+
             });
 
             // Delete Frame Stock
-            $(document).on('click', '.deleteFrameStock', function(e) {
+            $(document).on('click', '.deleteCaseStock', function(e) {
                 e.preventDefault();
                 let stock_id = $(this).data('id');
                 let token = "{{ csrf_token() }}";
-                let path = "{{ route('admin.hq.frame.stocks.delete', ':hqFrameStock') }}";
-                path = path.replace(':hqFrameStock', stock_id);
+                let path = "{{ route('admin.hq.cases.stocks.delete', ':hqCaseStock') }}";
+                path = path.replace(':hqCaseStock', stock_id);
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this record!",
@@ -231,7 +229,7 @@
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
-                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#caseStocksData').DataTable().ajax.reload();
                                     setTimeout(() => {
                                         location.reload();
                                     }, 500);
@@ -245,41 +243,38 @@
             });
 
             // Edit Frame Stock
-            $(document).on('click', '.updateFrameStock', function(e) {
+            $(document).on('click', '.updateCaseStock', function(e) {
                 e.preventDefault();
                 let stock_id = $(this).data('id');
-                let path = "{{ route('admin.hq.frame.stocks.show', ':hqFrameStock') }}";
-                path = path.replace(':hqFrameStock', stock_id);
+                let path = "{{ route('admin.hq.cases.stocks.show', ':hqCaseStock') }}";
+                path = path.replace(':hqCaseStock', stock_id);
                 $.ajax({
                     url: path,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        if(data['status'])
-                        {
-                            $('#updateFrameStockModal').modal('show');
-                            $('#updateFrameStockId').val(data['data']['id']);
-                            let frame_id = data['data']['frame_id'];
-                            $('#updateFrameStockCode').val(frame_id).trigger('change');
-                            $('#updateFrameStockGender').val(data['data']['gender']).trigger('change');
-                            $('#updateFrameStockColorId').val(data['data']['color_id']).trigger('change');
-                            $('#updateFrameStockShapeId').val(data['data']['shape_id']).trigger('change');
-                            $('#updateFrameStockOpeningStock').val(data['data']['opening']);
-                            $('#updateFrameStockManufacturerPrice').val(data['data']['supplier_price']);
-                            $('#updateFrameStockPrice').val(data['data']['price']);
+                        if (data['status']) {
+                            $('#updateCaseStockModal').modal('show');
+                            $('#updateCaseStockId').val(data['data']['id']);
+                            let case_id = data['data']['case_id'];
+                            $('#updateCaseStockCode').val(case_id).trigger('change');
+                            $('#updateCaseStockOpening').val(data['data']['opening']);
+                            $('#updateCaseStockSupplierPrice').val(data['data'][
+                                'supplier_price']);
+                            $('#updateCaseStockPrice').val(data['data']['price']);
                         }
                     }
                 });
             });
 
             // Post Edit For, 
-            $('#updateFrameStockForm').submit(function (e) { 
+            $('#updateCaseStockForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let stock_id = $('#updateFrameStockId').val();
-                let path = '{{ route('admin.hq.frame.stocks.update', ':hqFrameStock') }}';
-                path = path.replace(':hqFrameStock', stock_id);
+                let stock_id = $('#updateCaseStockId').val();
+                let path = '{{ route('admin.hq.cases.stocks.update', ':hqCaseStock') }}';
+                path = path.replace(':hqCaseStock', stock_id);
                 $.ajax({
                     url: path,
                     type: 'POST',
@@ -299,9 +294,9 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#updateFrameStockForm')[0].reset();
-                            $('#updateFrameStockModal').modal('hide');
-                            $('#frameStocksData').DataTable().ajax.reload();
+                            $('#updateCaseStockForm')[0].reset();
+                            $('#updateCaseStockModal').modal('hide');
+                            $('#caseStocksData').DataTable().ajax.reload();
                         }
                     },
                     error: function(response) {
@@ -317,6 +312,8 @@
                     }
                 });
             });
+
+
         });
     </script>
 @endpush

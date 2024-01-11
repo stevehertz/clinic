@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Cases;
 
+use App\Models\CaseSize;
+use App\Models\CaseColor;
+use App\Models\CaseShape;
+use App\Models\FrameCase;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Settings\Cases\FrameCaseRequest;
 use App\Http\Requests\Admin\Settings\Cases\UpdateFrameCaseRequest;
-use App\Models\CaseColor;
-use App\Models\CaseShape;
-use App\Models\CaseSize;
-use App\Models\FrameCase;
-use Illuminate\Http\Request;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
 
 class FrameCasesController extends Controller
 {
@@ -25,8 +28,10 @@ class FrameCasesController extends Controller
     public function index(Request $request)
     {
         //
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
         if ($request->ajax()) {
-            $data = FrameCase::latest()->get();
+            $data = $organization->frame_case()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('size', function ($row) {
@@ -73,18 +78,22 @@ class FrameCasesController extends Controller
         //
         $data = $request->except("_token");
 
-        $frame_case = new FrameCase;
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
 
-        $frame_case->create([
+        $organization = $admin->organization;
+
+        $code = Str::upper(Str::random(5));
+
+        $organization->frame_case()->create([
             'color_id' => $data['color_id'],
             'size_id' => $data['size_id'],
             'shape_id' => $data['shape_id'],
-            'code' => $data['code']
+            'code' => $code
         ]);
 
         $response = [
             'status' => true,
-            'message' => 'New Cases added' 
+            'message' => 'New Cases added'
         ];
 
         return response()->json($response, 200);
@@ -96,14 +105,12 @@ class FrameCasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FrameCase $frameCase)
     {
-        //
-        $case = FrameCase::findOrFail($id);
-        
+
         $response = [
             'status' => true,
-            'data' => $case
+            'data' => $frameCase
         ];
 
         return response()->json($response, 200);
@@ -116,23 +123,20 @@ class FrameCasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateFrameCaseRequest $request, $id)
+    public function update(UpdateFrameCaseRequest $request, FrameCase $frameCase)
     {
         //
-        $case = FrameCase::findOrFail($id);
-
         $data = $request->except('_token');
 
-        $case->update([
+        $frameCase->update([
             'color_id' => $data['color_id'],
             'size_id' => $data['size_id'],
             'shape_id' => $data['shape_id'],
-            'code' => $data['code']
         ]);
 
         $response = [
             'status' => true,
-            'message' => 'Cases Updated' 
+            'message' => 'Cases Updated'
         ];
 
         return response()->json($response, 200);
@@ -144,16 +148,14 @@ class FrameCasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FrameCase $frameCase)
     {
         //
-        $case = FrameCase::findOrFail($id);
-
-        $case->delete();
+        $frameCase->delete();
 
         $response = [
             'status' => true,
-            'message' => 'Cases deleted' 
+            'message' => 'Cases deleted'
         ];
 
         return response()->json($response, 200);
