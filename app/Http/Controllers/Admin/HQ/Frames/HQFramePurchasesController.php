@@ -81,7 +81,7 @@ class HQFramePurchasesController extends Controller
         //1. Get Stock 
         $frame_stock = $organization->hq_frame_stock()->findOrFail($data['stock_id']);
 
-        // Craeate a purchas 
+        // Craeate a purchase
         $frame_purchase = new HqFramePurchase();
 
         $frame_purchase->organization_id = $organization->id;

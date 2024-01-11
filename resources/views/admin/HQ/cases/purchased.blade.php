@@ -36,8 +36,8 @@
                         <div class="icon">
                             <i class="fas fa-address-card"></i>
                         </div>
-                        <a href="javascript:void(0)" class="small-box-footer newFramePurchaseBtn">
-                            New Frame Purchase <i class="fa fa-plus"></i>
+                        <a href="javascript:void(0)" class="small-box-footer newCasePurchaseBtn">
+                            New Case Purchase <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
@@ -49,15 +49,15 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="framesPurchasedData" class="table table-striped table-hover">
+                                <table id="casePurchasedData" class="table table-striped table-hover">
                                     <thead>
                                         <tr>
                                             <th>Purchased Date</th>
                                             <th>Receipt #</th>
-                                            <th>Frame Code</th>
-                                            <th>Gender</th>
+                                            <th>Case Code</th>
                                             <th>Color</th>
                                             <th>Shape</th>
+                                            <th>Size</th>
                                             <th>Units</th>
                                             <th>Price per unit</th>
                                             <th>Total Price</th>
@@ -84,9 +84,8 @@
     <!--/.content -->
 @endsection
 
-
 @push('modals')
-    @include('admin.includes.partials.modals.new_frame_purchase')
+    @include('admin.includes.partials.modals.new_case_purchase')
 @endpush
 
 @push('scripts')
@@ -96,8 +95,8 @@
             find_all_purchases();
 
             function find_all_purchases() {
-                let path = '{{ route('admin.hq.frame.purchases.index') }}';
-                $('#framesPurchasedData').DataTable({
+                let path = '{{ route('admin.hq.cases.purchases.index') }}';
+                $('#casePurchasedData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
@@ -112,12 +111,8 @@
                             name: 'receipt_number'
                         },
                         {
-                            data: 'code',
-                            name: 'code'
-                        },
-                        {
-                            data: 'gender',
-                            name: 'gender'
+                            data: 'case_code',
+                            name: 'case_code'
                         },
                         {
                             data: 'color',
@@ -126,6 +121,10 @@
                         {
                             data: 'shape',
                             name: 'shape'
+                        },
+                        {
+                            data: 'size',
+                            name: 'size'
                         },
                         {
                             data: 'quantity',
@@ -159,17 +158,17 @@
                 });
             }
 
-            $(document).on('click', '.newFramePurchaseBtn', function(e) {
+            $(document).on('click', '.newCasePurchaseBtn', function(e) {
                 e.preventDefault();
-                $('#newFramePurchaseModal').modal('show');
-                $('#newFramePurchaseForm').trigger("reset");
+                $('#newCasePurchaseModal').modal('show');
+                $('#newCasePurchaseForm').trigger("reset");
             });
 
-            $('#newFramePurchaseForm').submit(function(e) {
+            $('#newCasePurchaseForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
                 var formData = new FormData(form[0]);
-                var path = '{{ route('admin.hq.frame.purchases.store') }}';
+                var path = '{{ route('admin.hq.cases.purchases.store') }}';
                 $.ajax({
                     url: path,
                     type: "POST",
@@ -189,12 +188,13 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newFramePurchaseForm')[0].reset();
-                            $('#newFramePurchaseModal').modal('hide');
-                            $('#framesPurchasedData').DataTable().ajax.reload();
+                            $('#newCasePurchaseForm')[0].reset();
+                            $('#newCasePurchaseModal').modal('hide');
+                            $('#casePurchasedData').DataTable().ajax.reload();
                             setTimeout(() => {
                                 location.reload();
                             }, 500);
+                            
                         }
                     },
                     error: function(error) {
@@ -210,12 +210,12 @@
 
             });
 
-            $(document).on('click', '.deleteFramePurchaseBtn', function(e){
+            $(document).on('click', '.deleteCasePurchaseBtn', function(e){
                 e.preventDefault();
                 let purchase_id = $(this).data('id');
                 let token = "{{ csrf_token() }}";
-                let path = "{{ route('admin.hq.frame.purchases.delete', ':hqFramePurchase') }}";
-                path  = path.replace(':hqFramePurchase', purchase_id);
+                let path = "{{ route('admin.hq.cases.purchases.delete', ':hqCasePurchase') }}";
+                path  = path.replace(':hqCasePurchase', purchase_id);
                 Swal.fire({
                     title: "Are you sure?",
                     text: "Once deleted, you will not be able to recover this record!",
@@ -233,8 +233,8 @@
                             dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
-                                    toastr.success(data['message']);
-                                    $('#framesPurchasedData').DataTable().ajax.reload();
+                                    toastr.success(data['message'])
+                                    $('#casePurchasedData').DataTable().ajax.reload();
                                     setTimeout(() => {
                                         location.reload();
                                     }, 500);
@@ -247,6 +247,7 @@
                     }
                 });
             });
+
         });
     </script>
 @endpush

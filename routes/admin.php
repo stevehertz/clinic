@@ -63,6 +63,7 @@ use App\Http\Controllers\Admin\Technicians\TechniciansController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
+use App\Http\Controllers\Admin\HQ\Cases\HQCasePurchasesController;
 use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
@@ -240,15 +241,15 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             Route::prefix('purchases')->name('purchases.')->group(function () {
 
-                Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
+                Route::get('/index', [HQCasePurchasesController::class, 'index'])->name('index');
 
-                Route::post('/store', [HQFramePurchasesController::class, 'store'])->name('store');
+                Route::post('/store', [HQCasePurchasesController::class, 'store'])->name('store');
 
-                Route::get('/{hqFramePurchase}/show', [HQFramePurchasesController::class, 'show'])->name('show');
+                Route::get('/{hqCasePurchase}/show', [HQCasePurchasesController::class, 'show'])->name('show');
 
-                Route::get('/{hqFramePurchase}/attachment', [HQFramePurchasesController::class, 'attachment'])->name('attachment');
+                Route::get('/{hqCasePurchase}/attachment', [HQCasePurchasesController::class, 'attachment'])->name('attachment');
 
-                Route::delete('/{hqFramePurchase}/delete', [HQFramePurchasesController::class, 'destroy'])->name('delete');
+                Route::delete('/{hqCasePurchase}/delete', [HQCasePurchasesController::class, 'destroy'])->name('delete');
 
             });
         });

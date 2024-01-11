@@ -257,4 +257,10 @@ class Organization extends Model
     {
         return $this->hasMany(HqCaseStock::class, 'organization_id', 'id');
     }
+
+    public function hq_case_purchase()  
+    {
+        return $this->hasMany(HqCasePurchase::class, 'organization_id', 'id');
+    }
+
 }
