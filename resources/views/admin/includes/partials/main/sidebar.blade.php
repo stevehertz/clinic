@@ -166,10 +166,12 @@
                 <li class="nav-item has-treeview
                 {{ Route::is('admin.hq.cases.stocks.index') ? 'menu-open' : '' }}
                 {{ Route::is('admin.hq.cases.purchases.index') ? 'menu-open' : ''  }}
+                {{ Route::is('admin.hq.cases.transfers.index') ? 'menu-open' : '' }}
                 ">
                     <a href="#" class="nav-link
                     {{ Route::is('admin.hq.cases.stocks.index') ? 'active' : '' }}
                     {{ Route::is('admin.hq.cases.purchases.index') ? 'active' : ''  }}
+                    {{ Route::is('admin.hq.cases.transfers.index') ? 'active' : '' }}
                     ">
                         <i class="nav-icon fas fa-briefcase-medical"></i>
                         <p>
@@ -197,7 +199,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('admin.hq.cases.transfers.index') }}" class="nav-link
+                            {{ Route::is('admin.hq.cases.transfers.index') ? 'active' : '' }}
+                            ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('admin.page.cases.sub_page.transfers')</p>
                             </a>

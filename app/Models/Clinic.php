@@ -171,4 +171,9 @@ class Clinic extends Model
     {
         return $this->hasMany(ClinicFrameCaseStock::class, 'clinic_id', 'id');
     }
+
+    public function to_hq_case_transfer()
+    {
+        return $this->hasMany(HqCaseTransfer::class, 'to_clinic_id', 'id');
+    }
 }

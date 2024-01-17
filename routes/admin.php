@@ -64,6 +64,7 @@ use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
 use App\Http\Controllers\Admin\HQ\Cases\HQCasePurchasesController;
+use App\Http\Controllers\Admin\HQ\Cases\HQCaseTransfersController;
 use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
@@ -229,13 +230,15 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             Route::prefix('tranfers')->name('transfers.')->group(function () {
 
-                Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
+                Route::get('/index', [HQCaseTransfersController::class, 'index'])->name('index');
 
-                Route::post('/store', [HQFrameTransfersController::class, 'store'])->name('store');
+                Route::get('/workshop', [HQCaseTransfersController::class, 'get_for_workshops'])->name('workshop');
 
-                Route::get('/{hqFrameTransfer}/show', [HQFrameTransfersController::class, 'show'])->name('show');
+                Route::post('/store', [HQCaseTransfersController::class, 'store'])->name('store');
 
-                Route::delete('/{hqFrameTransfer}/delete', [HQFrameTransfersController::class, 'destroy'])->name('delete');
+                Route::get('/{hqCaseTransfer}/show', [HQCaseTransfersController::class, 'show'])->name('show');
+
+                Route::delete('/{hqCaseTransfer}/delete', [HQCaseTransfersController::class, 'destroy'])->name('delete');
 
             });
 

@@ -263,4 +263,9 @@ class Organization extends Model
         return $this->hasMany(HqCasePurchase::class, 'organization_id', 'id');
     }
 
+    public function hq_case_transfer()  
+    {
+        return $this->hasMany(HqCaseTransfer::class, 'organization_id', 'id');
+    }
+
 }
