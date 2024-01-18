@@ -23,33 +23,31 @@ class OrganizationController extends Controller
     {
         # code...
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
-        if ($admin->has_organization) {
-            $organization = $admin->organization;
-            if ($request->ajax()) {
-                $data = $organization->clinic;
-                return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('logo', function ($row) {
-                        return '<img src="' . asset('storage/clinics/' . $row['logo']) . '" class="img-circle img-size-32 mr-2">';
-                    })
-                    ->addColumn('select', function ($row) {
-                        $selectBtn = '<a href="#" id="' . $row['id'] . '" class="btn btn-primary selectBtn"><i class="fa fa-check"></i></a>';
-                        return $selectBtn;
-                    })
-                    ->rawColumns(['logo', 'select'])
-                    ->make(true);
-            }
-            $page_title = 'Dashboard';
-            $workshops = $organization->workshop->count();
-            $clinics = $organization->clinic->count();
-            return view('admin.organization.index', [
-                'page_title' => $page_title,
-                'organization' => $organization,
-                'clinics' => $clinics,
-                'workshops' => $workshops
-            ]);
+        $organization = $admin->organization;
+
+        if ($request->ajax()) {
+            $data = $organization->clinic()->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('logo', function ($row) {
+                    return '<img src="' . asset('storage/clinics/' . $row['logo']) . '" class="img-circle img-size-32 mr-2">';
+                })
+                ->addColumn('select', function ($row) {
+                    $selectBtn = '<a href="#" id="' . $row['id'] . '" class="btn btn-primary selectBtn"><i class="fa fa-check"></i></a>';
+                    return $selectBtn;
+                })
+                ->rawColumns(['logo', 'select'])
+                ->make(true);
         }
-        return redirect()->route('admin.organization.create');
+        $page_title = 'Dashboard';
+        $workshops = $organization->workshop()->latest()->get();
+        $clinics = $organization->clinic()->latest()->get();
+        return view('admin.organization.index', [
+            'page_title' => $page_title,
+            'organization' => $organization,
+            'clinics' => $clinics,
+            'workshops' => $workshops
+        ]);
     }
 
     public function create()
@@ -180,7 +178,7 @@ class OrganizationController extends Controller
         $organization->id = $organization->id;
         $organization->organization = $data['organization'];
         $organization->tagline = $data['tagline'];
-        if($request->hasFile('logo')){
+        if ($request->hasFile('logo')) {
             $organization->logo = $logoNameToStore;
         }
         $organization->phone = $data['phone'];

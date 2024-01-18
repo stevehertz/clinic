@@ -47,13 +47,18 @@ return [
 
         'settings' => [
             'title' => 'Settings'
-        ]
+        ],
+
+        'admins' => [
+            'title' => 'Admins'
+        ],
     ],
 
     'header' => [
         'reports' => 'Reports',
         'settings' => 'Settings',
-        'inventory' => 'Inventories'
+        'inventory' => 'Inventories',
+        'user_management' => 'User Management'
     ],
 
 ];

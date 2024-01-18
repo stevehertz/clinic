@@ -41,7 +41,6 @@
                                         <th>Email</th>
                                         <th>Gender</th>
                                         <th>DOB</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -97,12 +96,12 @@
                             data: 'dob',
                             name: 'dob',
                         },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false,
-                        },
+                        // {
+                        //     data: 'actions',
+                        //     name: 'actions',
+                        //     orderable: false,
+                        //     searchable: false,
+                        // },
                     ],
                     "autoWidth": false,
                     "responsive": true,

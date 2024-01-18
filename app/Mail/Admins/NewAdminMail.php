@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Admins;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,9 +9,10 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AdminMail extends Mailable
+class NewAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $details;
 
     /**
@@ -33,7 +34,7 @@ class AdminMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Sais Eye Clinic',
+            subject: 'Admin Account',
         );
     }
 
@@ -45,7 +46,7 @@ class AdminMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'admin.mails.admin',
+            markdown: 'admin.mails.admins.new_admin',
         );
     }
 

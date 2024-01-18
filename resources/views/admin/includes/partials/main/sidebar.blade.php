@@ -225,6 +225,21 @@
                     </a>
                 </li>
 
+                <li class="nav-header">@lang('admin.header.user_management')</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.admins.index') }}"
+                        class="nav-link
+                    {{ Route::is('admin.admins.index') ? 'active' : '' }}
+                    ">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            @lang('admin.page.admins.title')
+                        </p>
+                    </a>
+                </li>
+
+
                 <li class="nav-header">SETTINGS</li>
 
                 <li class="nav-item">

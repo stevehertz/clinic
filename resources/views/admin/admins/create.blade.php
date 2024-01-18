@@ -126,7 +126,7 @@
                             <!-- /.card-body -->
 
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
                                 <a href="{{ route('admin.admins.index') }}" class="float-right btn btn-danger">Cancel</a>
                             </div>
                             <!--/.card-footer -->
@@ -157,6 +157,16 @@
                     dataType: "json",
                     contentType: false,
                     processData:false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
                     success: function (data) {
                         if(data['status'])
                         {

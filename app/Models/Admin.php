@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Mail\AdminMail;
 use Exception;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,7 +28,7 @@ class Admin extends Authenticatable
         'email',
         'gender',
         'dob',
-        'has_organization',
+        'status',
         'username',
         'password',
     ];
@@ -59,22 +58,6 @@ class Admin extends Authenticatable
     {
         # code...
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
-    }
-
-    public function sendMail($email, $password)
-    {
-        $login = route('admin.login');
-        $details = [
-            'email' => $email,
-            'password' => $password,
-            'login' => $login
-        ];
-        try {
-            Mail::to($email)->send(new AdminMail($details));
-            info("Email successfully sent");
-        } catch (Exception $e) {
-            info("Error: " . $e->getMessage());
-        }
     }
 
     public function hq_frame_stock()  

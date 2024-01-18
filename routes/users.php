@@ -169,7 +169,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::get('/{paymentAttachment}/show', [PaymentsAttachmentController::class, 'show'])->name('show');
 
-            Route::get('/{paymentAttachment}/open/file', [PaymentsAttachmentController::class, 'openFile'])->name('open.file');
+            Route::get('/{paymentAttachment}/open/file', [PaymentsAttachmentController::class, 'readFile'])->name('open.file');
            
             Route::post('/{paymentAttachment}/update', [PaymentsAttachmentController::class, 'update'])->name('update');
 

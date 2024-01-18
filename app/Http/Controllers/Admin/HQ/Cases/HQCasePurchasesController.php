@@ -55,7 +55,7 @@ class HQCasePurchasesController extends Controller
                     return $row->vendor->first_name . ' ' . $row->vendor->last_name;
                 })
                 ->addColumn('actions', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="delete btn btn-tools btn-sm deleteCasePurchaseBtn">';
+                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteCasePurchaseBtn">';
                     $btn = $btn . '<i class="fa fa-trash"></i></a>';
                     return $btn;
                 })

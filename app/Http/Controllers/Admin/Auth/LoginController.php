@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -15,24 +16,10 @@ class LoginController extends Controller
         $this->middleware('guest:admin');
     }
 
-    public function store(Request $request)
+    public function store(LoginRequest $request)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'email' => 'required|email|exists:admins,email',
-            'password' => 'required|min:6',
-        ], [
-            'email.exists' => 'Email not found',
-        ]);
-
-        if($validator->fails()){
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 422);
-        }
+        $data = $request->except("_token");
 
         $credentials = [
             'email' => $data['email'],

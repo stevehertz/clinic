@@ -80,7 +80,7 @@ class PaymentsAttachmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function openFile(PaymentAttachment $paymentAttachment)
+    public function readFile(PaymentAttachment $paymentAttachment)
     {
 
         $file = $paymentAttachment->file;
