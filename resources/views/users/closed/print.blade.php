@@ -61,8 +61,11 @@
                             Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
                             Scheme: {{ $payment_bill->payment_detail->scheme }}
                         @endif
-                        Prescription Invoice Number:
-                        {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
+                        @if (isset($payment_bill->appontment->lens_power->frame_prescription->receipt_number))
+                            Prescription Invoice Number:
+                            {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
+                        @endif
+
                     </address>
                 </div>
                 <!-- /.col -->

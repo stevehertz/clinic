@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Frames;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Models\Admin;
 use App\Models\Clinic;
 use App\Models\Frame;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 
 class FramesController extends Controller
 {
+
+    use FileUploadTrait;
 
     public function __construct()
     {
@@ -179,20 +182,9 @@ class FramesController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            // file name with extension
-            $photoNameWithExt = $request->file('photo')->getClientOriginalName();
-
-            // Get Filename
-            $photoName = pathinfo($photoNameWithExt, PATHINFO_FILENAME);
-
-            // Get just Extension
-            $extension = $request->file('photo')->getClientOriginalExtension();
-
-            // Filename To store
-            $photoNameToStore = $photoName . '_' . time() . '.' . $extension;
-
-            // Upload Image
-            $path = $request->file('photo')->storeAs('public/frames', $photoNameToStore);
+            $storagePath = 'public/frames';
+            $fileName = 'photo';
+            $photoNameToStore = $this->uploadFile($request, $fileName, $storagePath);
         } else {
             $photoNameToStore = 'noimage.png';
         }

@@ -15,19 +15,21 @@
 </head>
 <body class="hold-transition sidebar-mini accent-primary">
     <div class="wrapper">
-        @include('admin.components.clinic_nav')
+        
+        @include('admin.includes.partials.clinics.nav')
 
         <!-- Main Sidebar Container -->
-        @include('admin.components.clinic_sidebar')
+        @include('admin.includes.partials.clinics.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @yield('content')
         </div>
+        @stack('modals')
         <!-- /.content-wrapper -->
 
         <!-- Main Footer -->
-        @include('admin.components.clinic_footer')
+        @include('admin.includes.partials.clinics.footer')
     </div>
     <!-- ./wrapper -->
     <!-- REQUIRED SCRIPTS -->

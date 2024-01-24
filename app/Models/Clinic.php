@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Clinic extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'organization_id',
@@ -19,6 +20,8 @@ class Clinic extends Model
         'location',
         'initials',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function organization()
     {

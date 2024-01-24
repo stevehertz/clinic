@@ -71,8 +71,12 @@
                                         Insurance : {{ $payment_bill->payment_detail->insurance->title }}<br>
                                         Scheme: {{ $payment_bill->payment_detail->scheme }}
                                     @endif
-                                    Prescription Invoice Number:
-                                    {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
+
+                                    @if (isset($payment_bill->appontment->lens_power->frame_prescription->receipt_number))
+                                        Prescription Invoice Number:
+                                        {{ $payment_bill->appontment->lens_power->frame_prescription->receipt_number }}
+                                    @endif
+
                                 </address>
                             </div>
                             <!-- /.col -->
@@ -478,7 +482,8 @@
                                                 {{ $attachment->title }}
                                             </td>
                                             <td>
-                                                <a href="{{ route('users.payments.attachments.open.file', $attachment->id) }}" target="_blank">
+                                                <a href="{{ route('users.payments.attachments.open.file', $attachment->id) }}"
+                                                    target="_blank">
                                                     {{ $attachment->file }}
                                                 </a>
                                             </td>
@@ -584,7 +589,8 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.payments.close.bills.print', ':paymentBill') }}';
+                            let url =
+                                '{{ route('users.payments.close.bills.print', ':paymentBill') }}';
                             url = url.replace(':paymentBill', data['data']['id']);
                             setTimeout(() => {
                                 window.open(url, "mywindow",

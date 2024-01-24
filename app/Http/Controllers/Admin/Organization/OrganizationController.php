@@ -50,6 +50,30 @@ class OrganizationController extends Controller
         ]);
     }
 
+
+    public function clinics(Request $request)
+    {
+        # code...
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
+        if($request->ajax())
+        {
+            $data = $organization->clinic()->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('logo', function($row){
+                    return '<img src="'.asset('storage/clinics/'.$row['logo']).'" class="img-circle img-size-32 mr-2">';
+                })
+                ->addColumn('actions', function($row){
+                    $selectBtn = '<a href="#" id="'.$row['id'].'" class="btn btn-primary btn-sm selectBtn">';
+                    $selectBtn = $selectBtn . '<i class="fa fa-check"></i></a>';
+                    return $selectBtn;
+                })
+                ->rawColumns(['logo', 'actions'])
+                ->make(true);
+        }
+    }
+
     public function create()
     {
         # code...

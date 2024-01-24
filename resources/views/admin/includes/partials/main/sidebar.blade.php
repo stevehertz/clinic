@@ -3,7 +3,9 @@
     <a href="{{ route('admin.organization.index') }}" class="brand-link navbar-primary">
         <img src="{{ asset('storage/logo/AdminLTELogo.png') }}" alt="AdminLTE Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Clinic App</span>
+        <span class="brand-text font-weight-light">
+            {{ config('app.name') }}
+        </span>
     </a>
 
     <!-- Sidebar -->

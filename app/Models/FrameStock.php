@@ -10,24 +10,18 @@ class FrameStock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'organization_id', // new
+        'organization_id', 
         'clinic_id',
-        'brand_id', //new
-        'type_id', // new
-        'size_id', // new
-        'material_id', //new
         'frame_id',
-        'code', // new
+        'code',
         'gender',
         'color_id',
         'shape_id',
-        'opening_stock',
-        'purchase_stock',
-        'transfered_stock',
-        'received_stock',
-        'total_stock',
-        'sold_stock',
-        'closing_stock',
+        'opening',
+        'transfered',
+        'total',
+        'sold',
+        'closing',
         'price',
         'supplier_price',
         'remarks',

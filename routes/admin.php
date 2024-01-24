@@ -114,6 +114,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/index', [OrganizationController::class, 'index'])->name('index');
 
+        Route::get('/clinics', [OrganizationController::class, 'clinics'])->name('clinics');
+
         Route::get('/create', [OrganizationController::class, 'create'])->name('create');
 
         Route::post('/store', [OrganizationController::class, 'store'])->name('store');
@@ -614,13 +616,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/index', [ClinicsController::class, 'index'])->name('index');
 
+        Route::get('/trashed', [ClinicsController::class, 'get_trashed'])->name('trashed');
+
         Route::post('/store', [ClinicsController::class, 'store'])->name('store');
 
-        Route::post('/show', [ClinicsController::class, 'show'])->name('show');
+        Route::get('/{clinic}/show', [ClinicsController::class, 'show'])->name('show');
 
         Route::get('/{id}', [ClinicsController::class, 'view'])->name('view');
 
         Route::post('/update', [ClinicsController::class, 'update'])->name('update');
+
+        Route::delete('/{clinic}/delete', [ClinicsController::class, 'destroy'])->name('delete');
+
+        Route::post('/{clinic}/restore', [ClinicsController::class, 'restore'])->name('restore.clinic');
+
+        Route::delete('/{clinic}/force/delete', [ClinicsController::class, 'forceDelete'])->name('force.delete');
     });
 
     // clinics Reports
@@ -633,7 +643,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
-        Route::get('/{id}', [DashboardController::class, 'index'])->name('index');
+        Route::get('/{clinic}', [DashboardController::class, 'index'])->name('index');
 
         Route::get('/{id}/workshop', [DashboardController::class, 'workshop'])->name('workshop.index');
     });
@@ -863,13 +873,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     // frame stocks
     Route::prefix('frame/stocks')->name('frame.stocks.')->group(function () {
 
-        Route::get('/{id}', [FramesStocksController::class, 'stocks'])->name('stocks');
+        Route::get('/{clinic}/index', [FramesStocksController::class, 'index'])->name('index');
 
-        Route::get('/{id}/index', [FramesStocksController::class, 'index'])->name('index');
+        Route::post('/{clinic}/store', [FramesStocksController::class, 'store'])->name('store');
 
-        Route::post('/store', [FramesStocksController::class, 'store'])->name('store');
-
-        Route::post('/show', [FramesStocksController::class, 'show'])->name('show');
+        Route::get('/{frameStock}/show', [FramesStocksController::class, 'show'])->name('show');
 
         Route::post('/update', [FramesStocksController::class, 'update'])->name('update');
 

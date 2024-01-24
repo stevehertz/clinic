@@ -61,6 +61,31 @@ return [
         'user_management' => 'User Management'
     ],
 
+    'clinics' => [
+        'page' => [
+            'dashboard' => [
+                'title' => 'Dashboard',
+            ],
+            'patients' => [
+                'title' => 'Patients',
+            ],
+            'frames' => [
+                'title' => 'Frames',
+                'sub_page' => [
+                    'stocks' => 'Stocks',
+                    'received' => 'Received Stocks',
+                    'request' => 'Requested Stocks',
+                ],
+            ],
+        ],
+
+        'header' => [
+            'inventory' => 'Inventory',
+            'reports' => 'Reports',
+            'settings' => 'Settings',
+        ],
+    ],
+
 ];
 
 ?>

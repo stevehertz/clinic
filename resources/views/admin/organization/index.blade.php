@@ -94,7 +94,8 @@
                                     aria-labelledby="custom-tabs-four-home-tab">
 
                                     <div class="table-responsive">
-                                        <table id="clinicData" class="table table-striped table-bordered table-valign-middle">
+                                        <table id="clinicData"
+                                            class="table table-striped table-bordered table-valign-middle">
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -103,7 +104,7 @@
                                                     <th>Logo</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
-                                                    <th></th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -126,7 +127,7 @@
                                                     <th>Logo</th>
                                                     <th>Phone</th>
                                                     <th>Email</th>
-                                                    <th></th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -159,13 +160,12 @@
             find_clinics();
 
             function find_clinics() {
-                var path = '{{ route('admin.clinics.index') }}';
+                var path = '{{ route('admin.organization.clinics') }}';
                 $('#clinicData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
-                    columns: [
-                        {
+                    columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
                         },
@@ -192,8 +192,8 @@
                             name: 'phone'
                         },
                         {
-                            data: 'select',
-                            name: 'select',
+                            data: 'actions',
+                            name: 'actions',
                             orderable: false,
                             searchable: false
                         },
@@ -210,36 +210,33 @@
 
             $(document).on('click', '.selectBtn', function(e) {
                 e.preventDefault();
-                var clinic_id = $(this).attr('id');
-                var path = '{{ route('admin.clinics.show') }}';
-                var token = '{{ csrf_token() }}';
+                let clinic_id = $(this).attr('id');
+                let path = '{{ route('admin.clinics.show', ':clinic') }}';
+                path = path.replace(':clinic', clinic_id)
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        clinic_id: clinic_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     success: function(data) {
-                        if (data['status'] == false) {
-                            console.log(data);
-                        } else {
-                            window.location.href =
-                                '{{ route('admin.dashboard.index', ':id') }}'.replace(':id',
-                                    data.data.id);
+                        if (data['status']) {
+                            setTimeout(() => {
+                                window.location.href =
+                                    '{{ route('admin.dashboard.index', ':clinic') }}'
+                                    .replace(':clinic',
+                                        data.data.id);
+                            }, 500);
                         }
                     }
                 });
             });
 
             find_workshops();
-            function find_workshops()
-            {
+
+            function find_workshops() {
                 var path = '{{ route('admin.workshop.index') }}';
                 $('#workshopsData').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: path, 
+                    ajax: path,
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
@@ -282,7 +279,7 @@
                 });
             }
 
-            $(document).on('click', '.selectWorkshopBtn', function(e){
+            $(document).on('click', '.selectWorkshopBtn', function(e) {
                 e.preventDefault();
                 var workshop_id = $(this).attr('data-id');
                 var path = '{{ route('admin.workshop.show') }}';
@@ -296,7 +293,9 @@
                     },
                     success: function(data) {
                         if (data['status']) {
-                            let workshop_url = '{{ route('admin.dashboard.workshop.index', ':id') }}'.replace(':id', data.data.id);
+                            let workshop_url =
+                                '{{ route('admin.dashboard.workshop.index', ':id') }}'.replace(
+                                    ':id', data.data.id);
                             window.location.href = workshop_url;
                         } else {
                             console.log(data);

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Clinics;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Clinic as ResourcesClinic;
+use COM;
 use App\Models\Admin;
 use App\Models\Clinic;
-use COM;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Clinic as ResourcesClinic;
 
 class ClinicsController extends Controller
 {
@@ -25,24 +26,50 @@ class ClinicsController extends Controller
         # code...
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
         $organization = $admin->organization;
-
         if ($request->ajax()) {
-            $data = $organization->clinic;
+            $data = $organization->clinic()->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('logo', function ($row) {
                     return '<img src="' . asset('storage/clinics/' . $row['logo']) . '" class="img-circle img-size-32 mr-2">';
                 })
-                ->addColumn('select', function ($row) {
-                    $selectBtn = '<a href="#" id="' . $row['id'] . '" class="btn btn-primary selectBtn"><i class="fas fa-tachometer-alt"></i> Dashboard</a>';
-                    return $selectBtn;
+                ->addColumn('actions', function ($row) {
+                    $btn = '<a href="javascript:void(0)" id="' . $row['id'] . '" class="btn btn-primary btn-sm selectBtn">';
+                    $btn = $btn . '<i class="fas fa-tachometer-alt"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" id="' . $row['id'] . '" class="btn btn-danger btn-sm deleteBtn">';
+                    $btn = $btn . '<i class="fas fa-trash-alt"></i></a>';
+                    return $btn;
                 })
-                ->rawColumns(['logo', 'select'])
+                ->rawColumns(['logo', 'actions'])
                 ->make(true);
         }
 
         $page_title = 'Clinics';
         return view('admin.clinics.index', compact('organization', 'page_title'));
+    }
+
+    public function get_trashed(Request $request)
+    {
+        # code...
+        $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
+        $organization = $admin->organization;
+        if ($request->ajax()) {
+            $data = $organization->clinic()->onlyTrashed()->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('logo', function ($row) {
+                    return '<img src="' . asset('storage/clinics/' . $row['logo']) . '" class="img-circle img-size-32 mr-2">';
+                })
+                ->addColumn('actions', function ($row) {
+                    $btn = '<a href="javascript:void(0)" id="' . $row['id'] . '" class="btn btn-success btn-sm restoreBtn">';
+                    $btn = $btn . '<i class="fas fa-redo-alt"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" id="' . $row['id'] . '" class="btn btn-danger btn-sm deleteCompletelyBtn">';
+                    $btn = $btn . '<i class="fas fa-trash-alt"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['logo', 'actions'])
+                ->make(true);
+        }
     }
 
     public function store(Request $request)
@@ -104,24 +131,13 @@ class ClinicsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function show(Request $request)
+    public function show(Clinic $clinic)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'clinic_id' => 'required|integer|exists:clinics,id',
+        return response()->json([
+            'status' => true,
+            'data' => $clinic
         ]);
-
-        if($validator->fails()){
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $clinic = Clinic::findOrFail($data['clinic_id']);
-        return new ResourcesClinic($clinic);
     }
 
     public function view($id)
@@ -190,6 +206,37 @@ class ClinicsController extends Controller
         $response['status'] = true;
         $response['message'] = 'Clinic updated successfully';
         return response()->json($response, 200);
+    }
 
+    public function destroy(Clinic $clinic)
+    {
+
+        $clinic->delete();
+        $response['status'] = true;
+        $response['message'] = 'Clinic deleted successfully';
+        return response()->json($response, 200);
+    }
+
+    public function restore($clinic)  
+    {
+        $clinic = Clinic::onlyTrashed()->find($clinic);
+        $clinic->restore();
+        $response['status'] = true;
+        $response['message'] = 'Clinic restored successfully';
+        return response()->json($response, 200);
+    }
+
+    public function forceDelete($clinic)
+    {
+        $clinic = Clinic::onlyTrashed()->find($clinic);
+        if ($clinic->logo != 'noimage.png') {
+            // Delete Image
+            Storage::delete('public/clinics/' . $clinic->logo);
+        }
+
+        $clinic->forceDelete();
+        $response['status'] = true;
+        $response['message'] = 'Clinic deleted successfully';
+        return response()->json($response, 200);
     }
 }

@@ -25,34 +25,75 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-primary btn-sm newClinicBtn">
-                                    <i class="fa fa-plus-circle"></i> New Clinic
-                                </a>
+
+                    <div class="card card-default card-outline">
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill"
+                                        href="#custom-content-below-home" role="tab"
+                                        aria-controls="custom-content-below-home" aria-selected="true">
+                                        All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill"
+                                        href="#custom-content-below-profile" role="tab"
+                                        aria-controls="custom-content-below-profile" aria-selected="false">
+                                        Trash
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="custom-content-below-tabContent">
+                                <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel"
+                                    aria-labelledby="custom-content-below-home-tab">
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table id="clinicData" class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Initials</th>
+                                                    <th>Logo</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel"
+                                    aria-labelledby="custom-content-below-profile-tab">
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table id="clinicTrashedData"
+                                            class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Initials</th>
+                                                    <th>Logo</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="clinicData" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Name</th>
-                                        <th>Initials</th>
-                                        <th>Logo</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div><!-- /.card-body -->
-                    </div><!-- /.card -->
-
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.card -->
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -169,8 +210,54 @@
                             name: 'phone'
                         },
                         {
-                            data: 'select',
-                            name: 'select',
+                            data: 'actions',
+                            name: 'actions',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            find_trashed_clinics();
+
+            function find_trashed_clinics() {
+                var path = '{{ route('admin.clinics.trashed') }}';
+                $('#clinicTrashedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'clinic',
+                            name: 'clinic'
+                        },
+                        {
+                            data: 'initials',
+                            name: 'initials'
+                        },
+                        {
+                            data: 'logo',
+                            name: 'logo',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'phone',
+                            name: 'phone'
+                        },
+                        {
+                            data: 'actions',
+                            name: 'actions',
                             orderable: false,
                             searchable: false
                         },
@@ -220,27 +307,130 @@
 
             $(document).on('click', '.selectBtn', function(e) {
                 e.preventDefault();
-                var clinic_id = $(this).attr('id');
-                var path = '{{ route('admin.clinics.show') }}';
-                var token = '{{ csrf_token() }}';
+                let clinic_id = $(this).attr('id');
+                let path = '{{ route('admin.clinics.show', ':clinic') }}';
+                path = path.replace(':clinic', clinic_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        clinic_id: clinic_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     success: function(data) {
-                        if (data['status'] == false) {
-                            console.log(data);
-                        } else {
-                            window.location.href = '{{ route('admin.dashboard.index', ':id') }}'
-                                .replace(':id', data.data.id);
+                        if (data['status']) {
+                            setTimeout(() => {
+                                window.location.href =
+                                    '{{ route('admin.dashboard.index', ':clinic') }}'
+                                    .replace(':clinic',
+                                        data.data.id);
+                            }, 500);
                         }
                     }
                 });
             });
 
+            $(document).on('click', '.restoreBtn', function(e){
+                e.preventDefault();
+                let clinic_id = $(this).attr('id');
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.clinics.restore.clinic', ':clinic') }}';
+                path = path.replace(':clinic', clinic_id);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You are gong to restore clinic data",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "POST",
+                            data: {
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#clinicTrashedData').DataTable().ajax.reload();
+                                    $('#clinicData').DataTable().ajax.reload();
+                                    
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            })
+
+            $(document).on('click', '.deleteBtn', function(e) {
+                e.preventDefault();
+                let clinic_id = $(this).attr('id');
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.clinics.delete', ':clinic') }}';
+                path = path.replace(':clinic', clinic_id);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#clinicData').DataTable().ajax.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteCompletelyBtn', function(e) {
+
+                e.preventDefault();
+                let clinic_id = $(this).attr('id');
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.clinics.force.delete', ':clinic') }}';
+                path = path.replace(':clinic', clinic_id);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#clinicTrashedData').DataTable().ajax.reload();
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+
+            });
         });
     </script>
 @endsection

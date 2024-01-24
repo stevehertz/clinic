@@ -8,6 +8,9 @@
             </a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('admin.organization.index') }}" class="nav-link">HQ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ route('admin.dashboard.index', $clinic->id) }}" class="nav-link">Home</a>
         </li>
     </ul>
@@ -26,7 +29,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa fa-sign-out mr-2"></i> {{ __('Logout') }}
+                    <i class="fas fa-sign-out-alt mr-2"></i> {{ __('Logout') }}
                 </a>
                 <form id="logout-form" action="{{ route('admin.personal.logout') }}" method="POST" class="d-none">
                     @csrf

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin\HQ\Frames;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\HQ\Frames\StoreFrameTransferRequest;
 use App\Models\HqFrameTransfer;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\Admin\HQ\Frames\StoreFrameTransferRequest;
+use App\Mail\HQ\Frames\TransferMail;
 
 class HQFrameTransfersController extends Controller
 {
@@ -102,13 +104,6 @@ class HQFrameTransfersController extends Controller
 
         $total = ($opening + $purchased) - $transfered;
 
-        $frame_stock->update([
-
-            'opening' => $opening,
-            'purchased' => $purchased,
-            'transfered' => $transfered,
-            'total' => $total
-        ]);
         // Transfer Stock
         $organization->hq_frame_transfer()->create([
 
@@ -122,9 +117,24 @@ class HQFrameTransfersController extends Controller
             'condition' => $data['condition'],
             'remarks' => $data['remarks'],
 
+        ]); 
+
+        $frame_stock->update([
+
+            'opening' => $opening,
+            'purchased' => $purchased,
+            'transfered' => $transfered,
+            'total' => $total
         ]);
 
         // Send and email to the clinic
+        $email = $to_clinic->email;
+        $details = [
+            'title' => 'Transfer Frames',
+            'body' => 'We have transfered ' . $quantity . ' frames from ' . $organization->organization
+        ];
+
+        Mail::to($email)->send(new TransferMail($details));
 
         $response['status'] = true;
         $response['message'] = "You have successfully transfered " . $quantity . " frames to " . $to_clinic->clinic;

@@ -18,10 +18,9 @@ class DashboardController extends Controller
     }
 
     // clinic dashboard
-    public function index($id)
+    public function index(Clinic $clinic)
     {
         # code...
-        $clinic  = Clinic::findOrFail($id);
         $appointments = $clinic->appointment()
             ->join('patients', 'appointments.patient_id', '=', 'patients.id')
             ->join('payment_details', 'appointments.id', '=', 'payment_details.appointment_id')
