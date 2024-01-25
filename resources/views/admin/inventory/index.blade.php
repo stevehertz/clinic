@@ -615,43 +615,6 @@
 
            
 
-            $(document).on('click', '.deleteFrameStock', function(e) {
-                e.preventDefault();
-                var stock_id = $(this).data('id');
-                var token = "{{ csrf_token() }}";
-                var path = "{{ route('admin.frame.stocks.delete') }}";
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this record!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: path,
-                            type: "DELETE",
-                            data: {
-                                _token: token,
-                                stock_id: stock_id
-                            },
-                            dataType: "json",
-                            success: function(data) {
-                                if (data['status']) {
-                                    Swal.fire(data['message'], '', 'success');
-                                    $('#framesData').DataTable().ajax.reload();
-                                    $('#frameStocksData').DataTable().ajax.reload();
-                                    $('#purchasedStocks').DataTable().ajax.reload();
-                                    $('#frameReceivedData').DataTable().ajax.reload();
-                                    location.reload();
-                                }
-                            }
-                        });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
-                    }
-                });
-            });
 
             // Stock Purchases 
             // view all purchases

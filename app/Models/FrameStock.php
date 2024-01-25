@@ -18,6 +18,7 @@ class FrameStock extends Model
         'color_id',
         'shape_id',
         'opening',
+        'received',
         'transfered',
         'total',
         'sold',
@@ -25,7 +26,6 @@ class FrameStock extends Model
         'price',
         'supplier_price',
         'remarks',
-        'status' // new
     ];
 
     public function clinic()

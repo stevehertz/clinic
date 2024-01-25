@@ -192,56 +192,22 @@
                     </a>
                 </li>
 
-                <li class="nav-header">@lang('admin.clinics.header.inventory')</li>
-
-                <li
-                    class="nav-item has-treeview
-                {{ Route::is('admin.frame.stocks.index', $clinic->id) ? 'menu-open' : '' }}
-                ">
-
-                    <a href="#"
-                        class="nav-link
-                    {{ Route::is('admin.frame.stocks.index', $clinic->id) ? 'active' : '' }}
-                    ">
-                        <i class="nav-icon fas fa-address-card"></i>
-                        <p>
-                            @lang('admin.clinics.page.frames.title')
-                            <i class="fa fa-angle-left right"></i>
-                        </p>
-                    </a>
-
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.frame.stocks.index', $clinic->id) }}"
-                                class="nav-link
-                                {{ Route::is('admin.frame.stocks.index', $clinic->id) ? 'active' : '' }}
-                                ">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('admin.clinics.page.frames.sub_page.stocks')</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('admin.clinics.page.frames.sub_page.received')</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('admin.clinics.page.frames.sub_page.request')</p>
-                            </a>
-                        </li>
-                    </ul>
-
+                <li class="nav-header">
+                    @lang('admin.clinics.header.inventory')
                 </li>
 
+                <li class="nav-item">
 
-
-
-
-
-
+                    <a href="{{ route('admin.clinic.inventory.frames.stocks.index', $clinic->id) }}"
+                        class="nav-link
+                                {{ Route::is('admin.clinic.inventory.frames.stocks.index', $clinic->id) ? 'active' : '' }}
+                                ">
+                        <i class="fas fa-address-card nav-icon"></i>
+                        <p>
+                            @lang('admin.clinics.page.frames.title')
+                        </p>
+                    </a>
+                </li>
 
                 <li class="nav-header">REPORTS</li>
 

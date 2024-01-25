@@ -179,4 +179,14 @@ class Clinic extends Model
     {
         return $this->hasMany(HqCaseTransfer::class, 'to_clinic_id', 'id');
     }
+
+    public function frame_received()  
+    {
+        return $this->hasMany(FrameReceived::class, 'clinic_id', 'id');   
+    }
+
+    public function from_frame_received()  
+    {
+        return $this->hasMany(FrameReceived::class, 'from_clinic_id', 'id'); 
+    }
 }

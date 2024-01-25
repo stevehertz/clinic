@@ -268,4 +268,8 @@ class Organization extends Model
         return $this->hasMany(HqCaseTransfer::class, 'organization_id', 'id');
     }
 
+    public function frame_received()  
+    {
+        return $this->hasMany(FrameReceived::class, 'organization_id', 'id');    
+    }
 }

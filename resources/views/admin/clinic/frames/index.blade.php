@@ -24,65 +24,129 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+
             <div class="row">
+                <div class="col-md-3 col-sm-6 col-12">
 
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{ $clinic->frame_stock()->count() }}</h3>
+                    <div class="info-box">
+                        <span class="info-box-icon bg-primary"><i class="fas fa-address-card"></i></span>
 
-                            <p>Frame Stocks</p>
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame Stocks
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_stock()->count() }}
+                            </span>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer newFrameStockBtn">
-                            New Frame Stock <i class="fa fa-plus"></i>
-                        </a>
+                        <!-- /.info-box-content -->
                     </div>
+                    <!-- /.info-box -->
+
                 </div>
-                <!-- ./col -->
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+
+                    <div class="info-box">
+                        <span class="info-box-icon bg-primary"><i class="fas fa-address-card"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame stocks 
+                                <br>
+                                Received from HQ
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_received()->where('is_hq', 1)->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+
+                    <div class="info-box">
+                        <span class="info-box-icon bg-primary"><i class="fas fa-address-card"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame stocks 
+                                <br>
+                                received from clinic
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_received()->where('is_hq', 0)->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+
+                </div>
+                <!-- /.col -->
             </div>
             <!-- /.row -->
 
             <div class="row">
                 <div class="col-12">
-
-
-                    <div class="card card-default">
-
+                    <!-- Custom Tabs -->
+                    <div class="card">
+                        <div class="card-header d-flex p-0">
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">
+                                        @lang('admin.clinics.page.frames.sub_page.stocks')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
+                                        @lang('admin.clinics.page.frames.sub_page.received')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
+                                        @lang('admin.clinics.page.frames.sub_page.request')
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
                         <div class="card-body">
-                            <div class="table-responsive">
-
-                                <table id="frameStocksData" class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Frame Code</th>
-                                            <th>Gender</th>
-                                            <th>Color</th>
-                                            <th>Shape</th>
-                                            <th>Opening</th>
-                                            <th>Transfered</th>
-                                            <th>Total</th>
-                                            <th>Sold</th>
-                                            <th>Closing</th>
-                                            <th>Supplier Price</th>
-                                            <th>Price</th>
-                                            <th>Remarks</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    @include('admin.clinic.frames.stocks')
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    @include('admin.clinic.frames.received')
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                    when an unknown printer took a galley of type and scrambled it to make a type specimen
+                                    book.
+                                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                                    remaining essentially unchanged. It was popularised in the 1960s with the release of
+                                    Letraset
+                                    sheets containing Lorem Ipsum passages, and more recently with desktop publishing
+                                    software
+                                    like Aldus PageMaker including versions of Lorem Ipsum.
+                                </div>
+                                <!-- /.tab-pane -->
                             </div>
-                        </div>
-
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
                     </div>
-
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+                    <!-- ./card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div><!-- /.container-fluid -->
 
     </section><!-- /.content -->
@@ -100,7 +164,7 @@
             find_frame_stocks();
 
             function find_frame_stocks() {
-                let path = '{{ route('admin.frame.stocks.index', $clinic->id) }}';
+                let path = '{{ route('admin.clinic.inventory.frames.stocks.index', $clinic->id) }}';
                 $('#frameStocksData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -126,6 +190,10 @@
                         {
                             data: 'opening',
                             name: 'opening'
+                        },
+                        {
+                            data: 'received',
+                            name: 'received'
                         },
                         {
                             data: 'transfered',
@@ -165,56 +233,102 @@
                 });
             }
 
-            $(document).on('click', '.newFrameStockBtn', function(e) {
-                e.preventDefault();
-                $('#newFrameStockModal').modal('show');
-                $('#newFrameStockForm').trigger("reset");
-            });
+            find_frame_hq_received();
 
-            $('#newFrameStockForm').submit(function(e) {
-                e.preventDefault();
-                let form = $(this);
-                let formData = new FormData(form[0]);
-                let path = '{{ route('admin.frame.stocks.store', $clinic->id) }}';
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('#newFrameStockSubmitBtn').html(
-                            '<i class="fa fa-spinner fa-spin"></i>'
-                        );
-                        $('#newFrameStockSubmitBtn').attr('disabled', true);
-                    },
-                    complete: function() {
-                        $('#newFrameStockSubmitBtn').html('Save');
-                        $('#newFrameStockSubmitBtn').attr('disabled', false);
-                    },
-                    success: function(data) {
-                        if (data['status']) {
-                            toastr.success(data['message']);
-                            $('#newFrameStockForm')[0].reset();
-                            $('#newFrameStockModal').modal('hide');
-                            $('#frameStocksData').DataTable().ajax.reload();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 500);
-                            
-                        }
-                    },
-                    error: function(error) {
-                        if (error.status == 422) {
-                            $.each(error.responseJSON.errors, function(i, error) {
-                                toastr.error(error);
-                            });
-                        } else {
-                            toastr.error(error.responseJSON.message);
-                        }
-                    }
+            function find_frame_hq_received() {
+                let path = '{{ route('admin.clinic.inventory.frames.received.index', $clinic->id) }}';
+                $('#frameReceivedFromHQStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
                 });
-            });
+            }
+
+            find_frame_clinic_received();
+
+            function find_frame_clinic_received() {
+                let path = '{{ route('admin.clinic.inventory.frames.received.from.clinic', $clinic->id) }}';
+                $('#frameReceivedFromClinicsStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
         });
     </script>
 @endpush

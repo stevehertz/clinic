@@ -42,9 +42,15 @@ class FramesStocksController extends Controller
                 ->addColumn('shape', function($row){
                     return $row->frame_shape->shape;
                 })
-                ->addColumn('actions', function ($row) {
+                ->addColumn('remarks', function($row){
+                    return Str::limit($row->remarks, 20, '...');
                 })
-                ->rawColumns(['actions', 'color', 'shape'])
+                ->addColumn('actions', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteFrameStock">';
+                    $btn = $btn . '<i class="fa fa-trash"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['actions', 'color', 'shape', 'remarks'])
                 ->make(true);
         }
         $page_title = trans('admin.clinics.page.frames.sub_page.stocks');
@@ -112,19 +118,6 @@ class FramesStocksController extends Controller
         $response['status'] = true;
         $response['data'] = $frameStock;
         return response()->json($response, 200);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, FrameStock $frameStock)
-    {
-        //
     }
 
     /**
