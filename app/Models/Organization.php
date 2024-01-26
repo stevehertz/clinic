@@ -272,4 +272,9 @@ class Organization extends Model
     {
         return $this->hasMany(FrameReceived::class, 'organization_id', 'id');    
     }
+
+    public function frame_requests()  
+    {
+        return $this->hasMany(FrameRequest::class, 'organization_id', 'id');    
+    }
 }

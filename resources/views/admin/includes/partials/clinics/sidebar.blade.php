@@ -118,43 +118,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview @if ($page_title == 'inventory') menu-open @endif">
-
-                    <a href="#" class="nav-link @if ($page_title == 'inventory') active @endif">
-                        <i class="nav-icon fa fa-balance-scale"></i>
-                        <p>
-                            Inventory
-                            <i class="fa fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.inventory.index', $clinic->id) }}"
-                                class="nav-link @if (isset($sub_page) && $sub_page == 'frames') active @endif">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    Frames
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.sun.glasses.index', $clinic->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Sun glasses</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.frame.cases.index', $clinic->id) }}"
-                                class="nav-link  @if (isset($sub_page) && $sub_page == 'cases') active @endif">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Cases</p>
-                            </a>
-                        </li>
-                    </ul>
-
-                </li>
-
                 <li class="nav-item has-treeview">
 
                     <a href="#" class="nav-link">

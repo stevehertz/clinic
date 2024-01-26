@@ -42,6 +42,7 @@ use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
 use App\Http\Controllers\Admin\Assets\AssetTransferController;
 use App\Http\Controllers\Admin\Frames\FrameReceivedController;
+use App\Http\Controllers\Admin\Frames\FrameRequestsController;
 use App\Http\Controllers\Admin\Payments\ClosedBillsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
 use App\Http\Controllers\Admin\ClientType\ClientTypeController;
@@ -896,6 +897,13 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::post('/update', [FrameReceivedController::class, 'update'])->name('update');
 
                 Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
+            });
+
+            
+            Route::prefix('requests')->name('requests.')->group(function () {
+
+                Route::get('/{clinic}', [FrameRequestsController::class, 'index'])->name('index');
+
             });
 
 

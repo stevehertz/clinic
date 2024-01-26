@@ -41,9 +41,9 @@ class Clinic extends Model
         return $this->hasMany(Patient::class, 'clinic_id', 'id');
     }
 
-    function patients_per_clinic() 
+    function patients_per_clinic()
     {
-        return $this->patient()->where('status', 1)->latest()->count();   
+        return $this->patient()->where('status', 1)->latest()->count();
     }
 
     public function appointment()
@@ -170,7 +170,7 @@ class Clinic extends Model
         return $this->hasMany(ReceivedFrame::class, 'to_clinic_id', 'id');
     }
 
-    public function clinic_frame_case_stock() 
+    public function clinic_frame_case_stock()
     {
         return $this->hasMany(ClinicFrameCaseStock::class, 'clinic_id', 'id');
     }
@@ -180,13 +180,18 @@ class Clinic extends Model
         return $this->hasMany(HqCaseTransfer::class, 'to_clinic_id', 'id');
     }
 
-    public function frame_received()  
+    public function frame_received()
     {
-        return $this->hasMany(FrameReceived::class, 'clinic_id', 'id');   
+        return $this->hasMany(FrameReceived::class, 'clinic_id', 'id');
     }
 
-    public function from_frame_received()  
+    public function from_frame_received()
     {
-        return $this->hasMany(FrameReceived::class, 'from_clinic_id', 'id'); 
+        return $this->hasMany(FrameReceived::class, 'from_clinic_id', 'id');
+    }
+
+    public function frame_request()
+    {
+        return $this->hasMany(FrameRequest::class, 'clinic_id', 'id');
     }
 }

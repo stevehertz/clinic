@@ -53,7 +53,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame stocks 
+                                Frame stocks
                                 <br>
                                 Received from HQ
                             </span>
@@ -75,9 +75,29 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame stocks 
+                                Frame stocks
                                 <br>
                                 received from clinic
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_received()->where('is_hq', 0)->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+
+                    <div class="info-box">
+                        <span class="info-box-icon bg-primary"><i class="fas fa-address-card"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame requests
                             </span>
                             <span class="info-box-number">
                                 {{ $clinic->frame_received()->where('is_hq', 0)->count() }}
@@ -126,16 +146,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type specimen
-                                    book.
-                                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                                    remaining essentially unchanged. It was popularised in the 1960s with the release of
-                                    Letraset
-                                    sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-                                    software
-                                    like Aldus PageMaker including versions of Lorem Ipsum.
+                                    @include('admin.clinic.frames.requests')
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
@@ -324,6 +335,64 @@
                         {
                             data: 'received_by',
                             name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+            find_frame_requests();
+            function find_frame_requests() {
+                let path = '{{ route('admin.clinic.inventory.frames.requests.index', $clinic->id) }}';
+                $('#framesRequestedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'request_date',
+                            name: 'request_date'
+                        },
+                        {
+                            data: 'clinic',
+                            name: 'clinic'
+                        },
+                        {
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
                         },
                     ]
                 });
