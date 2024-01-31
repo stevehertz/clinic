@@ -84,6 +84,7 @@ class HQFrameStocksController extends Controller
         $organization->hq_frame_stock()->create([
             'admin_id' => $admin->id,
             'frame_id' => $frame->id,
+            'code' => $frame->code,
             'gender' => $data['gender'],
             'color_id' => $frame_color->id,
             'shape_id' => $frame_shape->id,
@@ -149,6 +150,7 @@ class HQFrameStocksController extends Controller
         $hqFrameStock->update([
             'admin_id' => $admin->id,
             'frame_id' => $frame->id,
+            'code' => $frame->code,
             'gender' => $data['gender'],
             'color_id' => $frame_color->id,
             'shape_id' => $frame_shape->id,

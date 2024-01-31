@@ -54,6 +54,10 @@ return [
         ],
 
         'inventory' => [
+
+            'frames' => [
+                'title' => 'Frame Stocks',
+            ],
             'title' => 'Inventory',
             'sub_page' => [
                 'frames' => 'Frames',
@@ -66,4 +70,9 @@ return [
         ],
 
     ],
+
+    'header' => [
+        'inventory' => 'Inventory',
+        'users' => 'Users Access',
+    ], 
 ];

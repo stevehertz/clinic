@@ -25,33 +25,123 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body table-responsive">
-                            <table id="frameStocksData" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Frame Code</th>
-                                        <th>Gender</th>
-                                        <th>Color</th>
-                                        <th>Shape</th>
-                                        <th>Total</th>
-                                        <th>Sold</th>
-                                        <th>Closing</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div><!-- /.card-body -->
-                    </div><!-- /.card -->
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info">
+                            <i class="fas fa-chart-area"></i>
+                        </span>
 
-                </div><!-- /.col -->
+                        <div class="info-box-content">
+                            <span class="info-box-text">Frame Stocks</span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_stock()->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info">
+                            <i class="fas fa-chart-area"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame Stocks <br>
+                                Received From HQ
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_received()->where('is_hq', 1)->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info">
+                            <i class="fas fa-chart-area"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                Frame Stocks <br>
+                                Received From Clinics
+                            </span>
+                            <span class="info-box-number">
+                                {{ $clinic->frame_received()->where('is_hq', 0)->count() }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
             </div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-12">
+                    <!-- Custom Tabs -->
+                    <div class="card">
+                        <div class="card-header d-flex p-0">
+                            <h3 class="card-title p-3">Tabs</h3>
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">
+                                        @lang('labels.users.tabs.inventory.frames.stocks')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
+                                        @lang('labels.users.tabs.inventory.frames.received.title')
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
+                                        @lang('labels.users.tabs.inventory.frames.requested')
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    @include('users.frames.stocks')
+                                </div>
+                                <!-- /.tab-pane -->
+
+                                <div class="tab-pane" id="tab_2">
+                                    @include('users.frames.received')
+                                </div>
+                                <!-- /.tab-pane -->
+
+                                <div class="tab-pane" id="tab_3">
+                                    @include('users.frames.requested')
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- ./card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div><!-- /.container-fluid -->
     </section><!-- /.content -->
 @endsection
+
+@push('modals')
+    @include('users.includes.modals.receive_from_hq')
+@endpush
 
 @push('scripts')
     <script>
@@ -86,16 +176,20 @@
                             name: 'shape'
                         },
                         {
-                            data: 'total_stock',
-                            name: 'total_stock'
+                            data: 'received',
+                            name: 'received'
                         },
                         {
-                            data: 'sold_stock',
-                            name: 'sold_stock'
+                            data: 'total',
+                            name: 'total'
                         },
                         {
-                            data: 'closing_stock',
-                            name: 'closing_stock'
+                            data: 'sold',
+                            name: 'sold'
+                        },
+                        {
+                            data: 'closing',
+                            name: 'closing'
                         }
                     ],
                     "autoWidth": false,
@@ -103,6 +197,149 @@
                 });
             }
 
+            find_received_frames_hq();
+
+            function find_received_frames_hq() {
+                let path = '{{ route('users.frame.received.index') }}';
+                $('#framesReceivedFromHQData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            find_received_frames_clinics();
+
+            function find_received_frames_clinics() {
+                let path = '{{ route('users.frame.received.from.clinics') }}';
+                $('#framesReceivedFromClinicsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            $(document).on('click', '.receiveFromHQBtn', function(e) {
+                e.preventDefault();
+                $('#receiveFromHQModal').modal('show');
+                $('#receiveFromHQForm').trigger("reset");
+            });
+
+            $("#receiveFromHQForm").submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.frame.received.store', ':clinic') }}';
+                path = path.replace(':clinic', '{{ $clinic->id }}');
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Receive');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#receiveFromHQModal').modal('hide');
+                            $('#receiveFromHQForm').trigger("reset");
+                            $('#framesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endpush

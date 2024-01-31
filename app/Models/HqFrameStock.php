@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HqFrameStock extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'organization_id',
         'admin_id',
         'frame_id',
+        'code',
         'gender',
         'color_id',
         'shape_id',
@@ -23,6 +25,8 @@ class HqFrameStock extends Model
         'supplier_price',
         'price',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function organization()  
     {
@@ -47,5 +51,10 @@ class HqFrameStock extends Model
     public function frame_shape()  
     {
         return $this->belongsTo(FrameShape::class, 'shape_id', 'id');
+    }
+
+    public function frame_stock() 
+    {
+        return $this->hasOne(FrameStock::class, 'hq_stock_id', 'id');
     }
 }

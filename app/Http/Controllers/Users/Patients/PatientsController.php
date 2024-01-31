@@ -31,9 +31,9 @@ class PatientsController extends Controller
                 $data = $clinic->patient()
                 ->where('status', 1)
                 ->whereBetween('date_in', [$request->from_date, $request->to_date])
-                ->latest();
+                ->latest()->get();
             } else {
-                $data = $clinic->patient()->where('status', 1)->latest();
+                $data = $clinic->patient()->where('status', 1)->latest()->get();
             }
             return DataTables::of($data)
                 ->addIndexColumn()

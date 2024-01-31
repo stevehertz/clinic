@@ -105,7 +105,7 @@
                             <a href="{{ route('users.appointments.index') }}"
                                 class="nav-link
                             {{ Route::is('users.appointments.index') ? 'active' : '' }}
-                            @if (isset($page_title) && ($page_title == trans('users.page.appointments.sub_page.view'))) active @endif
+                            @if (isset($page_title) && $page_title == trans('users.page.appointments.sub_page.view')) active @endif
                             ">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.appointments.sub_page.appointment')</p>
@@ -233,48 +233,25 @@
                     </a>
                 </li>
 
-                <li
-                    class="nav-item has-treeview 
-                {{ Route::is('users.frame.stocks.index') ? 'menu-open' : '' }}
-                {{ Route::is('users.case.stock.index') ? 'menu-open' : '' }}
-                ">
-                    <a href="#"
-                        class="nav-link 
+
+                <li class="nav-header">
+                    @lang('menus.users.sidebar.headers.inventory')
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('users.frame.stocks.index') }}" class="nav-link
                     {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
-                    {{ Route::is('users.case.stock.index') ? 'active' : '' }}
                     ">
-                        <i class="nav-icon fa fa-balance-scale"></i>
+                        <i class="nav-icon fas fa-chart-area"></i>
                         <p>
-                            @lang('users.page.inventory.title')
-                            <i class="fa fa-angle-left right"></i>
+                            @lang('menus.users.sidebar.inventory.frames.title')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('users.frame.stocks.index') }}"
-                                class="nav-link
-                            {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
-                            ">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    @lang('users.page.inventory.sub_page.frames')
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('users.case.stock.index') }}"
-                                class="nav-link
-                            {{ Route::is('users.case.stock.index') ? 'active' : '' }}
-                            ">
-                                <i class="nav-icon fa fa-circle"></i>
-                                <p>
-                                    @lang('users.page.inventory.sub_page.cases')
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+
+
+
+                <li class="nav-header">@lang('users.header.users')</li>
 
                 <li class="nav-item">
 
@@ -287,7 +264,6 @@
                             @lang('users.page.doctors.title')
                         </p>
                     </a>
-
                 </li>
 
             </ul>

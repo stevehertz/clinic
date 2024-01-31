@@ -102,8 +102,8 @@
                     serverSide: true,
                     ajax: path,
                     columns: [{
-                            data: 'frame_code',
-                            name: 'frame_code'
+                            data: 'code',
+                            name: 'code'
                         },
                         {
                             data: 'gender',

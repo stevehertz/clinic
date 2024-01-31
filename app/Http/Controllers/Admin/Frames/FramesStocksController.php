@@ -36,11 +36,14 @@ class FramesStocksController extends Controller
             $data = $clinic->frame_stock()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('gender', function($row){
+                    return $row->hq_stock->gender;
+                })
                 ->addColumn('color', function($row){
-                    return $row->frame_color->color;
+                    return $row->hq_stock->frame_color->color;
                 })
                 ->addColumn('shape', function($row){
-                    return $row->frame_shape->shape;
+                    return $row->hq_stock->frame_shape->shape;
                 })
                 ->addColumn('remarks', function($row){
                     return Str::limit($row->remarks, 20, '...');
@@ -72,32 +75,42 @@ class FramesStocksController extends Controller
         //
         $data = $request->except("_token");
 
-        $frame = Frame::findOrFail($data['frame_id']);
+        $organization = $clinic->organization;
 
-        $frame_color = FrameColor::findOrFail($data['color_id']);
+        $hq_frame_stock = $organization->hq_frame_stock()->findOrFail($data['hq_stock_id']);
 
-        $frame_shape = FrameShape::findOrFail($data['shape_id']);
+        // check this stock does not exist in this clinic
+        $clinic_frame_stock = $clinic->frame_stock()->where('hq_stock_id', $hq_frame_stock->id)->first();
+        if ($clinic_frame_stock) {
+            $response['status'] = false;
+            $response['message'] = 'Frame Stock Already Exists';
+            return response()->json($response, 200);
+        }
 
         $opening = $data['opening'];
 
-        $total = $opening;
+        $received = 0;
+
+        $transfered = 0;
+        
+        $total = ($opening + $received) - $transfered;
 
         $sold = 0;
 
         $closing = $total - $sold;
 
         $clinic->frame_stock()->create([
-            'frame_id' => $frame->id,
-            'code' => $frame->code,
-            'gender' => $data['gender'],
-            'color_id' => $frame_color->id,
-            'shape_id' => $frame_shape->id,
+            'organization_id' => $organization->id,
+            'hq_stock_id' => $hq_frame_stock->id,
+            'frame_id' =>  $hq_frame_stock->frame->id,
+            'code' => $hq_frame_stock->frame->code,
             'opening' => $opening,
+            'received' => $received,
+            'transfered' => $transfered,
             'total' => $total,
             'sold' => $sold,
             'closing' => $closing,
-            'price' => $data['price'],
-            'supplier_price' => $data['supplier_price'],
+            'price' => $hq_frame_stock->price,
             'remarks' => $data['remarks'],
         ]);
 

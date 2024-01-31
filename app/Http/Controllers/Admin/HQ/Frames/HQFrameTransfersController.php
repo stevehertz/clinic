@@ -49,12 +49,20 @@ class HQFrameTransfersController extends Controller
                         return '<span class="badge badge-danger">Not Transfered</span>';
                     }
                 })
+                ->addColumn('received', function($row){
+                    if($row->received)
+                    {
+                        return '<span class="badge badge-success">Received</span>';
+                    } else{
+                        return '<span class="badge badge-danger">Not Received</span>';
+                    }
+                })
                 ->addColumn('actions', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteFrameTransferBtn">';
                     $btn = $btn . '<i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['admin', 'status', 'to_clinic', 'actions'])
+                ->rawColumns(['admin', 'status', 'received', 'to_clinic', 'actions'])
                 ->make(true);
         }
         $transfers = $organization->hq_frame_transfer()->latest()->get();

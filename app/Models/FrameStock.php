@@ -12,11 +12,9 @@ class FrameStock extends Model
     protected $fillable = [
         'organization_id', 
         'clinic_id',
+        'hq_stock_id',
         'frame_id',
         'code',
-        'gender',
-        'color_id',
-        'shape_id',
         'opening',
         'received',
         'transfered',
@@ -24,9 +22,14 @@ class FrameStock extends Model
         'sold',
         'closing',
         'price',
-        'supplier_price',
         'remarks',
     ];
+
+    public function organization()
+    {
+        # code...
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
 
     public function clinic()
     {
@@ -34,22 +37,16 @@ class FrameStock extends Model
         return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
     }
 
+    public function hq_stock()
+    {
+        # code...
+        return $this->belongsTo(HqFrameStock::class, 'hq_stock_id', 'id');
+    }
+
     public function frame()
     {
         # code...
         return $this->belongsTo(Frame::class, 'frame_id', 'id');
-    }
-
-    public function frame_color()
-    {
-        # code...
-        return $this->belongsTo(FrameColor::class, 'color_id', 'id');
-    }
-
-    public function frame_shape()
-    {
-        # code...
-        return $this->belongsTo(FrameShape::class, 'shape_id', 'id');
     }
 
     public function frame_purchase()

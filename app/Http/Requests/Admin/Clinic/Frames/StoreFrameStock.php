@@ -25,11 +25,9 @@ class StoreFrameStock extends FormRequest
     {
         return [
             //
-            'frame_id' => 'required|integer|exists:frames,id',
-            'gender' => 'required|string|max:255',
-            'color_id' => 'required|integer|exists:frame_colors,id',
-            'shape_id' => 'required|integer|exists:frame_shapes,id',
+            'hq_stock_id' => ['required', 'integer', 'exists:hq_frame_stocks,id'],
             'opening' => 'required|numeric',
+            'remarks' => 'nullable|string|max:255',
         ];
     }
 }

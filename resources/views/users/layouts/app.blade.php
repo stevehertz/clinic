@@ -27,6 +27,8 @@
         </div>
         <!-- /.content-wrapper -->
 
+        @stack('modals')
+
         <!-- Main Footer -->
         @include('users.includes.partials.footer')
         

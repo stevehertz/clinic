@@ -5,6 +5,8 @@ use App\Http\Controllers\Users\Users\UsersController;
 use App\Http\Controllers\Users\Auth\AccountController;
 use App\Http\Controllers\Users\Orders\OrdersController;
 use App\Http\Controllers\Users\Lens\LensPowerController;
+use App\Http\Controllers\Users\Doctors\DoctorsController;
+use App\Http\Controllers\Users\Cases\CaseStocksController;
 use App\Http\Controllers\Users\Payments\BillingController;
 use App\Http\Controllers\Users\Medicine\MedicineController;
 use App\Http\Controllers\Users\Frames\FrameStocksController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\Users\Payments\RemittanceController;
 use App\Http\Controllers\Users\Procedure\ProcedureController;
 use App\Http\Controllers\Users\Treatment\TreatmentController;
 use App\Http\Controllers\Users\ClientType\ClientTypeController;
+use App\Http\Controllers\Users\Frames\FramesReceivedController;
 use App\Http\Controllers\Users\Lens\LensPrescriptionController;
 use App\Http\Controllers\Users\Payments\PaymentsBillController;
 use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
@@ -27,8 +30,6 @@ use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswo
 use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
 use App\Http\Controllers\Users\Payments\PaymentDetailsController as PaymentsPaymentDetailsController;
 use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
-use App\Http\Controllers\Users\Cases\CaseStocksController;
-use App\Http\Controllers\Users\Doctors\DoctorsController;
 
 Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
 
@@ -45,16 +46,14 @@ Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
     Route::post('reset/password/store', [AuthResetPasswordController::class, 'store'])->name('reset.password.store');
 });
 
-Route::middleware(['auth:web', 'preventBackHistory'])->group(function(){
+Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
 
     Route::get('/deactivate/account', [AccountController::class, 'index'])->name('deactivate.account');
 
     Route::prefix('/users')->name('users.')->group(function () {
 
         Route::post('/logout', [UsersController::class, 'logout'])->name('logout');
-        
     });
-
 });
 
 Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(function () {
@@ -77,10 +76,9 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         Route::get('/{appointment}/view', [AppointmentsAppointmentsController::class, 'view'])->name('view');
     });
 
-    Route::prefix('client/type')->name('client.type.')->group(function(){
+    Route::prefix('client/type')->name('client.type.')->group(function () {
 
         Route::post('/show', [ClientTypeController::class, 'show'])->name('show');
-
     });
 
     Route::prefix('/users')->name('users.')->group(function () {
@@ -90,7 +88,6 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         Route::post('/update', [UsersController::class, 'update'])->name('update');
 
         Route::post('/update/password', [UsersController::class, 'update_password'])->name('update.password');
-
     });
 
     Route::prefix('patients')->name('patients.')->group(function () {
@@ -163,18 +160,17 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
             Route::get('/{paymentBill}/print', [CloseBillsController::class, 'print'])->name('print');
         });
 
-        Route::prefix('attachments')->name('attachments.')->group(function(){
+        Route::prefix('attachments')->name('attachments.')->group(function () {
 
             Route::post('/{paymentBill}/store', [PaymentsAttachmentController::class, 'store'])->name('store');
 
             Route::get('/{paymentAttachment}/show', [PaymentsAttachmentController::class, 'show'])->name('show');
 
             Route::get('/{paymentAttachment}/open/file', [PaymentsAttachmentController::class, 'readFile'])->name('open.file');
-           
+
             Route::post('/{paymentAttachment}/update', [PaymentsAttachmentController::class, 'update'])->name('update');
 
             Route::delete('/{paymentAttachment}/delete', [PaymentsAttachmentController::class, 'destroy'])->name('delete');
-
         });
 
         Route::prefix('billing')->name('billing.')->group(function () {
@@ -234,7 +230,6 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
             Route::post('/show', [LensPowerController::class, 'show'])->name('show');
 
             Route::post('/update', [LensPowerController::class, 'update'])->name('update');
-
         });
 
         Route::prefix('prescription')->name('prescription.')->group(function () {
@@ -244,7 +239,6 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
             Route::post('/show', [LensPrescriptionController::class, 'show'])->name('show');
 
             Route::post('/update', [LensPrescriptionController::class, 'update'])->name('update');
-            
         });
 
         Route::prefix('frame/prescription')->name('frame.prescription.')->group(function () {
@@ -254,7 +248,6 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
             Route::post('/show', [FramePrescriptionsController::class, 'show'])->name('show');
 
             Route::post('/update', [FramePrescriptionsController::class, 'update'])->name('update');
-            
         });
     });
 
@@ -294,21 +287,32 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         Route::post('/store', [OrderTracksController::class, 'store'])->name('store');
     });
 
-    Route::prefix('frame/stocks')->name('frame.stocks.')->group(function(){
+    Route::prefix('frame')->name('frame.')->group(function () {
 
-        Route::get('/index', [FrameStocksController::class, 'index'])->name('index');
+        Route::prefix('stocks')->name('stocks.')->group(function () {
 
+            Route::get('/index', [FrameStocksController::class, 'index'])->name('index');
+
+        });
+
+        Route::prefix('received')->name('received.')->group(function(){
+
+            Route::get('/index', [FramesReceivedController::class, 'index'])->name('index');
+
+            Route::get('/from/clinics', [FramesReceivedController::class, 'getReceivedFromClinic'])->name('from.clinics');
+
+            Route::post('/{clinic}/store', [FramesReceivedController::class, 'store'])->name('store');
+
+        });
     });
 
-    Route::prefix('case/stock')->name('case.stock.')->group(function(){
+    Route::prefix('case/stock')->name('case.stock.')->group(function () {
 
         Route::get('/index', [CaseStocksController::class, 'index'])->name('index');
-
     });
 
-    Route::prefix('doctors')->name('doctors.')->group(function(){
+    Route::prefix('doctors')->name('doctors.')->group(function () {
 
         Route::get('/index', [DoctorsController::class, 'index'])->name('index');
-
     });
 });

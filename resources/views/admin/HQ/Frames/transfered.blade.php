@@ -59,6 +59,7 @@
                                             <th>Status</th>
                                             <th>Condition</th>
                                             <th>Remarks</th>
+                                            <th>Received</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -126,6 +127,10 @@
                         {
                             data: 'remarks',
                             name: 'remarks'
+                        },
+                        {
+                            data: 'received',
+                            name: 'received'
                         },
                         {
                             data: 'actions',

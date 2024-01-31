@@ -223,10 +223,6 @@
                             name: 'closing'
                         },
                         {
-                            data: 'supplier_price',
-                            name: 'supplier_price'
-                        },
-                        {
                             data: 'price',
                             name: 'price'
                         },
@@ -341,6 +337,7 @@
             }
 
             find_frame_requests();
+
             function find_frame_requests() {
                 let path = '{{ route('admin.clinic.inventory.frames.requests.index', $clinic->id) }}';
                 $('#framesRequestedData').DataTable({
@@ -365,7 +362,7 @@
                             data: 'frame_code',
                             name: 'frame_code'
                         },
-                        
+
                         {
                             data: 'quantity',
                             name: 'quantity'
@@ -397,6 +394,96 @@
                     ]
                 });
             }
+
+            $(document).on('click', '.newFrameStockBtn', function(e) {
+                e.preventDefault();
+                $('#newFrameStockModal').modal('show');
+                $('#newFrameStockForm').trigger("reset");
+            });
+
+            $('#newFrameStockForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('admin.clinic.inventory.frames.stocks.store', ':clinic') }}';
+                path = path.replace(':clinic', '{{ $clinic->id }}');
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#newFrameStockForm')[0].reset();
+                            $('#newFrameStockModal').modal('hide');
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            location.reload();
+                        } else {
+                            toastr.error(data['message']);
+                        }
+                    },
+                    error: function(response) {
+                        let errors = response.responseJSON.errors;
+                        var errorsHtml = '<ul>';
+                        $.each(errors, function(field, messages) {
+                            errorsHtml +=
+                                '<li style="list-style-type:none; padding:0;">' +
+                                messages + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteFrameStock', function(e) {
+                e.preventDefault();
+                let frame_stock_id = $(this).data('id');
+                let path = '{{ route('admin.clinic.inventory.frames.stocks.delete', ':frameStock') }}';
+                path = path.replace(':frameStock', frame_stock_id);
+                let token = "{{ csrf_token() }}";
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 500);
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
 
         });
     </script>

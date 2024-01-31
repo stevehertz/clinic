@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Frames;
 
 use App\Http\Controllers\Controller;
+use App\Models\FrameStock;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,19 +26,22 @@ class FrameStocksController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-            $data = $clinic->frame_stock->sortBy('created_at', SORT_DESC);
+            $data = $clinic->frame_stock()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('frame_code', function ($row) {
-                    $frame_code = $row->frame->code;
+                    $frame_code = $row->code;
                     return $frame_code;
                 })
+                ->addColumn('gender', function($row){
+                    return $row->hq_stock->gender;
+                })
                 ->addColumn('color', function($row){
-                    $frame_color = $row->frame_color->color;
+                    $frame_color = $row->hq_stock->frame_color->color;
                     return $frame_color;
                 })
                 ->addColumn('shape', function($row){
-                    $frame_shape = $row->frame_shape->shape;
+                    $frame_shape = $row->hq_stock->frame_shape->shape;
                     return $frame_shape;
                 })
                 ->rawColumns(['frame_code', 'color', 'shape'])
@@ -51,68 +55,17 @@ class FrameStocksController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FrameStock $frameStock)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json([
+            'status' => true,
+            'data' => $frameStock
+        ]);
     }
 }

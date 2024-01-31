@@ -148,6 +148,8 @@ class Clinic extends Model
         return $this->hasMany(FramePurchase::class, 'clinic_id', 'id');
     }
 
+
+
     public function frame_transfer_from()
     {
         # code...
@@ -193,5 +195,10 @@ class Clinic extends Model
     public function frame_request()
     {
         return $this->hasMany(FrameRequest::class, 'clinic_id', 'id');
+    }
+
+    public function hq_frame_transfer_to()  
+    {
+        return $this->hasMany(HqFrameTransfer::class, 'to_clinic_id', 'id');   
     }
 }
