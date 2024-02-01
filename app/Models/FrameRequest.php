@@ -21,7 +21,8 @@ class FrameRequest extends Model
         'shape_id',
         'quantity',
         'remarks',
-        'status'
+        'status',
+        'transfer_status'
     ];
 
     public function organization()
@@ -36,6 +37,27 @@ class FrameRequest extends Model
         return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
     }
 
-
+    public function user()
+    {
+        # code...
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
     
+    public function frame()
+    {
+        # code...
+        return $this->belongsTo(Frame::class, 'frame_id', 'id');
+    }
+
+    public function frame_color()
+    {
+        # code...
+        return $this->belongsTo(FrameColor::class, 'color_id', 'id');
+    }
+
+    public function frame_shape()
+    {
+        # code...
+        return $this->belongsTo(FrameShape::class, 'shape_id', 'id');
+    }
 }

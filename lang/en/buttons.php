@@ -6,6 +6,7 @@ return array(
         'inventory' => array(
             'receive_hq' => 'Receive From HQ', 
             'receive_clinic' => 'Receive From Clinic',
+            'request_frame' => 'Request Frame',
         ),
     ),
 

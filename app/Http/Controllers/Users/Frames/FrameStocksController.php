@@ -50,7 +50,8 @@ class FrameStocksController extends Controller
         $page_title = "Frame Stocks";
         return view('users.frames.index', [
             'page_title' => $page_title,
-            'clinic' => $clinic
+            'clinic' => $clinic,
+            'organization' => $clinic->organization,
         ]);
     }
 

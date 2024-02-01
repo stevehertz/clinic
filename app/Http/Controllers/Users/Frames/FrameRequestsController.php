@@ -1,27 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Frames;
+namespace App\Http\Controllers\Users\Frames;
 
-use App\Http\Controllers\Controller;
-use App\Models\Clinic;
+use App\Models\User;
 use App\Models\FrameRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Users\Frames\FrameRequestMail;
+use App\Http\Requests\Users\Frames\StoreFrameRequest;
 
 class FrameRequestsController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Clinic $clinic)
+    public function index(Request $request)
     {
         //
+        $user  = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
         if ($request->ajax()) {
             $data = $clinic->frame_request()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('request_date', function ($row) {
+                ->addColumn('request_date', function($row){
                     return date('F d, Y', strtotime($row->request_date));
                 })
                 ->addColumn('color', function ($row) {
@@ -47,9 +60,9 @@ class FrameRequestsController extends Controller
                 ->addColumn('requested_by', function ($row) {
                     return $row->user->first_name . ' ' . $row->user->last_name;
                 })
-                ->addColumn('clinic', function ($row) {
+                ->addColumn('actions', function ($row) {
                 })
-                ->rawColumns(['request_date', 'requested_by', 'status', 'transfer_status'])
+                ->rawColumns(['actions', 'color', 'shape', 'status', 'transfer_status'])
                 ->make(true);
         }
     }
@@ -60,9 +73,45 @@ class FrameRequestsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreFrameRequest $request)
     {
         //
+        $user  = User::findOrFail(Auth::user()->id);
+
+        $clinic = $user->clinic;
+
+        $organization = $clinic->organization;
+
+        $data = $request->except("_token");
+
+        $frame = $organization->frame()->findOrFail($data['frame_id']);
+
+        $clinic->frame_request()->create([
+            'organization_id' => $organization->id,
+            'user_id' => $user->id,
+            'frame_id' => $frame->id,
+            'request_date' => $data['request_date'],
+            'frame_code' => $frame->code,
+            'gender' => $data['gender'],
+            'color_id' => $data['color_id'],
+            'shape_id' => $data['shape_id'],
+            'quantity' => $data['quantity'],
+            'remarks' => $data['remarks'],
+            'status' => 1,
+            'transfer_status' => 0
+        ]);
+
+        $details = [
+            'title' => 'Frame Request',
+            'body' => 'You have a new frame request from ' . $clinic->clinic . '.' . ' Please check your dashboard.'
+        ];
+
+        Mail::to($organization->email)->send(new FrameRequestMail($details));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Frame request has been sent successfully.'
+        ]);
     }
 
     /**
@@ -94,7 +143,7 @@ class FrameRequestsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FrameRequest $frameRequest)
+    public function destroy($id)
     {
         //
     }

@@ -259,8 +259,8 @@
                             name: 'received_date'
                         },
                         {
-                            data: 'code',
-                            name: 'code'
+                            data: 'frame_code',
+                            name: 'frame_code'
                         },
                         {
                             data: 'quantity',

@@ -22,8 +22,8 @@
                                      </option>
                                      @forelse ($organization->frame()->latest()->get() as $frame)
                                          <option value="{{ $frame->id }}">
-                                             {{ $frame->code }} -
-                                             {{ $frame->frame_brand->title }}
+                                             Frame Code: {{ $frame->code }} -
+                                             Frame Brand: {{ $frame->frame_brand->title }}
                                          </option>
                                      @empty
                                          <option disabled="disabled">No Frame Code Found..</option>
@@ -119,30 +119,30 @@
 
                      <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="newFrameStockManufacturerPrice">
-                                    Suppliers Price
-                                </label>
-                                <input type="text" id="newFrameStockManufacturerPrice" name="supplier_price"
-                                    class="form-control" placeholder="Enter Suppliers Price" />
-                            </div>
-                        </div>
-                        <!-- /.col-md-6 -->
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="newFrameStockManufacturerPrice">
+                                     Suppliers Price
+                                 </label>
+                                 <input type="text" id="newFrameStockManufacturerPrice" name="supplier_price"
+                                     class="form-control" placeholder="Enter Suppliers Price" />
+                             </div>
+                         </div>
+                         <!-- /.col-md-6 -->
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="newFrameStockPrice">
-                                    Selling Price
-                                </label>
-                                <input type="text" id="newFrameStockPrice" name="price"
-                                    class="form-control" placeholder="Enter Price" />
-                            </div>
-                        </div>
-                        <!-- /.col-md-6 -->
-                        
-                    </div>
-                    <!-- /.row -->
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="newFrameStockPrice">
+                                     Selling Price
+                                 </label>
+                                 <input type="text" id="newFrameStockPrice" name="price" class="form-control"
+                                     placeholder="Enter Price" />
+                             </div>
+                         </div>
+                         <!-- /.col-md-6 -->
+
+                     </div>
+                     <!-- /.row -->
 
 
                  </div>

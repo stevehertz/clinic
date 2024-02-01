@@ -141,6 +141,7 @@
 
 @push('modals')
     @include('users.includes.modals.receive_from_hq')
+    @include('users.includes.modals.request_frame')
 @endpush
 
 @push('scripts')
@@ -328,6 +329,119 @@
                             $('#receiveFromHQForm').trigger("reset");
                             $('#framesReceivedFromHQData').DataTable().ajax.reload();
                             $('#frameStocksData').DataTable().ajax.reload();
+                            $('#frameRequestedData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
+
+            find_frame_requested();
+
+            function find_frame_requested() {
+                let path = '{{ route('users.frame.requests.index') }}';
+                $('#frameRequestedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'request_date',
+                            name: 'request_date'
+                        },
+                        {
+                            data: 'frame_code',
+                            name: 'frame_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'gender',
+                            name: 'gender'
+                        },
+                        {
+                            data: 'color',
+                            name: 'color'
+                        },
+                        {
+                            data: 'shape',
+                            name: 'shape'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            $(document).on('click', '.requestFrameBtn', function(e) {
+                e.preventDefault();
+                $('#requestFrameModal').modal('show');
+                $('#requestFrameForm').trigger("reset");
+            });
+
+            $('#requestFrameForm').submit(function (e) { 
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.frame.requests.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Request');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#requestFrameModal').modal('hide');
+                            $('#requestFrameForm').trigger("reset");
+                            $('#frameRequestedData').DataTable().ajax.reload();
+                            $('#framesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }
                     },
                     error: function(data) {

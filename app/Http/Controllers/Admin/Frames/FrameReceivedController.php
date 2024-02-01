@@ -28,9 +28,17 @@ class FrameReceivedController extends Controller
             $data = $clinic->frame_received()->where('is_hq', 1)->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('received_by', function ($row) {
+                ->addColumn('status', function($row){
+                    if ($row->received_status) {
+                        return '<span class="badge badge-success">Received</span>';
+                    } else {
+                        return '<span class="badge badge-warning">Pending</span>';
+                    }
                 })
-                ->rawColumns(['received_by'])
+                ->addColumn('received_by', function ($row) {
+                    return $row->user->first_name . ' ' . $row->user->last_name;
+                })
+                ->rawColumns(['received_by', 'status'])
                 ->make(true);
         }
         $page_title = trans('admin.clinics.page.frames.sub_page.received');

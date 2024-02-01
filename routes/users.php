@@ -16,6 +16,7 @@ use App\Http\Controllers\Users\Payments\CloseBillsController;
 use App\Http\Controllers\Users\Payments\RemittanceController;
 use App\Http\Controllers\Users\Procedure\ProcedureController;
 use App\Http\Controllers\Users\Treatment\TreatmentController;
+use App\Http\Controllers\Users\Frames\FrameRequestsController;
 use App\Http\Controllers\Users\ClientType\ClientTypeController;
 use App\Http\Controllers\Users\Frames\FramesReceivedController;
 use App\Http\Controllers\Users\Lens\LensPrescriptionController;
@@ -61,6 +62,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
         Route::get('/index', [DashboardDashboardController::class, 'index'])->name('index');
+        
     });
 
     Route::prefix('appointments')->name('appointments.')->group(function () {
@@ -302,6 +304,16 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
             Route::get('/from/clinics', [FramesReceivedController::class, 'getReceivedFromClinic'])->name('from.clinics');
 
             Route::post('/{clinic}/store', [FramesReceivedController::class, 'store'])->name('store');
+
+        });
+
+        Route::prefix('requests')->name('requests.')->group(function(){
+
+            Route::get('/index', [FrameRequestsController::class, 'index'])->name('index');
+
+            Route::post('/store', [FrameRequestsController::class, 'store'])->name('store');
+
+            Route::get('{frameRequest}/show', [FrameRequestsController::class, 'show'])->name('show');
 
         });
     });
