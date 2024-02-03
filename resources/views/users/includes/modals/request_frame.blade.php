@@ -12,20 +12,20 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="requestFrame">Frame</label>
-                            <select id="requestFrame" name="frame_id" class="select2" data-placeholder="Select frame"
+                            <label for="requestFrameHQStockID">Frame Code</label>
+                            <select id="requestFrameHQStockID" name="hq_stock_id" class="select2" data-placeholder="Select frame"
                                 style="width: 100%;">
                                 <option selected="selected" disabled="disabled">
-                                    Select frame
+                                    Select frame 
                                 </option>
-                                @forelse ($organization->frame()->latest()->get() as $frame)
-                                    <option value="{{ $frame->id }}">
-                                        Frame Code: {{ $frame->code }} -
-                                        Frame Brand: {{ $frame->frame_brand->title }}
+                                @forelse ($organization->hq_frame_stock()->latest()->get() as $frame_stock)
+                                    <option value="{{ $frame_stock->id }}">
+                                        Frame Code: {{ $frame_stock->code }} -
+                                        Frame Brand: {{ $frame_stock->frame->frame_brand->title }}
                                     </option>
                                 @empty
                                     <option disabled="disabled">
-                                        No Stock transfered yet
+                                        No Frames Found
                                     </option>
                                 @endforelse
                             </select>
@@ -47,26 +47,7 @@
                     <!-- /.row -->
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="requestFrameGender">
-                                    Gender
-                                </label>
-                                <select id="requestFrameGender" name="gender" class="form-control select2"
-                                    style="width: 100%;">
-                                    <option disabled='disabled' selected="selected">
-                                        Choose Gender
-                                    </option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Unisex">Unisex</option>
-                                </select>
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <!--/.col -->
-
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="requestFrameQuantity">Quantity</label>
                             <input type="number" id="requestFrameQuantity" name="quantity" class="form-control"
                                 placeholder="Quantity" />
@@ -75,59 +56,10 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="requestFrameColorId">
-                                    Color
-                                </label>
-                                <select id="requestFrameColorId" name="color_id" class="form-control select2"
-                                    style="width: 100%;">
-                                    <option disabled='disabled' selected="selected">
-                                        Choose Frame Color
-                                    </option>
-                                    @forelse ($organization->frame_color()->latest()->get() as $color)
-                                        <option value="{{ $color->id }}">
-                                            {{ $color->color }}
-                                        </option>
-                                    @empty
-                                        <option disabled="disabled">No Frame Colors Found</option>
-                                    @endforelse
-                                </select>
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <!--/.col -->
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="requestFrameShapeId">
-                                    Frame Shape
-                                </label>
-                                <select id="requestFrameShapeId" name="shape_id" class="form-control select2"
-                                    style="width: 100%;">
-                                    <option disabled='disabled' selected="selected">
-                                        Choose Frame Shape
-                                    </option>
-                                    @forelse ($organization->frame_shape()->latest()->get() as $shape)
-                                        <option value="{{ $shape->id }}">
-                                            {{ $shape->shape }}
-                                        </option>
-                                    @empty
-                                        <option disabled="disabled">No Frame Shapes Found</option>
-                                    @endforelse
-
-                                </select>
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                    </div>
-                    <!--/.row -->
-
-                    <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="requestFrameRemarks">Remarks</label>
-                                <textarea id="requestFrameRemarks" name="remarks" class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                <textarea id="requestFrameRemarks" name="remarks" class="form-control" rows="3" placeholder="Enter your remarks ..."></textarea>
                             </div>
                         </div>
                     </div>

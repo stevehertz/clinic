@@ -17,9 +17,6 @@
                     <th>Request Date</th>
                     <th>Frame Code</th>
                     <th>Quantity</th>
-                    <th>Gender</th>
-                    <th>Color</th>
-                    <th>Shape</th>
                     <th>Status</th>
                     <th>Transfer Status</th>
                     <th>Remarks</th>

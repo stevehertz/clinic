@@ -7,10 +7,8 @@
                 <th>Clinic</th>
                 <th>Frame Code</th>
                 <th>Quantity</th>
-                <th>Gender</th>
-                <th>Color</th>
-                <th>Shape</th>
                 <th>Status</th>
+                <th>Transfer</th>
                 <th>Remarks</th>
                 <th>Requested By</th>
             </tr>

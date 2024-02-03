@@ -370,18 +370,6 @@
                             name: 'quantity'
                         },
                         {
-                            data: 'gender',
-                            name: 'gender'
-                        },
-                        {
-                            data: 'color',
-                            name: 'color'
-                        },
-                        {
-                            data: 'shape',
-                            name: 'shape'
-                        },
-                        {
                             data: 'status',
                             name: 'status'
                         },

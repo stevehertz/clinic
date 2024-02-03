@@ -37,12 +37,6 @@ class FrameRequestsController extends Controller
                 ->addColumn('request_date', function($row){
                     return date('F d, Y', strtotime($row->request_date));
                 })
-                ->addColumn('color', function ($row) {
-                    return $row->frame_color->color;
-                })
-                ->addColumn('shape', function ($row) {
-                    return $row->frame_shape->shape;
-                })
                 ->addColumn('status', function($row){
                     if($row->status){
                         return '<span class="badge badge-success">Requested</span>';
@@ -62,7 +56,7 @@ class FrameRequestsController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                 })
-                ->rawColumns(['actions', 'color', 'shape', 'status', 'transfer_status'])
+                ->rawColumns(['actions', 'status', 'transfer_status'])
                 ->make(true);
         }
     }
@@ -84,17 +78,17 @@ class FrameRequestsController extends Controller
 
         $data = $request->except("_token");
 
-        $frame = $organization->frame()->findOrFail($data['frame_id']);
+        $hq_frame_stock = $organization->hq_frame_stock()->findOrFail($data['hq_stock_id']);
+
+        $frame = $hq_frame_stock->frame;
 
         $clinic->frame_request()->create([
             'organization_id' => $organization->id,
             'user_id' => $user->id,
+            'hq_stock_id' => $hq_frame_stock->id, // 'hq_stock_id' is the id of the frame in the headquarter's stock
             'frame_id' => $frame->id,
             'request_date' => $data['request_date'],
             'frame_code' => $frame->code,
-            'gender' => $data['gender'],
-            'color_id' => $data['color_id'],
-            'shape_id' => $data['shape_id'],
             'quantity' => $data['quantity'],
             'remarks' => $data['remarks'],
             'status' => 1,

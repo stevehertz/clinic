@@ -13,12 +13,10 @@ class FrameRequest extends Model
         'organization_id',
         'clinic_id',
         'user_id',
+        'hq_stock_id', // 'hq_stock_id' is the id of the frame in the headquarter's stock
         'frame_id',
         'request_date',
         'frame_code',
-        'gender',
-        'color_id',
-        'shape_id',
         'quantity',
         'remarks',
         'status',
@@ -42,22 +40,16 @@ class FrameRequest extends Model
         # code...
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function hq_frame_stock()
+    {
+        # code...
+        return $this->belongsTo(HqFrameStock::class, 'hq_stock_id', 'id');
+    }
     
     public function frame()
     {
         # code...
         return $this->belongsTo(Frame::class, 'frame_id', 'id');
-    }
-
-    public function frame_color()
-    {
-        # code...
-        return $this->belongsTo(FrameColor::class, 'color_id', 'id');
-    }
-
-    public function frame_shape()
-    {
-        # code...
-        return $this->belongsTo(FrameShape::class, 'shape_id', 'id');
     }
 }

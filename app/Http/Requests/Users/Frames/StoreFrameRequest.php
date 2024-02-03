@@ -25,11 +25,8 @@ class StoreFrameRequest extends FormRequest
     {
         return [
             //
-            'frame_id' => ['required', 'integer', 'exists:frames,id'],
+            'hq_stock_id' => ['required', 'integer', 'exists:hq_frame_stocks,id'],
             'request_date' => ['required', 'date'],
-            'gender' => ['required', 'string', 'max:255'],
-            'color_id' => ['required', 'integer', 'exists:frame_colors,id'],
-            'shape_id' => ['required', 'integer', 'exists:frame_shapes,id'],
             'quantity' => ['required', 'integer', 'max:255'],
             'remarks' => ['nullable', 'string', 'max:255'],
         ];

@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <button type="button"
             class="btn btn-block btn-outline-primary requestFrameBtn">
-            @lang('buttons.users.inventory.request_frame')
+            @lang('buttons.users.inventory.request_case')
         </button>
     </div>
 </div>

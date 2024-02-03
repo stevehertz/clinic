@@ -24,12 +24,6 @@ class FrameRequestsController extends Controller
                 ->addColumn('request_date', function ($row) {
                     return date('F d, Y', strtotime($row->request_date));
                 })
-                ->addColumn('color', function ($row) {
-                    return $row->frame_color->color;
-                })
-                ->addColumn('shape', function ($row) {
-                    return $row->frame_shape->shape;
-                })
                 ->addColumn('status', function($row){
                     if($row->status){
                         return '<span class="badge badge-success">Requested</span>';
@@ -48,8 +42,9 @@ class FrameRequestsController extends Controller
                     return $row->user->first_name . ' ' . $row->user->last_name;
                 })
                 ->addColumn('clinic', function ($row) {
+                    return $row->clinic->clinic;
                 })
-                ->rawColumns(['request_date', 'requested_by', 'status', 'transfer_status'])
+                ->rawColumns(['request_date', 'requested_by', 'status', 'transfer_status', 'clinic'])
                 ->make(true);
         }
     }
