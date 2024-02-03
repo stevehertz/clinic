@@ -13,6 +13,16 @@ return [
                     'transferred' => 'Frames Transferred',
                     'requested' => 'Frames Requested',
                 ],
+                'cases' => [
+                    'stocks' => 'Case Stocks',
+                    'received' => [
+                        'title' => 'Received Cases',
+                        'hq' => 'Received Cases from HQ',
+                        'clinics' => 'Received Cases from Clinics',
+                    ],
+                    'transferred' => 'Cases Transferred',
+                    'requested' => 'Cases Requested',   
+                ],
             ],
         ],
     ],

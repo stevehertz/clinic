@@ -200,5 +200,20 @@ class Clinic extends Model
     public function hq_frame_transfer_to()  
     {
         return $this->hasMany(HqFrameTransfer::class, 'to_clinic_id', 'id');   
+    } 
+
+    public function case_stock()
+    {
+        return $this->hasMany(CaseStock::class, 'clinic_id', 'id');
+    }
+
+    public function case_receive()
+    {
+        return $this->hasMany(CaseReceive::class, 'clinic_id', 'id');
+    }
+
+    public function case_request()
+    {
+        return $this->hasMany(CaseRequest::class, 'clinic_id', 'id');
     }
 }

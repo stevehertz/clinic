@@ -9,8 +9,10 @@ use App\Http\Controllers\Users\Doctors\DoctorsController;
 use App\Http\Controllers\Users\Cases\CaseStocksController;
 use App\Http\Controllers\Users\Payments\BillingController;
 use App\Http\Controllers\Users\Medicine\MedicineController;
+use App\Http\Controllers\Users\Cases\CaseRequestsController;
 use App\Http\Controllers\Users\Frames\FrameStocksController;
 use App\Http\Controllers\Users\Orders\OrderTracksController;
+use App\Http\Controllers\Users\Cases\CasesReceivedController;
 use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
 use App\Http\Controllers\Users\Payments\CloseBillsController;
 use App\Http\Controllers\Users\Payments\RemittanceController;
@@ -318,9 +320,33 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         });
     });
 
-    Route::prefix('case/stock')->name('case.stock.')->group(function () {
+    Route::prefix('case')->name('case.')->group(function () {
 
-        Route::get('/index', [CaseStocksController::class, 'index'])->name('index');
+        Route::prefix('stock')->name('stock.')->group(function () {
+
+            Route::get('/index', [CaseStocksController::class, 'index'])->name('index');
+
+        });
+
+        Route::prefix('received')->name('received.')->group(function(){
+
+            Route::get('/', [CasesReceivedController::class, 'index'])->name('index');
+
+            Route::get('/from/clinics', [CasesReceivedController::class, 'getReceivedFromClinic'])->name('from.clinics');
+
+        });
+
+        Route::prefix('requests')->name('requests.')->group(function(){
+
+            Route::get('/index', [CaseRequestsController::class, 'index'])->name('index');
+
+            Route::post('/store', [CaseRequestsController::class, 'store'])->name('store');
+
+            Route::get('{caseRequest}/show', [CaseRequestsController::class, 'show'])->name('show');
+
+        });
+
+        
     });
 
     Route::prefix('doctors')->name('doctors.')->group(function () {

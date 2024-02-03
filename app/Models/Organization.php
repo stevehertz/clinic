@@ -277,4 +277,19 @@ class Organization extends Model
     {
         return $this->hasMany(FrameRequest::class, 'organization_id', 'id');    
     }
+
+    public function case_stock()  
+    {
+        return $this->hasMany(CaseStock::class, 'organization_id', 'id');   
+    }
+
+    public function case_receive()  
+    {
+        return $this->hasMany(CaseReceive::class, 'organization_id', 'id');    
+    }
+
+    public function case_request()  
+    {
+        return $this->hasMany(CaseRequest::class, 'organization_id', 'id');    
+    }
 }

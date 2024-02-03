@@ -248,6 +248,18 @@
                         </p>
                     </a>
                 </li>
+                
+
+                <li class="nav-item">
+                    <a href="{{ route('users.case.stock.index') }}" class="nav-link
+                    {{ Route::is('users.case.stock.index') ? 'active' : '' }}
+                    ">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            @lang('menus.users.sidebar.inventory.cases.title')
+                        </p>
+                    </a>
+                </li>
 
 
 

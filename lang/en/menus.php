@@ -20,7 +20,9 @@ return [
                 'frames' => [
                     'title' => 'Frame Stocks',
                 ],
-
+                'cases' => [
+                    'title' => 'Case Stocks',
+                ],
             ]
 
 
