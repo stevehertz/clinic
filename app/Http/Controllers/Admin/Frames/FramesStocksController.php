@@ -56,7 +56,7 @@ class FramesStocksController extends Controller
                 ->rawColumns(['actions', 'color', 'shape', 'remarks'])
                 ->make(true);
         }
-        $page_title = trans('admin.clinics.page.frames.sub_page.stocks');
+        $page_title = trans('menus.admins.sidebar.inventory.frames.title');
         return view('admin.clinic.frames.index', [
             'page_title' => $page_title,
             'clinic' => $clinic,

@@ -26,4 +26,21 @@ return [
             ],
         ],
     ],
+
+    'admins' => [
+        'tabs' => [
+            'inventory' => [
+                'frames' => 'Frames',
+                'cases' => [
+                    'stocks' => 'Case Stocks',
+                    'received' => [
+                        'title' => 'Received Cases',
+                        'hq' => 'Received Cases from HQ',
+                        'clinics' => 'Received Cases from Clinics',
+                    ],
+                    'requested' => 'Cases Requested',
+                ],
+            ],
+        ],
+    ]
 ];

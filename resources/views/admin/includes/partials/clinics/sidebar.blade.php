@@ -156,7 +156,7 @@
                 </li>
 
                 <li class="nav-header">
-                    @lang('admin.clinics.header.inventory')
+                    @lang('menus.admins.sidebar.headers.inventory')
                 </li>
 
                 <li class="nav-item">
@@ -165,9 +165,22 @@
                         class="nav-link
                                 {{ Route::is('admin.clinic.inventory.frames.stocks.index', $clinic->id) ? 'active' : '' }}
                                 ">
-                        <i class="fas fa-address-card nav-icon"></i>
+                        <i class="fas fa-chart-area nav-icon"></i>
                         <p>
-                            @lang('admin.clinics.page.frames.title')
+                            @lang('menus.admins.sidebar.inventory.frames.title')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+
+                    <a href="{{ route('admin.clinic.inventory.cases.index', $clinic->id) }}"
+                        class="nav-link
+                                {{ Route::is('admin.clinic.inventory.cases.index', $clinic->id) ? 'active' : '' }}
+                                ">
+                        <i class="fas fa-chart-bar nav-icon"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.inventory.cases.title')
                         </p>
                     </a>
                 </li>

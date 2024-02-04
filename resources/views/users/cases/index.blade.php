@@ -174,6 +174,10 @@
                             name: 'shape'
                         },
                         {
+                            data: 'size',
+                            name: 'size'
+                        },
+                        {
                             data: 'received',
                             name: 'received'
                         },

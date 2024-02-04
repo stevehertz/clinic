@@ -4,10 +4,21 @@ return array(
 
     'users' => array(
         'inventory' => array(
-            'receive_hq' => 'Receive From HQ', 
+            'receive_hq' => 'Receive From HQ',
             'receive_clinic' => 'Receive From Clinic',
             'request_frame' => 'Request Frame',
             'request_case' => 'Request Case',
+        ),
+    ),
+
+    'admins' => array(
+        'inventory' => array(
+            'frames' => array(
+                'stocks' => 'Add Frame Stocks',
+            ),
+            'cases' => array(
+                'stocks' => 'Add Case Stocks',
+            ),
         ),
     ),
 

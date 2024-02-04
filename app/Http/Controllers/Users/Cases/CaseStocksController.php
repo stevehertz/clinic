@@ -32,13 +32,16 @@ class CaseStocksController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('case_code', function($row){
-
+                    return $row->hqStock->frame_case->code;
                 })
                 ->addColumn('color', function($row){
-                    
+                    return $row->hqStock->frame_case->case_color->title;
                 })
                 ->addColumn('shape', function($row){
-                    
+                    return $row->hqStock->frame_case->case_shape->title;
+                })
+                ->addColumn('size', function($row){
+                    return $row->hqStock->frame_case->case_size->title;
                 })
                 ->rawColumns(['color', 'shape', 'case_code'])
                 ->make(true);

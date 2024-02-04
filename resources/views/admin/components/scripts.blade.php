@@ -13,6 +13,16 @@
  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
  <!-- Select2 -->
  <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+
+ <!-- Bootstrap4 Duallistbox -->
+ <script src="{{ asset('plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
+
+
+ <!-- Tempusdominus Bootstrap 4 -->
+ {{-- <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script> --}}
+ <!-- Bootstrap Switch -->
+ <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+
  <!-- date-range-picker -->
  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
  <!-- bs-custom-file-input -->
@@ -34,5 +44,9 @@
              autoclose: true,
              todayHighlight: true,
          });
+
+         $("input[data-bootstrap-switch]").each(function() {
+             $(this).bootstrapSwitch('state', $(this).prop('checked'));
+         })
      });
  </script>

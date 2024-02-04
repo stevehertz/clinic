@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
 use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
+use App\Http\Controllers\Admin\Cases\CaseStocksController;
 use App\Http\Controllers\Admin\Cases\FrameCasesController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
 use App\Http\Controllers\Admin\HQ\Lens\HQLensesController;
@@ -889,7 +890,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::get('/{clinic}', [FrameReceivedController::class, 'index'])->name('index');
 
                 Route::get('/{clinic}/from/clinic', [FrameReceivedController::class, 'get_received_from_clinic'])->name('from.clinic');
-                
+
                 Route::post('/{clinic}/store', [FrameReceivedController::class, 'store'])->name('store');
 
                 Route::get('/{frameStock}/show', [FrameReceivedController::class, 'show'])->name('show');
@@ -899,14 +900,25 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
             });
 
-            
+
             Route::prefix('requests')->name('requests.')->group(function () {
 
                 Route::get('/{clinic}', [FrameRequestsController::class, 'index'])->name('index');
-
             });
+        });
 
+        // Cases Stocks 
+        Route::prefix('cases')->name('cases.')->group(function () {
 
+            Route::get('/{clinic}', [CaseStocksController::class, 'index'])->name('index');
+
+            Route::post('/{clinic}/store', [CaseStocksController::class, 'store'])->name('store');
+
+            Route::get('/{caseStock}/show', [CaseStocksController::class, 'show'])->name('show');
+
+            Route::post('/update', [CaseStocksController::class, 'update'])->name('update');
+
+            Route::delete('/{caseStock}/delete', [CaseStocksController::class, 'destroy'])->name('delete');
         });
     });
 

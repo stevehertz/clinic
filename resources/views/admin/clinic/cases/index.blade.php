@@ -29,15 +29,15 @@
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">
                         <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-area"></i>
+                            <i class="fas fa-chart-bar"></i>
                         </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame Stocks
+                                Case Stocks
                             </span>
                             <span class="info-box-number">
-                                {{ $clinic->frame_stock()->count() }}
+                                {{ $clinic->case_stock()->count() }}
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -50,17 +50,17 @@
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">
                         <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-area"></i>
+                            <i class="fas fa-chart-bar"></i>
                         </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame stocks
+                                Case stocks
                                 <br>
                                 Received from HQ
                             </span>
                             <span class="info-box-number">
-                                {{ $clinic->frame_received()->where('is_hq', 1)->count() }}
+                                {{ $clinic->case_receive()->where('is_hq', 1)->count() }}
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -73,17 +73,17 @@
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">
                         <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-area"></i>
+                            <i class="fas fa-chart-bar"></i>
                         </span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame stocks
+                                Case stocks
                                 <br>
                                 received from clinic
                             </span>
                             <span class="info-box-number">
-                                {{ $clinic->frame_received()->where('is_hq', 0)->count() }}
+                                {{ $clinic->case_receive()->where('is_hq', 0)->count() }}
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -101,10 +101,10 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Frame requests
+                                Case requests
                             </span>
                             <span class="info-box-number">
-                                {{ $clinic->frame_request()->count() }}
+                                {{ $clinic->case_request()->count() }}
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -123,17 +123,17 @@
                             <ul class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="#tab_1" data-toggle="tab">
-                                        @lang('admin.clinics.page.frames.sub_page.stocks')
+                                        @lang('labels.admins.tabs.inventory.cases.stocks')
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#tab_2" data-toggle="tab">
-                                        @lang('admin.clinics.page.frames.sub_page.received')
+                                        @lang('labels.admins.tabs.inventory.cases.received.title')
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#tab_3" data-toggle="tab">
-                                        @lang('admin.clinics.page.frames.sub_page.request')
+                                        @lang('labels.admins.tabs.inventory.cases.requested')
                                     </a>
                                 </li>
                             </ul>
@@ -141,7 +141,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
-                                    @include('admin.clinic.frames.stocks')
+                                    @include('admin.clinic.cases.stocks')
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
@@ -161,37 +161,36 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-        </div><!-- /.container-fluid -->
 
-    </section><!-- /.content -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
 @endsection
 
 @push('modals')
-    @include('admin.includes.partials.modals.new_clinic_frame_stock')
+    @include('admin.includes.partials.modals.add_case_stock')
 @endpush
 
 @push('scripts')
     <script>
         $(document).ready(function() {
 
-            // Frame Stocks sector (Tab)
-            find_frame_stocks();
+            find_case_stocks();
 
-            function find_frame_stocks() {
-                let path = '{{ route('admin.clinic.inventory.frames.stocks.index', $clinic->id) }}';
-                $('#frameStocksData').DataTable({
+            function find_case_stocks() {
+                let path = "{{ route('admin.clinic.inventory.cases.index', $clinic->id) }}";
+                $('#caseStocksData').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: path,
-                    'responsive': true,
-                    'autoWidth': false,
                     columns: [{
-                            data: 'code',
-                            name: 'code'
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
                         },
                         {
-                            data: 'gender',
-                            name: 'gender'
+                            data: 'case_code',
+                            name: 'case_code'
                         },
                         {
                             data: 'color',
@@ -200,6 +199,10 @@
                         {
                             data: 'shape',
                             name: 'shape'
+                        },
+                        {
+                            data: 'size',
+                            name: 'size'
                         },
                         {
                             data: 'opening',
@@ -235,25 +238,36 @@
                         },
                         {
                             data: 'actions',
-                            name: 'actions',
-                            orderable: false,
-                            searchable: false
-                        },
-                    ]
+                            name: 'actions'
+                        }
+                    ],
+                    order: [
+                        [0, 'desc']
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search..."
+                    },
+                    'autoWidth': false,
+                    'responsive': true
                 });
             }
 
-            $(document).on('click', '.newFrameStockBtn', function(e) {
+            $(document).on('click', '.addCaseStockBtn', function(e) {
                 e.preventDefault();
-                $('#newFrameStockModal').modal('show');
-                $('#newFrameStockForm').trigger("reset");
+                $('#addCaseStockModal').modal('show');
+                $('#addCaseStockForm').trigger('reset');
             });
 
-            $('#newFrameStockForm').submit(function(e) {
+            $('#addCaseStockForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let path = '{{ route('admin.clinic.inventory.frames.stocks.store', ':clinic') }}';
+                let path = '{{ route('admin.clinic.inventory.cases.store', ':clinic') }}';
                 path = path.replace(':clinic', '{{ $clinic->id }}');
                 $.ajax({
                     url: path,
@@ -274,10 +288,12 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newFrameStockForm')[0].reset();
-                            $('#newFrameStockModal').modal('hide');
-                            $('#frameStocksData').DataTable().ajax.reload();
-                            location.reload();
+                            $('#addCaseStockForm')[0].reset();
+                            $('#addCaseStockModal').modal('hide');
+                            $('#caseStocksData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         } else {
                             toastr.error(data['message']);
                         }
@@ -296,192 +312,53 @@
                 });
             });
 
-            $(document).on('click', '.deleteFrameStock', function(e) {
+            $(document).on('click', '.deleteCaseStock', function(e) {
                 e.preventDefault();
-                let frame_stock_id = $(this).data('id');
-                let path = '{{ route('admin.clinic.inventory.frames.stocks.delete', ':frameStock') }}';
-                path = path.replace(':frameStock', frame_stock_id);
-                let token = "{{ csrf_token() }}";
+                let stock_id = $(this).data('id');
+                let path = '{{ route('admin.clinic.inventory.cases.delete', ':caseStock') }}';
+                path = path.replace(':caseStock', stock_id);
                 Swal.fire({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this record!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
+                    title: 'Are you sure?',
+                    text: "You want to delete this case stock?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
                             url: path,
-                            type: "DELETE",
+                            type: 'DELETE',
                             data: {
-                                _token: token,
+                                _token: '{{ csrf_token() }}'
                             },
-                            dataType: "json",
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
-                                    $('#frameStocksData').DataTable().ajax.reload();
+                                    $('#caseStocksData').DataTable().ajax.reload();
                                     setTimeout(() => {
                                         location.reload();
-                                    }, 500);
+                                    }, 1000);
+                                } else {
+                                    toastr.error(data['message']);
                                 }
+                            },
+                            error: function(response) {
+                                let errors = response.responseJSON.errors;
+                                var errorsHtml = '<ul>';
+                                $.each(errors, function(field, messages) {
+                                    errorsHtml +=
+                                        '<li style="list-style-type:none; padding:0;">' +
+                                        messages + '</li>';
+                                });
+                                errorsHtml += '</ul>';
+                                toastr.error(errorsHtml);
                             }
                         });
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info');
                     }
                 });
             });
-
-            find_frame_hq_received();
-
-            function find_frame_hq_received() {
-                let path = '{{ route('admin.clinic.inventory.frames.received.index', $clinic->id) }}';
-                $('#frameReceivedFromHQStocksData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    'responsive': true,
-                    'autoWidth': false,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'received_date',
-                            name: 'received_date'
-                        },
-                        {
-                            data: 'frame_code',
-                            name: 'frame_code'
-                        },
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'condition',
-                            name: 'condition'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'remarks',
-                            name: 'remarks'
-                        },
-                        {
-                            data: 'received_by',
-                            name: 'received_by'
-                        },
-                    ]
-                });
-            }
-
-            find_frame_clinic_received();
-
-            function find_frame_clinic_received() {
-                let path = '{{ route('admin.clinic.inventory.frames.received.from.clinic', $clinic->id) }}';
-                $('#frameReceivedFromClinicsStocksData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    'responsive': true,
-                    'autoWidth': false,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'received_date',
-                            name: 'received_date'
-                        },
-                        {
-                            data: 'code',
-                            name: 'code'
-                        },
-                        {
-                            data: 'from_clinic',
-                            name: 'from_clinic'
-                        },
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'condition',
-                            name: 'condition'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'remarks',
-                            name: 'remarks'
-                        },
-                        {
-                            data: 'received_by',
-                            name: 'received_by'
-                        },
-                    ]
-                });
-            }
-
-            find_frame_requests();
-
-            function find_frame_requests() {
-                let path = '{{ route('admin.clinic.inventory.frames.requests.index', $clinic->id) }}';
-                $('#framesRequestedData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    'responsive': true,
-                    'autoWidth': false,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'request_date',
-                            name: 'request_date'
-                        },
-                        {
-                            data: 'clinic',
-                            name: 'clinic'
-                        },
-                        {
-                            data: 'frame_code',
-                            name: 'frame_code'
-                        },
-
-                        {
-                            data: 'quantity',
-                            name: 'quantity'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        {
-                            data: 'transfer_status',
-                            name: 'transfer_status'
-                        },
-                        {
-                            data: 'remarks',
-                            name: 'remarks'
-                        },
-                        {
-                            data: 'requested_by',
-                            name: 'requested_by'
-                        },
-                    ]
-                });
-            }
-
-           
-
         });
     </script>
 @endpush

@@ -24,17 +24,18 @@ class FrameRequestsController extends Controller
                 ->addColumn('request_date', function ($row) {
                     return date('F d, Y', strtotime($row->request_date));
                 })
-                ->addColumn('status', function($row){
-                    if($row->status){
+                ->addColumn('status', function ($row) {
+                    if ($row->status) {
                         return '<span class="badge badge-success">Requested</span>';
-                    }else{
+                    } else {
                         return '<span class="badge badge-danger">Not Requested</span>';
                     }
                 })
-                ->addColumn('transfer_status', function($row){
-                    if($row->transfer_status){
+
+                ->addColumn('transfer_status', function ($row) {
+                    if ($row->transfer_status) {
                         return '<span class="badge badge-success">Transferred</span>';
-                    }else{
+                    } else {
                         return '<span class="badge badge-danger">Not Transferred</span>';
                     }
                 })

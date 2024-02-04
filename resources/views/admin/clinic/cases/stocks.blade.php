@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="text-center">
-            <button class="btn btn-block btn-outline-primary newFrameStockBtn">
-                <i class="fa fa-plus"></i> @lang('buttons.admins.inventory.frames.stocks')
+            <button class="btn btn-block btn-outline-primary addCaseStockBtn">
+                <i class="fa fa-plus"></i> @lang('buttons.admins.inventory.cases.stocks')
             </button>
         </div>
     </div>
@@ -12,13 +12,14 @@
 
 <div class="row">
     <div class="col-md-12 table-responsive">
-        <table id="frameStocksData" class="table table-striped table-hover">
+        <table id="caseStocksData" class="table table-striped table-hover table-bordered text-center">
             <thead>
                 <tr>
-                    <th>Frame Code</th>
-                    <th>Gender</th>
+                    <th></th>
+                    <th>Case Code</th>
                     <th>Color</th>
                     <th>Shape</th>
+                    <th>Size</th>
                     <th>Opening</th>
                     <th>Received</th>
                     <th>Transfered</th>
