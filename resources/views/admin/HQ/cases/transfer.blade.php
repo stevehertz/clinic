@@ -29,9 +29,11 @@
                     <!-- small box -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                            <h3>{{ count($clinic_transfers) }}</h3>
+                            <h3>
+                                {{ $organization->hq_case_transfer()->where('to_clinic_id', '!=', null)->sum('quantity') }}
+                            </h3>
 
-                            <p>Transfered to Clinics</p>
+                            <p>Cases Transfered to Clinics</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-document-text"></i>
@@ -46,7 +48,9 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ count($workshop_transfers) }}</h3>
+                            <h3>
+                                {{ $organization->hq_case_transfer()->where('to_workshop_id', '!=', null)->sum('quantity') }}
+                            </h3>
 
                             <p>Transfered to Workshops</p>
                         </div>

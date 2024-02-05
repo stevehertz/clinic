@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\Patients\PatientsController;
 use App\Http\Controllers\Admin\Payments\PaymentsController;
 use App\Http\Controllers\Admin\Settings\SettingsController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\Cases\CaseReceivedController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
 use App\Http\Controllers\Admin\Frames\FrameColorsController;
 use App\Http\Controllers\Admin\Frames\FrameShapesController;
@@ -910,15 +911,33 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         // Cases Stocks 
         Route::prefix('cases')->name('cases.')->group(function () {
 
-            Route::get('/{clinic}', [CaseStocksController::class, 'index'])->name('index');
+            Route::prefix('stock')->name('stock.')->group(function () {
 
-            Route::post('/{clinic}/store', [CaseStocksController::class, 'store'])->name('store');
+                Route::get('/{clinic}', [CaseStocksController::class, 'index'])->name('index');
 
-            Route::get('/{caseStock}/show', [CaseStocksController::class, 'show'])->name('show');
+                Route::post('/{clinic}/store', [CaseStocksController::class, 'store'])->name('store');
 
-            Route::post('/update', [CaseStocksController::class, 'update'])->name('update');
+                Route::get('/{caseStock}/show', [CaseStocksController::class, 'show'])->name('show');
 
-            Route::delete('/{caseStock}/delete', [CaseStocksController::class, 'destroy'])->name('delete');
+                Route::post('/update', [CaseStocksController::class, 'update'])->name('update');
+
+                Route::delete('/{caseStock}/delete', [CaseStocksController::class, 'destroy'])->name('delete');
+            });
+
+            Route::prefix('received')->name('received.')->group(function () {
+
+                Route::get('/{clinic}', [CaseReceivedController::class, 'index'])->name('index');
+
+                Route::get('/{clinic}/from/clinic', [CaseReceivedController::class, 'get_received_from_clinic'])->name('from.clinic');
+
+                Route::get('/{frameStock}/show', [FrameReceivedController::class, 'show'])->name('show');
+
+                Route::post('/update', [FrameReceivedController::class, 'update'])->name('update');
+
+                Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
+            });
+
+
         });
     });
 

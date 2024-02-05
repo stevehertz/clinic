@@ -6,7 +6,9 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\HqCaseTransfer;
 use App\Http\Controllers\Controller;
+use App\Mail\HQ\Frames\TransferMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\Admin\HQ\Cases\StoreCaseStockRequest;
 use App\Http\Requests\Admin\HQ\Cases\StoreCaseTransferRequest;
 
@@ -17,7 +19,7 @@ class HQCaseTransfersController extends Controller
     {
         $this->middleware('auth:admin');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +34,7 @@ class HQCaseTransfersController extends Controller
             $data = $organization->hq_case_transfer()->where('to_clinic_id', '!=', null)->where('to_workshop_id', '=', null)->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('case_code', function($row){
+                ->addColumn('case_code', function ($row) {
                     $case_code = $row->hq_stock->frame_case->code;
                     return $case_code;
                 })
@@ -79,7 +81,7 @@ class HQCaseTransfersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function get_for_workshops(Request $request) 
+    public function get_for_workshops(Request $request)
     {
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
         $organization = $admin->organization;
@@ -87,7 +89,7 @@ class HQCaseTransfersController extends Controller
             $data = $organization->hq_case_transfer()->where('to_clinic_id', '=', null)->where('to_workshop_id', '!=', null)->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('case_code', function($row){
+                ->addColumn('case_code', function ($row) {
                     $case_code = $row->hq_stock->frame_case->code;
                     return $case_code;
                 })
@@ -118,7 +120,6 @@ class HQCaseTransfersController extends Controller
                 ->rawColumns(['case_code', 'admin', 'status', 'to_clinic', 'actions'])
                 ->make(true);
         }
-        
     }
 
 
@@ -141,13 +142,13 @@ class HQCaseTransfersController extends Controller
 
         $to_workshop = null;
         $clinic_id = null;
-        if(isset($data['to_clinic_id'])){
+        if (isset($data['to_clinic_id'])) {
             $to_clinic = $organization->clinic()->findOrFail($data['to_clinic_id']);
             $clinic_id = $to_clinic->id;
         }
 
         $workshop_id = null;
-        if(isset($data['to_workshop_id'])){
+        if (isset($data['to_workshop_id'])) {
             $to_workshop = $organization->workshop()->findOrFail($data['to_workshop_id']);
             $workshop_id = $to_workshop->id;
         }
@@ -158,8 +159,7 @@ class HQCaseTransfersController extends Controller
         $quantity = $data['quantity'];
 
         // check if the quantity of frames asked for is available 
-        if($quantity > $case_stock->total)
-        {
+        if ($quantity > $case_stock->total) {
             $response['status'] = false;
             $response['errors'] = ["The quantity requested is not available at the moment"];
             return response()->json($response, 422);
@@ -177,7 +177,7 @@ class HQCaseTransfersController extends Controller
 
             'admin_id' => $admin->id,
             'to_clinic_id' => $clinic_id,
-            'to_workshop_id' => $workshop_id, 
+            'to_workshop_id' => $workshop_id,
             'stock_id' => $case_stock->id,
             'case_id' => $case_stock->frame_case->id,
             'transfer_date' => $data['transfer_date'],
@@ -194,6 +194,20 @@ class HQCaseTransfersController extends Controller
             'transfered' => $transfered,
             'total' => $total
         ]);
+
+        // Send and email to the clinic
+        if($clinic_id != null){
+            $email = $to_clinic->email;
+            $details = [
+                'title' => 'Transfer Cases',
+                'body' => 'We have transfered ' . $quantity . ' cases from ' . $organization->organization
+            ];
+    
+            Mail::to($email)->send(new TransferMail($details));
+        }
+
+
+
 
         $response['status'] = true;
         $response['message'] = "Case Stock Transfered Successfully";

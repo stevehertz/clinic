@@ -29,7 +29,7 @@
                     <!-- small box -->
                     <div class="small-box bg-secondary">
                         <div class="inner">
-                            <h3>{{ count($transfers) }}</h3>
+                            <h3>{{ $organization->hq_frame_transfer()->sum('quantity') }}</h3>
 
                             <p>Transfered Stocks</p>
                         </div>

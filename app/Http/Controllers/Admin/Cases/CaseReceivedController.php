@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Frames;
+namespace App\Http\Controllers\Admin\Cases;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaseReceive;
 use App\Models\Clinic;
-use App\Models\FrameReceived;
 use Illuminate\Http\Request;
 
-class FrameReceivedController extends Controller
+class CaseReceivedController extends Controller
 {
 
     public function __construct()
@@ -24,10 +24,39 @@ class FrameReceivedController extends Controller
     {
         //
         if ($request->ajax()) {
-            $data = $clinic->frame_received()->where('is_hq', 1)->latest()->get();
+            $data = $clinic->case_receive()->where('is_hq', 1)->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('status', function($row){
+                ->addColumn('status', function ($row) {
+                    if ($row->received_status) {
+                        return '<span class="badge badge-success">Received</span>';
+                    } else {
+                        return '<span class="badge badge-warning">Pending</span>';
+                    }
+                })
+                ->addColumn('received_by', function ($row) {
+                    return $row->user->first_name . ' ' . $row->user->last_name;
+                })
+                ->rawColumns(['received_by', 'status'])
+                ->make(true);
+        }
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function get_received_from_clinic(Request $request, Clinic $clinic)
+    {
+        if ($request->ajax()) {
+            $data = $clinic->case_receive()->where('is_hq', 0)->latest()->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('from_clinic', function($row){
+
+                })
+                ->addColumn('status', function ($row) {
                     if ($row->received_status) {
                         return '<span class="badge badge-success">Received</span>';
                     } else {
@@ -43,50 +72,19 @@ class FrameReceivedController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function get_received_from_clinic(Request $request, Clinic $clinic)  
-    {
-        $organization = $clinic->organization;
-        if ($request->ajax()) {
-            $data = $clinic->frame_received()->where('is_hq', 0)->latest()->get();
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('from_clinic', function($row){
-
-                })
-                ->addColumn('received_by', function ($row) {
-                })
-                ->rawColumns(['received_by', 'from_clinic'])
-                ->make(true);
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FrameReceived $frameReceived)
+    public function show(CaseReceive $caseReceive)
     {
         //
+        return response()->json([
+            'status' => true,
+            'data' => $caseReceive
+        ]);
     }
-
 
     /**
      * Update the specified resource in storage.

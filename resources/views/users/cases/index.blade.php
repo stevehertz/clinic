@@ -143,6 +143,7 @@
 @endsection
 
 @push('modals')
+    @include('users.includes.modals.receive_cases_from_hq')
 @endpush
 
 @push('scripts')
@@ -212,8 +213,8 @@
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'received_date',
-                            name: 'received_date'
+                            data: 'receive_date',
+                            name: 'receive_date'
                         },
                         {
                             data: 'case_code',
@@ -244,6 +245,57 @@
                     "responsive": true,
                 });
             }
+
+            $(document).on('click', '.receiveFromHQBtn', function(e) {
+                e.preventDefault();
+                $('#receiveFromHQModal').modal('show');
+                $('#receiveFromHQForm').trigger("reset");
+            });
+
+            $("#receiveFromHQForm").submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.case.received.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Receive');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#receiveFromHQModal').modal('hide');
+                            $('#receiveFromHQForm').trigger("reset");
+                            $('#casesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#caseStocksData').DataTable().ajax.reload();
+                            $('#caseRequestedData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
 
             find_received_cases_clinics();
 
@@ -294,6 +346,8 @@
                     "responsive": true,
                 });
             }
+
+         
 
             find_case_requested();
 

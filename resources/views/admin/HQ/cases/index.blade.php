@@ -30,7 +30,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ count($cases) }}</h3>
+                            <h3>{{ $organization->hq_case_stock()->sum('total') }}</h3>
 
                             <p>Case Stocks</p>
                         </div>

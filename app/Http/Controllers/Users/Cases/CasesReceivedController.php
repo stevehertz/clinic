@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Users\Cases;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\CaseReceive;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Users\Cases\StoreCaseReceivedRequest;
 
 class CasesReceivedController extends Controller
 {
@@ -32,7 +35,7 @@ class CasesReceivedController extends Controller
                     return date('d-m-Y', strtotime($row->receive_date));
                 })
                 ->addColumn('status', function ($row) {
-                    if ($row->gc_status) {
+                    if ($row->received_status) {
                         return '<span class="badge badge-success">Received</span>';
                     } else {
                         return '<span class="badge badge-warning">Pending</span>';
@@ -45,7 +48,7 @@ class CasesReceivedController extends Controller
                     $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'status' , 'received_by'])
                 ->make(true);
         }
     }
@@ -89,27 +92,94 @@ class CasesReceivedController extends Controller
         }
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCaseReceivedRequest $request)
     {
         //
+        $data = $request->except(['_token']);
+
+        $user = User::findOrFail(auth()->user()->id);
+
+        $clinic = $user->clinic;
+
+        $organization = $clinic->organization;
+
+        $hq_case_transfer = $organization->hq_case_transfer()->findOrFail($data['hq_case_transfer_id']);
+
+        $hq_case_stock = $hq_case_transfer->hq_stock;
+
+        $case_stock = $clinic->case_stock()->where('case_id', $hq_case_stock->case_id)->first();
+
+        // check this stock does not exist in this clinic
+        // update case_stocks
+        if($case_stock)
+        {
+            $opening = $case_stock->opening;
+            $received = $case_stock->received + $hq_case_transfer->quantity;
+            $transfered = $case_stock->transfered;
+            $total = ($opening + $received) - $transfered;
+            $sold = $case_stock->sold;
+            $closing = $total - $sold;
+            $case_stock->update([
+                'opening' => $opening,
+                'received' => $received,
+                'transfered' => $transfered,
+                'total' => $total,
+                'sold' => $sold,
+                'closing' => $closing,
+            ]);
+        } else{
+            $opening = 0;
+            $received = $hq_case_transfer->quantity;
+            $transfered = 0;
+            $total = ($opening + $received) - $transfered;
+            $sold = 0;
+            $closing = $total - $sold;
+            // create case_stock
+            $case_stock = $clinic->case_stock()->create([
+                'organization_id' => $organization->id,
+                'hq_stock_id' => $hq_case_stock->id,
+                'case_id' => $hq_case_stock->frame_case->id,
+                'code' => $hq_case_stock->frame_case->code,
+                'opening' => $opening,
+                'received' => $received,
+                'transfered' => $transfered,
+                'total' => $total,
+                'sold' => $sold,
+                'closing' => $closing,
+                'price' => $hq_case_stock->price,
+            ]);
+        }
+
+        // Receive Cases
+        $is_hq = $data['is_hq'];
+        $clinic->case_receive()->create([
+            'organization_id' => $organization->id,
+            'hq_case_stock_id' => $hq_case_stock->id,
+            'user_id' => Auth::user()->id,
+            'case_id' => $hq_case_stock->frame_case->id,
+            'case_code' => $hq_case_stock->frame_case->code,
+            'receive_date' => $data['receive_date'],
+            'quantity' => $hq_case_transfer->quantity,
+            'received_status' => $data['received_status'],
+            'is_hq' => $is_hq,
+            'condition' => $data['condition'],
+            'remarks' => $data['remarks'],
+        ]);
+
+        // Update hq_frame_transfer
+        $hq_case_transfer->update([
+            'received_status' => 1,
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'Case Received Successfully';
+        return response()->json($response);
     }
 
     /**
@@ -118,20 +188,13 @@ class CasesReceivedController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(CaseReceive $caseReceive)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json([
+            'status' => true,
+            'data' => $caseReceive,
+        ]);
     }
 
     /**

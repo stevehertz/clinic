@@ -25,95 +25,7 @@
     <section class="content">
         <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case Stocks
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_stock()->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-
-                </div>
-                <!-- /.col -->
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case stocks
-                                <br>
-                                Received from HQ
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_receive()->where('is_hq', 1)->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-
-                </div>
-                <!-- /.col -->
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case stocks
-                                <br>
-                                received from clinic
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_receive()->where('is_hq', 0)->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-
-                </div>
-                <!-- /.col -->
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-primary">
-                            <i class="fas fa-chart-area"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case requests
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_request()->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
+            @include('admin.clinic.cases.stats')
 
             <div class="row">
                 <div class="col-12">
@@ -145,7 +57,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
-                                    @include('admin.clinic.frames.received')
+                                    @include('admin.clinic.cases.received')
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
@@ -179,7 +91,7 @@
             find_case_stocks();
 
             function find_case_stocks() {
-                let path = "{{ route('admin.clinic.inventory.cases.index', $clinic->id) }}";
+                let path = "{{ route('admin.clinic.inventory.cases.stock.index', $clinic->id) }}";
                 $('#caseStocksData').DataTable({
                     processing: true,
                     serverSide: true,
@@ -267,7 +179,7 @@
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
-                let path = '{{ route('admin.clinic.inventory.cases.store', ':clinic') }}';
+                let path = '{{ route('admin.clinic.inventory.cases.stock.store', ':clinic') }}';
                 path = path.replace(':clinic', '{{ $clinic->id }}');
                 $.ajax({
                     url: path,
@@ -315,7 +227,7 @@
             $(document).on('click', '.deleteCaseStock', function(e) {
                 e.preventDefault();
                 let stock_id = $(this).data('id');
-                let path = '{{ route('admin.clinic.inventory.cases.delete', ':caseStock') }}';
+                let path = '{{ route('admin.clinic.inventory.cases.stock.delete', ':caseStock') }}';
                 path = path.replace(':caseStock', stock_id);
                 Swal.fire({
                     title: 'Are you sure?',
@@ -359,6 +271,104 @@
                     }
                 });
             });
+
+            find_case_hq_received();
+            function find_case_hq_received() {
+                let path = '{{ route('admin.clinic.inventory.cases.received.index', $clinic->id) }}';
+                $('#caseReceivedFromHQStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'receive_date',
+                            name: 'receive_date'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+            find_case_clinic_received();
+            
+            function find_case_clinic_received() {
+                let path = '{{ route('admin.clinic.inventory.cases.received.from.clinic', $clinic->id) }}';
+                $('#caseReceivedFromClinicsStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'from_clinic',
+                            name: 'from_clinic'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+
+
         });
     </script>
 @endpush

@@ -174,9 +174,9 @@
 
                 <li class="nav-item">
 
-                    <a href="{{ route('admin.clinic.inventory.cases.index', $clinic->id) }}"
+                    <a href="{{ route('admin.clinic.inventory.cases.stock.index', $clinic->id) }}"
                         class="nav-link
-                                {{ Route::is('admin.clinic.inventory.cases.index', $clinic->id) ? 'active' : '' }}
+                                {{ Route::is('admin.clinic.inventory.cases.stock.index', $clinic->id) ? 'active' : '' }}
                                 ">
                         <i class="fas fa-chart-bar nav-icon"></i>
                         <p>

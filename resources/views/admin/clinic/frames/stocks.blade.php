@@ -12,7 +12,7 @@
 
 <div class="row">
     <div class="col-md-12 table-responsive">
-        <table id="frameStocksData" class="table table-striped table-hover">
+        <table id="frameStocksData" class="table table-striped table-hover table-bordered text-center">
             <thead>
                 <tr>
                     <th>Frame Code</th>

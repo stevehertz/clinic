@@ -334,6 +334,8 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::get('/from/clinics', [CasesReceivedController::class, 'getReceivedFromClinic'])->name('from.clinics');
 
+            Route::post('/store', [CasesReceivedController::class, 'store'])->name('store');
+
         });
 
         Route::prefix('requests')->name('requests.')->group(function(){
