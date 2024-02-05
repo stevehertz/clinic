@@ -180,7 +180,7 @@ class DoctorSchedulesController extends Controller
 
         $schedule = DoctorSchedule::findOrFail($id);
         $patient = $schedule->patient;
-        $doctor = $schedule->user; 
+        $doctor = $schedule->user;
         $appointment = $schedule->appointment;
         $payment_details = $appointment->payment_detail;
         $diagnosis = $schedule->diagnosis;
@@ -209,11 +209,10 @@ class DoctorSchedulesController extends Controller
         }
 
         // Load frame stocks for the clinic
-        $frame_stocks = $clinic->frame_stock()->where('closing_stock', '>', 0)->latest()->get();
-        if($schedule->user_id == Auth::user()->id)
-        {
+        $frame_stocks = $clinic->frame_stock()->where('closing', '>', 0)->latest()->get();
+        if ($schedule->user_id == Auth::user()->id) {
             $view = trans('users.page.schedules.sub_page.view_personal');
-        }else{
+        } else {
             $view = trans('users.page.schedules.sub_page.view');
         }
         $page_title = $view;

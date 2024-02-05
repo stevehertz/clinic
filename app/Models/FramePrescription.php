@@ -13,7 +13,9 @@ class FramePrescription extends Model
         'power_id',
         'prescription_id',
         'stock_id',
+        'case_stock_id', // new field
         'frame_code',
+        'case_code', // new field
         'receipt_number',
         'workshop_id',
         'quantity',
@@ -36,6 +38,12 @@ class FramePrescription extends Model
     {
         # code...
         return $this->belongsTo(FrameStock::class, 'stock_id', 'id');
+    }
+
+    public function case_stock()
+    {
+        # code...
+        return $this->belongsTo(CaseStock::class, 'case_stock_id', 'id');
     }
 
     public function workshop()

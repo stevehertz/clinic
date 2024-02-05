@@ -26,6 +26,7 @@ class CaseStocksController extends Controller
         //
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
+        $organization = $clinic->organization;
         if($request->ajax())
         {
             $data = $clinic->case_stock()->latest()->get();
@@ -49,6 +50,7 @@ class CaseStocksController extends Controller
         $page_title = trans('users.page.inventory.sub_page.cases');
         return view('users.cases.index', [
             'clinic' => $clinic,
+            'organization' => $organization,
             'page_title' => $page_title
         ]);
     }

@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>View Appointment</h1>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -18,7 +18,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active">
-                            View Appointment
+                            Appointment Details
                         </li>
                     </ol>
                 </div>
@@ -34,332 +34,250 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">
-                                Appointment Details
-                            </h3>
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                                </button>
-                            </div>
+                            <h3 class="card-title">Patient Details</h3>
                         </div>
+                        <div class="card-body">
 
-                        <div class="card-body p-0">
-                            <ul class="nav nav-pills flex-column">
-                                <li class="nav-item active">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-calendar"></i> {{ $appointment->date }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-clock-o"></i> {{ $appointment->appointment_time }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
+                            <strong><i class="fas fa-user mr-1"></i> Full Names</strong>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Patient Details
-                            </h3>
+                            <p class="text-muted">
+                                {{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}
+                            </p>
 
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
+                            <hr>
 
-                        <div class="card-body p-0">
-                            <ul class="nav nav-pills flex-column">
-                                <li class="nav-item active">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-user"></i> {{ $patient->first_name }} {{ $patient->last_name }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-phone"></i> {{ $patient->phone }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-envelope"></i> {{ $patient->email }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-calendar"></i> {{ $patient->dob }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-male"></i> {{ $patient->gender }}
-                                    </a>
-                                </li>
+                            <strong><i class="fas fa-phone-square-alt mr-1"></i> Phone Number</strong>
 
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-map-signs"></i> {{ $patient->address }}
-                                    </a>
-                                </li>
-                            </ul>
+                            <p class="text-muted">
+                                {{ $appointment->patient->phone }}
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-envelope-open-text mr-1"></i> Email Address</strong>
+
+                            <p class="text-muted">
+                                {{ $appointment->patient->email }}
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-calendar-alt mr-1"></i> Date of Birth</strong>
+
+                            <p class="text-muted">
+                                {{ $appointment->patient->dob }}
+                            </p>
+
+                            <hr>
+
+                            <strong><i class=" fas fa-user-cog mr-1"></i> Gender</strong>
+
+                            <p class="text-muted">
+                                {{ $appointment->patient->gender }}
+                            </p>
+
+                            <hr>
+
+                            <strong><i class="far fa-address-card mr-1"></i> Address</strong>
+
+                            <p class="text-muted">
+                                {{ $appointment->patient->address }}
+                            </p>
+
                         </div>
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-
                 </div>
                 <!-- /.col -->
-                <div class="col-md-6">
 
-                    <div class="card card-outline card-primary">
+                <div class="col-md-9">
+
+                    <div class="card">
+
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#scheduleTab" data-toggle="tab">
+                                    <a class="nav-link active" href="#activity" data-toggle="tab">
                                         Doctor Schedule
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#timeline" data-toggle="tab">
+                                        Payment Details
+                                    </a>
+                                </li>
                             </ul>
-                        </div><!-- /.card-header -->
+                        </div>
+                        <!-- /.card-header -->
+
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="active tab-pane" id="scheduleTab">
-                                    @if ($doctor_schedule)
-                                        <strong>
-                                            <i class="fa fa-fighter-jet mr-1"></i> Scheduled Day
-                                        </strong>
+                                <div class="active tab-pane" id="activity">
+                                    @if ($appointment->doctor_schedule)
+                                        <div class="callout callout-info">
+                                            <h5>
+                                                <i class="fa fa-fighter-jet mr-1"></i> Scheduled Day
+                                            </h5>
 
-                                        <p class="text-muted">
-                                            {{ $doctor_schedule->day }}
-                                        </p>
+                                            <p>
+                                                {{ $appointment->doctor_schedule->day }}
+                                            </p>
+                                        </div>
+                                        <hr>
+                                        <div class="callout callout-info">
+                                            <h5>
+                                                <i class="fa fa-calendar mr-1"></i> Scheduled Dates
+                                            </h5>
+
+                                            <p>
+                                                {{ $appointment->doctor_schedule->date }}
+                                            </p>
+                                        </div>
 
                                         <hr>
+                                        <div class="callout callout-info">
+                                            <h5>
+                                                <i class="fa fa-clock-o mr-1"></i> Scheduled Time
+                                            </h5>
 
-                                        <strong>
-                                            <i class="fa fa-calendar mr-1"></i> Scheduled Date
-                                        </strong>
-
-                                        <p class="text-muted">
-                                            {{ $doctor_schedule->date }}
-                                        </p>
-
-                                        <hr>
-
-                                        <strong>
-                                            <i class="fa fa-clock-o mr-1"></i> Scheduled Time
-                                        </strong>
-
-                                        <p class="text-muted">
-                                            {{ $doctor_schedule->time }}
-                                        </p>
+                                            <p>
+                                                {{ $appointment->doctor_schedule->time }}
+                                            </p>
+                                        </div>
 
                                         <hr>
+                                        <div class="callout callout-info">
+                                            <h5>
+                                                <i class="fa fa-user mr-1"></i> Doctor/ Optimetrist
+                                            </h5>
 
-                                        <strong>
-                                            <i class="fa fa-user mr-1"></i> Doctor/ Optimetrist
-                                        </strong>
+                                            <p>
+                                                {{ $appointment->doctor_schedule->user->first_name }}
+                                                {{ $appointment->doctor_schedule->user->last_name }}
+                                            </p>
+                                        </div>
 
-                                        <p class="text-muted">
-                                            {{ $doctor_schedule->user->first_name }}
-                                            {{ $doctor_schedule->user->last_name }}
-                                        </p>
-
-
-                                        @if (Auth::user()->id == $doctor_schedule->user_id)
+                                        @if (Auth::user()->id == $appointment->doctor_schedule->user_id)
                                             <hr>
-                                            <a href="{{ route('users.doctor.schedules.view', $doctor_schedule->id) }}"
+                                            <a href="{{ route('users.doctor.schedules.view', $appointment->doctor_schedule->id) }}"
                                                 class="btn btn-default btn-block">
                                                 View Schedule
                                             </a>
                                         @endif
                                     @else
-                                        <strong>
-                                            <i class="fa fa-info-circle"></i> Alert
-                                        </strong>
+                                        <div class="post">
+                                            <p>
+                                                No schedule found for this appointment.
+                                            </p>
 
+                                            <p>
+                                                <a href="javascript:void(0)"
+                                                    class="btn btn-block btn-sm btn-outline-primary mr-2 scheduleAppointmentBtn">
+                                                    <i class="fas fa-calendar mr-1"></i> Schedule this appointment
+                                                </a>
+                                            </p>
+                                        </div>
+                                        <!-- /.post -->
+                                    @endif
+                                </div>
+                                <!-- /.tab-pane -->
+
+                                <div class="tab-pane" id="timeline">
+
+                                    <strong><i class="fa fa-hourglass mr-1"></i> Client Type</strong>
+
+                                    <p class="text-muted">
+                                        {{ $appointment->payment_detail->client_type->type }}
+                                    </p>
+
+                                    <hr>
+
+                                    @if ($appointment->payment_detail->insurance)
+                                        <strong><i class="fa fa-building mr-1"></i> Insurance Company</strong>
 
                                         <p class="text-muted">
-
-                                            No schedule found for this appointment.
+                                            {{ $appointment->payment_detail->insurance->title }}
                                         </p>
+
                                         <hr>
-                                        <a href="#" id="{{ $appointment->id }}"
-                                            data-clinic="{{ $patient->clinic->id }}"
-                                            data-patient="{{ $appointment->patient->id }}"
-                                            class="btn btn-info btn-block scheduleAppointment">
-                                            Schedule this appointment
-                                        </a>
+
+                                        <strong><i class="fa fa-building mr-1"></i> Scheme</strong>
+
+                                        <p class="text-muted">
+                                            {{ $appointment->payment_detail->insurance->title }}
+                                        </p>
+
+                                        <hr>
+
+                                        <strong><i class="fa fa-user mr-1"></i> Principal Member</strong>
+
+                                        <p class="text-muted">
+                                            {{ $appointment->payment_detail->principal }}
+                                        </p>
+
+                                        <hr>
+                                        <strong><i class="fa fa-phone mr-1"></i> Principal Telephone Number</strong>
+
+                                        <p class="text-muted">
+                                            {{ $appointment->payment_detail->phone }}
+                                        </p>
+
+                                        <hr>
+                                        <strong><i class="fa fa-map-pin mr-1"></i> Principal Workplace</strong>
+
+                                        <p class="text-muted">
+                                            {{ $appointment->payment_detail->workplace }}
+                                        </p>
+
+                                        <hr>
+                                        <strong><i class="fa fa-credit-card mr-1"></i> Insurance Card Number</strong>
+
+                                        <p class="text-muted">
+                                            {{ $appointment->payment_detail->card_number }}
+                                        </p>
+
+                                        <hr>
                                     @endif
+
+                                    <strong><i class="fa fa-map-pin mr-1"></i> Patient Workplace</strong>
+
+                                    <p class="text-muted">
+                                        {{ $appointment->payment_detail->principal_workplace }}
+                                    </p>
+
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
                             <!-- /.tab-content -->
-                        </div><!-- /.card-body -->
-                    </div>
-                    <!-- /.nav-tabs-custom -->
-
-                </div>
-                <!-- /.col -->
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Payment Details
-                            </h3>
-
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <strong><i class="fa fa-hourglass mr-1"></i> Client Type</strong>
-
-                            <p class="text-muted">
-                                {{ $payment_details->client_type->type }}
-                            </p>
-
-                            <hr>
-                            @if ($payment_details->insurance)
-                                <strong><i class="fa fa-building mr-1"></i> Insurance Company</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->insurance->title }}
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fa fa-building mr-1"></i> Scheme</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->insurance->title }}
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fa fa-user mr-1"></i> Principal Member</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->principal }}
-                                </p>
-
-                                <hr>
-                                <strong><i class="fa fa-phone mr-1"></i> Principal Telephone Number</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->phone }}
-                                </p>
-
-                                <hr>
-                                <strong><i class="fa fa-map-pin mr-1"></i> Principal Workplace</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->workplace }}
-                                </p>
-
-                                <hr>
-                                <strong><i class="fa fa-credit-card mr-1"></i> Insurance Card Number</strong>
-
-                                <p class="text-muted">
-                                    {{ $payment_details->card_number }}
-                                </p>
-
-                                <hr>
-                            @endif
-
-                            <strong><i class="fa fa-map-pin mr-1"></i> Patient Workplace</strong>
-
-                            <p class="text-muted">
-                                {{ $payment_details->workplace }}
-                            </p>
                         </div>
                         <!-- /.card-body -->
+
                     </div>
                     <!-- /.card -->
-
                 </div>
                 <!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-        <div class="modal fade" id="scheduleAppointmentModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Schedule Appointment</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="scheduleAppointmentForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="form-group">
-                                <input type="hidden" id="scheduleAppointmentClinicId" name="clinic_id"
-                                    class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" id="scheduleAppointmentPatientId" name="patient_id"
-                                    class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" id="scheduleAppointmentAppointmentId" name="appointment_id"
-                                    class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label for="scheduleAppointmentUserId">
-                                    Doctor / Optometrist
-                                </label>
-                                <select id="scheduleAppointmentUserId" name="user_id" class="form-control select2"
-                                    style="width: 100%;">
-                                    <option selected="selected" disabled="disabled">Choose a Doctor / Optometrist</option>
-                                    @forelse ($doctors as $doctor)
-                                        <option value="{{ $doctor->id }}">
-                                            {{ $doctor->first_name }} {{ $doctor->last_name }}
-                                        </option>
-                                    @empty
-                                        <option selected="selected" disabled="disabled">
-                                            No Doctors / Optometrists
-                                        </option>
-                                    @endforelse
-                                </select>
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="scheduleAppointmentSubmitBtn" class="btn btn-primary">
-                                Schedule
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.row -->
         </div>
-        <!-- /.modal -->
+        <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('modals')
+    @include('users.includes.modals.schedule_appointment')
+@endpush
+
+
+@push('scripts')
     <script>
         $(document).ready(function() {
-            $(document).on('click', '.scheduleAppointment', function(e) {
+            $(document).on('click', '.scheduleAppointmentBtn', function(e) {
                 e.preventDefault();
-                $('#scheduleAppointmentClinicId').val($(this).data('clinic'));
-                $('#scheduleAppointmentPatientId').val($(this).data('patient'));
-                $('#scheduleAppointmentAppointmentId').val($(this).attr('id'));
+                $('#scheduleAppointmentClinicId').val({{ $clinic->id }});
+                $('#scheduleAppointmentPatientId').val({{ $appointment->patient->id }});
+                $('#scheduleAppointmentAppointmentId').val({{ $appointment->id }});
                 $('#scheduleAppointmentModal').modal('show');
             });
 
@@ -406,6 +324,9 @@
                     }
                 });
             });
+
+
+
         });
     </script>
-@endsection
+@endpush

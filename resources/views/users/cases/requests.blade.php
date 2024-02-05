@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
         <button type="button"
-            class="btn btn-block btn-outline-primary requestFrameBtn">
+            class="btn btn-block btn-outline-primary requestCaseBtn">
             @lang('buttons.users.inventory.request_case')
         </button>
     </div>

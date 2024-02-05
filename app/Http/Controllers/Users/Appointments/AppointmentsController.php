@@ -221,20 +221,14 @@ class AppointmentsController extends Controller
         # code...
         $user = User::find(auth()->user()->id);
         $clinic = $appointment->clinic;
-        $patient = $appointment->patient;
-        $payment_details = $appointment->payment_detail;
-        $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->latest()->get();
         $page_title = trans('users.page.appointments.sub_page.view');
-        $doctor_schedule = $appointment->doctor_schedule;
+        $doctors = $clinic->user()->whereRoleIs('doctor')->latest()->get();
         return view('users.appointments.view', [
             'user' => $user,
             'clinic' => $clinic,
             'appointment' => $appointment,
-            'patient' => $patient,
-            'payment_details' => $payment_details,
-            'doctor_schedule' => $doctor_schedule,
-            'doctors' => $doctors,
             'page_title' => $page_title,
+            'doctors' => $doctors,
         ]);
     }
 

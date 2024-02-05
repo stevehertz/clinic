@@ -70,13 +70,14 @@ class FrameRequestsController extends Controller
     public function store(StoreFrameRequest $request)
     {
         //
+
+        $data = $request->except("_token");
+
         $user  = User::findOrFail(Auth::user()->id);
 
         $clinic = $user->clinic;
 
         $organization = $clinic->organization;
-
-        $data = $request->except("_token");
 
         $hq_frame_stock = $organization->hq_frame_stock()->findOrFail($data['hq_stock_id']);
 

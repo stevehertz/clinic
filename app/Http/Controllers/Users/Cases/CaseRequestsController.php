@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Users\Cases;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\Cases\StoreCaseRequest;
-use App\Models\CaseRequest;
 use App\Models\User;
+use App\Models\CaseRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Users\Frames\FrameRequestMail;
+use App\Http\Requests\Users\Cases\StoreCaseRequest;
 
 class CaseRequestsController extends Controller
 {
@@ -64,6 +66,42 @@ class CaseRequestsController extends Controller
     public function store(StoreCaseRequest $request)
     {
         //
+        $data = $request->except("_token");
+
+        $user = User::findOrFail(auth()->user()->id);
+
+        $clinic = $user->clinic;
+
+        $organization = $clinic->organization;
+
+        $hq_case_stock = $organization->hq_case_stock()->findOrFail($data['hq_case_stock_id']);
+
+        $frame_case = $hq_case_stock->frame_case;
+
+        $clinic->case_request()->create([
+            'organization_id' => $organization->id,
+            'user_id' => auth()->user()->id,
+            'hq_case_stock_id' => $hq_case_stock->id,
+            'case_id' => $frame_case->id,
+            'case_code' => $frame_case->code,
+            'request_date' => $data['request_date'],
+            'quantity' => $data['quantity'],
+            'status' => 1,
+            'transfer_status' => 0,
+            'remarks' => $data['remarks'],
+        ]);
+
+        $details = [
+            'title' => 'Case Request',
+            'body' => 'You have a new case request from ' . $clinic->clinic . '.' . ' Please check your dashboard.'
+        ];
+
+        Mail::to($organization->email)->send(new FrameRequestMail($details));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Case request has been created successfully'
+        ]);
     }
 
     /**

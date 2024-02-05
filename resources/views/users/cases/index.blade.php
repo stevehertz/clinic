@@ -24,69 +24,9 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
 
-                        <div class="info-box-content">
-                            <span class="info-box-text">Case Stocks</span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_stock()->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
 
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case Stocks <br>
-                                Received From HQ
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_receive()->where('is_hq', 1)->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info">
-                            <i class="fas fa-chart-bar"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">
-                                Case Stocks <br>
-                                Received From Clinics
-                            </span>
-                            <span class="info-box-number">
-                                {{ $clinic->case_receive()->where('is_hq', 0)->count() }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-
-            </div>
-            <!--/.row -->
+            @include('users.cases.stats')
 
 
             <div class="row">
@@ -144,6 +84,7 @@
 
 @push('modals')
     @include('users.includes.modals.receive_cases_from_hq')
+    @include('users.includes.modals.request_case')
 @endpush
 
 @push('scripts')
@@ -347,8 +288,6 @@
                 });
             }
 
-         
-
             find_case_requested();
 
             function find_case_requested() {
@@ -394,6 +333,57 @@
                     "responsive": true,
                 });
             }
+
+            $(document).on('click', '.requestCaseBtn', function(e) {
+                e.preventDefault();
+                $('#requestCaseModal').modal('show');
+                $('#requestCaseForm').trigger("reset");
+            });
+
+            $('#requestCaseForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('users.case.requests.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Request');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#requestCaseModal').modal('hide');
+                            $('#requestCaseForm').trigger("reset");
+                            $('#caseRequestedData').DataTable().ajax.reload();
+                            $('#casesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#caseStocksData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endpush

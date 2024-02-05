@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Lens;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\Lens\SubmitLensPowerRequest;
 use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Models\Diagnosis;
@@ -18,30 +19,10 @@ class LensPowerController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request)
+    public function store(SubmitLensPowerRequest $request)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'diagnosis_id' => 'required|integer|exists:diagnoses,id',
-            'treatment_id' => 'required|integer|exists:treatments,id',
-            'right_sphere' => 'required|string|max:255',
-            'right_cylinder' => 'required|string|max:255',
-            'right_axis' => 'required|string|max:255',
-            'right_add' => 'required|string|max:255',
-            'left_sphere' => 'required|string|max:255',
-            'left_cylinder' => 'required|string|max:255',
-            'left_axis' => 'required|string|max:255',
-            'left_add' => 'required|string|max:255',
-        ]);
-
-        if($validator->fails()){
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
+        $data = $request->except("_token");
 
         $diagnosis = Diagnosis::findOrFail($data['diagnosis_id']);
 
