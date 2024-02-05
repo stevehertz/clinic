@@ -254,7 +254,86 @@
                                 </div>
                                 <!-- /.tab-pane -->
 
+                                <div class="tab-pane" id="medicineTab">
+                                    <div class="table-responsive">
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            <button id="addMedicineBtn" class="btn btn-block btn-success">
+                                                <i class="fa fa-plus-circle"></i> Add Medicine
+                                            </button>
+                                            <hr>
+                                        @endif
+                                        <table id="medicineData" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medicine</th>
+                                                    <th>Dose</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.table-responsive -->
+                                </div>
+                                <!-- /.tab-pane -->
 
+                                <div class="tab-pane" id="procedureTab">
+                                    @if ($procedure)
+                                        <div class="callout callout-info">
+                                            {!! $procedure->procedure !!}
+                                        </div>
+                                    @else
+                                        @if (Auth::user()->id == $schedule->user_id)
+                                            <form id="procedureForm">
+                                                @csrf
+                                                @if ($diagnosis)
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="diagnosis_id"
+                                                            value="{{ $diagnosis->id }}" class="form-control" />
+                                                    </div>
+                                                @endif
+                                                <div class="form-group">
+                                                    <label for="procudereText">Procedure</label>
+                                                    <textarea name="procedure" id="procudereText" class="form-control textarea"></textarea>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <button type="submit" id="procudereSubmitBtn"
+                                                            class="btn btn-primary btn-block">Save</button>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        @else
+                                            <span>No procedure added yet</span>
+                                        @endif
+                                    @endif
+                                    <hr>
+                                    @if ($treatment)
+                                        @if ($payment_bill)
+                                            <a href="#" data-id="{{ $payment_bill->id }}"
+                                                class="btn btn-block btn-primary viewPaymentBillBtn">
+                                                View Payment Bill
+                                            </a>
+                                        @else
+                                            @if (Auth::user()->id == $schedule->user_id)
+                                                @if ($diagnosis)
+                                                    <a href="#" id="{{ $diagnosis->schedule_id }}"
+                                                        class="btn btn-block btn-success openBillBtn"
+                                                        rel="noopener noreferrer">
+                                                        @if ($treatment->payments == 'consultation')
+                                                            Pay Consultation Fee
+                                                        @else
+                                                            Open Bill
+                                                        @endif
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        @endif
+                                    @endif
+                                </div>
+                                <!-- /.tab-pane -->
                             </div>
                             <!--/.tab-content -->
                         </div>
@@ -349,6 +428,11 @@
 @push('modals')
     @include('users.includes.modals.add_diagnosis')
     @include('users.includes.modals.edit_diagnosis')
+    @include('users.includes.modals.edit_lens_power')
+    @include('users.includes.modals.edit_lens_prescription')
+    @include('users.includes.modals.edit_frame_prescription')
+    @include('users.includes.modals.add_medicine')
+    @include('users.includes.modals.open_bill')
 @endpush
 
 @push('scripts')

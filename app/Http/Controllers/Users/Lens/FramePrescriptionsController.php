@@ -12,6 +12,7 @@ use App\Models\FramePrescription;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Users\Lens\StoreFramePrescriptionRequest;
+use App\Http\Requests\Users\Lens\UpdateFramePrescriptionRequest;
 
 class FramePrescriptionsController extends Controller
 {
@@ -111,24 +112,10 @@ class FramePrescriptionsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function update(Request $request)
+    public function update(UpdateFramePrescriptionRequest $request)
     {
         # code...
         $data = $request->except('_token');
-
-        $validator = Validator::make($data, [
-            'frame_prescription_id' => 'required|integer|exists:frame_prescriptions,id',
-            'stock_id' => 'required|integer|exists:frame_stocks,id',
-            'workshop_id' => 'required|integer|exists:workshops,id',
-            'remarks' => 'nullable|string|max:255',
-        ]);
-
-        if($validator->fails()){
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
 
         $frame_stock = FrameStock::findOrFail($data['stock_id']);
 
@@ -137,22 +124,26 @@ class FramePrescriptionsController extends Controller
         $frame_prescription = FramePrescription::findOrFail($data['frame_prescription_id']);
 
         // check avalable frame stocks
-        $closing = $frame_stock->closing_stock;
+        // $closing = $frame_stock->closing;
 
-        $quantity = 1;
+        $quantity = $frame_prescription->quantity;
 
-        if($closing <= 0 && $quantity > $closing) {
-            $errors = ['No Frame Stocks available for the clinic. Please contact the admin in order to continue'];
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
+        // if($closing <= 0 && $quantity > $closing) {
+        //     $errors = ['No Frame Stocks available for the clinic. Please contact the admin in order to continue'];
+        //     $response['status'] = false;
+        //     $response['errors'] = $errors;
+        //     return response()->json($response, 401);
+        // }
+
+        $case_stock = CaseStock::findOrFail($data['case_stock_id']);
 
         $frame_prescription->update([
             'power_id' => $frame_prescription->power_id,
             'prescription_id' => $frame_prescription->prescription_id,
             'stock_id' => $frame_stock->id,
+            'case_stock_id' => $case_stock->id,
             'frame_code' => $frame_stock->frame->code,
+            'case_code' => $case_stock->hqStock->frame_case->code,
             'receipt_number' => $frame_prescription->receipt_number,
             'workshop_id' => $workshop->id,
             'quantity' => $quantity,
