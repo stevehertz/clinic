@@ -61,7 +61,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
-                                    @include('admin.clinic.frames.requests')
+                                    @include('admin.clinic.cases.requests')
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
@@ -362,6 +362,57 @@
                         {
                             data: 'received_by',
                             name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+            find_case_requests();
+
+            function find_case_requests() {
+                let path = '{{ route('admin.clinic.inventory.cases.requests.index', $clinic->id) }}';
+                $('#casesRequestedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'request_date',
+                            name: 'request_date'
+                        },
+                        {
+                            data: 'clinic',
+                            name: 'clinic'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
                         },
                     ]
                 });

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Frames;
+namespace App\Http\Controllers\Admin\Cases;
 
-use App\Http\Controllers\Controller;
 use App\Models\Clinic;
-use App\Models\FrameRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class FrameRequestsController extends Controller
+class CaseRequestsController extends Controller
 {
+    //
     public function __construct()
     {
         $this->middleware('auth:admin');   
     }
-    
-    /**
+
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -23,7 +23,7 @@ class FrameRequestsController extends Controller
     {
         //
         if ($request->ajax()) {
-            $data = $clinic->frame_request()->latest()->get();
+            $data = $clinic->case_request()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('request_date', function ($row) {
@@ -54,49 +54,5 @@ class FrameRequestsController extends Controller
                 ->make(true);
         }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(FrameRequest $frameRequest)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(FrameRequest $frameRequest)
-    {
-        //
-    }
 }
+

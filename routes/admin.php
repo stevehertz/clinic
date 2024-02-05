@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\Payments\PaymentsController;
 use App\Http\Controllers\Admin\Settings\SettingsController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Cases\CaseReceivedController;
+use App\Http\Controllers\Admin\Cases\CaseRequestsController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
 use App\Http\Controllers\Admin\Frames\FrameColorsController;
 use App\Http\Controllers\Admin\Frames\FrameShapesController;
@@ -937,6 +938,10 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
             });
 
+            Route::prefix('requests')->name('requests.')->group(function () {
+
+                Route::get('/{clinic}', [CaseRequestsController::class, 'index'])->name('index');
+            });
 
         });
     });
