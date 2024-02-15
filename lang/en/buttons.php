@@ -28,6 +28,7 @@ return array(
             'receive_clinic' => 'Receive From Clinic',
             'request_frame' => 'Request Frame',
             'request_case' => 'Request Case',
+            'request_lens' => 'Request Lens'
         ),
     ),
 

@@ -111,4 +111,9 @@ class Workshop extends Model
     {
         return $this->hasMany(HqLensTransfer::class, 'to_workshop_id');
     }
+
+    public function lens_request()  
+    {
+        return $this->hasMany(LensRequest::class, 'workshop_id');
+    }
 }

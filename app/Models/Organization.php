@@ -297,4 +297,9 @@ class Organization extends Model
     {
         return $this->hasMany(LensReceive::class, 'organization_id', 'id');
     }
+
+    public function len_request()  
+    {
+        return $this->hasMany(LensRequest::class, 'organization_id');    
+    }
 }

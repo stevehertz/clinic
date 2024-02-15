@@ -97,6 +97,7 @@ class CaseRequestsController extends Controller
         ];
 
         Mail::to($organization->email)->send(new FrameRequestMail($details));
+        
 
         return response()->json([
             'status' => true,

@@ -18,24 +18,43 @@ class LensRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, Workshop $workshop)
     {
         //
-        $workshop = Workshop::findOrFail($id);
         if ($request->ajax()) {
-            $data = $workshop->request_lens()->latest()->get();
+            $data = $workshop->lens_request()->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('lens_type', function ($row) {
-                    return $row->lens_type->type;
+                ->addColumn('requested_date', function ($row) {
+                    return  date('d-m-Y', strtotime($row->request_date));
                 })
-                ->addColumn('lens_material', function ($row) {
-                    return $row->lens_material->title;
+                ->addColumn('power', function ($row) {
+                    return $row->hq_lens->power;
                 })
-                ->addColumn('technician', function ($row) {
-                    return $row->technician->first_name.' '. $row->technician->last_name;
+                ->addColumn('lens_index', function ($row) {
+                    return $row->hq_lens->lens_index;
                 })
-                ->rawColumns(['lens_type', 'lens_material', 'technician'])
+                ->addColumn('eye', function ($row) {
+                    return $row->hq_lens->eye;
+                })
+                ->addColumn('request_status', function ($row) {
+                    if ($row->status) {
+                        return '<span class="badge badge-success">Requested</span>';
+                    } else {
+                        return '<span class="badge badge-danger">Not Requested</span>';
+                    }
+                })
+                ->addColumn('transfer_status', function ($row) {
+                    if ($row->transfer_status) {
+                        return '<span class="badge badge-success">Transfered</span>';
+                    } else {
+                        return '<span class="badge badge-danger">Not Transfered</span>';
+                    }
+                })
+                ->addColumn('requested_by', function ($row) {
+                    return $row->technician->first_name . ' ' . $row->technician->last_name;
+                })
+                ->rawColumns(['requested_by', 'request_status', 'transfer_status', 'power', 'requested_date', 'lens_index', 'eye'])
                 ->make(true);
         }
     }

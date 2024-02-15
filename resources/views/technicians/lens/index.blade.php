@@ -78,6 +78,7 @@
 
 @push('modals')
     @include('technicians.includes.modals.receive_lenses_from_hq')
+    @include('technicians.includes.modals.request_lens')
 @endpush
 
 @push('scripts')
@@ -140,6 +141,7 @@
             }
 
             find_hq_receives();
+
             function find_hq_receives() {
                 let path = '{{ route('technicians.lens.received.index') }}';
                 $('#receivedFromHQData').DataTable({
@@ -184,12 +186,12 @@
                 });
             }
 
-            $(document).on('click', '.receiveFromHQBtn', function(e){
+            $(document).on('click', '.receiveFromHQBtn', function(e) {
                 e.preventDefault();
                 $('#receiveFromHQModal').modal('show');
             });
 
-            $('#receiveFromHQForm').submit(function (e) { 
+            $('#receiveFromHQForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
@@ -211,9 +213,8 @@
                         form.find('button[type=submit]').html('Receive');
                         form.find('button[type=submit]').attr('disabled', false);
                     },
-                    success: function (data) {
-                        if(data['status'])
-                        {
+                    success: function(data) {
+                        if (data['status']) {
                             toastr.success(data['message']);
                             $('#receiveFromHQModal').modal('hide');
                             $('#receiveFromHQForm').trigger("reset");
@@ -237,6 +238,7 @@
             });
 
             find_workshop_receives();
+
             function find_workshop_receives() {
                 let path = '{{ route('technicians.lens.received.from.workshop') }}';
                 $('#receivedFromWorkshopData').DataTable({
@@ -285,6 +287,116 @@
                 });
             }
 
+            find_lens_request();
+
+            function find_lens_request() {
+                let path = '{{ route('technicians.lens.request.index') }}';
+                $('#requestsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    "responsive": true,
+                    "autoWidth": false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'requested_date',
+                            name: 'requested_date'
+                        },
+                        {
+                            data: 'lens_code',
+                            name: 'lens_code'
+                        },
+                        {
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'lens_index',
+                            name: 'lens_index'
+                        },
+                        {
+                            data: 'eye',
+                            name: 'eye'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'request_status',
+                            name: 'request_status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
+                        },
+                    ]
+
+                });
+            }
+
+            $(document).on('click', '.requestLensBtn', function(e) {
+                e.preventDefault();
+                $('#requestLensModal').modal('show');
+                $('#requestLensForm').trigger("reset");
+            });
+
+            $('#requestLensForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('technicians.lens.request.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Request');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#requestLensModal').modal('hide');
+                            $('#requestLensForm').trigger("reset");
+                            $('#requestsData').DataTable().ajax.reload();
+                            $('#receivedFromHQData').DataTable().ajax.reload();
+                            $('#receivedFromWorkshopData').DataTable().ajax.reload();
+                            $('#lensData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
 
         });
     </script>

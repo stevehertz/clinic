@@ -792,6 +792,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
                 Route::get('/{workshop}/from/workshop', [LensReceivesController::class, 'get_lens_received_from_workshops'])->name('from.workshop');
 
             });
+
+            Route::prefix('request')->name('request.')->group(function () {
+
+                Route::get('/{workshop}', [LensRequestController::class, 'index'])->name('index');
+
+            });
+
+
         });
     });
 

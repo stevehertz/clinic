@@ -82,6 +82,15 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
 
     });
 
+
+    Route::prefix('lens/request')->name('lens.request.')->group(function(){
+        
+        Route::get('/', [LensRequestController::class, 'index'])->name('index');
+
+        Route::post('/store', [LensRequestController::class, 'store'])->name('store');
+
+    });
+
     Route::prefix('lens/purchase')->name('lens.purchase.')->group(function(){
 
         Route::get('/index', [LensPurchaseController::class, 'index'])->name('index');
@@ -106,11 +115,7 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
 
     });
 
-    Route::prefix('lens/request')->name('lens.request.')->group(function(){
-
-        Route::post('/store', [LensRequestController::class, 'store'])->name('store');
-
-    });
+    
 
     Route::prefix('assets')->name('assets.')->group(function(){
 

@@ -152,6 +152,7 @@
             }
 
             find_hq_receives();
+
             function find_hq_receives() {
                 let path = '{{ route('admin.workshop.inventory.lens.received.index', $workshop->id) }}';
                 $('#receivedFromHQData').DataTable({
@@ -198,8 +199,8 @@
 
 
             find_workshop_receives();
-            function find_workshop_receives()
-            {
+
+            function find_workshop_receives() {
                 let path = '{{ route('admin.workshop.inventory.lens.received.from.workshop', $workshop->id) }}';
                 $('#receivedFromWorkshopData').DataTable({
                     processing: true,
@@ -244,6 +245,65 @@
                             name: 'received_by'
                         },
                     ]
+                });
+            }
+
+            find_lens_request();
+
+            function find_lens_request() {
+                let path = '{{ route('admin.workshop.inventory.lens.request.index', $workshop->id) }}';
+                $('#requestsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    "responsive": true,
+                    "autoWidth": false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'requested_date',
+                            name: 'requested_date'
+                        },
+                        {
+                            data: 'lens_code',
+                            name: 'lens_code'
+                        },
+                        {
+                            data: 'power',
+                            name: 'power'
+                        },
+                        {
+                            data: 'lens_index',
+                            name: 'lens_index'
+                        },
+                        {
+                            data: 'eye',
+                            name: 'eye'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'request_status',
+                            name: 'request_status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
+                        },
+                    ]
+
                 });
             }
 
