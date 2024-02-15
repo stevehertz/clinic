@@ -27,37 +27,13 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('technicians.dashboard.index') }}" class="nav-link  @if ($page_title == trans('pages.technicians.dashboard')) active @endif ">
-                        <i class="nav-icon fa fa-dashboard"></i>
+                    <a href="{{ route('technicians.dashboard.index') }}" class="nav-link  
+                    {{ Route::is('technicians.dashboard.index') ? 'active' : '' }} ">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             @lang('pages.technicians.dashboard')
                         </p>
                     </a>
-                </li>
-
-                <li class="nav-item has-treeview @if ($page_title == trans('pages.technicians.inventory.title')) menu-open @endif">
-                    <a href="#" class="nav-link @if ($page_title == trans('pages.technicians.inventory.title')) active @endif">
-                        <i class="nav-icon fa fa-users"></i>
-                        <p>
-                            @lang('pages.technicians.inventory.title')
-                            <i class="fa fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item ">
-                            <a href="{{ route('technicians.lens.index') }}"
-                                class="nav-link  @if (isset($lens_pages) && $lens_pages == trans('pages.technicians.inventory.lens')) active @endif">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('pages.technicians.inventory.lens')</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('pages.technicians.inventory.cases')</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-item has-treeview">
@@ -90,6 +66,30 @@
                         <i class="nav-icon fa fa-check-square"></i>
                         <p>
                             @lang('pages.technicians.orders.title')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-header">
+                    @lang('menus.technicians.sidebar.headers.inventory')
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('technicians.lens.index') }}" class="nav-link
+                    {{ Route::is('technicians.lens.index') ? 'active' :'' }}
+                    ">
+                        <i class="nav-icon fas fa-eye"></i>
+                        <p>
+                            @lang('menus.technicians.sidebar.inventory.lens.title')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            @lang('menus.technicians.sidebar.inventory.cases.title')
                         </p>
                     </a>
                 </li>

@@ -37,12 +37,6 @@ class Workshop extends Model
         return $this->hasMany(Order::class, 'workshop_id', 'id');
     }
 
-    // public function workshop()
-    // {
-    //     # code...
-    //     return $this->hasMany(Workshop::class, 'workshop_id', 'id');
-    // }
-
     public function treatment()
     {
         # code...
@@ -106,5 +100,15 @@ class Workshop extends Model
     public function request_lens()  
     {
         return $this->hasMany(RequestLens::class, 'workshop_id', 'id');    
+    }
+
+    public function lens_receive()  
+    {
+        return $this->hasMany(LensReceive::class, 'workshop_id');
+    }
+
+    public function hq_lens_transfer_to() 
+    {
+        return $this->hasMany(HqLensTransfer::class, 'to_workshop_id');
     }
 }

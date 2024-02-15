@@ -98,6 +98,7 @@
                                                     <th>Status</th>
                                                     <th>Condition</th>
                                                     <th>Remarks</th>
+                                                    <th>Received</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -119,6 +120,7 @@
                                                     <th>Status</th>
                                                     <th>Condition</th>
                                                     <th>Remarks</th>
+                                                    <th>Received</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -193,6 +195,10 @@
                             name: 'remarks'
                         },
                         {
+                            data: 'received',
+                            name: 'received'
+                        },
+                        {
                             data: 'actions',
                             name: 'actions',
                             orderable: false,
@@ -240,6 +246,10 @@
                         {
                             data: 'remarks',
                             name: 'remarks'
+                        },
+                        {
+                            data: 'received',
+                            name: 'received'
                         },
                         {
                             data: 'actions',

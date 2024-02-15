@@ -17,18 +17,19 @@
 <body class="hold-transition sidebar-mini accent-primary">
     <div class="wrapper">
         
-        @include('technicians.components.nav')
+        @include('technicians.includes.partials.nav')
 
         <!-- Main Sidebar Container -->
-        @include('technicians.components.sidebar')
+        @include('technicians.includes.partials.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @yield('content')
         </div>
         <!-- /.content-wrapper -->
+        @stack('modals')
         <!-- Main Footer -->
-        @include('technicians.components.footer')
+        @include('technicians.includes.partials.footer')
     </div>
     <!-- ./wrapper -->
 
@@ -36,6 +37,8 @@
     @include('technicians.components.scripts')
 
     @yield('scripts')
+
+    @stack('scripts')
 </body>
 
 </html>

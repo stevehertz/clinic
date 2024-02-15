@@ -427,10 +427,20 @@
 
 @push('modals')
     @include('users.includes.modals.add_diagnosis')
-    @include('users.includes.modals.edit_diagnosis')
-    @include('users.includes.modals.edit_lens_power')
-    @include('users.includes.modals.edit_lens_prescription')
-    @include('users.includes.modals.edit_frame_prescription')
+    @if ($diagnosis)
+        @include('users.includes.modals.edit_diagnosis')
+    @endif
+    @if ($lens_power)
+        @include('users.includes.modals.edit_lens_power')
+    @endif
+    @if ($lens_prescription)
+        @include('users.includes.modals.edit_lens_prescription')
+    @endif
+    @if ($frame_prescription)
+        @include('users.includes.modals.edit_frame_prescription')
+    @endif
+
+
     @include('users.includes.modals.add_medicine')
     @include('users.includes.modals.open_bill')
 @endpush

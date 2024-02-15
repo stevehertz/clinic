@@ -29,38 +29,31 @@ class LensController extends Controller
             $data = $workshop->lens->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('lens_code', function($row){
+                    return $row->hq_lens->code;
+                })
+                ->addColumn('power', function($row){
+                    return $row->hq_lens->power;
+                })
                 ->addColumn('type', function ($row) {
-                    $type = $row->lens_type->type;
+                    $type = $row->hq_lens->lens_type->type;
                     return $type;
                 })
                 ->addColumn('material', function ($row) {
-                    $material = $row->lens_material->title;
+                    $material = $row->hq_lens->lens_material->title;
                     return $material;
                 })
-                ->rawColumns(['type', 'material'])
+                ->addColumn('lens_index', function($row){
+                    return $row->hq_lens->lens_index;
+                })
+                ->rawColumns(['type', 'material', 'lens_code', 'power', 'lens_index'])
                 ->make(true);
         }
-        $num_lens = $workshop->lens->count();
-        $num_lens_purchase = $workshop->lens_purchase->count();
-        $lens_types = $organization->lens_type->sortBy('created_at', SORT_DESC);
-        $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
-        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
-        $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
-        $num_lens_transfer_from = $workshop->lens_transfer->count();
-        $transfer_workshops = $organization->workshop->where('id', '!=', $workshop->id);
         $page_title = trans('pages.technicians.inventory.title');
-        $lens_pages = trans('pages.technicians.inventory.lens');
         return view('technicians.lens.index', [
             'page_title' => $page_title,
-            'lens_pages' => $lens_pages,
-            'num_lens' => $num_lens,
-            'num_lens_purchase' => $num_lens_purchase,
-            'types' => $lens_types,
-            'materials' => $lens_materials,
-            'lenses' => $lenses,
-            'vendors' => $vendors,
-            'num_lens_transfer_from' => $num_lens_transfer_from,
-            'transfer_workshops' => $transfer_workshops,
+            'workshop' => $workshop,
+            'organization' => $organization
         ]);
     }
 

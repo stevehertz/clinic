@@ -8,12 +8,11 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('storage/admin/' . Auth::guard()->user()->profile) }}"
-                    class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('storage/admin/' . Auth::guard()->user()->profile) }}" class="img-circle elevation-2"
+                    alt="User Image">
             </div>
             <div class="info">
                 <a href="#" class="d-block">{{ Auth::guard('admin')->user()->first_name }}
@@ -26,48 +25,17 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fa fa-dashboard"></i>
+                <li class="nav-item">
+                    <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}" class="nav-link 
+                        {{ Route::is('admin.dashboard.workshop.index', $workshop->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard
-                            <i class="right fa fa-angle-left"></i>
+                            @lang('menus.admins.sidebar.dashboard')
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}"
-                                class="nav-link active">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-users"></i>
-                        <p>
-                            Inventory
-                            <i class="fa fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.lens.index', $workshop->id) }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Lens</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>Sun glasses</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -85,7 +53,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.workshop.assets.transfer.index', $workshop->id) }}" class="nav-link">
+                            <a href="{{ route('admin.workshop.assets.transfer.index', $workshop->id) }}"
+                                class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>Transfered Assets</p>
                             </a>
@@ -145,6 +114,23 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+
+                <li class="nav-header">
+                    @lang('menus.admins.sidebar.headers.inventory')
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.workshop.inventory.lens.stocks.index', $workshop->id) }}"
+                        class="nav-link
+                        {{ Route::is('admin.workshop.inventory.lens.stocks.index', $workshop->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fas fa-eye"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.inventory.lenses.title')
+                        </p>
+                    </a>
                 </li>
 
                 <li class="nav-header">REPORTS</li>

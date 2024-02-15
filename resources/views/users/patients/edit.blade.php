@@ -112,7 +112,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="updatePatientAddress">Residential Address</label>
-                                            <textarea name="address" id="updatePatientAddress" class="form-control" placeholder="Enter Residential Address">{{ $patient->address }}</textarea>
+                                            <input type="text" name="address" id="updatePatientAddress" class="form-control" placeholder="Enter Residential Address" value="{{ $patient->address }}">
                                         </div>
                                     </div>
                                 </div>

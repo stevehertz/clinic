@@ -24,21 +24,28 @@ class LensController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, Workshop $workshop)
     {
         //
-        $workshop = Workshop::findOrFail($id);
+        $organization = $workshop->organization;
         if ($request->ajax()) {
             $data = $workshop->lens->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('code', function($row){
+                   return $row->hq_lens->code;
+                })
+                ->addColumn('power', function($row){
+                    return $row->hq_lens->power;
+                })
                 ->addColumn('type', function ($row) {
-                    $type = $row->lens_type->type;
-                    return $type;
+                    return $row->hq_lens->lens_type->type;
                 })
                 ->addColumn('material', function ($row) {
-                    $material = $row->lens_material->title;
-                    return $material;
+                    return $row->hq_lens->lens_material->title;
+                })
+                ->addColumn('lens_index', function($row){
+                    return $row->hq_lens->lens_index;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Update" class="update btn btn-tools btn-sm updateLensBtn"><i class="fa fa-edit"></i></a>';
@@ -48,27 +55,12 @@ class LensController extends Controller
                 ->rawColumns(['action', 'type', 'material'])
                 ->make(true);
         }
-        $num_lens = $workshop->lens->count();
-        $num_lens_purchase = $workshop->lens_purchase->count();
-        $num_lens_transfer_from = $workshop->lens_transfer->count();
-        $lenses = $workshop->lens->sortBy('created_at', SORT_DESC);
-        $organization = $workshop->organization;
-        $lens_types = $organization->lens_type->sortBy('created_at', SORT_DESC);
-        $lens_materials = $organization->lens_material->sortBy('created_at', SORT_DESC);
-        $vendors = $organization->vendor->sortBy('created_at', SORT_DESC);
-        $num_lens_request = $workshop->request_lens()->where('status', 'REQUESTED')->count();
+       
         $page_title = "Lenses";
         return view('admin.lens.index', [
             'workshop' => $workshop,
             'page_title' => $page_title,
-            'num_lens' => $num_lens,
-            'num_lens_purchase' => $num_lens_purchase,
-            'num_lens_transfer_from' => $num_lens_transfer_from,
-            'types' => $lens_types,
-            'materials' => $lens_materials,
-            'lenses' => $lenses,
-            'vendors' => $vendors,
-            'num_lens_request' => $num_lens_request,
+            'organization' => $organization
         ]);
     }
 

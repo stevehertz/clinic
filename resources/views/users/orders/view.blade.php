@@ -142,6 +142,12 @@
                                     Frame Prescription
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#casePrescriptionTab" data-toggle="tab">
+                                    Case Prescription
+                                </a>
+                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -230,19 +236,48 @@
 
                                 <strong><i class="fa fa-user mr-1"></i> Gender</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->gender }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->gender }}</p>
 
                                 <hr>
 
-                                <strong><i class="fa  fa-industry mr-1"></i> Shape</strong>
+                                <strong><i class="fab fa-creative-commons-share mr-1"></i> Shape</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_shape->shape }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->frame_shape->shape }}</p>
 
                                 <hr>
 
-                                <strong><i class="fa fa-creative-commons mr-1"></i> Color</strong>
+                                <strong><i class="fas fa-ankh mr-1"></i> Color</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->frame_color->color }}</p>
+
+                            </div>
+                            <!-- /.tab-pane -->
+
+
+                            <div class="tab-pane" id="casePrescriptionTab">
+                                <strong><i class="fa fa-archive mr-1"></i> Case Code</strong>
+
+                                <p class="text-muted">
+                                    {{ $order->frame_prescription->case_code }}
+                                </p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-ankh mr-1"></i> Case Color</strong>
+
+                                <p class="text-muted">{{ $order->frame_prescription->case_stock->hqStock->frame_case->case_color->title }}</p>
+
+                                <hr>
+
+                                <strong><i class="fab fa-creative-commons-share mr-1"></i> Case Shape</strong>
+
+                                <p class="text-muted">{{ $order->frame_prescription->case_stock->hqStock->frame_case->case_shape->title }}</p>
+
+                                <hr>
+
+                                <strong><i class="fas fa-arrows-alt mr-1"></i> Case Size</strong>
+
+                                <p class="text-muted">{{ $order->frame_prescription->case_stock->hqStock->frame_case->case_size->title }}</p>
 
                             </div>
                             <!-- /.tab-pane -->

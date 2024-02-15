@@ -22,6 +22,15 @@ return array(
         ),
     ),
 
+    'technicians' => array(
+        'inventory' => array(
+            'receive_hq' => 'Receive From HQ',
+            'receive_clinic' => 'Receive From Clinic',
+            'request_frame' => 'Request Frame',
+            'request_case' => 'Request Case',
+        ),
+    ),
+
     'general' =>
     array(
         'crud' =>

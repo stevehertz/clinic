@@ -7,6 +7,7 @@ use App\Http\Controllers\Technicians\Auth\LoginController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Lens\LensController;
 use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
+use App\Http\Controllers\Technicians\Lens\LensReceivedController;
 use App\Http\Controllers\Technicians\Lens\LensRequestController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
 use App\Http\Controllers\Technicians\Orders\OrdersController;
@@ -63,6 +64,21 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
         Route::post('/{id}/update', [LensController::class, 'update'])->name('update');
 
         Route::delete('/{id}/delete', [LensController::class, 'destroy'])->name('delete');
+
+    });
+
+
+    Route::prefix('lens/received')->name('lens.received.')->group(function(){
+
+        Route::get('/index', [LensReceivedController::class, 'index'])->name('index');
+
+        Route::get('/from/workshop', [LensReceivedController::class, 'get_lens_received_from_workshops'])->name('from.workshop');
+
+        Route::post('/store', [LensReceivedController::class, 'store'])->name('store');
+
+        Route::get('/{lensReceive}', [LensReceivedController::class, 'show'])->name('show');
+
+        Route::delete('/{id}/delete', [LensPurchaseController::class, 'destroy'])->name('delete');
 
     });
 

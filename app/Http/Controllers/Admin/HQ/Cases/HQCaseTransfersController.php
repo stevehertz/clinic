@@ -57,12 +57,25 @@ class HQCaseTransfersController extends Controller
                         return '<span class="badge badge-danger">Not Transfered</span>';
                     }
                 })
-                ->addColumn('actions', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteCaseTransferBtn">';
-                    $btn = $btn . '<i class="fa fa-trash"></i></a>';
-                    return $btn;
+
+                ->addColumn('received', function ($row) {
+                    if ($row->received_status) {
+                        return '<span class="badge badge-success">Received</span>';
+                    } else {
+                        return '<span class="badge badge-danger">Not Received</span>';
+                    }
                 })
-                ->rawColumns(['case_code', 'admin', 'status', 'to_clinic', 'actions'])
+
+                ->addColumn('actions', function ($row) {
+                    if (!$row->received_status) {
+                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteCaseTransferBtn">';
+                        $btn = $btn . '<i class="fa fa-trash"></i></a>';
+                        return $btn;
+                    } else {
+                        return '';
+                    }
+                })
+                ->rawColumns(['case_code', 'admin', 'status', 'received', 'to_clinic', 'actions'])
                 ->make(true);
         }
         $clinic_transfers = $organization->hq_case_transfer()->where('to_clinic_id', '!=', null)->where('to_workshop_id', '=', null)->latest()->get();
@@ -112,12 +125,21 @@ class HQCaseTransfersController extends Controller
                         return '<span class="badge badge-danger">Not Transfered</span>';
                     }
                 })
+
+                ->addColumn('received', function ($row) {
+                    if ($row->received_status) {
+                        return '<span class="badge badge-success">Received</span>';
+                    } else {
+                        return '<span class="badge badge-danger">Not Received</span>';
+                    }
+                })
+
                 ->addColumn('actions', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteCaseTransferBtn">';
                     $btn = $btn . '<i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['case_code', 'admin', 'status', 'to_clinic', 'actions'])
+                ->rawColumns(['case_code', 'admin', 'status', 'received', 'to_clinic', 'actions'])
                 ->make(true);
         }
     }
@@ -196,13 +218,13 @@ class HQCaseTransfersController extends Controller
         ]);
 
         // Send and email to the clinic
-        if($clinic_id != null){
+        if ($clinic_id != null) {
             $email = $to_clinic->email;
             $details = [
                 'title' => 'Transfer Cases',
                 'body' => 'We have transfered ' . $quantity . ' cases from ' . $organization->organization
             ];
-    
+
             Mail::to($email)->send(new TransferMail($details));
         }
 

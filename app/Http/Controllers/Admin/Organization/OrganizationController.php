@@ -33,7 +33,8 @@ class OrganizationController extends Controller
                     return '<img src="' . asset('storage/clinics/' . $row['logo']) . '" class="img-circle img-size-32 mr-2">';
                 })
                 ->addColumn('select', function ($row) {
-                    $selectBtn = '<a href="#" id="' . $row['id'] . '" class="btn btn-primary selectBtn"><i class="fa fa-check"></i></a>';
+                    $selectBtn = '<a href="#" id="' . $row['id'] . '" class="btn btn-sm btn-primary selectBtn">';
+                    $selectBtn = $selectBtn . '<i class="fas fa-tachometer-alt"></i> Dashboard</a>';
                     return $selectBtn;
                 })
                 ->rawColumns(['logo', 'select'])
@@ -66,7 +67,7 @@ class OrganizationController extends Controller
                 })
                 ->addColumn('actions', function($row){
                     $selectBtn = '<a href="#" id="'.$row['id'].'" class="btn btn-primary btn-sm selectBtn">';
-                    $selectBtn = $selectBtn . '<i class="fa fa-check"></i></a>';
+                    $selectBtn = $selectBtn . '<i class="fas fa-tachometer-alt"></i> Dashboard</a>';
                     return $selectBtn;
                 })
                 ->rawColumns(['logo', 'actions'])

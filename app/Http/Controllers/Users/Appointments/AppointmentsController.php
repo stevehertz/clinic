@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Appointments;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\Appointments\StoreAppointmentRequest;
 use App\Models\Appointment;
 use App\Models\ClientType;
 use App\Models\Clinic;
@@ -104,35 +105,10 @@ class AppointmentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAppointmentRequest $request)
     {
         //
         $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'clinic_id' => 'required|integer|exists:clinics,id',
-            'patient_id' => 'required|integer|exists:patients,id',
-            'client_type_id' => 'required|integer|exists:client_types,id',
-            'insurance_id' => 'nullable|integer|exists:insurances,id',
-            'scheme' => 'nullable|string|max:255',
-            'principal' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'workplace' => 'nullable|string|max:255',
-            'nhif_number' => 'nullable|string|max:255',
-            'nhif_principal_member' => 'nullable|string|max:255',
-            'nhif_principal_member_phone' => 'nullable|string|max:255',
-            'principal_workplace' => 'nullable|string|max:255',
-            'card_number' => 'nullable|string|max:255',
-            'hospital_client_number' => 'nullable|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            # code...
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
 
         $clinic = Clinic::findOrFail($data['clinic_id']);
         $patient = Patient::findOrFail($data['patient_id']);
@@ -145,6 +121,7 @@ class AppointmentsController extends Controller
         $appointment->date = Carbon::now()->format('Y-m-d');
         $appointment->appointment_time = Carbon::now()->format('H:i:s');
         $appointment->user_id = Auth::user()->id;
+        $appointment->status = 1;
 
         if ($appointment->save()) {
 

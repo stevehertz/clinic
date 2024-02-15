@@ -106,7 +106,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="newPatientAddress">Residential Address</label>
-                                            <textarea name="address" id="newPatientAddress" class="form-control" placeholder="Enter Residential Address"></textarea>
+                                            <input type="text" name="address" id="newPatientAddress" placeholder="Enter Residential Address" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -363,15 +363,12 @@
                             }, 1000);
                         }
                     },
-                    error: function(xhr, status, error) {
-                        if (xhr.responseJSON.status == false) {
-                            var errors = xhr.responseJSON.errors;
-                            var errorHtml = '<ul>';
-                            $.each(errors, function(key, value) {
-                                errorHtml += '<li>' + value + '</li>';
-                            });
-                            errorHtml += '</ul>';
-                            toastr.error(errorHtml);
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
                         }
                     }
                 });

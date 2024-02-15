@@ -292,4 +292,9 @@ class Organization extends Model
     {
         return $this->hasMany(CaseRequest::class, 'organization_id', 'id');    
     }
+    
+    public function lens_receive()  
+    {
+        return $this->hasMany(LensReceive::class, 'organization_id', 'id');
+    }
 }

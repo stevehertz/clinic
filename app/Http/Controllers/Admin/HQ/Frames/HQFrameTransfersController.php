@@ -41,26 +41,28 @@ class HQFrameTransfersController extends Controller
                     $to_clinic = $row->to_clinic->clinic;
                     return $to_clinic;
                 })
-                ->addColumn('status', function($row){
-                    if($row->transfer_status)
-                    {
+                ->addColumn('status', function ($row) {
+                    if ($row->transfer_status) {
                         return '<span class="badge badge-success">Transfered</span>';
-                    } else{
+                    } else {
                         return '<span class="badge badge-danger">Not Transfered</span>';
                     }
                 })
-                ->addColumn('received', function($row){
-                    if($row->received)
-                    {
+                ->addColumn('received', function ($row) {
+                    if ($row->received_status) {
                         return '<span class="badge badge-success">Received</span>';
-                    } else{
+                    } else {
                         return '<span class="badge badge-danger">Not Received</span>';
                     }
                 })
                 ->addColumn('actions', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteFrameTransferBtn">';
-                    $btn = $btn . '<i class="fa fa-trash"></i></a>';
-                    return $btn;
+                    if (!$row->received_status) {
+                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deleteFrameTransferBtn">';
+                        $btn = $btn . '<i class="fa fa-trash"></i></a>';
+                        return $btn;
+                    } else {
+                        return '';
+                    }
                 })
                 ->rawColumns(['admin', 'status', 'received', 'to_clinic', 'actions'])
                 ->make(true);
@@ -97,8 +99,7 @@ class HQFrameTransfersController extends Controller
         $quantity = $data['quantity'];
 
         // check if the quantity of frames asked for is available 
-        if($quantity > $frame_stock->total)
-        {
+        if ($quantity > $frame_stock->total) {
             $response['status'] = false;
             $response['errors'] = ["The quantity requested is not available at the moment"];
             return response()->json($response, 422);
@@ -125,7 +126,7 @@ class HQFrameTransfersController extends Controller
             'condition' => $data['condition'],
             'remarks' => $data['remarks'],
 
-        ]); 
+        ]);
 
         $frame_stock->update([
 
@@ -148,7 +149,6 @@ class HQFrameTransfersController extends Controller
         $response['message'] = "You have successfully transfered " . $quantity . " frames to " . $to_clinic->clinic;
 
         return response()->json($response, 200);
-        
     }
 
     /**
@@ -216,6 +216,5 @@ class HQFrameTransfersController extends Controller
         $response['status'] = true;
         $response['message'] = 'Frame Transfer successfully deleted';
         return response()->json($response, 200);
-
     }
 }

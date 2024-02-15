@@ -31,15 +31,19 @@ class WorkshopsController extends Controller
             $data = $organization->workshop->sortBy('created_at', SORT_DESC);
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('name', function($row){
+                    return '<a href="javascript:void(0)" data-id="'.$row->id.'" class="selectWorkshopBtn">'. $row->name . '</a>';
+                })
                 ->addColumn('logo', function($row){
                     $logo = '<img src="'.asset('storage/workshops/'.$row->logo).'" alt="'.$row->name.'" class="img-circle img-size-32 mr-2"/>';
                     return $logo;
                 })
                 ->addColumn('action', function($data){
-                    $button = '<button type="button" name="edit" data-id="'.$data->id.'" class="edit btn btn-primary btn-sm selectWorkshopBtn"><i class="fa fa-dashboard"></i> Dashboard</button>';
+                    $button = '<button type="button" data-id="'.$data->id.'" class="btn btn-primary btn-sm selectWorkshopBtn">';
+                    $button = $button . '<i class="fas fa-tachometer-alt"></i> Dashboard</button>';
                     return $button;
                 })
-                ->rawColumns(['action', 'logo'])
+                ->rawColumns(['action', 'logo', 'name'])
                 ->make(true);
         }
 

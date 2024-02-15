@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Patients;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\Patients\StorePatientRequest;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
@@ -81,32 +82,10 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
         # code...
         $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'clinic_id' => 'required|integer|exists:clinics,id',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'id_number' => 'required|numeric|unique:patients,id_number',
-            'phone' => 'required|numeric|min:10',
-            'email' => 'nullable|string|email|max:255',
-            'dob' => 'required|string|max:255|date_format:Y-m-d',
-            'gender' => 'required|string',
-            'next_of_kin_contact' => 'nullable|numeric|min:10',
-            'card_number' => 'required|unique:patients,card_number|numeric',
-        ], [
-            'dob.date_format' => 'Date of Birth Must Match The Format: Y-m-d'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
 
         $clinic = Clinic::findOrFail($data['clinic_id']);
 

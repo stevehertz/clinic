@@ -11,16 +11,11 @@ class Lens extends Model
 
     protected $fillable = [
         'organization_id',
+        'hq_lens_id',
         'workshop_id',
-        'power',
-        'code',
-        'lens_type_id',
-        'lens_material_id',
-        'lens_index',
-        'date_added',
         'eye',
         'opening',
-        'purchased',
+        'received',
         'transfered',
         'total',
         'sold',
@@ -31,6 +26,11 @@ class Lens extends Model
     {
         # code...
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
+
+    public function hq_lens()
+    {
+        return $this->belongsTo(HqLens::class, 'hq_lens_id', 'id');    
     }
 
     public function workshop()

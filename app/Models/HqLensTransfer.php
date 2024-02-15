@@ -18,6 +18,7 @@ class HqLensTransfer extends Model
         'quantity',
         'condition',
         'status',
+        'received_status',
         'remarks',
     ];
 

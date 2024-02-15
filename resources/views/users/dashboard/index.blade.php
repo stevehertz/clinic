@@ -122,7 +122,7 @@
                                     @forelse ($schedules as $schedule)
                                         <tr>
                                             <td>
-                                                {{ $schedule->user->first_name }} {{ $schedule->user->last_name }}
+                                                {{ $schedule->patient->first_name }} {{ $schedule->patient->last_name }}
                                             </td>
 
                                             <td>

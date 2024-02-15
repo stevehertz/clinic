@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Assets\AssetTypesController;
 use App\Http\Controllers\Admin\Cases\CasesColorsController;
 use App\Http\Controllers\Admin\Cases\CasesShapesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
+use App\Http\Controllers\Admin\Lens\LensReceivesController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Patients\PatientsController;
 use App\Http\Controllers\Admin\Payments\PaymentsController;
@@ -767,18 +768,34 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/{schedule_id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
     });
 
-    Route::prefix('lens')->name('lens.')->group(function () {
+    Route::prefix('workshop/inventory')->name('workshop.inventory.')->group(function () {
 
-        Route::get('/{id}/index', [LensController::class, 'index'])->name('index');
+        Route::prefix('lens')->name('lens.')->group(function () {
 
-        Route::post('/store', [LensController::class, 'store'])->name('store');
+            Route::prefix('stocks')->name('stocks.')->group(function () {
 
-        Route::post('/show', [LensController::class, 'show'])->name('show');
+                Route::get('/{workshop}', [LensController::class, 'index'])->name('index');
 
-        Route::post('/update', [LensController::class, 'update'])->name('update');
+                Route::post('/store', [LensController::class, 'store'])->name('store');
 
-        Route::delete('/delete', [LensController::class, 'destroy'])->name('delete');
+                Route::post('/show', [LensController::class, 'show'])->name('show');
+
+                Route::post('/update', [LensController::class, 'update'])->name('update');
+
+                Route::delete('/delete', [LensController::class, 'destroy'])->name('delete');
+            });
+
+            Route::prefix('received')->name('received.')->group(function () {
+
+                Route::get('/{workshop}', [LensReceivesController::class, 'index'])->name('index');
+
+                Route::get('/{workshop}/from/workshop', [LensReceivesController::class, 'get_lens_received_from_workshops'])->name('from.workshop');
+
+            });
+        });
     });
+
+
 
     Route::prefix('lens/purchase')->name('lens.purchase.')->group(function () {
 
@@ -942,7 +959,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/{clinic}', [CaseRequestsController::class, 'index'])->name('index');
             });
-
         });
     });
 

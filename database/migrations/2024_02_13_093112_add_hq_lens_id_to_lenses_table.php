@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('frame_requests', function (Blueprint $table) {
+        Schema::table('lenses', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('hq_stock_id')->nullable()->after('user_id');
-            $table->foreign('hq_stock_id')->nullable()->references('id')->on('hq_frame_stocks')->onDelete('cascade');
+            $table->unsignedBigInteger('hq_lens_id')->after('organization_id')->nullable();
+            $table->foreign('hq_lens_id')->nullable()->references('id')->on('hq_lenses')->onDelete('cascade');
+            
         });
     }
 
@@ -27,9 +28,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('frame_requests', function (Blueprint $table) {
+        Schema::table('lenses', function (Blueprint $table) {
             //
-            $table->dropForeign(['frame_requests_hq_stock_id_foreign']);
+            $table->dropForeign(['lenses_hq_lens_id_foreign']);
             $table->dropColumn('hq_stock_id');
         });
     }

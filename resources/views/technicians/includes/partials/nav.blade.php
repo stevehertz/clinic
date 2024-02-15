@@ -26,7 +26,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fa fa-sign-out mr-2"></i> {{ __('Logout') }}
+                    <i class="fas fa-sign-out-alt mr-2"></i> {{ __('Logout') }}
                 </a>
                 <form id="logout-form" action="{{ route('technicians.technicians.logout') }}" method="POST"
                     class="d-none">
