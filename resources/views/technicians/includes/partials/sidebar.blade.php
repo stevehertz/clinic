@@ -86,7 +86,9 @@
                 </li>
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('technicians.cases.stocks.index') }}" class="nav-link
+                    {{ Route::is('technicians.cases.stocks.index') ? 'active' :'' }}
+                    ">
                         <i class="nav-icon fas fa-chart-bar"></i>
                         <p>
                             @lang('menus.technicians.sidebar.inventory.cases.title')

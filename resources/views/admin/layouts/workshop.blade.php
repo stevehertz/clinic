@@ -28,7 +28,9 @@
             @yield('content')
         </div>
         <!-- /.content-wrapper -->
-        
+
+        @stack('modals')
+
         <!-- Main Footer -->
         @include('admin.includes.partials.workshops.footer')
     </div>

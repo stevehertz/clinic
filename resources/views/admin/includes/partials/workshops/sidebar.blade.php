@@ -133,6 +133,20 @@
                     </a>
                 </li>
 
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.workshop.inventory.cases.stock.index', $workshop->id) }}"
+                        class="nav-link
+                        {{ Route::is('admin.workshop.inventory.cases.stock.index', $workshop->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.inventory.cases.title')
+                        </p>
+                    </a>
+                </li>
+
+
                 <li class="nav-header">REPORTS</li>
 
                 <li class="nav-item">

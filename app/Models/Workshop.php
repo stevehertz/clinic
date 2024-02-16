@@ -116,4 +116,9 @@ class Workshop extends Model
     {
         return $this->hasMany(LensRequest::class, 'workshop_id');
     }
+
+    public function workshop_case_stock()  
+    {
+        return $this->hasMany(WorkshopCaseStock::class, 'workshop_id', 'id');   
+    }
 }

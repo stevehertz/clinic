@@ -302,4 +302,9 @@ class Organization extends Model
     {
         return $this->hasMany(LensRequest::class, 'organization_id');    
     }
+
+    public function workshop_case_stock()  
+    {
+        return $this->hasMany(WorkshopCaseStock::class, 'organization_id', 'id');   
+    }
 }

@@ -66,6 +66,7 @@ use App\Http\Controllers\Admin\HQ\Lens\HQLensTransfersController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
+use App\Http\Controllers\Admin\Cases\WorkshopCaseStocksController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
@@ -800,6 +801,22 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             });
 
 
+        });
+
+        Route::prefix('cases')->name('cases.')->group(function () {
+
+            Route::prefix('stock')->name('stock.')->group(function () {
+
+                Route::get('/{workshop}', [WorkshopCaseStocksController::class, 'index'])->name('index');
+
+                Route::post('/{workshop}/store', [WorkshopCaseStocksController::class, 'store'])->name('store');
+
+                Route::get('/{caseStock}/show', [WorkshopCaseStocksController::class, 'show'])->name('show');
+
+                Route::post('/update', [WorkshopCaseStocksController::class, 'update'])->name('update');
+
+                Route::delete('/{caseStock}/delete', [WorkshopCaseStocksController::class, 'destroy'])->name('delete');
+            });
         });
     });
 
