@@ -121,4 +121,19 @@ class Workshop extends Model
     {
         return $this->hasMany(WorkshopCaseStock::class, 'workshop_id', 'id');   
     }
+
+    public function workshop_case_receive()
+    {
+        return $this->hasMany(WorkshopCaseReceive::class, 'workshop_id', 'id');
+    }
+
+    public function from_workshop_case_receive()
+    {
+        return $this->hasMany(WorkshopCaseReceive::class, 'from_workshop_id', 'id');
+    }
+
+    public function hq_case_transfer_to()
+    {
+        return $this->hasMany(HqCaseTransfer::class, 'to_workshop_id', 'id');
+    }
 }

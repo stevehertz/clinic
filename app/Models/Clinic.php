@@ -212,6 +212,11 @@ class Clinic extends Model
         return $this->hasMany(CaseReceive::class, 'clinic_id', 'id');
     }
 
+    public function from_case_receive()
+    {
+        return $this->hasMany(CaseReceive::class, 'from_clinic_id', 'id');
+    }
+
     public function case_request()
     {
         return $this->hasMany(CaseRequest::class, 'clinic_id', 'id');

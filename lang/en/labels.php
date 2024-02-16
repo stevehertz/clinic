@@ -37,6 +37,7 @@ return [
                         'title' => 'Received Cases',
                         'hq' => 'Received Cases from HQ',
                         'clinics' => 'Received Cases from Clinics',
+                        'workshops' => 'Received Cases from Workshops',
                     ],
                     'requested' => 'Cases Requested',
                 ],

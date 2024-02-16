@@ -307,4 +307,10 @@ class Organization extends Model
     {
         return $this->hasMany(WorkshopCaseStock::class, 'organization_id', 'id');   
     }
+
+    public function workshop_case_receive()  
+    {
+        return $this->hasMany(WorkshopCaseReceive::class, 'organization_id', 'id');    
+    }
+
 }

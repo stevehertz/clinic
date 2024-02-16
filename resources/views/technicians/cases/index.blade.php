@@ -76,11 +76,17 @@
     <!--/.content -->
 @endsection
 
+
+@push('modals')
+    @include('technicians.includes.modals.receive_cases_from_hq')
+@endpush
+
 @push('scripts')
     <script>
         $(document).ready(function() {
 
             find_case_stocks();
+
             function find_case_stocks() {
                 let path = '{{ route('technicians.cases.stocks.index') }}';
                 $('#caseStocksData').DataTable({
@@ -122,6 +128,152 @@
                         {
                             data: 'closing',
                             name: 'closing'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            find_received_cases_hq();
+
+            function find_received_cases_hq() {
+                let path = '{{ route('technicians.cases.received.index') }}';
+                $('#casesReceivedFromHQData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'receive_date',
+                            name: 'receive_date'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            $(document).on('click', '.receiveFromHQBtn', function(e) {
+                e.preventDefault();
+                $('#receiveFromHQModal').modal('show');
+            });
+
+            $("#receiveFromHQForm").submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('technicians.cases.received.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Receive');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#receiveFromHQModal').modal('hide');
+                            $('#receiveFromHQForm').trigger("reset");
+                            $('#casesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#caseStocksData').DataTable().ajax.reload();
+                            // $('#caseRequestedData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
+
+            find_received_cases_workshop();
+
+            function find_received_cases_workshop() {
+                let path = '{{ route('technicians.cases.received.from.workshop') }}';
+                $('#casesReceivedFromClinicsData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+                        {
+                            data: 'from_workshop',
+                            name: 'from_workshop'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
                         }
                     ],
                     "autoWidth": false,

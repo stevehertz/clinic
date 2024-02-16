@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\Technicians\Assets\AssetsController;
-use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
-use App\Http\Controllers\Technicians\Auth\AccountController;
-use App\Http\Controllers\Technicians\Auth\LoginController;
-use App\Http\Controllers\Technicians\Cases\CaseStocksController;
-use App\Http\Controllers\Technicians\Dashboard\DashboardController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Technicians\Lens\LensController;
+use App\Http\Controllers\Technicians\Auth\LoginController;
+use App\Http\Controllers\Technicians\Sales\SalesController;
+use App\Http\Controllers\Technicians\Auth\AccountController;
+use App\Http\Controllers\Technicians\Assets\AssetsController;
+use App\Http\Controllers\Technicians\Orders\OrdersController;
+use App\Http\Controllers\Technicians\Cases\CaseStocksController;
+use App\Http\Controllers\Technicians\Lens\LensRequestController;
 use App\Http\Controllers\Technicians\Lens\LensPurchaseController;
 use App\Http\Controllers\Technicians\Lens\LensReceivedController;
-use App\Http\Controllers\Technicians\Lens\LensRequestController;
+use App\Http\Controllers\Technicians\Cases\CaseReceivedController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
-use App\Http\Controllers\Technicians\Orders\OrdersController;
-use App\Http\Controllers\Technicians\Sales\SalesController;
+use App\Http\Controllers\Technicians\Dashboard\DashboardController;
+use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
 use App\Http\Controllers\Technicians\Technicians\TechniciansController;
-use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest:technician', 'preventBackHistory'])->group(function () {
 
@@ -112,6 +113,17 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
         Route::prefix('stocks')->name('stocks.')->group(function(){
 
             Route::get('/', [CaseStocksController::class, 'index'])->name('index');
+
+        });
+
+        Route::prefix('received')->name('received.')->group(function(){
+
+            Route::get('/', [CaseReceivedController::class, 'index'])->name('index');
+
+            Route::get('/from/workshop', [CaseReceivedController::class, 'get_received_from_workshop'])->name('from.workshop');
+
+            Route::post('/store', [CaseReceivedController::class, 'store'])->name('store');
+
 
         });
 

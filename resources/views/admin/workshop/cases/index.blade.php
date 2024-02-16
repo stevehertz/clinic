@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index', $workshop->id) }}">Home</a>
+                            <a href="{{ route('admin.dashboard.workshop.index', $workshop->id) }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
                             {{ $page_title }}
@@ -87,7 +87,6 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
 
             find_case_stocks();
 
@@ -225,6 +224,150 @@
                 });
 
             });
+            
+            $(document).on('click', '.deleteCaseStock', function(e) {
+                e.preventDefault();
+                let stock_id = $(this).data('id');
+                let path = '{{ route('admin.workshop.inventory.cases.stock.delete', ':workshopCaseStock') }}';
+                path = path.replace(':workshopCaseStock', stock_id);
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to delete this case stock?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#workshopCaseStocksData').DataTable().ajax.reload();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1000);
+                                } else {
+                                    toastr.error(data['message']);
+                                }
+                            },
+                            error: function(response) {
+                                let errors = response.responseJSON.errors;
+                                var errorsHtml = '<ul>';
+                                $.each(errors, function(field, messages) {
+                                    errorsHtml +=
+                                        '<li style="list-style-type:none; padding:0;">' +
+                                        messages + '</li>';
+                                });
+                                errorsHtml += '</ul>';
+                                toastr.error(errorsHtml);
+                            }
+                        });
+                    }
+                });
+            });
+
+            find_case_hq_received();
+
+            function find_case_hq_received() {
+                let path = '{{ route('admin.workshop.inventory.cases.received.index', $workshop->id) }}';
+                $('#caseReceivedFromHQStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'receive_date',
+                            name: 'receive_date'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+            find_case_clinic_received();
+            
+            function find_case_clinic_received() {
+                let path = '{{ route('admin.workshop.inventory.cases.received.from.workshop', $workshop->id) }}';
+                $('#caseReceivedFromClinicsStocksData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'received_date',
+                            name: 'received_date'
+                        },
+                        {
+                            data: 'code',
+                            name: 'code'
+                        },
+                        {
+                            data: 'from_workshop',
+                            name: 'from_workshop'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'condition',
+                            name: 'condition'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'received_by',
+                            name: 'received_by'
+                        },
+                    ]
+                });
+            }
 
         });
     </script>

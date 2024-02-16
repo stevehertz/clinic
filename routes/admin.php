@@ -75,6 +75,7 @@ use App\Http\Controllers\Admin\HQ\Cases\HQCaseTransfersController;
 use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
+use App\Http\Controllers\Admin\Cases\WorkshopCaseReceivedController;
 use App\Http\Controllers\Admin\HQ\Frames\HQFramePurchasesController;
 use App\Http\Controllers\Admin\HQ\Frames\HQFrameTransfersController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
@@ -811,12 +812,21 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::post('/{workshop}/store', [WorkshopCaseStocksController::class, 'store'])->name('store');
 
-                Route::get('/{caseStock}/show', [WorkshopCaseStocksController::class, 'show'])->name('show');
+                Route::get('/{workshopCaseStock}/show', [WorkshopCaseStocksController::class, 'show'])->name('show');
 
                 Route::post('/update', [WorkshopCaseStocksController::class, 'update'])->name('update');
 
-                Route::delete('/{caseStock}/delete', [WorkshopCaseStocksController::class, 'destroy'])->name('delete');
+                Route::delete('/{workshopCaseStock}/delete', [WorkshopCaseStocksController::class, 'destroy'])->name('delete');
             });
+
+            Route::prefix('received')->name('received.')->group(function () {
+
+                Route::get('/{workshop}', [WorkshopCaseReceivedController::class, 'index'])->name('index');
+
+                Route::get('/{workshop}/from/workshop', [WorkshopCaseReceivedController::class, 'get_received_from_workshop'])->name('from.workshop');
+
+            });
+
         });
     });
 
