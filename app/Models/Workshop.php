@@ -136,4 +136,9 @@ class Workshop extends Model
     {
         return $this->hasMany(HqCaseTransfer::class, 'to_workshop_id', 'id');
     }
+
+    public function workshop_case_request()  
+    {
+        return $this->hasMany(WorkshopCaseRequest::class, 'workshop_id', 'id');    
+    }
 }

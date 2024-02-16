@@ -76,6 +76,7 @@ use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
 use App\Http\Controllers\Admin\Cases\WorkshopCaseReceivedController;
+use App\Http\Controllers\Admin\Cases\WorkshopCaseRequestsController;
 use App\Http\Controllers\Admin\HQ\Frames\HQFramePurchasesController;
 use App\Http\Controllers\Admin\HQ\Frames\HQFrameTransfersController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
@@ -825,6 +826,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/{workshop}/from/workshop', [WorkshopCaseReceivedController::class, 'get_received_from_workshop'])->name('from.workshop');
 
+            });
+
+            Route::prefix('requests')->name('requests.')->group(function () {
+
+                Route::get('/{workshop}', [WorkshopCaseRequestsController::class, 'index'])->name('index');
             });
 
         });

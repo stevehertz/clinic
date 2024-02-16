@@ -70,7 +70,7 @@
     </div>
     <!-- /.col -->
 
-    {{-- <div class="col-md-3 col-sm-6 col-12">
+    <div class="col-md-3 col-sm-6 col-12">
         <div class="info-box">
             <span class="info-box-icon bg-primary">
                 <i class="fas fa-chart-area"></i>
@@ -78,7 +78,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-number">
-                    {{ $clinic->case_request()->sum('quantity') }}
+                    {{ $workshop->workshop_case_request()->sum('quantity') }}
                 </span>
                 <span class="info-box-text">
                     Case stocks
@@ -88,7 +88,7 @@
             <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
-    </div> --}}
+    </div>
     <!-- /.col -->
 </div>
 <!-- /.row -->

@@ -313,4 +313,9 @@ class Organization extends Model
         return $this->hasMany(WorkshopCaseReceive::class, 'organization_id', 'id');    
     }
 
+    public function workshop_case_request()  
+    {
+        return $this->hasMany(WorkshopCaseRequest::class, 'organization_id', 'id');    
+    }
+
 }

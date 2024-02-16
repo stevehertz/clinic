@@ -224,11 +224,12 @@
                 });
 
             });
-            
+
             $(document).on('click', '.deleteCaseStock', function(e) {
                 e.preventDefault();
                 let stock_id = $(this).data('id');
-                let path = '{{ route('admin.workshop.inventory.cases.stock.delete', ':workshopCaseStock') }}';
+                let path =
+                    '{{ route('admin.workshop.inventory.cases.stock.delete', ':workshopCaseStock') }}';
                 path = path.replace(':workshopCaseStock', stock_id);
                 Swal.fire({
                     title: 'Are you sure?',
@@ -249,7 +250,8 @@
                             success: function(data) {
                                 if (data['status']) {
                                     toastr.success(data['message']);
-                                    $('#workshopCaseStocksData').DataTable().ajax.reload();
+                                    $('#workshopCaseStocksData').DataTable().ajax
+                                        .reload();
                                     setTimeout(() => {
                                         location.reload();
                                     }, 1000);
@@ -320,7 +322,7 @@
             }
 
             find_case_clinic_received();
-            
+
             function find_case_clinic_received() {
                 let path = '{{ route('admin.workshop.inventory.cases.received.from.workshop', $workshop->id) }}';
                 $('#caseReceivedFromClinicsStocksData').DataTable({
@@ -364,6 +366,58 @@
                         {
                             data: 'received_by',
                             name: 'received_by'
+                        },
+                    ]
+                });
+            }
+
+
+            find_case_requests();
+
+            function find_case_requests() {
+                let path = '{{ route('admin.workshop.inventory.cases.requests.index', $workshop->id) }}';
+                $('#casesRequestedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    'responsive': true,
+                    'autoWidth': false,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'request_date',
+                            name: 'request_date'
+                        },
+                        {
+                            data: 'workshop',
+                            name: 'workshop'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
                         },
                     ]
                 });

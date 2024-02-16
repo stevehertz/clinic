@@ -79,6 +79,7 @@
 
 @push('modals')
     @include('technicians.includes.modals.receive_cases_from_hq')
+    @include('technicians.includes.modals.requests_case')
 @endpush
 
 @push('scripts')
@@ -214,7 +215,7 @@
                             $('#receiveFromHQForm').trigger("reset");
                             $('#casesReceivedFromHQData').DataTable().ajax.reload();
                             $('#caseStocksData').DataTable().ajax.reload();
-                            // $('#caseRequestedData').DataTable().ajax.reload();
+                            $('#caseRequestedData').DataTable().ajax.reload();
                             setTimeout(() => {
                                 location.reload();
                             }, 1000);
@@ -280,6 +281,103 @@
                     "responsive": true,
                 });
             }
+
+            find_case_requested();
+
+            function find_case_requested() {
+                let path = '{{ route('technicians.cases.request.index') }}';
+                $('#caseRequestedData').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: path,
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'request_date',
+                            name: 'request_date'
+                        },
+                        {
+                            data: 'case_code',
+                            name: 'case_code'
+                        },
+                        {
+                            data: 'quantity',
+                            name: 'quantity'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'transfer_status',
+                            name: 'transfer_status'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
+                        },
+                        {
+                            data: 'requested_by',
+                            name: 'requested_by'
+                        }
+                    ],
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            }
+
+            $(document).on('click', '.requestCaseBtn', function(e) {
+                e.preventDefault();
+                $('#requestCaseModal').modal('show');
+                $('#requestCaseForm').trigger("reset");
+            });
+
+            $('#requestCaseForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('technicians.cases.request.store') }}';
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Request');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#requestCaseModal').modal('hide');
+                            $('#requestCaseForm').trigger("reset");
+                            $('#caseRequestedData').DataTable().ajax.reload();
+                            $('#casesReceivedFromHQData').DataTable().ajax.reload();
+                            $('#caseStocksData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(data) {
+                        if (data.status == 422) {
+                            let errors = data.responseJSON.errors;
+                            for (var key in errors) {
+                                toastr.error(errors[key][0]);
+                            }
+                        }
+                    }
+                });
+            });
 
         });
     </script>

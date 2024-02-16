@@ -48,9 +48,11 @@ class CaseStocksController extends Controller
         }
 
         $page_title = trans('menus.technicians.sidebar.inventory.cases.title');
+        $organization = $workshop->organization;
         return view('technicians.cases.index', [
             'page_title' => $page_title,
-            'workshop' => $workshop
+            'organization' => $organization,
+            'workshop' => $workshop,
         ]);
     }
 

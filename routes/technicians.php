@@ -15,6 +15,7 @@ use App\Http\Controllers\Technicians\Cases\CaseReceivedController;
 use App\Http\Controllers\Technicians\Lens\LensTransfersController;
 use App\Http\Controllers\Technicians\Dashboard\DashboardController;
 use App\Http\Controllers\Technicians\Assets\TransferedAssetsController;
+use App\Http\Controllers\Technicians\Cases\CaseRequestsController;
 use App\Http\Controllers\Technicians\Technicians\TechniciansController;
 
 Route::middleware(['guest:technician', 'preventBackHistory'])->group(function () {
@@ -124,7 +125,16 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
 
             Route::post('/store', [CaseReceivedController::class, 'store'])->name('store');
 
+        });
 
+        
+        Route::prefix('request')->name('request.')->group(function(){
+
+            Route::get('/', [CaseRequestsController::class, 'index'])->name('index');
+
+            Route::post('/store', [CaseRequestsController::class, 'store'])->name('store');
+            
+            Route::get('/{workshopCaseRequest}', [CaseRequestsController::class, 'show'])->name('show');
         });
 
     });
