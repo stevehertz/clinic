@@ -103,7 +103,8 @@ class LensRequestController extends Controller
 
         $details = [
             'title' => 'Lens Request',
-            'body' => 'You have a new case request from ' . $workshop->name . '.' . ' Please check your dashboard.'
+            'body' => 'You have a new case request from ' . $workshop->name . '.' . ' Please check your dashboard.',
+            'workshop' => $workshop->name
         ];
 
         Mail::to($workshop->email)->send(new RequestLensMail($details));

@@ -93,6 +93,8 @@ class OrdersController extends Controller
             'sales' => $sales,
             'types' => $types,
             'materials' => $lens_materials,
+            'workshop' => $workshop,
+            'oeganization' => $organization
         ]);
     }
 

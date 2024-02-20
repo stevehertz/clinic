@@ -45,12 +45,6 @@
             </table>
         </div>
         <!-- /.card-body -->
-
-        <div class="card-footer">
-            <a href="javascript:void(0)" class="btn btn-block btn-outline-primary requestLensBtn">
-                Request Lens
-            </a>
-        </div>
     </div>
     <!--.card -->
 
