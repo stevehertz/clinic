@@ -33,11 +33,11 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard.index', $clinic->id) }}"
                         class="nav-link 
-                        {{ Route::is('admin.dashboard.index') ? 'active' : '' }}
+                        {{ Route::is('admin.dashboard.index', $clinic->id) ? 'active' : '' }}
                     ">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            @lang('admin.clinics.page.dashboard.title')
+                            @lang('menus.admins.sidebar.dashboard')
                         </p>
                     </a>
                 </li>
@@ -185,39 +185,59 @@
                     </a>
                 </li>
 
-                <li class="nav-header">REPORTS</li>
+                <li class="nav-header">
+                    @lang('menus.admins.sidebar.headers.reports')
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.reports.main.index', $clinic->id) }}"
-                        class="nav-link @if ($page_title == trans('pages.reports.clinic-main')) active @endif">
+                        class="nav-link 
+                        {{ Route::is('admin.reports.main.index', $clinic->id) ? 'active' : '' }}">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            @lang('pages.reports.clinic-main')
+                            @lang('menus.admins.sidebar.reports.main')
                         </p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.payments.reports.index', $clinic->id) }}"
-                        class="nav-link @if ($page_title == trans('pages.reports.clinic-payments')) active @endif">
+                        class="nav-link 
+                        {{ Route::is('admin.payments.reports.index', $clinic->id) ? 'active' : '' }}">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            Payments Report
+                            @lang('menus.admins.sidebar.reports.payments')
                         </p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.order.reports.index', $clinic->id) }}"
-                        class="nav-link @if ($page_title == trans('pages.reports.orders')) active @endif">
+                        class="nav-link 
+                        {{ Route::is('admin.order.reports.index', $clinic->id) ? 'active' : '' }}
+                        ">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
-                            Orders Report
+                            @lang('menus.admins.sidebar.reports.orders')
                         </p>
                     </a>
                 </li>
 
-                <li class="nav-header">SETTINGS</li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.order.reports.index', $clinic->id) }}"
+                        class="nav-link 
+                        {{ Route::is('admin.order.reports.index', $clinic->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.tat')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-header">
+                    @lang('menus.admins.sidebar.headers.settings')
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.clinics.view', $clinic->id) }}" class="nav-link">

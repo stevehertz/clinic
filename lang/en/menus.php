@@ -13,6 +13,8 @@ return [
             'headers' => [
                 'inventory' => 'Inventory',
                 'users' => 'Users Access',
+                'reports' => 'REPORTS',
+                'settings' => 'SETTINGS'
             ],
 
             'inventory' => [
@@ -29,6 +31,20 @@ return [
                 ],
 
             ],
+
+            'reports' => [
+                'main' => 'Main Report',
+                'payments' => 'Payments Report',
+                'orders' => 'Orders Report',
+                'tat' => 'TAT Reports',
+                'scheme_details' => 'Scheme Details Report',
+                'claims' => 'Claims Report',
+                'uncollected_ordrs' => 'Uncollected Orders Reports',
+                'rejected' => 'Rejected Claims Report',
+                'assets' => "Assets Report"
+            ],
+
+            'settings' => 'Settings',
         ],
     ],
 

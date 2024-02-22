@@ -19,6 +19,7 @@ class ClinicReportsController extends Controller
 
     public function index(Request $request)
     {
+        // 
         # code...
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
@@ -34,7 +35,10 @@ class ClinicReportsController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('clinic', function ($row) {
-                    return $row->clinic->clinic;
+                    if($row->clinic)
+                    {
+                        return $row->clinic->clinic;
+                    }
                 })
                 ->addColumn('full_name', function ($row) {
                     return $row->patient->first_name . ' ' . $row->patient->last_name;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users\Orders;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\Orders\UpdateOrderRequest;
 use App\Mail\OrdersMail;
 use App\Mail\OrderTechnicianMail;
 use App\Models\FramePrescription;
@@ -58,7 +59,8 @@ class OrdersController extends Controller
                     return $workshop;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn"><i class="fa fa-eye"></i></a>';
+                    $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn">';
+                    $btn = $btn . '<i class="fa fa-eye"></i></a>';
                     return $btn;
                 })
                 ->rawColumns(['action', 'full_names', 'clinic', 'workshop'])
@@ -137,19 +139,10 @@ class OrdersController extends Controller
 
         $closing = $total - $sold;
 
-        // remove the frame from stock
-        $frame_stock->update([
-            'opening_stock' => $opening,
-            'purchase_stock' => $purchased,
-            'transfered_stock' => $transfered,
-            'total_stock' => $total,
-            'sold_stock' => $sold,
-            'closing_stock' => $closing
-        ]);
-
         // create order
         $order = $payment_bill->order()->create([
             'clinic_id' => $payment_bill->clinic_id,
+            'user_id' => auth()->user()->id,
             'patient_id' => $payment_bill->patient_id,
             'appointment_id' => $payment_bill->appointment_id,
             'schedule_id' => $payment_bill->schedule_id,
@@ -161,6 +154,16 @@ class OrdersController extends Controller
             'order_date' => Carbon::now(),
             'receipt_number' => $lens_power->frame_prescription->receipt_number,
             'status' => 'APPROVED',
+        ]);
+
+        // remove the frame from stock
+        $frame_stock->update([
+            'opening_stock' => $opening,
+            'purchase_stock' => $purchased,
+            'transfered_stock' => $transfered,
+            'total_stock' => $total,
+            'sold_stock' => $sold,
+            'closing_stock' => $closing
         ]);
 
         // update order id on the treatment
@@ -214,6 +217,12 @@ class OrdersController extends Controller
     {
         # code...
         $clinic = $order->clinic;
+
+        if ($order->user_id == null) {
+            $order->update([
+                'user_id' => $order->payment_bill->user_id
+            ]);
+        }
         $page_title = trans('users.page.orders.sub_page.view');
         return view('users.orders.view', [
             'page_title' => $page_title,
@@ -229,35 +238,65 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
         //
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'status' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $order = Order::findOrFail($id);
-
-        $last_order_truck = $order->order_track()->latest()->first();
+        $data = $request->except("_token");
 
         $now = Carbon::now();
-
-        $diffInDays = $last_order_truck->created_at->diffInDays($now);
 
         $appointment = $order->appointment;
 
         $order->id = $order->id;
 
+        $order->user_id = Auth::user()->id;
+
         $order->status = $data['status'];
+
+        if ($order->status == 'RECEIVED FROM WORKSHOP') {
+            // TAT ONE
+            $time_received = $now;
+            $order_frame_sent_to_workshop = $order->order_track()->where('track_status', 'FRAME SENT TO WORKSHOP')->first();
+            $time_frame_sent_to_workshop = $order_frame_sent_to_workshop->track_date;
+            $format_time_frame_sent_to_workhop = Carbon::parse($time_frame_sent_to_workshop);
+            $tat_one = $format_time_frame_sent_to_workhop->diffInDays($time_received);
+            $order->tat_one = $tat_one;
+        }
+
+        if ($order->status == 'FRAME COLLECTED') {
+            // TAT TWO
+            $time_collected = $now;
+            $order_received_from_workshop = $order->order_track()->where('track_status', 'RECEIVED FROM WORKSHOP')->first();
+            $time_received_from_workshop = $order_received_from_workshop->track_date;
+            $formated_received_date = Carbon::parse($time_received_from_workshop);
+            $tat_two = $formated_received_date->diffInDays($time_collected);
+            $order->tat_two = $tat_two;
+        }
+
+        if ($order->status == 'CLOSED') {
+            $order->closed_date = Carbon::now();
+        }
+
+        $order->save();
+
+        // track order
+        $order->order_track()->create([
+            'user_id' => $order->doctor_schedule->user->id,
+            'workshop_id' => $order->workshop->id,
+            'track_date' => Carbon::now()->format('Y-m-d'),
+            'track_status' => $order->status,
+            'tat' => 0,
+        ]);
+
+        $clinic = $order->clinic;
+
+        $report_id = $appointment->report_id;
+
+        $report = $clinic->report()->findOrFail($report_id);
+
+        $report->update([
+            'order_status' => $order->status,
+        ]);
 
         if ($order->status == 'SENT TO WORKSHOP') {
             $workshop = $order->workshop;
@@ -278,6 +317,7 @@ class OrdersController extends Controller
         }
 
         if ($order->status == 'RECEIVED FROM WORKSHOP') {
+
             $workshop = $order->workshop;
             $email = $workshop->email;
             $details['title'] = 'Order Details';
@@ -286,53 +326,9 @@ class OrdersController extends Controller
             Mail::to($email)->send(new OrderTechnicianMail($details));
         }
 
-        // if($order->status == 'CALL FOR COLLECTION')
-        // {
-        //     $patient = $order->patient;
-        //     $email = $patient->email;
-
-        //     $details['title'] = 'Order Details';
-
-        //     $details['body'] = 'Your lens that you ordered is ready to be picked up. You are welcome to come an pick them up';
-
-        //     Mail::to($patient->email)->send(new OrdersMail($details));
-
-        // }
-
-        if ($order->status == 'CLOSED') {
-            $order->closed_date = Carbon::now();
-        }
-
-        if ($order->save()) {
-
-            $order = Order::findOrFail($order->id);
-
-            $order->order_track()->create([
-                'user_id' => $order->doctor_schedule->user->id,
-                'workshop_id' => $order->workshop->id,
-                'track_date' => Carbon::now()->format('Y-m-d'),
-                'track_status' => $order->status,
-                'tat' => $diffInDays,
-            ]);
-
-            $clinic = $order->clinic;
-
-            $report_id = $appointment->report_id;
-
-            $report = $clinic->report()->findOrFail($report_id);
-
-            $report->update([
-                'order_status' => $order->status,
-            ]);
-
-            $response['status'] = true;
-            $response['message'] = 'Order updated successfully';
-            return response()->json($response, 200);
-        } else {
-            $response['status'] = false;
-            $response['errors'] = 'Something went wrong';
-            return response()->json($response, 401);
-        }
+        $response['status'] = true;
+        $response['message'] = 'Order updated successfully';
+        return response()->json($response, 200);
     }
 
     /**

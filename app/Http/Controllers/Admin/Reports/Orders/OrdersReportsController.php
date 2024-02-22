@@ -27,25 +27,26 @@ class OrdersReportsController extends Controller
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                    ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                     ->whereBetween('order_tracks.track_date', [$request->from_date, $request->to_date])
                     ->orderBy('orders.created_at', 'desc')
                     ->get();
             } elseif (!empty($request->order_id)) {
                 $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                    ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                     ->where('orders.id', $request->order_id)
                     ->orderBy('orders.created_at', 'desc')
                     ->get();
             } elseif (!empty($request->status)) {
                 $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                    ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                     ->where('order_tracks.track_status', $request->status)
                     ->orderBy('orders.created_at', 'desc')
                     ->get();
             } else {
-                $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                    ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                $data = $clinic->order()
+                    ->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
+                    ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                     ->orderBy('orders.created_at', 'desc')
                     ->get();
             }

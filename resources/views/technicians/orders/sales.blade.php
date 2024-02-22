@@ -15,8 +15,18 @@
                     <td>{{ $sale->lens->hq_lens->power }}</td>
                     <td>{{ $sale->lens->hq_lens->lens_type->type }}</td>
                     <td>{{ $sale->lens->hq_lens->lens_material->title }}</td>
-                    <td>{{ $sale->lens->eye }}</td>
-                    <td>{{ $sale->quantity }}</td>
+                    <td>
+                        @if ($sale->eye)
+                            {{ $sale->eye }}
+                        @else
+                            <a href="javascript:void(0)" data-id="{{ $sale->id }}" class="btn btn-sm btn-link addEyeBtn">
+                                Add Eye
+                            </a>
+                        @endif
+                    </td>
+                    <td>
+                        {{ $sale->quantity }}
+                    </td>
                 </tr>
             @empty
                 <tr>

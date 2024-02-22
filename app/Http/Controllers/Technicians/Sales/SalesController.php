@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Technicians\Sales;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Technicians\Sales\StoreWorkshopSalesRequest;
 use App\Mail\TechnicianOrdersMail;
 use App\Models\Lens;
 use App\Models\Order;
@@ -37,23 +38,10 @@ class SalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWorkshopSalesRequest $request)
     {
         //
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'order_id' => 'required|integer|exists:orders,id',
-            'lens_id' => 'required|integer|exists:lenses,id',
-            'status' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
+        $data = $request->except("_token");
 
         $lens = Lens::findOrFail($data['lens_id']);
 
@@ -61,7 +49,7 @@ class SalesController extends Controller
 
         $opening = $lens->opening;
 
-        $purchased = $lens->purchased;
+        $received = $lens->received;
 
         $transfered = $lens->transfered;
 
@@ -85,7 +73,7 @@ class SalesController extends Controller
 
         $lens->update([
             'opening' => $opening,
-            'purchased' => $purchased,
+            'received' => $received,
             'transfered' => $transfered,
             'total' => $total,
             'sold' => $sold,
@@ -106,9 +94,11 @@ class SalesController extends Controller
         $sale->lens_id = $lens->id;
         $sale->payment_bill_id = $order->payment_bill->id;
         $sale->quantity = $quantity;
-        $sale->paid = $order->payment_bill->paid_amount;
+        $sale->eye = $lens->hq_lens->eye;
 
         $sale->save();
+
+        $lens_quantity = $order->quantity + $quantity;
 
         $appointment = $order->appointment;
 
@@ -116,16 +106,15 @@ class SalesController extends Controller
 
         $order->status = $data['status'];
 
-        if ($order->status == 'GLAZED') {
-            $clinic = $order->clinic;
-
-            $email = $clinic->email;
-
-            $details['title'] = 'Order Details';
-            $details['body'] = 'Order has been successfully glazed. The Lens will be sent to you shortly.';
-
-            Mail::to($email)->send(new TechnicianOrdersMail($details));
+        if($order->status == 'RIGHT LENS GLAZED'){
+            $order->right_eye_lens_id = $lens->id;
         }
+
+        if($order->status == 'GLAZED'){
+            $order->left_eye_lens_id = $lens->id;
+        }
+
+        $order->quantity = $lens_quantity;
 
         if($order->save())
         {
@@ -145,6 +134,17 @@ class SalesController extends Controller
             $report->update([
                 'order_status' => $order->status,
             ]);
+
+            if ($order->status == 'GLAZED') {
+                $clinic = $order->clinic;
+    
+                $email = $clinic->email;
+    
+                $details['title'] = 'Order Details';
+                $details['body'] = 'Order has been successfully glazed. The Lens will be sent to you shortly.';
+    
+                Mail::to($email)->send(new TechnicianOrdersMail($details));
+            }
     
             $response = [
                 'status' => true,
@@ -174,26 +174,28 @@ class SalesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(WorkshopSale $workshopSale)
     {
         //
+        $order = $workshopSale->order;
+
+        $lens = $workshopSale->lens;
+
+        $eye = $lens->hq_lens->eye;
+
+        $workshopSale->update([
+            'eye' => $eye
+        ]);
+
+        $response['status'] = true;
+        $response['message'] = 'Eye updated';
+        return response()->json($response);
     }
 
     /**

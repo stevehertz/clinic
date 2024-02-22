@@ -13,7 +13,12 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Frame Code</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Frame Quantity</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Status</th>
-            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">TAT</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Right Eye Lens Power</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Right Eye Lens Type</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Right Eye Lens Material</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Left Eye Lens Power</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Left Eye Lens Type</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Left Eye Lens Material</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Closed Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Workshop</th>
         </tr>
@@ -36,7 +41,38 @@
                 <td>{{ $report->frame_prescription->frame_code }}</td>
                 <td>{{ $report->frame_prescription->quantity }}</td>
                 <td>{{ $report->track_status }}</td>
-                <td>{{ $report->tat }}</td>
+                <td>
+                    @if ($report->right_eye_lens)
+                        {{ $report->right_eye_lens->hq_lens->power }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->right_eye_lens)
+                        {{ $report->right_eye_lens->hq_lens->lens_type->type }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->right_eye_lens)
+                        {{ $report->right_eye_lens->hq_lens->lens_material->title }}
+                    @endif
+                </td>
+                
+                <td>
+                    @if ($report->left_eye_lens)
+                        {{ $report->left_eye_lens->hq_lens->power }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->left_eye_lens)
+                        {{ $report->left_eye_lens->hq_lens->lens_type->type }}
+                    @endif
+                </td>
+                <td>
+                    @if ($report->left_eye_lens)
+                        {{ $report->left_eye_lens->hq_lens->lens_material->title }}
+                    @endif
+                </td>
+
                 <td>
                     @if ($report->closed_date)
                         {{ date('d F Y', strtotime($report->closed_date)) }}

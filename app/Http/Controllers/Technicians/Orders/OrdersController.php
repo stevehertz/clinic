@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Technicians\Orders;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Technicians\Orders\UpdateOrderRequest;
 use App\Mail\TechnicianOrdersMail;
 use App\Models\LensType;
 use App\Models\Order;
@@ -54,7 +55,8 @@ class OrdersController extends Controller
         }
         $page_title = trans('pages.technicians.orders.title');
         return view('technicians.orders.index', [
-            'page_title' => $page_title
+            'page_title' => $page_title,
+            'workshop' => $workshop
         ]);
     }
 
@@ -75,7 +77,17 @@ class OrdersController extends Controller
     {
         # code...
         $order = Order::findOrFail($id);
+
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
+
+        if($order->technician_id == null)
+        {
+            $order->update([
+                'technician_id' => $technician->id
+            ]);
+        }
+
+        
         $workshop = $technician->workshop;
         $right_eye_lenses = $workshop->lens->where('eye', 'RIGHT')->sortBy('created_at', SORT_DESC);
         $left_eye_lenses = $workshop->lens->where('eye', 'LEFT')->sortBy('created_at', SORT_DESC);
@@ -98,21 +110,10 @@ class OrdersController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateOrderRequest $request, $id)
     {
         # code...
         $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'status' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
 
         $order = Order::findOrFail($id);
 
@@ -126,12 +127,15 @@ class OrdersController extends Controller
 
         $order->id = $order->id;
 
+        $order->technician_id = auth()->guard('technician')->user()->id;
+
         $order->status = $data['status'];
 
         if ($order->status == 'ORDER RECEIVED') {
+
             $clinic = $order->clinic;
 
-            $email = $clinic->email;
+            $email = $clinic->emil;
 
             $details['title'] = 'Order Details';
             $details['body'] = 'An order has been received from your clinic successfully.';
@@ -140,6 +144,7 @@ class OrdersController extends Controller
         }
 
         if ($order->status == 'FRAME RECEIVED') {
+
             $clinic = $order->clinic;
 
             $email = $clinic->email;
@@ -151,6 +156,28 @@ class OrdersController extends Controller
         }
 
         if ($order->status == 'SEND TO CLINIC') {
+
+
+            if($order->right_eye_lens_id == null)
+            {
+                $sales = $order->workshop_sale()->where('eye', 'RIGHT')->first();
+                $qty = $sales->quantity + $order->quantity;
+                $order->update([
+                    'right_eye_lens_id' => $sales->lens_id,
+                    'quantity' => $qty,
+                ]);
+            }
+
+            if($order->left_eye_lens_id == null)
+            {
+                $sales = $order->workshop_sale()->where('eye', 'LEFT')->first();
+                $qty = $sales->quantity + $order->quantity;
+                $order->update([
+                    'left_eye_lens_id' => $sales->lens_id,
+                    'quantity' => $qty,
+                ]);
+            }
+
             $clinic = $order->clinic;
 
             $email = $clinic->email;

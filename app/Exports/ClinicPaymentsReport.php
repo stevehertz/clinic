@@ -34,13 +34,15 @@ class ClinicPaymentsReport implements FromView
                 ->select('payment_bills.*', 'billings.item', 'billings.amount', 'billings.receipt_number')
                 ->whereBetween('payment_bills.open_date', [$this->from_date, $this->to_date])
                 ->orderBy('payment_bills.created_at', 'desc')
+                ->with('billing')
                 ->get();
         } elseif (!empty($this->bill_status)) {
             $data = $clinic->payment_bill()
                 ->where('bill_status', $this->bill_status)
+                ->with('billing')
                 ->latest()->get();
         } else {
-            $data = $clinic->payment_bill()->latest()->get();
+            $data = $clinic->payment_bill()->with('billing')->latest()->get();
         }
         return view('admin.reports.payments.reports', [
             'reports' => $data

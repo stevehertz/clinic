@@ -212,7 +212,7 @@
                 </li>
 
                 <li class="nav-header">
-                    @lang('admin.header.reports')
+                    @lang('menus.admins.sidebar.headers.reports')
                 </li>
 
                 <li class="nav-item">
@@ -222,7 +222,7 @@
                     ">
                         <i class="nav-icon fa fa-line-chart"></i>
                         <p>
-                            @lang('admin.page.reports.title')
+                            @lang('menus.admins.sidebar.reports.main')
                         </p>
                     </a>
                 </li>

@@ -34,7 +34,10 @@ class PaymentsReportController extends Controller
                     ->where('bill_status', $request->bill_status)
                     ->latest()->get();
             } else {
-                $data = $clinic->payment_bill()->latest()->get();
+                $data = $clinic->payment_bill()
+                    ->with('billing')
+                    ->latest()
+                    ->get();
             }
 
             return datatables()->of($data)
@@ -69,6 +72,5 @@ class PaymentsReportController extends Controller
         $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
         $bill_status = $request->input('bill_status') ? $request->input('bill_status') : '';
         return (new ClinicPaymentsReport($clinic->id, $from_date, $to_date, $bill_status))->download('payment-reports' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-
     }
 }

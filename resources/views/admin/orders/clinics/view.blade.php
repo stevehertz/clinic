@@ -220,19 +220,19 @@
 
                                 <strong><i class="fa fa-user mr-1"></i> Gender</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->gender }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->gender }}</p>
 
                                 <hr>
 
                                 <strong><i class="fa  fa-industry mr-1"></i> Shape</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_shape->shape }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->frame_shape->shape }}</p>
 
                                 <hr>
 
                                 <strong><i class="fa fa-creative-commons mr-1"></i> Color</strong>
 
-                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->frame_color->color }}</p>
+                                <p class="text-muted">{{ $order->frame_prescription->frame_stock->hq_stock->frame_color->color }}</p>
 
                                 <hr>
 

@@ -176,6 +176,7 @@
                             <table id="reportsData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Clinic Name</th>
                                         <th>Patient Name</th>
                                         <th>Appointment Date</th>
@@ -205,7 +206,7 @@
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -226,6 +227,10 @@
                         }
                     },
                     columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
                             data: "clinic",
                             name: "clinic",
                         },
@@ -343,36 +348,35 @@
                 $('.filterReportsByOrdersRow').fadeOut(500);
             });
 
-            $(document).on('click', '#filtePaymentStatus', function(e){
+            $(document).on('click', '#filtePaymentStatus', function(e) {
                 e.preventDefault();
                 let paymentStatus = $('#paymentStatus').val();
-                if(paymentStatus != null)
-                {
+                if (paymentStatus != null) {
                     $('#reportsData').DataTable().destroy();
                     find_reports(from_date = '', to_date = '', paymentStatus);
-                }else{
+                } else {
                     toastr.warning("Please select a Payment Status");
                 }
             });
 
-            $(document).on('click', '#filterReportsByOrders', function(e){
+            $(document).on('click', '#filterReportsByOrders', function(e) {
                 e.preventDefault();
                 $('.filterReportsByDatesRow').fadeOut(500);
                 $('.filterReportsByPaymentsRow').fadeOut(500);
                 $('.filterReportsByOrdersRow').fadeIn(800);
             });
 
-            $(document).on('click', '#filteOrderStatus', function(e){
+            $(document).on('click', '#filteOrderStatus', function(e) {
                 e.preventDefault();
                 let orderStatus = $('#ordersStatus').val();
-                if(orderStatus != null)
-                {
+                if (orderStatus != null) {
                     $('#reportsData').DataTable().destroy();
                     find_reports(from_date = '', to_date = '', payment_status = '', orderStatus);
-                }else{
+                } else {
                     toastr.warning("Please select an Order Status");
                 }
             });
+
         });
     </script>
-@endsection
+@endpush

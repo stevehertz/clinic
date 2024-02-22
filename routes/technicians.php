@@ -138,9 +138,7 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
         });
 
     });
-
-
-
+    
     Route::prefix('assets')->name('assets.')->group(function () {
 
         Route::get('/index', [AssetsController::class, 'index'])->name('index');
@@ -169,5 +167,7 @@ Route::middleware(['auth:technician', 'preventBackHistory', 'TechnicianAccountSt
         Route::get('/index', [SalesController::class, 'index'])->name('index');
 
         Route::post('/store', [SalesController::class, 'store'])->name('store');
+
+        Route::post('/{workshopSale}/update', [SalesController::class, 'update'])->name('update');
     });
 });

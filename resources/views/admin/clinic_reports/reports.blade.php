@@ -67,7 +67,11 @@
     <tbody>
         @forelse ($reports as $report)
             <tr>
-                <td>{{ $report->clinic->clinic }}</td>
+                <td>
+                    @if ($report->clinic)
+                        {{ $report->clinic->clinic }}
+                    @endif
+                </td>
                 <td>{{ $report->patient->card_number }}</td>
                 <td>{{ $report->patient->first_name }} {{ $report->patient->last_name }}</td>
                 <td>{{ $report->patient->phone }}</td>

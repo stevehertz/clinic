@@ -37,7 +37,7 @@ class ClinicOrdersReport implements FromView
         if (!empty($this->from_date) && !empty($this->to_date)) {
 
             $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.lens_power_id', 'orders.lens_prescription_id', 'orders.closed_date', 'orders.frame_prescription_id', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                 ->whereBetween('order_tracks.track_date', [$this->from_date, $this->to_date])
                 ->orderBy('orders.created_at', 'desc')
                 ->get();
@@ -45,20 +45,20 @@ class ClinicOrdersReport implements FromView
 
 
             $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.lens_power_id', 'orders.lens_prescription_id', 'orders.closed_date', 'orders.frame_prescription_id', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date')
+                ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date')
                 ->where('orders.id', $this->order_id)
                 ->orderBy('orders.created_at', 'desc')
                 ->get();
         } elseif (!empty($this->order_status)) {
 
             $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.lens_power_id', 'orders.lens_prescription_id', 'orders.frame_prescription_id', 'orders.closed_date', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                 ->where('order_tracks.track_status', $this->order_status)
                 ->orderBy('orders.created_at', 'desc')
                 ->get();
         } else {
             $data = $clinic->order()->join('order_tracks', 'orders.id', '=', 'order_tracks.order_id')
-                ->select('orders.id', 'orders.patient_id', 'orders.clinic_id', 'orders.receipt_number', 'orders.lens_power_id', 'orders.lens_prescription_id', 'orders.frame_prescription_id', 'orders.closed_date', 'orders.workshop_id', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
+                ->select('orders.*', 'order_tracks.track_status', 'order_tracks.track_date', 'order_tracks.tat')
                 ->orderBy('orders.created_at', 'desc')
                 ->get();
         }

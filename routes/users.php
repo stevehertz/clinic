@@ -281,7 +281,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::get('/{order}/view', [OrdersController::class, 'view'])->name('view');
 
-        Route::post('/{id}/update', [OrdersController::class, 'update'])->name('update');
+        Route::post('/{order}/update', [OrdersController::class, 'update'])->name('update');
 
         Route::post('/send/mail', [OrdersController::class, 'send_mail'])->name('send.mail');
     });

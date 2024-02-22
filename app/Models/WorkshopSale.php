@@ -16,7 +16,7 @@ class WorkshopSale extends Model
         'lens_id',
         'payment_bill_id',
         'quantity',
-        'paid'
+        'eye'
     ];
 
     public function organization()
