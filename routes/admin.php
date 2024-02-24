@@ -82,6 +82,7 @@ use App\Http\Controllers\Admin\HQ\Frames\HQFrameTransfersController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
 use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
+use App\Http\Controllers\Admin\Reports\TAT\ClinicsTATReportsController;
 use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
@@ -734,6 +735,17 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}', [OrdersReportsController::class, 'index'])->name('index');
 
         Route::get('/{id}/export', [OrdersReportsController::class, 'export'])->name('export');
+    });
+
+    // TAT Reports
+    Route::prefix('tat/reports')->name('tat.reports.')->group(function(){
+
+        Route::get('/{clinic}', [ClinicsTATReportsController::class, 'index'])->name('index');
+
+        Route::get('/{clinic}/tat/two', [ClinicsTATReportsController::class, 'get_tat_two'])->name('tat.two');
+
+        Route::get('/{clinic}/reports', [ClinicsTATReportsController::class, 'reports'])->name('reports');
+
     });
 
 

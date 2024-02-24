@@ -224,9 +224,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.order.reports.index', $clinic->id) }}"
+                    <a href="{{ route('admin.tat.reports.index', $clinic->id) }}"
                         class="nav-link 
-                        {{ Route::is('admin.order.reports.index', $clinic->id) ? 'active' : '' }}
+                        {{ Route::is('admin.tat.reports.index', $clinic->id) ? 'active' : '' }}
                         ">
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>

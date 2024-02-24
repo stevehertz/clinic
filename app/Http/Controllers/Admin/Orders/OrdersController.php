@@ -23,36 +23,10 @@ class OrdersController extends Controller
         $clinic = Clinic::findOrFail($id);
         if ($request->ajax()) {
 
-            if (!empty($request->order_id) && !empty($request->status)) {
+            if (!empty($request->status)) {
                 $data = $clinic->order()
-                    ->join('clinics', 'clinics.id', '=', 'orders.clinic_id')
-                    ->join('patients', 'patients.id', '=', 'orders.patient_id')
-                    ->join('workshops', 'workshops.id', '=', 'orders.workshop_id')
-                    ->select('orders.*', 'clinics.clinic', 'patients.first_name as patient_first', 'patients.last_name as patient_last', 'workshops.name as workshop')
-                    ->where('orders.id', $request->order_id)
-                    ->where('orders.status', $request->status)
-                    ->where('patients.status', 1)
-                    ->orderBy('orders.created_at', 'desc')
-                    ->get();
-            } elseif (!empty($request->order_id) && empty($request->status)) {
-                $data = $clinic->order()
-                    ->join('clinics', 'clinics.id', '=', 'orders.clinic_id')
-                    ->join('patients', 'patients.id', '=', 'orders.patient_id')
-                    ->join('workshops', 'workshops.id', '=', 'orders.workshop_id')
-                    ->select('orders.*', 'clinics.clinic', 'patients.first_name as patient_first', 'patients.last_name as patient_last', 'workshops.name as workshop')
-                    ->where('orders.id', $request->order_id)
-                    ->where('patients.status', 1)
-                    ->orderBy('orders.created_at', 'desc')
-                    ->get();
-            } elseif (empty($request->order_id) && !empty($request->status)) {
-                $data = $clinic->order()
-                    ->join('clinics', 'clinics.id', '=', 'orders.clinic_id')
-                    ->join('patients', 'patients.id', '=', 'orders.patient_id')
-                    ->join('workshops', 'workshops.id', '=', 'orders.workshop_id')
-                    ->select('orders.*', 'clinics.clinic', 'patients.first_name as patient_first', 'patients.last_name as patient_last', 'workshops.name as workshop')
-                    ->where('orders.status', $request->status)
-                    ->where('patients.status', 1)
-                    ->orderBy('orders.created_at', 'desc')
+                    ->where('status', $request->status)
+                    ->latest()
                     ->get();
             } else {
                 $data = $clinic->order()
@@ -73,6 +47,12 @@ class OrdersController extends Controller
                 })
                 ->addColumn('workshop', function ($row) {
                     return $row->workshop->name;
+                })
+                ->addColumn('tat_one', function($row){
+                    return $row->tat_one;
+                })
+                ->addColumn('tat_two', function($row){
+                    return $row->tat_two;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="#" data-id="' . $row->id . '" class="btn btn-tools btn-sm viewOrderBtn"><i class="fa fa-eye"></i></a>';

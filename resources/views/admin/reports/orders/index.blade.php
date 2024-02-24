@@ -5,8 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Orders Report</h1>
-                    <small>{{ $clinic->clinic }}</small>
+                    <h1>{{ $clinic->clinic }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -226,7 +225,7 @@
             find_orders();
 
             function find_orders(from_date = '', to_date='', order_id = '', status = '') {
-                var path = '{{ route('admin.order.reports.index', $clinic->id) }}';
+                let path = '{{ route('admin.order.reports.index', $clinic->id) }}';
                 $('#ordersReportData').DataTable({
                     processing: true,
                     serverSide: true,

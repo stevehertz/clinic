@@ -51,6 +51,12 @@ return [
                     'requested' => 'Lenses Requested',
                 ]
             ],
+            'reports' => [
+                'tat' => [
+                    'tat_one' => 'TAT One',
+                    'tat_two' => 'TAT Two'
+                ],
+            ],
         ],
     ],
 

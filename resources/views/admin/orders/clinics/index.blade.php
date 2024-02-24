@@ -25,7 +25,7 @@
         <div class="container-fluid">
             <form>
                 <div class="row">
-                    <div class="col-4">
+                    {{-- <div class="col-4">
                         <div class="form-group">
                             <select id="orderNumberSelect" class="form-control select2"
                                 style="width: 100%;">
@@ -43,8 +43,8 @@
                         </div>
                         <!-- /.form-group -->
                     </div>
-                    <!--/.col -->
-                    <div class="col-4">
+                    <!--/.col --> --}}
+                    <div class="col-8">
                         <div class="form-group">
                             <select id="orderStatusSelect" class="form-control select2" style="width: 100%;">
                                 <option selected="selected" disabled="disabled">
@@ -92,7 +92,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-body table-responsive">
+                        <div class="    card-body table-responsive">
                             <table id="ordersData" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -102,6 +102,8 @@
                                         <th>Clinic</th>
                                         <th>Status</th>
                                         <th>Workshop</th>
+                                        <th>TAT One</th>
+                                        <th>TAT Two</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -157,6 +159,14 @@
                         {
                             data: 'workshop',
                             name: 'workshop'
+                        },
+                        {
+                            data: 'tat_one',
+                            name: 'tat_one'
+                        },
+                        {
+                            data: 'tat_two',
+                            name: 'tat_two'
                         },
                         {
                             data: 'action',
