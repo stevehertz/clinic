@@ -701,7 +701,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
             Route::get('/{id}', [ClosedBillsController::class, 'index'])->name('index');
 
-            Route::get('/show', [ClosedBillsController::class, 'show'])->name('show');
+            Route::get('/{paymentBill}/show', [ClosedBillsController::class, 'show'])->name('show');
 
             Route::get('/{id}/view', [ClosedBillsController::class, 'view'])->name('view');
 

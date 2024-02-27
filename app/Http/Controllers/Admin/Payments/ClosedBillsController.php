@@ -59,27 +59,13 @@ class ClosedBillsController extends Controller
         ]);
     }
 
-    public function show(Request $request)
+    public function show(PaymentBill $paymentBill, Request $request)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'bill_id' => 'required|integer|exists:payment_bills,id',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $payment_bill = PaymentBill::findOrFail($data['bill_id']);
-        $request->session()->put('bill_id', $payment_bill->id);
+        $request->session()->put('bill_id', $paymentBill->id);
 
         $response['status'] = true;
-        $response['data'] = $payment_bill;
+        $response['data'] = $paymentBill;
 
         return response()->json($response, 200);
     }

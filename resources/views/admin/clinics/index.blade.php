@@ -26,152 +26,56 @@
             <div class="row">
                 <div class="col-12">
 
-                    <div class="card card-default card-outline">
-                        <div class="card-body">
-                            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                    <!-- Custom Tabs -->
+                    <div class="card">
+                        <div class="card-header d-flex p-0">
+                            <h3 class="card-title p-3"></h3>
+                            <ul class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill"
-                                        href="#custom-content-below-home" role="tab"
-                                        aria-controls="custom-content-below-home" aria-selected="true">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">
                                         All
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill"
-                                        href="#custom-content-below-profile" role="tab"
-                                        aria-controls="custom-content-below-profile" aria-selected="false">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
+                                        New Clinic
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
                                         Trash
                                     </a>
                                 </li>
                             </ul>
-                            <div class="tab-content" id="custom-content-below-tabContent">
-                                <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel"
-                                    aria-labelledby="custom-content-below-home-tab">
-                                    <br>
-                                    <div class="table-responsive">
-                                        <table id="clinicData" class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Name</th>
-                                                    <th>Initials</th>
-                                                    <th>Logo</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    @include('admin.clinics.clinics')
                                 </div>
-                                <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel"
-                                    aria-labelledby="custom-content-below-profile-tab">
-                                    <br>
-                                    <div class="table-responsive">
-                                        <table id="clinicTrashedData"
-                                            class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Name</th>
-                                                    <th>Initials</th>
-                                                    <th>Logo</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    @include('admin.clinics.new_clinic')
                                 </div>
-
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    @include('admin.clinics.trash')
+                                </div>
+                                <!-- /.tab-pane -->
                             </div>
-                        </div>
-                        <!-- /.card -->
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
+                    <!-- ./card -->
+
+
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-
-        <div class="modal fade" id="newClinicModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="newClinicForm">
-                        @csrf
-                        <div class="modal-header">
-                            <h4 class="modal-title">New Clinic</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="newClinicName">Clinic Name</label>
-                                <input type="text" name="clinic" class="form-control" id="newClinicName"
-                                    placeholder="Enter clinic name">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicLogo">Logo</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" name="logo" class="custom-file-input" id="newClinicLogo">
-                                        <label class="custom-file-label" for="newClinicLogo">Choose file</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicInitials">Clinic Initials</label>
-                                <input type="text" name="initials" class="form-control" id="newClinicInitials"
-                                    placeholder="Enter clinic initials">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicPhone">Phone Number</label>
-                                <input type="text" name="phone" class="form-control" id="newClinicPhone"
-                                    placeholder="Enter Phone Number">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicEmail">Email Address</label>
-                                <input type="email" name="email" class="form-control" id="newClinicEmail"
-                                    placeholder="Enter Email Address">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicAddress">Address</label>
-                                <textarea name="address" id="newClinicAddress" class="form-control" placeholder="Enter Address"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="newClinicLocation">Location</label>
-                                <input type="text" name="location" class="form-control" id="newClinicLocation"
-                                    placeholder="Enter Email Address">
-                            </div>
-
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" id="newClinicSubmitBtn" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
     </section><!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -267,12 +171,6 @@
                 });
             }
 
-            $(document).on('click', '.newClinicBtn', function(e) {
-                e.preventDefault();
-                $('#newClinicModal').modal('show');
-                $('#newClinicForm').trigger('reset');
-            });
-
             $('#newClinicForm').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
@@ -295,11 +193,13 @@
                     success: function(data) {
                         if (data['status']) {
                             toastr.success(data['message']);
-                            $('#newClinicModal').modal('hide');
                             $('#newClinicForm').trigger('reset');
                             $('#clinicData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         } else {
-                            console.log(data);
+                            toastr.success(data['error']);
                         }
                     }
                 });
@@ -326,7 +226,7 @@
                 });
             });
 
-            $(document).on('click', '.restoreBtn', function(e){
+            $(document).on('click', '.restoreBtn', function(e) {
                 e.preventDefault();
                 let clinic_id = $(this).attr('id');
                 let token = '{{ csrf_token() }}';
@@ -352,7 +252,7 @@
                                     toastr.success(data['message']);
                                     $('#clinicTrashedData').DataTable().ajax.reload();
                                     $('#clinicData').DataTable().ajax.reload();
-                                    
+
                                 }
                             }
                         });
@@ -387,6 +287,7 @@
                                 if (data['status']) {
                                     toastr.success(data['message']);
                                     $('#clinicData').DataTable().ajax.reload();
+                                    $('#clinicTrashedData').DataTable().ajax.reload();
                                 }
                             }
                         });
@@ -397,7 +298,6 @@
             });
 
             $(document).on('click', '.deleteCompletelyBtn', function(e) {
-
                 e.preventDefault();
                 let clinic_id = $(this).attr('id');
                 let token = '{{ csrf_token() }}';
@@ -422,6 +322,7 @@
                                 if (data['status']) {
                                     toastr.success(data['message']);
                                     $('#clinicTrashedData').DataTable().ajax.reload();
+                                    $('#clinicData').DataTable().ajax.reload();
                                 }
                             }
                         });
@@ -433,4 +334,4 @@
             });
         });
     </script>
-@endsection
+@endpush

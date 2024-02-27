@@ -30,10 +30,9 @@ class OrdersController extends Controller
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
         $workshop = $technician->workshop;
         if ($request->ajax()) {
-            if(!empty($request->status))
-            {
+            if (!empty($request->status)) {
                 $data = $workshop->order->where('status', '!=', 'APPROVED')->where('status', '=', $request->status)->sortBy('created_at', SORT_DESC);
-            }else{
+            } else {
                 $data = $workshop->order->where('status', '!=', 'APPROVED')->sortBy('created_at', SORT_DESC);
             }
             return datatables()->of($data)
@@ -80,14 +79,13 @@ class OrdersController extends Controller
 
         $technician = Technician::findOrFail(Auth::guard('technician')->user()->id);
 
-        if($order->technician_id == null)
-        {
+        if ($order->technician_id == null) {
             $order->update([
                 'technician_id' => $technician->id
             ]);
         }
 
-        
+
         $workshop = $technician->workshop;
         $right_eye_lenses = $workshop->lens->where('eye', 'RIGHT')->sortBy('created_at', SORT_DESC);
         $left_eye_lenses = $workshop->lens->where('eye', 'LEFT')->sortBy('created_at', SORT_DESC);
@@ -135,7 +133,7 @@ class OrdersController extends Controller
 
             $clinic = $order->clinic;
 
-            $email = $clinic->emil;
+            $email = $clinic->email;
 
             $details['title'] = 'Order Details';
             $details['body'] = 'An order has been received from your clinic successfully.';
@@ -158,8 +156,7 @@ class OrdersController extends Controller
         if ($order->status == 'SEND TO CLINIC') {
 
 
-            if($order->right_eye_lens_id == null)
-            {
+            if ($order->right_eye_lens_id == null) {
                 $sales = $order->workshop_sale()->where('eye', 'RIGHT')->first();
                 $qty = $sales->quantity + $order->quantity;
                 $order->update([
@@ -168,8 +165,7 @@ class OrdersController extends Controller
                 ]);
             }
 
-            if($order->left_eye_lens_id == null)
-            {
+            if ($order->left_eye_lens_id == null) {
                 $sales = $order->workshop_sale()->where('eye', 'LEFT')->first();
                 $qty = $sales->quantity + $order->quantity;
                 $order->update([

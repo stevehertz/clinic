@@ -7,6 +7,8 @@ use App\Models\Admin;
 use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Requests\Admin\Clinics\StoreClinicRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,6 +18,9 @@ use App\Http\Resources\Clinic as ResourcesClinic;
 class ClinicsController extends Controller
 {
     //
+
+    use FileUploadTrait;
+
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -72,44 +77,10 @@ class ClinicsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StoreClinicRequest $request)
     {
         # code...
-        $data = $request->all();
-
-        $validator = Validator::make($data, [
-            'clinic' => 'required|string|max:255',
-            'logo' => 'image|mimes:png,jpg,jpeg|nullable|max:2048',
-            'phone' => 'required|numeric',
-            'email' => 'required|string|email|max:255',
-            'location' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        if ($request->hasFile('logo')) {
-
-            $logoNameWithExt = $request->file('logo')->getClientOriginalName();
-
-            // Get Filename
-            $logoName = pathinfo($logoNameWithExt, PATHINFO_FILENAME);
-
-            // Get just Extension
-            $extension = $request->file('logo')->getClientOriginalExtension();
-
-            // Filename To store
-            $logoNameToStore = $logoName . '_' . time() . '.' . $extension;
-
-            // Upload Image
-            $path = $request->file('logo')->storeAs('public/clinics', $logoNameToStore);
-        } else {
-            $logoNameToStore = 'noimage.png';
-        }
+        $data = $request->except("_token");
 
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
         $organization = $admin->organization;
@@ -117,6 +88,15 @@ class ClinicsController extends Controller
 
         $clinics->organization_id = $organization->id;
         $clinics->clinic = $data['clinic'];
+
+        if ($request->hasFile('logo')) {
+            $storagePath = 'public/clinics';
+            $fileName = 'logo';
+            $logoNameToStore = $this->uploadFile($request, $fileName, $storagePath);
+        } else {
+            $logoNameToStore = 'noimage.png';
+        }
+
         $clinics->logo = $logoNameToStore;
         $clinics->phone = $data['phone'];
         $clinics->email = $data['email'];

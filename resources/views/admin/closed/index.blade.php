@@ -106,14 +106,11 @@
                 e.preventDefault();
                 var bill_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.payments.closed.bills.show') }}';
+                var path = '{{ route('admin.payments.closed.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
@@ -122,15 +119,6 @@
                                 window.location.href = url;
                             }, 1000);
                         }
-                    },
-                    error: function(data) {
-                        var errors = data.responseJSON;
-                        var errorsHtml = '<ul>';
-                        $.each(errors['errors'], function(key, value) {
-                            errorsHtml += '<li>' + value + '</li>';
-                        });
-                        errorsHtml += '</ul>';
-                        toastr.error(errorsHtml);
                     },
                 });
             });

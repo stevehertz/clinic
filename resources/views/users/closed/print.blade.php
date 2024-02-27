@@ -55,6 +55,7 @@
                         <strong>{{ $payment_bill->patient->first_name }}
                             {{ $payment_bill->patient->last_name }}</strong><br>
                         {{ $payment_bill->patient->address }}<br>
+                        Card Number: {{ $payment_bill->patient->card_number }}<br>
                         Phone: {{ $payment_bill->patient->phone }}<br>
                         Email: {{ $payment_bill->patient->email }}<br>
                         @if ($payment_bill->payment_detail->client_type->type == 'Insurance')

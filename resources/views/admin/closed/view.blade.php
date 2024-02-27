@@ -256,7 +256,7 @@
     <!-- /.content -->
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
 
@@ -264,18 +264,16 @@
                 e.preventDefault();
                 var bill_id = $(this).data('id');
                 var token = '{{ csrf_token() }}';
-                var path = '{{ route('admin.payments.closed.bills.show') }}';
+                var path = '{{ route('admin.payments.closed.bills.show', ':paymentBill') }}';
+                path = path.replace(':paymentBill', bill_id);
                 $.ajax({
                     url: path,
-                    type: 'POST',
-                    data: {
-                        bill_id: bill_id,
-                        _token: token
-                    },
+                    type: 'GET',
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('admin.payments.closed.bills.print', $clinic->id) }}';
+                            let url =
+                                '{{ route('admin.payments.closed.bills.print', $clinic->id) }}';
                             setTimeout(() => {
                                 window.open(url, '_blank');
                             }, 1000);
@@ -296,4 +294,4 @@
 
         });
     </script>
-@endsection
+@endpush
