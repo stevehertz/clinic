@@ -70,3 +70,15 @@
 .content .container-fluid .filterReportsByStatusRow {
   display: none;
 }
+.content .container-fluid .TATOneReportsByDateRow {
+  display: none;
+}
+.content .container-fluid .TATOneReportsByStatusRow {
+  display: none;
+}
+.content .container-fluid .TATTwoReportsByDateRow {
+  display: none;
+}
+.content .container-fluid .TATTwoReportsByStatusRow {
+  display: none;
+}

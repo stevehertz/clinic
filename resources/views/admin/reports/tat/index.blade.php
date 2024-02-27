@@ -68,7 +68,7 @@
 
             find_tat_one();
 
-            function find_tat_one(from_date = '', to_date='', order_id = '', status = '') {
+            function find_tat_one(from_date = '', to_date = '', status = '') {
                 let path = '{{ route('admin.tat.reports.index', $clinic->id) }}';
                 $('#tatOneOrderData').DataTable({
                     processing: true,
@@ -78,7 +78,6 @@
                         data: {
                             from_date: from_date,
                             to_date: to_date,
-                            order_id: order_id,
                             status: status
                         }
                     },
@@ -120,9 +119,56 @@
                 });
             }
 
+            $('.TATOneReportsByDateRow').fadeOut(500);
+            $('.TATOneReportsByStatusRow').fadeOut(500);
+            $(document).on('click', '#filterTATOneByDateBtn', function(e) {
+                e.preventDefault();
+                $('.TATOneReportsByDateRow').fadeToggle("slow");
+                $('.TATOneReportsByStatusRow').fadeOut(500);
+            });
+
+            $(document).on('click', '#filter', function(e) {
+                e.preventDefault();
+                var from_date = $('#fromDate').val();
+                var to_date = $('#toDate').val();
+                if (from_date != '' && to_date != '') {
+                    $('#tatOneOrderData').DataTable().destroy();
+                    find_tat_one(from_date, to_date);
+                } else {
+                    toastr.error('Both Date is required');
+                }
+            });
+
+            $(document).on('click', '#filterTATOneByStatus', function(e) {
+                $('.TATOneReportsByDateRow').fadeOut(500);
+                $('.TATOneReportsByStatusRow').fadeToggle("slow");
+            });
+
+            $(document).on('click', '#filterStatusBtn', function(e) {
+                e.preventDefault();
+                let status = $('#orderStatusSelect').val();
+                if (status != null) {
+                    $('#tatOneOrderData').DataTable().destroy();
+                    find_tat_one(from_date = '', to_date = '', status);
+                } else {
+                    toastr.error('Please select order status');
+                }
+            });
+
+            $(document).on('click', '#refreshReportsAllReports', function(e) {
+                e.preventDefault();
+                $('#fromDate').val('');
+                $('#toDate').val('');
+                $('#orderStatusSelect').val('').change();
+                $('#tatOneOrderData').DataTable().destroy();
+                find_tat_one();
+                $('.TATOneReportsByDateRow').fadeOut(500);
+                $('.TATOneReportsByStatusRow').fadeOut(500);
+            });
+
             find_tat_two();
 
-            function find_tat_two(from_date = '', to_date='', order_id = '', status = '') {
+            function find_tat_two(from_date = '', to_date = '', status = '') {
                 let path = '{{ route('admin.tat.reports.tat.two', $clinic->id) }}';
                 $('#tatTwoOrderData').DataTable({
                     processing: true,
@@ -132,7 +178,6 @@
                         data: {
                             from_date: from_date,
                             to_date: to_date,
-                            order_id: order_id,
                             status: status
                         }
                     },
@@ -173,6 +218,56 @@
                     "responsive": true,
                 });
             }
+
+            $('.TATTwoReportsByDateRow').fadeOut(500);
+            $('.TATTwoReportsByStatusRow').fadeOut(500);
+            $(document).on('click', '#filterTATTwoByDateBtn', function(e) {
+                e.preventDefault();
+                $('.TATTwoReportsByDateRow').fadeToggle("slow");
+                $('.TATTwoReportsByStatusRow').fadeOut(500);
+            });
+
+            $(document).on('click', '#filterTATTwoBtn', function(e) {
+                e.preventDefault();
+                var from_date = $('#fromTATTwoDate').val();
+                var to_date = $('#toTATTwoDate').val();
+                if (from_date != '' && to_date != '') {
+                    $('#tatTwoOrderData').DataTable().destroy();
+                    find_tat_two(from_date, to_date);
+                } else {
+                    toastr.error('Both Date is required');
+                }
+            });
+
+            $(document).on('click', '#filterTATTwoByStatus', function(e) {
+                $('.TATTwoReportsByDateRow').fadeOut(500);
+                $('.TATTwoReportsByStatusRow').fadeToggle("slow");
+            });
+
+            $(document).on('click', '#filterTATTwoStatusBtn', function(e) {
+                e.preventDefault();
+                let status = $('#tatTwoStatusSelectVal').val();
+                if (status != null) {
+                    $('#tatTwoOrderData').DataTable().destroy();
+                    find_tat_two(from_date = '', to_date = '', status);
+                } else {
+                    toastr.error('Please select status');
+                }
+            });
+
+            $(document).on('click', '#refreshReportsTATTwoReports', function(e) {
+                e.preventDefault();
+                $('#fromTATTwoDate').val('');
+                $('#toTATTwoDate').val('');
+                $('#tatTwoStatusSelectVal').val('').change();
+                $('#tatTwoOrderData').DataTable().destroy();
+                find_tat_two();
+                $('.TATTwoReportsByDateRow').fadeOut(500);
+                $('.TATTwoReportsByStatusRow').fadeOut(500);
+            });
+
+            
+
         });
     </script>
 @endpush

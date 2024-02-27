@@ -742,9 +742,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{clinic}', [ClinicsTATReportsController::class, 'index'])->name('index');
 
+        Route::get('/{clinic}/export/tat/one', [ClinicsTATReportsController::class, 'export_tat_one'])->name('export.tat.one');
+
         Route::get('/{clinic}/tat/two', [ClinicsTATReportsController::class, 'get_tat_two'])->name('tat.two');
 
-        Route::get('/{clinic}/reports', [ClinicsTATReportsController::class, 'reports'])->name('reports');
+        Route::get('/{clinic}/export/tat/two', [ClinicsTATReportsController::class, 'export_tat_two'])->name('export.tat.two');
 
     });
 
