@@ -201,12 +201,15 @@
                                                     </div>
                                                     @if (Auth::user()->id == $schedule->user_id)
                                                         <div class="timeline-footer">
-                                                            @if ($treatment->status != 'ordered')
-                                                                <a href="#" data-id="{{ $diagnosis->id }}"
-                                                                    class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
-                                                                    <i class="fa fa-edit"></i> Edit Diagnosis
-                                                                </a>
+                                                            @if ($treatment)
+                                                                @if ($treatment->status != 'ordered')
+                                                                    <a href="#" data-id="{{ $diagnosis->id }}"
+                                                                        class="btn btn-secondary btn-block btn-sm editDiagnosisBtn">
+                                                                        <i class="fa fa-edit"></i> Edit Diagnosis
+                                                                    </a>
+                                                                @endif
                                                             @endif
+
                                                         </div>
                                                     @endif
                                                 </div>

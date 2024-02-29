@@ -85,6 +85,7 @@ use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
 use App\Http\Controllers\Admin\Reports\TAT\ClinicsTATReportsController;
 use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
+use App\Http\Controllers\Admin\Reports\Schemes\SchemeDetailsReportController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
@@ -751,6 +752,14 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
 
+    // Scheme Details Report
+    Route::prefix('scheme/details/reports')->name('scheme.details.reports.')->group(function(){
+
+        Route::get('/{clinic}', [SchemeDetailsReportController::class, 'index'])->name('index');
+
+    });
+
+
     Route::prefix('payments/details')->name('payments.details.')->group(function () {
 
         Route::post('/store', [PaymentDetailsController::class, 'store'])->name('store');
@@ -849,8 +858,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         });
     });
-
-
 
     Route::prefix('lens/purchase')->name('lens.purchase.')->group(function () {
 

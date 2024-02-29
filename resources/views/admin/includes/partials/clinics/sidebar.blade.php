@@ -235,6 +235,18 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.scheme.details.reports.index', $clinic->id) }}"
+                        class="nav-link 
+                        {{ Route::is('admin.scheme.details.reports.index', $clinic->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.scheme_details')
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-header">
                     @lang('menus.admins.sidebar.headers.settings')
                 </li>
