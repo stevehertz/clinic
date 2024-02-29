@@ -19,6 +19,9 @@ return array(
             'cases' => array(
                 'stocks' => 'Add Case Stocks',
             ),
+            'lenses' => array(
+                'stocks' => 'Add Lens Stock',
+            ),
         ),
     ),
 

@@ -79,6 +79,10 @@
     <!-- /.content -->
 @endsection
 
+@push('modals')
+    @include('admin.includes.partials.modals.add_lens_stock')
+@endpush
+
 @push('scripts')
     <script>
         $(document).ready(function() {
@@ -150,6 +154,62 @@
                     ]
                 });
             }
+
+            $(document).on('click', '.addLensStockBtn', function(e){
+                e.preventDefault();
+                $('#addLensStockModal').modal('show');
+                $('#addLensStockForm').trigger("reset");
+            });
+
+            $('#addLensStockForm').submit(function (e) { 
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path = '{{ route('admin.workshop.inventory.lens.stocks.store', ':workshop') }}';
+                path = path.replace(':workshop', '{{ $workshop->id }}');
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#addLensStockForm')[0].reset();
+                            $('#addLensStockModal').modal('hide');
+                            $('#lensData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            toastr.error(data['message']);
+                        }
+                    },
+                    error: function(response) {
+                        let errors = response.responseJSON.errors;
+                        var errorsHtml = '<ul>';
+                        $.each(errors, function(field, messages) {
+                            errorsHtml +=
+                                '<li style="list-style-type:none; padding:0;">' +
+                                messages + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+
+            });
 
             find_hq_receives();
 

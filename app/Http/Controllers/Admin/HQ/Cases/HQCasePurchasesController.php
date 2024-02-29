@@ -64,7 +64,7 @@ class HQCasePurchasesController extends Controller
         }
         $org_purchases = $organization->hq_case_purchase()->latest()->get();
         $page_title = trans('admin.page.cases.sub_page.purchases');
-        return view('admin.HQ.Cases.purchased', [
+        return view('admin.HQ.cases.purchased', [
             'organization' => $organization,
             'purchases' => $org_purchases,
             'page_title' => $page_title

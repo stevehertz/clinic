@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Lens;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Lens\StoreLensStockRequest;
 use App\Models\Lens;
 use App\Models\Workshop;
 use Carbon\Carbon;
@@ -70,55 +71,34 @@ class LensController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreLensStockRequest $request, Workshop $workshop)
     {
         //
         $data = $request->except("_token");
 
-        $validator = Validator::make($data, [
-            'workshop_id' => 'required|integer|exists:workshops,id',
-            'power' => 'required',
-            'lens_type_id' => 'required|integer|exists:lens_types,id',
-            'lens_material_id' => 'required|integer|exists:lens_materials,id',
-            'lens_index' => 'required',
-            'eye' => 'required|string',
-            'opening' => 'nullable|integer',
-        ]);
+        $organization = $workshop->organization;
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $workshop = Workshop::findOrFail($data['workshop_id']);
+        $hq_lens = $organization->hq_lens()->findOrFail($data['hq_lens_id']);
 
         $opening = $data['opening'];
 
-        $purchased = 0;
+        $received = 0;
 
         $transfered = 0;
 
-        $total = ($opening + $purchased) - $transfered;
+        $total = ($opening + $received) - $transfered;
 
         $sold = 0;
 
         $closing = $total - $sold;
 
-        $code = $workshop->initials . "-" . Str::upper(Str::random(5));
-
         $workshop->lens()->create([
             'organization_id' => $workshop->organization->id,
-            'power' => $data['power'],
-            'code' => $code,
-            'lens_type_id' => $data['lens_type_id'],
-            'lens_material_id' => $data['lens_material_id'],
-            'lens_index' => $data['lens_index'],
-            'date_added' => Carbon::now()->format('Y-m-d'),
-            'eye' => $data['eye'],
+            'hq_lens_id' => $hq_lens->id,
+            'power' => $hq_lens->power,
+            'eye' => $hq_lens->eye,
             'opening' => $opening,
-            'purchased' => $purchased,
+            'received' => $received,
             'transfered' => $transfered,
             'total' => $total,
             'sold' => $sold,

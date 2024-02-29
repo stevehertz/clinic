@@ -793,7 +793,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/{workshop}', [LensController::class, 'index'])->name('index');
 
-                Route::post('/store', [LensController::class, 'store'])->name('store');
+                Route::post('/{workshop}/store', [LensController::class, 'store'])->name('store');
 
                 Route::post('/show', [LensController::class, 'show'])->name('show');
 
