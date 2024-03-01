@@ -757,6 +757,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
         Route::get('/{clinic}', [SchemeDetailsReportController::class, 'index'])->name('index');
 
+        Route::get('/{clinic}/export', [SchemeDetailsReportController::class, 'export'])->name('export');
+
     });
 
 

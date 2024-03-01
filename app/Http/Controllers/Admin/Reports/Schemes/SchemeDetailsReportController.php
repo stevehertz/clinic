@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Reports\Schemes;
 
+use App\Exports\Admin\Reports\ClinicSchemeDetailsReport;
 use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,11 +18,22 @@ class SchemeDetailsReportController extends Controller
     {
         //
         if ($request->ajax()) {
-            $data = $clinic->payment_bill()->latest()->get();
+            if (!empty($request->from_date) && !empty($request->to_date)) {
+                $data = $clinic->payment_bill()
+                    ->whereBetween('open_date', [$request->from_date, $request->to_date])
+                    ->latest()->get();
+            } elseif (!empty($request->bill_status)) {
+                $data = $clinic->payment_bill()
+                    ->where('bill_status', $request->bill_status)
+                    ->latest()->get();
+            } else {
+                $data = $clinic->payment_bill()->latest()->get();
+            }
+
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('appointment_date', function ($row) {
-                    return date('d F Y', strtotime($row->appontment->date));
+                ->addColumn('open_date', function ($row) {
+                    return date('d F Y', strtotime($row->open_date));
                 })
                 ->addColumn('clinic', function ($row) {
                     return $row->clinic->clinic;
@@ -34,7 +46,7 @@ class SchemeDetailsReportController extends Controller
                 })
                 ->addColumn('insurance', function ($row) {
                     if ($row->payment_detail->client_type->type == "Insurance") {
-                        if($row->payment_detail->insurance){
+                        if ($row->payment_detail->insurance) {
                             return $row->payment_detail->insurance->title;
                         }
                     }
@@ -56,69 +68,18 @@ class SchemeDetailsReportController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a reports of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function export(Request $request, Clinic $clinic)  
     {
-        //
+        $from_date = $request->input('from_date') ? $request->input('from_date') : '';
+        $to_date = $request->input('to_date')  ? $request->input('to_date') : '';
+        $bill_status = $request->input('bill_status') ? $request->input('bill_status') : '';
+        return (new ClinicSchemeDetailsReport($clinic->id, $from_date, $to_date, $bill_status))->download('scheme-details-reports-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
