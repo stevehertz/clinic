@@ -30,7 +30,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ count($stocks) }}</h3>
+                            <h3>{{ $organization->hq_frame_stock()->sum('total') }}</h3>
 
                             <p>Frame Stocks</p>
                         </div>

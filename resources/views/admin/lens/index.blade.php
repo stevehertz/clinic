@@ -81,6 +81,7 @@
 
 @push('modals')
     @include('admin.includes.partials.modals.add_lens_stock')
+    @include('admin.includes.partials.modals.update_lens_stock')
 @endpush
 
 @push('scripts')
@@ -209,6 +210,114 @@
                     }
                 });
 
+            });
+
+            $(document).on('click', '.updateLensBtn', function(e){
+                e.preventDefault();
+                let lens_id = $(this).data('id');
+                let path = '{{ route('admin.workshop.inventory.lens.stocks.show', ':lens') }}';
+                path = path.replace(':lens', lens_id);
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    dataType: "json",
+                    success: function (data) {
+                        if(data['status'])
+                        {
+                            $('#updateLensStockModal').modal('show');
+                            $('#updateLensStockId').val(data['data']['id']);
+                            $('#updateLensStockHqLensId').val(data['data']['hq_lens_id']).trigger('change');
+                            $('#updateLensStockOpening').val(data['data']['opening']);
+                        }
+                    }
+                });
+            });
+
+            $('#updateLensStockForm').submit(function (e) { 
+                e.preventDefault();
+                let lens_id = $('#updateLensStockId').val();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let path ='{{ route('admin.workshop.inventory.lens.stocks.update', ':lens') }}';
+                path = path.replace(':lens', lens_id);
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function (data) {
+                        if(data['status'])
+                        {
+                            toastr.success(data['message']);
+                            $('#updateLensStockModal').modal('hide');
+                            $('#updateLensStockForm').trigger('reset');
+                            $('#lensData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(response) {
+                        let errors = response.responseJSON.errors;
+                        var errorsHtml = '<ul>';
+                        $.each(errors, function(field, messages) {
+                            errorsHtml +=
+                                '<li style="list-style-type:none; padding:0;">' +
+                                messages + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteLensBtn', function(e) {
+                e.preventDefault();
+                let lens_id = $(this).data('id');
+                let path = '{{ route('admin.workshop.inventory.lens.stocks.delete', ':lens') }}';
+                path = path.replace(':lens', lens_id);
+                let token = "{{ csrf_token() }}";
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this record!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: path,
+                            type: "DELETE",
+                            data: {
+                                _token: token,
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    $('#lensData').DataTable().ajax.reload();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 500);
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
             });
 
             find_hq_receives();

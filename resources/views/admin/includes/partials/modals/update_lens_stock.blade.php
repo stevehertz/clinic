@@ -1,21 +1,29 @@
  <!-- Frame Stocks Modal -->
- <div class="modal fade" id="addLensStockModal">
+ <div class="modal fade" id="updateLensStockModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Lens Stock</h4>
+                <h4 class="modal-title">Update Lens Stock</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="addLensStockForm">
+            <form id="updateLensStockForm">
                 <div class="modal-body">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="addLensStockHqLensId">Lens Code</label>
-                                <select name="hq_lens_id" id="addLensStockHqLensId" class="form-control select2"
+                                <input type="hidden" id="updateLensStockId" name="lens_id"
+                                    class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="updateLensStockHqLensId">Lens Code</label>
+                                <select name="hq_lens_id" id="updateLensStockHqLensId" class="form-control select2"
                                     style="width: 100%;">
                                     <option disabled='disabled' selected="selected">
                                         Select Lens Code
@@ -23,8 +31,10 @@
                                     @forelse ($organization->hq_lens()->latest()->get() as $lens_stock)
                                         <option value="{{ $lens_stock->id }}">
                                             Lens Code: {{ $lens_stock->code }} -
+                                            Power: {{ $lens_stock->power }} -
                                             Lens Type: {{ $lens_stock->lens_type->type }} -
-                                            Lens Material: {{ $lens_stock->lens_material->title }}
+                                            Lens Material: {{ $lens_stock->lens_material->title }} -
+                                            Eye: {{  $lens_stock->eye  }}
                                         </option>
                                     @empty
                                         <option disabled="disabled">No Lens Code Found..</option>
@@ -38,10 +48,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="addCaseStockOpening">
+                                <label for="updateLensStockOpening">
                                     Opening Stock
                                 </label>
-                                <input type="number" id="addCaseStockOpening" name="opening"
+                                <input type="number" id="updateLensStockOpening" name="opening"
                                     class="form-control" placeholder="Enter Opening Stock" />
                             </div>
                             <!-- /.form-group -->

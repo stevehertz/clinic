@@ -28,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('frame_stocks', function (Blueprint $table) {
             //
+            $table->dropColumn('received');
         });
     }
 };

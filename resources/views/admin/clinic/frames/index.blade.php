@@ -168,6 +168,7 @@
 
 @push('modals')
     @include('admin.includes.partials.modals.new_clinic_frame_stock')
+    @include('admin.includes.partials.modals.update_clinic_frame_stock')
 @endpush
 
 @push('scripts')
@@ -277,7 +278,83 @@
                             $('#newFrameStockForm')[0].reset();
                             $('#newFrameStockModal').modal('hide');
                             $('#frameStocksData').DataTable().ajax.reload();
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                            
+                        } else {
+                            toastr.error(data['message']);
+                        }
+                    },
+                    error: function(response) {
+                        let errors = response.responseJSON.errors;
+                        var errorsHtml = '<ul>';
+                        $.each(errors, function(field, messages) {
+                            errorsHtml +=
+                                '<li style="list-style-type:none; padding:0;">' +
+                                messages + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
+            $(document).on('click', '.updateFrameStock', function(e){
+                e.preventDefault();
+                let frame_stock_id = $(this).data('id');
+                let path = '{{ route('admin.clinic.inventory.frames.stocks.show', ':frameStock') }}';
+                path = path.replace(':frameStock', frame_stock_id);
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    dataType: "json",
+                    success: function (data) {
+                        if(data['status'])
+                        {
+                            $('#updateFrameStockModal').modal('show');
+                            $('#updateFrameStockId').val(data['data']['id']);
+                            $('#updateFrameStockCode').val(data['data']['hq_stock_id']).trigger('change');
+                            $('#updateFrameStockOpeningStock').val(data['data']['opening']);
+                        }
+                    }
+                });
+
+            });
+
+            $('#updateFrameStockForm').submit(function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let formData = new FormData(form[0]);
+                let frame_stock_id = $('#updateFrameStockId').val();
+                let path = '{{ route('admin.clinic.inventory.frames.stocks.update', ':frameStock') }}';
+                path = path.replace(':frameStock', frame_stock_id);
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        form.find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        form.find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        form.find('button[type=submit]').html('Save');
+                        form.find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+                            toastr.success(data['message']);
+                            $('#updateFrameStockForm')[0].reset();
+                            $('#updateFrameStockModal').modal('hide');
+                            $('#frameStocksData').DataTable().ajax.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                            
                         } else {
                             toastr.error(data['message']);
                         }

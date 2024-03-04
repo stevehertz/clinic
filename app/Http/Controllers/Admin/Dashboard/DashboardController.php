@@ -41,11 +41,10 @@ class DashboardController extends Controller
     }
 
     // Workshop Dashboard
-    public function workshop($id)
+    public function workshop(Workshop $workshop)
     {
         # code...
-        $workshop = Workshop::findOrFail($id);
-        $orders = $workshop->order->sortBy('created_at', SORT_DESC);
+        $orders = $workshop->order()->limit(10)->latest()->get();
         $sum_lenses = $workshop->lens->sum('closing');
         $num_orders = $workshop->order->count();
         $num_technicians = $workshop->technician->count();

@@ -85,7 +85,6 @@ use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
 use App\Http\Controllers\Admin\Reports\TAT\ClinicsTATReportsController;
 use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
 use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
-use App\Http\Controllers\Admin\Reports\Schemes\SchemeDetailsReportController;
 use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
 use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
@@ -136,132 +135,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/view', [OrganizationController::class, 'view'])->name('view');
 
         Route::post('/update', [OrganizationController::class, 'update'])->name('update');
-    });
-
-    // HQ Inventories
-    Route::prefix('hq')->name('hq.')->group(function () {
-
-        Route::prefix('frame')->name('frame.')->group(function () {
-
-            Route::prefix('stocks')->name('stocks.')->group(function () {
-
-                Route::get('/index', [HQFrameStocksController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQFrameStocksController::class, 'store'])->name('store');
-
-                Route::get('/{hqFrameStock}/show', [HQFrameStocksController::class, 'show'])->name('show');
-
-                Route::post('/{hqFrameStock}/update', [HQFrameStocksController::class, 'update'])->name('update');
-
-                Route::delete('/{hqFrameStock}/delete', [HQFrameStocksController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('tranfers')->name('transfers.')->group(function () {
-
-                Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQFrameTransfersController::class, 'store'])->name('store');
-
-                Route::get('/{hqFrameTransfer}/show', [HQFrameTransfersController::class, 'show'])->name('show');
-
-                Route::delete('/{hqFrameTransfer}/delete', [HQFrameTransfersController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('purchases')->name('purchases.')->group(function () {
-
-                Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQFramePurchasesController::class, 'store'])->name('store');
-
-                Route::get('/{hqFramePurchase}/show', [HQFramePurchasesController::class, 'show'])->name('show');
-
-                Route::get('/{hqFramePurchase}/attachment', [HQFramePurchasesController::class, 'attachment'])->name('attachment');
-
-                Route::delete('/{hqFramePurchase}/delete', [HQFramePurchasesController::class, 'destroy'])->name('delete');
-            });
-        });
-
-        Route::prefix('lenses')->name('lenses.')->group(function () {
-
-            Route::prefix('stocks')->name('stocks.')->group(function () {
-
-                Route::get('/index', [HQLensesController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQLensesController::class, 'store'])->name('store');
-
-                Route::get('/{hqLens}/show', [HQLensesController::class, 'show'])->name('show');
-
-                Route::post('/{hqLens}/update', [HQLensesController::class, 'update'])->name('update');
-
-                Route::delete('/{hqLens}/delete', [HQLensesController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('purchases')->name('purchases.')->group(function () {
-
-                Route::get('/index', [HQLensPurchasesController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQLensPurchasesController::class, 'store'])->name('store');
-
-                Route::get('/{hqLensPurchase}/show', [HQLensPurchasesController::class, 'show'])->name('show');
-
-                Route::get('/{hqLensPurchase}/attachment', [HQLensPurchasesController::class, 'attachment'])->name('attachment');
-
-                Route::delete('/{hqLensPurchase}/delete', [HQLensPurchasesController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('tranfers')->name('transfers.')->group(function () {
-
-                Route::get('/index', [HQLensTransfersController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQLensTransfersController::class, 'store'])->name('store');
-
-                Route::get('/{hqLensTransfer}/show', [HQLensTransfersController::class, 'show'])->name('show');
-
-                Route::delete('/{hqLensTransfer}/delete', [HQLensTransfersController::class, 'destroy'])->name('delete');
-            });
-        });
-
-        Route::prefix('cases')->name('cases.')->group(function () {
-
-            Route::prefix('stocks')->name('stocks.')->group(function () {
-
-                Route::get('/index', [HqCaseStocksController::class, 'index'])->name('index');
-
-                Route::post('/store', [HqCaseStocksController::class, 'store'])->name('store');
-
-                Route::get('/{hqCaseStock}/show', [HqCaseStocksController::class, 'show'])->name('show');
-
-                Route::post('/{hqCaseStock}/update', [HqCaseStocksController::class, 'update'])->name('update');
-
-                Route::delete('/{hqCaseStock}/delete', [HqCaseStocksController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('tranfers')->name('transfers.')->group(function () {
-
-                Route::get('/index', [HQCaseTransfersController::class, 'index'])->name('index');
-
-                Route::get('/workshop', [HQCaseTransfersController::class, 'get_for_workshops'])->name('workshop');
-
-                Route::post('/store', [HQCaseTransfersController::class, 'store'])->name('store');
-
-                Route::get('/{hqCaseTransfer}/show', [HQCaseTransfersController::class, 'show'])->name('show');
-
-                Route::delete('/{hqCaseTransfer}/delete', [HQCaseTransfersController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('purchases')->name('purchases.')->group(function () {
-
-                Route::get('/index', [HQCasePurchasesController::class, 'index'])->name('index');
-
-                Route::post('/store', [HQCasePurchasesController::class, 'store'])->name('store');
-
-                Route::get('/{hqCasePurchase}/show', [HQCasePurchasesController::class, 'show'])->name('show');
-
-                Route::get('/{hqCasePurchase}/attachment', [HQCasePurchasesController::class, 'attachment'])->name('attachment');
-
-                Route::delete('/{hqCasePurchase}/delete', [HQCasePurchasesController::class, 'destroy'])->name('delete');
-            });
-        });
     });
 
     // settings
@@ -637,19 +510,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/{clinic}/force/delete', [ClinicsController::class, 'forceDelete'])->name('force.delete');
     });
 
-    // clinics Reports
-    Route::prefix('clinics/reports')->name('clinics.reports.')->group(function () {
-
-        Route::get('/index', [ClinicReportsController::class, 'index'])->name('index');
-
-        Route::get('/export', [ClinicReportsController::class, 'export'])->name('export');
-    });
-
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
         Route::get('/{clinic}', [DashboardController::class, 'index'])->name('index');
 
-        Route::get('/{id}/workshop', [DashboardController::class, 'workshop'])->name('workshop.index');
+        Route::get('/{workshop}/workshop', [DashboardController::class, 'workshop'])->name('workshop.index');
     });
 
     Route::prefix('patients')->name('patients.')->group(function () {
@@ -730,51 +595,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{id}/{order_id}/view', [OrdersOrdersController::class, 'view'])->name('view');
     });
 
-    // Orders Reports
-    Route::prefix('orders/report')->name('order.reports.')->group(function () {
-
-        Route::get('/{id}', [OrdersReportsController::class, 'index'])->name('index');
-
-        Route::get('/{id}/export', [OrdersReportsController::class, 'export'])->name('export');
-    });
-
-    // TAT Reports
-    Route::prefix('tat/reports')->name('tat.reports.')->group(function(){
-
-        Route::get('/{clinic}', [ClinicsTATReportsController::class, 'index'])->name('index');
-
-        Route::get('/{clinic}/export/tat/one', [ClinicsTATReportsController::class, 'export_tat_one'])->name('export.tat.one');
-
-        Route::get('/{clinic}/tat/two', [ClinicsTATReportsController::class, 'get_tat_two'])->name('tat.two');
-
-        Route::get('/{clinic}/export/tat/two', [ClinicsTATReportsController::class, 'export_tat_two'])->name('export.tat.two');
-
-    });
-
-
-    // Scheme Details Report
-    Route::prefix('scheme/details/reports')->name('scheme.details.reports.')->group(function(){
-
-        Route::get('/{clinic}', [SchemeDetailsReportController::class, 'index'])->name('index');
-
-        Route::get('/{clinic}/export', [SchemeDetailsReportController::class, 'export'])->name('export');
-
-    });
-
-
     Route::prefix('payments/details')->name('payments.details.')->group(function () {
 
         Route::post('/store', [PaymentDetailsController::class, 'store'])->name('store');
     });
-
-    // Payments Reports
-    Route::prefix('payments/reports')->name('payments.reports.')->group(function () {
-
-        Route::get('/{id}', [PaymentsReportController::class, 'index'])->name('index');
-
-        Route::get('/{id}/export', [PaymentsReportController::class, 'export'])->name('export');
-    });
-
+    
     Route::prefix('appointments')->name('appointments.')->group(function () {
 
         Route::get('/{id}', [AppointmentsController::class, 'index'])->name('index');
@@ -794,71 +619,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{schedule_id}/show', [SchedulesDoctorSchedulesController::class, 'show'])->name('show');
 
         Route::get('/{id}/{schedule_id}/view', [SchedulesDoctorSchedulesController::class, 'view'])->name('view');
-    });
-
-    Route::prefix('workshop/inventory')->name('workshop.inventory.')->group(function () {
-
-        Route::prefix('lens')->name('lens.')->group(function () {
-
-            Route::prefix('stocks')->name('stocks.')->group(function () {
-
-                Route::get('/{workshop}', [LensController::class, 'index'])->name('index');
-
-                Route::post('/{workshop}/store', [LensController::class, 'store'])->name('store');
-
-                Route::post('/show', [LensController::class, 'show'])->name('show');
-
-                Route::post('/update', [LensController::class, 'update'])->name('update');
-
-                Route::delete('/delete', [LensController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('received')->name('received.')->group(function () {
-
-                Route::get('/{workshop}', [LensReceivesController::class, 'index'])->name('index');
-
-                Route::get('/{workshop}/from/workshop', [LensReceivesController::class, 'get_lens_received_from_workshops'])->name('from.workshop');
-
-            });
-
-            Route::prefix('request')->name('request.')->group(function () {
-
-                Route::get('/{workshop}', [LensRequestController::class, 'index'])->name('index');
-
-            });
-
-
-        });
-
-        Route::prefix('cases')->name('cases.')->group(function () {
-
-            Route::prefix('stock')->name('stock.')->group(function () {
-
-                Route::get('/{workshop}', [WorkshopCaseStocksController::class, 'index'])->name('index');
-
-                Route::post('/{workshop}/store', [WorkshopCaseStocksController::class, 'store'])->name('store');
-
-                Route::get('/{workshopCaseStock}/show', [WorkshopCaseStocksController::class, 'show'])->name('show');
-
-                Route::post('/update', [WorkshopCaseStocksController::class, 'update'])->name('update');
-
-                Route::delete('/{workshopCaseStock}/delete', [WorkshopCaseStocksController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('received')->name('received.')->group(function () {
-
-                Route::get('/{workshop}', [WorkshopCaseReceivedController::class, 'index'])->name('index');
-
-                Route::get('/{workshop}/from/workshop', [WorkshopCaseReceivedController::class, 'get_received_from_workshop'])->name('from.workshop');
-
-            });
-
-            Route::prefix('requests')->name('requests.')->group(function () {
-
-                Route::get('/{workshop}', [WorkshopCaseRequestsController::class, 'index'])->name('index');
-            });
-
-        });
     });
 
     Route::prefix('lens/purchase')->name('lens.purchase.')->group(function () {
@@ -943,88 +703,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/delete', [FramesController::class, 'destroy'])->name('delete');
     });
 
-    // Inventory
-    Route::prefix('inventory')->name('inventory.')->group(function () {
-
-        Route::get('/{id}', [InventoryController::class, 'index'])->name('index');
-    });
-
-    // Clinics inventory
-    Route::prefix('clinic/inventory')->name('clinic.inventory.')->group(function () {
-
-        // frame stocks 
-        Route::prefix('frames')->name('frames.')->group(function () {
-
-            Route::prefix('stocks')->name('stocks.')->group(function () {
-
-                Route::get('/{clinic}', [FramesStocksController::class, 'index'])->name('index');
-
-                Route::post('/{clinic}/store', [FramesStocksController::class, 'store'])->name('store');
-
-                Route::get('/{frameStock}/show', [FramesStocksController::class, 'show'])->name('show');
-
-                Route::post('/update', [FramesStocksController::class, 'update'])->name('update');
-
-                Route::delete('/{frameStock}/delete', [FramesStocksController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('received')->name('received.')->group(function () {
-
-                Route::get('/{clinic}', [FrameReceivedController::class, 'index'])->name('index');
-
-                Route::get('/{clinic}/from/clinic', [FrameReceivedController::class, 'get_received_from_clinic'])->name('from.clinic');
-
-                Route::post('/{clinic}/store', [FrameReceivedController::class, 'store'])->name('store');
-
-                Route::get('/{frameStock}/show', [FrameReceivedController::class, 'show'])->name('show');
-
-                Route::post('/update', [FrameReceivedController::class, 'update'])->name('update');
-
-                Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
-            });
-
-
-            Route::prefix('requests')->name('requests.')->group(function () {
-
-                Route::get('/{clinic}', [FrameRequestsController::class, 'index'])->name('index');
-            });
-        });
-
-        // Cases Stocks 
-        Route::prefix('cases')->name('cases.')->group(function () {
-
-            Route::prefix('stock')->name('stock.')->group(function () {
-
-                Route::get('/{clinic}', [CaseStocksController::class, 'index'])->name('index');
-
-                Route::post('/{clinic}/store', [CaseStocksController::class, 'store'])->name('store');
-
-                Route::get('/{caseStock}/show', [CaseStocksController::class, 'show'])->name('show');
-
-                Route::post('/update', [CaseStocksController::class, 'update'])->name('update');
-
-                Route::delete('/{caseStock}/delete', [CaseStocksController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('received')->name('received.')->group(function () {
-
-                Route::get('/{clinic}', [CaseReceivedController::class, 'index'])->name('index');
-
-                Route::get('/{clinic}/from/clinic', [CaseReceivedController::class, 'get_received_from_clinic'])->name('from.clinic');
-
-                Route::get('/{frameStock}/show', [FrameReceivedController::class, 'show'])->name('show');
-
-                Route::post('/update', [FrameReceivedController::class, 'update'])->name('update');
-
-                Route::delete('/{frameStock}/delete', [FrameReceivedController::class, 'destroy'])->name('delete');
-            });
-
-            Route::prefix('requests')->name('requests.')->group(function () {
-
-                Route::get('/{clinic}', [CaseRequestsController::class, 'index'])->name('index');
-            });
-        });
-    });
 
     // frame purchases
     Route::prefix('frame/purchases')->name('frame.purchases.')->group(function () {

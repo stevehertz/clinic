@@ -41,6 +41,7 @@ return [
                 'claims' => 'Claims Report',
                 'uncollected_ordrs' => 'Uncollected Orders Reports',
                 'rejected' => 'Rejected Claims Report',
+                'pending' => 'Pending Claims Report',
                 'assets' => "Assets Report"
             ],
 

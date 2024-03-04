@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Lens;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Lens\StoreLensStockRequest;
+use App\Http\Requests\Admin\Workshop\Lens\UpdateLensRequest;
+use App\Models\HqLens;
 use App\Models\Lens;
 use App\Models\Workshop;
 use Carbon\Carbon;
@@ -33,30 +35,40 @@ class LensController extends Controller
             $data = $workshop->lens->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('code', function($row){
-                   return $row->hq_lens->code;
+                ->addColumn('code', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->code;
+                    }
                 })
-                ->addColumn('power', function($row){
-                    return $row->hq_lens->power;
+                ->addColumn('power', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->power;
+                    }
                 })
                 ->addColumn('type', function ($row) {
-                    return $row->hq_lens->lens_type->type;
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->lens_type->type;
+                    }
                 })
                 ->addColumn('material', function ($row) {
-                    return $row->hq_lens->lens_material->title;
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->lens_material->title;
+                    }
                 })
-                ->addColumn('lens_index', function($row){
-                    return $row->hq_lens->lens_index;
+                ->addColumn('lens_index', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->lens_index;
+                    }
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Update" class="update btn btn-tools btn-sm updateLensBtn"><i class="fa fa-edit"></i></a>';
                     $btn = $btn .= ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="delete btn btn-tools btn-sm deleteLensBtn"><i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action', 'type', 'material'])
+                ->rawColumns(['action', 'type', 'material', 'code'])
                 ->make(true);
         }
-       
+
         $page_title = "Lenses";
         return view('admin.lens.index', [
             'workshop' => $workshop,
@@ -131,24 +143,9 @@ class LensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(Lens $lens)
     {
         //
-        $data = $request->except("_token");
-
-        $validator = Validator::make($data, [
-            'lens_id' => 'required|integer|exists:lenses,id'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $lens = Lens::findOrFail($data['lens_id']);
-
         $response = [
             'status' => true,
             'data' => $lens
@@ -164,36 +161,35 @@ class LensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateLensRequest $request, Lens $lens)
     {
         //
         $data = $request->except("_token");
 
-        $validator = Validator::make($data, [
-            'lens_id' => 'required|integer|exists:lenses,id',
-            'power' => 'required',
-            'lens_type_id' => 'required|integer|exists:lens_types,id',
-            'lens_material_id' => 'required|integer|exists:lens_materials,id',
-            'lens_index' => 'required',
-            'eye' => 'required|string',
-            'opening' => 'nullable|integer',
-        ]);
+        $hq_lens = HqLens::findOrFail($data['hq_lens_id']);
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
+        $opening = $data['opening'];
 
-        $lens = Lens::findOrFail($data['lens_id']);
+        $received = $lens->received;
+
+        $transfered = $lens->transfered;
+
+        $total = ($opening + $received) - $transfered;
+
+        $sold = $lens->sold;
+
+        $closing = $total - $sold;
 
         $lens->update([
-            'power' => $data['power'],
-            'lens_type_id' => $data['lens_type_id'],
-            'lens_material_id' => $data['lens_material_id'],
-            'lens_index' => $data['lens_index'],
-            'eye' => $data['eye'],
+            'hq_lens_id' => $hq_lens->id,
+            'power' => $hq_lens->power,
+            'eye' => $hq_lens->eye,
+            'opening' => $opening,
+            'received' => $received,
+            'transfered' => $transfered,
+            'total' => $total,
+            'sold' => $sold,
+            'closing' => $closing,
         ]);
 
         $response['status'] = true;
@@ -208,23 +204,9 @@ class LensController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Lens $lens)
     {
         //
-        $data = $request->except("_token");
-
-        $validator = Validator::make($data, [
-            'lens_id' => 'required|integer|exists:lenses,id'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['status'] = false;
-            $response['errors'] = $errors;
-            return response()->json($response, 401);
-        }
-
-        $lens = Lens::findOrFail($data['lens_id']);
         $lens->delete();
         $response['status'] = true;
         $response['message'] = "You have successfully deleted lens from stock";

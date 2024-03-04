@@ -30,7 +30,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ count($lenses) }}</h3>
+                            <h3>{{ $organization->hq_lens()->sum('total') }}</h3>
 
                             <p>Lenses</p>
                         </div>

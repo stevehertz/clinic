@@ -14,7 +14,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('storage/admin/' . Auth::guard()->user()->profile) }}" class="img-circle elevation-2"
+                <img src="{{ asset('storage/admin/' . Auth::guard('admin')->user()->profile) }}" class="img-circle elevation-2"
                     alt="{{ Auth::guard('admin')->user()->first_name }} {{ Auth::guard('admin')->user()->last_name }}">
             </div>
             <div class="info">
@@ -243,6 +243,18 @@
                         <i class="nav-icon fa fa-file-excel-o"></i>
                         <p>
                             @lang('menus.admins.sidebar.reports.scheme_details')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.pending.claims.reports.index', $clinic->id) }}"
+                        class="nav-link 
+                        {{ Route::is('admin.pending.claims.reports.index', $clinic->id) ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.pending')
                         </p>
                     </a>
                 </li>
