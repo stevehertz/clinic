@@ -40,8 +40,6 @@ use App\Http\Controllers\Admin\Glasses\SunGlassesController;
 use App\Http\Controllers\Admin\Lens\LensPurchasesController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
-use App\Http\Controllers\Admin\Frames\FramesStocksController;
-use App\Http\Controllers\Admin\Inventory\InventoryController;
 use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
 use App\Http\Controllers\Admin\Assets\AssetTransferController;

@@ -259,6 +259,28 @@
                     </a>
                 </li>
 
+
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.pending')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.frames')
+                        </p>
+                    </a>
+                </li>
+
+
                 <li class="nav-header">
                     @lang('menus.admins.sidebar.headers.settings')
                 </li>

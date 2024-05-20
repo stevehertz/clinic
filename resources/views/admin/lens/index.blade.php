@@ -98,6 +98,7 @@
                     ajax: path,
                     "responsive": true,
                     "autoWidth": false,
+                    pageLength: 1000,
                     columns: [{
                             data: 'code',
                             name: 'code'
@@ -264,9 +265,9 @@
                             $('#updateLensStockModal').modal('hide');
                             $('#updateLensStockForm').trigger('reset');
                             $('#lensData').DataTable().ajax.reload();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1000);
+                            // setTimeout(() => {
+                            //     location.reload();
+                            // }, 1000);
                         }
                     },
                     error: function(response) {

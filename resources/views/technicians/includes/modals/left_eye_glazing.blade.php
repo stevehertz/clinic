@@ -29,13 +29,16 @@
                                         Choose Lens To Use in this order
                                     </option>
                                     @forelse ($left_eye_lenses as $left_eye_lens)
-                                        <option value="{{ $left_eye_lens->id }}">
-                                            Lens Code : {{ $left_eye_lens->hq_lens->code }} :
-                                            Power: {{ $left_eye_lens->hq_lens->power }} : 
-                                            Type: {{ $left_eye_lens->hq_lens->lens_type->type }}:
-                                            Material: {{ $left_eye_lens->hq_lens->lens_material->title }} :
-                                            Index: {{ $left_eye_lens->hq_lens->lens_index }}
-                                        </option>
+                                        @if ($left_eye_lens->hq_lens)
+                                            <option value="{{ $left_eye_lens->id }}">
+                                                Lens Code : {{ $left_eye_lens->hq_lens->code }} :
+                                                Power: {{ $left_eye_lens->hq_lens->power }} :
+                                                Type: {{ $left_eye_lens->hq_lens->lens_type->type }}:
+                                                Material: {{ $left_eye_lens->hq_lens->lens_material->title }} :
+                                                Index: {{ $left_eye_lens->hq_lens->lens_index }}
+                                            </option>
+                                        @endif
+
                                     @empty
                                         <option disabled="disabled">NOT TRANSFERED</option>
                                     @endforelse

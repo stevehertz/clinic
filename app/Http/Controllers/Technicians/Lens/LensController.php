@@ -29,22 +29,33 @@ class LensController extends Controller
             $data = $workshop->lens->sortBy('created_at', SORT_DESC);
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('lens_code', function($row){
-                    return $row->hq_lens->code;
+                ->addColumn('lens_code', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->code;
+                    }
                 })
-                ->addColumn('power', function($row){
-                    return $row->hq_lens->power;
+                ->addColumn('power', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->power;
+                    }
                 })
                 ->addColumn('type', function ($row) {
-                    $type = $row->hq_lens->lens_type->type;
-                    return $type;
+                    if ($row->hq_lens) {
+                        $type = $row->hq_lens->lens_type->type;
+                        return $type;
+                    }
                 })
                 ->addColumn('material', function ($row) {
-                    $material = $row->hq_lens->lens_material->title;
-                    return $material;
+                    if ($row->hq_lens) {
+                        $material = $row->hq_lens->lens_material->title;
+                        return $material;
+                    }
                 })
-                ->addColumn('lens_index', function($row){
-                    return $row->hq_lens->lens_index;
+                ->addColumn('lens_index', function ($row) {
+                    if ($row->hq_lens) {
+                        return $row->hq_lens->lens_index;
+                    }
+                    
                 })
                 ->rawColumns(['type', 'material', 'lens_code', 'power', 'lens_index'])
                 ->make(true);

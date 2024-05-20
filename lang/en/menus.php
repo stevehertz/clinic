@@ -42,7 +42,10 @@ return [
                 'uncollected_ordrs' => 'Uncollected Orders Reports',
                 'rejected' => 'Rejected Claims Report',
                 'pending' => 'Pending Claims Report',
-                'assets' => "Assets Report"
+                'assets' => "Assets Report",
+                "frames" => "Frame Consumption Report",
+                "lens" => "Lens Consumption Report",
+                "cases" => "Case Consumption Reports"
             ],
 
             'settings' => 'Settings',

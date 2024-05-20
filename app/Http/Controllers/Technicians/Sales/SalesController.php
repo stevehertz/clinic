@@ -154,12 +154,6 @@ class SalesController extends Controller
             return response()->json($response, 200);
 
         }
-
-
-       
-
-       
-
     }
 
     /**

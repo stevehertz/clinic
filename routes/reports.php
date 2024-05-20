@@ -1,25 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Reports\Main\ReportsController;
 use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
 use App\Http\Controllers\Admin\Reports\TAT\ClinicsTATReportsController;
 use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
 use App\Http\Controllers\Admin\Reports\Claims\PendingClaimsReportController;
+use App\Http\Controllers\Admin\Reports\Frames\FramesReportController;
+use App\Http\Controllers\Admin\Reports\Frames\HqFramesReportController;
 use App\Http\Controllers\Admin\Reports\Schemes\SchemeDetailsReportController;
 
 Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
-    // clinics Reports
-    Route::prefix('clinics/reports')->name('clinics.reports.')->group(function () {
 
-        Route::get('/index', [ClinicReportsController::class, 'index'])->name('index');
+    // Main Report
+    Route::prefix('main/reports')->name('main.reports.')->group(function () {
 
-        Route::get('/export', [ClinicReportsController::class, 'export'])->name('export');
+        Route::get('/index', [ReportsController::class, 'index'])->name('index');
+
+        Route::get('/get/reports', [ReportsController::class, 'get_reports'])->name('get.reports');
+
+        Route::get('/export', [ReportsController::class, 'export'])->name('export');
+
     });
 
-     // Payments Reports
-     Route::prefix('payments/reports')->name('payments.reports.')->group(function () {
+    Route::prefix('hq')->name('hq.')->group(function(){
+
+        Route::prefix("frames/report")->name("frames.report.")->group(function(){
+
+            Route::get('/', [HqFramesReportController::class, 'index'])->name("index");
+
+            Route::get('/get/frames/report', [HqFramesReportController::class, 'getFramesReport'])->name("get.frames.report");
+
+            Route::get('/export', [HqFramesReportController::class, 'export'])->name('export');
+
+        });
+    });
+
+    // Payments Reports
+    Route::prefix('payments/reports')->name('payments.reports.')->group(function () {
 
         Route::get('/{id}', [PaymentsReportController::class, 'index'])->name('index');
 
@@ -36,7 +56,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // TAT Reports
-    Route::prefix('tat/reports')->name('tat.reports.')->group(function(){
+    Route::prefix('tat/reports')->name('tat.reports.')->group(function () {
 
         Route::get('/{clinic}', [ClinicsTATReportsController::class, 'index'])->name('index');
 
@@ -45,7 +65,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{clinic}/tat/two', [ClinicsTATReportsController::class, 'get_tat_two'])->name('tat.two');
 
         Route::get('/{clinic}/export/tat/two', [ClinicsTATReportsController::class, 'export_tat_two'])->name('export.tat.two');
-
     });
 
 
@@ -58,11 +77,18 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     });
 
     // Pending Claims Reports
-    Route::prefix('pending/claims/reports')->name('pending.claims.reports.')->group(function(){
+    Route::prefix('pending/claims/reports')->name('pending.claims.reports.')->group(function () {
 
         Route::get('/{clinic}', [PendingClaimsReportController::class, 'index'])->name('index');
 
         Route::get('/{clinic}/export', [PendingClaimsReportController::class, 'export'])->name('export');
+    });
+
+    // Frames Reports
+    Route::prefix('frames/report')->name('frames.report.')->group(function(){
+
+        Route::get('/{clinic}', [FramesReportController::class, 'index'])->name('index');
+
 
     });
 });

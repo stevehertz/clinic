@@ -202,6 +202,12 @@ class OrdersController extends Controller
     public function show(Order $order)
     {
         //
+        $clinic = $order->clinic;
+        if ($order->user_id == null) {
+            $order->update([
+                'user_id' => $order->doctor_schedule->user_id
+            ]);
+        }
         $response['status'] = true;
         $response['data'] = $order;
         return response()->json($response, 200);
@@ -216,11 +222,11 @@ class OrdersController extends Controller
     public function view(Order $order)
     {
         # code...
-        $clinic = $order->clinic;
+        $clinic = $order->payment_bill;
 
         if ($order->user_id == null) {
             $order->update([
-                'user_id' => $order->payment_bill->user_id
+                'user_id' => $order->doctor_schedule->user_id
             ]);
         }
         $page_title = trans('users.page.orders.sub_page.view');

@@ -12,14 +12,27 @@
         <tbody>
             @forelse ($sales as $sale)
                 <tr>
-                    <td>{{ $sale->lens->hq_lens->power }}</td>
-                    <td>{{ $sale->lens->hq_lens->lens_type->type }}</td>
-                    <td>{{ $sale->lens->hq_lens->lens_material->title }}</td>
+                    <td>
+                        @if ($sale->lens->hq_lens)
+                            {{ $sale->lens->hq_lens->power }}
+                        @endif
+                    </td>
+                    <td>
+                        @if ($sale->lens->hq_lens)
+                            {{ $sale->lens->hq_lens->lens_type->type }}
+                        @endif
+                    </td>
+                    <td>
+                        @if ($sale->lens->hq_lens)
+                            {{ $sale->lens->hq_lens->lens_material->title }}
+                        @endif
+                    </td>
                     <td>
                         @if ($sale->eye)
                             {{ $sale->eye }}
                         @else
-                            <a href="javascript:void(0)" data-id="{{ $sale->id }}" class="btn btn-sm btn-link addEyeBtn">
+                            <a href="javascript:void(0)" data-id="{{ $sale->id }}"
+                                class="btn btn-sm btn-link addEyeBtn">
                                 Add Eye
                             </a>
                         @endif

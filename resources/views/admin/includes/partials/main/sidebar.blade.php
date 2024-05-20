@@ -216,13 +216,45 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.clinics.reports.index') }}"
+                    <a href="{{ route('admin.main.reports.index') }}"
                         class="nav-link
-                    {{ Route::is('admin.clinics.reports.index') ? 'active' : '' }}
+                    {{ Route::is('admin.main.reports.index') ? 'active' : '' }}
                     ">
                         <i class="nav-icon fa fa-line-chart"></i>
                         <p>
                             @lang('menus.admins.sidebar.reports.main')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.hq.frames.report.index') }}"
+                        class="nav-link
+                        {{ Route::is('admin.hq.frames.report.index') ? 'active' : '' }}
+                        ">
+                        <i class="nav-icon fa fa-line-chart"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.frames')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.main.reports.index') }}"
+                        class="nav-link">
+                        <i class="nav-icon fa fa-line-chart"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.cases')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.main.reports.index') }}"
+                        class="nav-link">
+                        <i class="nav-icon fa fa-line-chart"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.reports.lens')
                         </p>
                     </a>
                 </li>

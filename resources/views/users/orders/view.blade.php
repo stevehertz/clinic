@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $clinic->clinic }}</h1>
+                    <h1>{{ $order->clinic->clinic }}</h1>
                     <small>
                         Order Date: {{ date('d-m-Y', strtotime($order->order_date)) }}
                     </small>
@@ -57,12 +57,14 @@
                                     Frame Prescription
                                 </a>
                             </li>
+                            @if ($order->frame_prescription->case_stock)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#casePrescriptionTab" data-toggle="tab">
+                                        Case Prescription
+                                    </a>
+                                </li>
+                            @endif
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#casePrescriptionTab" data-toggle="tab">
-                                    Case Prescription
-                                </a>
-                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -169,40 +171,42 @@
 
                             </div>
                             <!-- /.tab-pane -->
+                            @if ($order->frame_prescription->case_stock)
+                                <div class="tab-pane" id="casePrescriptionTab">
+                                    <strong><i class="fa fa-archive mr-1"></i> Case Code</strong>
 
+                                    <p class="text-muted">
+                                        {{ $order->frame_prescription->case_code }}
+                                    </p>
 
-                            <div class="tab-pane" id="casePrescriptionTab">
-                                <strong><i class="fa fa-archive mr-1"></i> Case Code</strong>
+                                    <hr>
 
-                                <p class="text-muted">
-                                    {{ $order->frame_prescription->case_code }}
-                                </p>
+                                    <strong><i class="fas fa-ankh mr-1"></i> Case Color</strong>
 
-                                <hr>
+                                    <p class="text-muted">
+                                        {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_color->title }}
+                                    </p>
 
-                                <strong><i class="fas fa-ankh mr-1"></i> Case Color</strong>
+                                    <hr>
 
-                                <p class="text-muted">
-                                    {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_color->title }}
-                                </p>
+                                    <strong><i class="fab fa-creative-commons-share mr-1"></i> Case Shape</strong>
 
-                                <hr>
+                                    <p class="text-muted">
+                                        {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_shape->title }}
+                                    </p>
 
-                                <strong><i class="fab fa-creative-commons-share mr-1"></i> Case Shape</strong>
+                                    <hr>
 
-                                <p class="text-muted">
-                                    {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_shape->title }}
-                                </p>
+                                    <strong><i class="fas fa-arrows-alt mr-1"></i> Case Size</strong>
 
-                                <hr>
+                                    <p class="text-muted">
+                                        {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_size->title }}
+                                    </p>
 
-                                <strong><i class="fas fa-arrows-alt mr-1"></i> Case Size</strong>
+                                </div>
+                                <!-- /.tab-pane -->
+                            @endif
 
-                                <p class="text-muted">
-                                    {{ $order->frame_prescription->case_stock->hqStock->frame_case->case_size->title }}</p>
-
-                            </div>
-                            <!-- /.tab-pane -->
 
                         </div>
                         <!-- /.tab-content -->

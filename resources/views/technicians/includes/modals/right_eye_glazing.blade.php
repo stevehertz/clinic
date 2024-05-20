@@ -30,11 +30,13 @@
                                     </option>
                                     @forelse ($right_eye_lenses as $right_eye_lens)
                                         <option value="{{ $right_eye_lens->id }}">
-                                            Lens Code : {{ $right_eye_lens->hq_lens->code }} :
-                                            Power: {{ $right_eye_lens->hq_lens->power }} : 
-                                            Type: {{ $right_eye_lens->hq_lens->lens_type->type }}:
-                                            Material: {{ $right_eye_lens->hq_lens->lens_material->title }} :
-                                            Index: {{ $right_eye_lens->hq_lens->lens_index }}
+                                            @if ($right_eye_lens->hq_lens)
+                                                Lens Code : {{ $right_eye_lens->hq_lens->code }} :
+                                                Power: {{ $right_eye_lens->hq_lens->power }} :
+                                                Type: {{ $right_eye_lens->hq_lens->lens_type->type }}:
+                                                Material: {{ $right_eye_lens->hq_lens->lens_material->title }} :
+                                                Index: {{ $right_eye_lens->hq_lens->lens_index }}
+                                            @endif
                                         </option>
                                     @empty
                                         <option disabled="disabled">NOT TRANSFERED</option>

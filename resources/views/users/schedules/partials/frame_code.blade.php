@@ -26,7 +26,8 @@
                             <b>Code</b>: {{ $frame_prescription->frame_code }}
                         </p>
                         <p>
-                            <b>Frame Brand</b> {{ $frame_prescription->frame_stock->hq_stock->frame->frame_brand->title }}
+                            <b>Frame Brand</b>
+                            {{ $frame_prescription->frame_stock->hq_stock->frame->frame_brand->title }}
                         </p>
                     </div>
                 </div>
@@ -34,35 +35,41 @@
             <!-- END timeline item -->
 
             <!-- timeline item -->
-            <div>
-                <i class="fas fa-briefcase-medical bg-info"></i>
+            @if ($frame_prescription->case_stock)
+                <div>
+                    <i class="fas fa-briefcase-medical bg-info"></i>
 
-                <div class="timeline-item">
-                    <h3 class="timeline-header">
-                        <a href="#">Case</a> Code
-                    </h3>
+                    <div class="timeline-item">
+                        <h3 class="timeline-header">
+                            <a href="#">Case</a> Code
+                        </h3>
 
-                    <div class="timeline-body table-responsive">
-                        <p>
-                            <b>Code:</b> {{ $frame_prescription->case_stock->hqStock->frame_case->code }}
-                        </p>
-                        <p>
-                            <b>Case Color:</b> {{ $frame_prescription->case_stock->hqStock->frame_case->case_color->title }}
-                        </p>
+                        <div class="timeline-body table-responsive">
+                            <p>
+                                <b>Code:</b> {{ $frame_prescription->case_stock->hqStock->frame_case->code }}
+                            </p>
+                            <p>
+                                <b>Case Color:</b>
+                                {{ $frame_prescription->case_stock->hqStock->frame_case->case_color->title }}
+                            </p>
 
-                        <p>
-                            <b>Case Shape:</b> {{ $frame_prescription->case_stock->hqStock->frame_case->case_shape->title }}
-                        </p>
+                            <p>
+                                <b>Case Shape:</b>
+                                {{ $frame_prescription->case_stock->hqStock->frame_case->case_shape->title }}
+                            </p>
 
-                        <p>
-                            <b>Case Size:</b> {{ $frame_prescription->case_stock->hqStock->frame_case->case_size->title }}
-                        </p>
+                            <p>
+                                <b>Case Size:</b>
+                                {{ $frame_prescription->case_stock->hqStock->frame_case->case_size->title }}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- END timeline item -->
+                <!-- END timeline item -->
+            @endif
 
-            
+
+
 
             <!-- timeline item -->
             <div>
@@ -227,11 +234,11 @@
                             </div>
                             <!-- /.col-md-6 -->
 
-                            
+
                         </div>
                         <!--/.row -->
 
-                        
+
 
                         <div class="row">
                             <div class="col-md-12">
