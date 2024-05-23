@@ -14,10 +14,27 @@ class FramesReportRepository
         ])->latest()->get();
     }
 
-    public function getAllFrames($request, $admin_id)
+    public function getTotalHqFrameStocks(Admin $admin) 
+    {
+        $organization = $admin->organization;   
+        return $organization->hq_frame_stock()->sum("total");
+    }
+
+    public function getPurchasedHqFrameStocks(Admin $admin) 
+    {
+        $organization = $admin->organization;   
+        return $organization->hq_frame_stock()->sum("purchased");
+    }
+
+    public function getTransferedHqFrameStocks(Admin $admin) 
+    {
+        $organization = $admin->organization;   
+        return $organization->hq_frame_stock()->sum("transfered");
+    }
+
+    public function getAllFrames($admin_id)
     {
         $admin = Admin::findOrFail($admin_id);
-
         if ($admin) {
             $organization = $admin->organization;
             $data = $organization->frame()->latest()->get();

@@ -31,7 +31,7 @@
                                 Total Frames
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                2300
+                                {{ $total }}
                             </span>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                                 Total Purchased
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                2300
+                                {{ $purchased }}
                             </span>
                         </div>
                     </div>
@@ -57,17 +57,28 @@
                                 Total Transfered
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                2300
+                                {{ $transfered }}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            
+            <!-- /.row -->
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-
+                        <div class="card-header">
+                            <div class="card-tools">
+                                <a href="{{ route("admin.hq.frames.report.export") }}">
+                                    <button type="button" class="btn btn-primary">
+                                        Export Excel
+                                    </button>
+                                </a>
+                                
+                            </div>
+                        </div>
+                        <!--/.card-header -->
                         <div class="card-body table-responsive">
                             <table id="reportsData" class="table table-bordered table-striped table-hover">
                                 <thead>
@@ -88,7 +99,8 @@
                         </div><!-- /.card-body -->
                     </div><!-- /.card -->
                 </div><!-- /.col -->
-            </div><!-- /.row -->
+            </div>
+            <!-- /.row -->
         </div>
     </section>
 @endsection

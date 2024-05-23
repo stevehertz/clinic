@@ -28,13 +28,9 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('hq')->name('hq.')->group(function(){
 
         Route::prefix("frames/report")->name("frames.report.")->group(function(){
-
             Route::get('/', [HqFramesReportController::class, 'index'])->name("index");
-
             Route::get('/get/frames/report', [HqFramesReportController::class, 'getFramesReport'])->name("get.frames.report");
-
             Route::get('/export', [HqFramesReportController::class, 'export'])->name('export');
-
         });
     });
 
