@@ -31,7 +31,6 @@ return [
                 ],
 
             ],
-
             'reports' => [
                 'main' => 'Main Report',
                 'payments' => 'Payments Report',
@@ -47,7 +46,16 @@ return [
                 "lens" => "Lens Consumption Report",
                 "cases" => "Case Consumption Reports"
             ],
-
+            'user_management' => [
+                'admins' => 'Admins',
+                'users' => 'Optometrists',
+                'technicians' => 'Technicians'
+            ],
+            'payments' => [
+                'payments' => 'Payments/ Billing',
+                'closed' => 'Closed Bills',
+                'billing' => 'Billing',
+            ],
             'settings' => 'Settings',
         ],
     ],

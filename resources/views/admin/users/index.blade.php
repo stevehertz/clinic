@@ -252,7 +252,6 @@
         $(document).ready(function() {
 
             find_users();
-
             function find_users() {
                 var path = '{{ route('admin.users.index', $clinic->id) }}';
                 $('#usersData').DataTable({

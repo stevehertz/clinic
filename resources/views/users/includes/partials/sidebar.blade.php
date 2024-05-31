@@ -211,12 +211,12 @@
                                 <p>@lang('users.page.payments.sub_page.closed')</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('users.payments.remittance.index') }}" class="nav-link">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>@lang('users.page.payments.sub_page.remittance')</p>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 

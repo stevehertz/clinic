@@ -62,9 +62,7 @@
                         </p>
                     </a>
                 </li>
-
-
-
+                
                 <li class="nav-header">
                     @lang('admin.header.inventory')
                 </li>
@@ -273,6 +271,26 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.organization.users.index') }}"
+                        class="nav-link {{ Route::is('admin.organization.users.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.user_management.users')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.admins.index') }}"
+                        class="nav-link
+                    ">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.user_management.technicians')
+                        </p>
+                    </a>
+                </li>
 
                 <li class="nav-header">SETTINGS</li>
 

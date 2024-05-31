@@ -8,6 +8,7 @@ use App\Mail\UsersMail;
 use App\Models\Admin;
 use App\Models\Clinic;
 use App\Models\User;
+use App\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,30 +19,34 @@ use Illuminate\Support\Str;
 class UsersController extends Controller
 {
 
-    public function __construct()
+    private $usersRepository;
+
+    public function __construct(UsersRepository $usersRepository)
     {
         $this->middleware('auth:admin');
+        $this->usersRepository = $usersRepository;
     }
 
     /**
      * Display a listing of the resource.
+     * 
+     * Display all organizational optoms
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id)
+    public function index(Request $request)
     {
         //
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
-        $clinic = Clinic::findOrFail($id);
-        $organization = $clinic->organization;
+        $organization = $admin->organization;
         if ($request->ajax()) {
-            $data = $clinic->user()->orderBy('id', 'desc')->get();
+            $data = $this->usersRepository->all($organization);
             return datatables()->of($data)
                 ->addIndexColumn()
-                ->addColumn('full_names', function($row){
+                ->addColumn('full_names', function ($row) {
                     return $row['first_name'] . ' ' . $row['last_name'];
                 })
-                ->addColumn('status', function($row){
+                ->addColumn('status', function ($row) {
                     return $row['status'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
@@ -52,12 +57,11 @@ class UsersController extends Controller
                     $btn = $btn . '</button>';
                     $btn = $btn . '<div class="dropdown-menu" role="menu">';
                     //$btn = $btn . '<a class="dropdown-item viewUserBtn" href="javascript:void(0)" data-id="' . $row->id . '">View</a>';
-                    if($row->status){
+                    if ($row->status) {
                         $btn = $btn . '<a class="dropdown-item deactivateBtn" data-status="0" href="javascript:void(0)" data-id="' . $row->id . '">Deactivate</a>';
-                    }else{
+                    } else {
                         $btn = $btn . '<a class="dropdown-item activateBtn" data-status="1" href="javascript:void(0)" data-id="' . $row->id . '">Activate</a>';
                     }
-                    
                     // $btn = $btn . '<a class="dropdown-item delete deleteUsersBtn" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
                     $btn = $btn . '</div>';
                     $btn = $btn . '</div>';
@@ -66,12 +70,57 @@ class UsersController extends Controller
                 ->rawColumns(['action', 'full_names', 'status'])
                 ->make(true);
         }
+        $page_title = trans('pages.users');
+        return view('admin.users.all.index', [
+            'page_title' => $page_title,
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     * 
+     * Display all clinic optoms
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function clinic(Request $request, Clinic $clinic)
+    {
+        if ($request->ajax()) {
+            $data = $this->usersRepository->find_users_for_clinic($clinic);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('full_names', function ($row) {
+                    return $row['first_name'] . ' ' . $row['last_name'];
+                })
+                ->addColumn('status', function ($row) {
+                    return $row['status'] ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<div class="btn-group">';
+                    $btn = $btn . '<button type="button" class="btn btn-default">Action</button>';
+                    $btn = $btn . '<button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">';
+                    $btn = $btn . '<span class="sr-only">Toggle Dropdown</span>';
+                    $btn = $btn . '</button>';
+                    $btn = $btn . '<div class="dropdown-menu" role="menu">';
+                    //$btn = $btn . '<a class="dropdown-item viewUserBtn" href="javascript:void(0)" data-id="' . $row->id . '">View</a>';
+                    if ($row->status) {
+                        $btn = $btn . '<a class="dropdown-item deactivateBtn" data-status="0" href="javascript:void(0)" data-id="' . $row->id . '">Deactivate</a>';
+                    } else {
+                        $btn = $btn . '<a class="dropdown-item activateBtn" data-status="1" href="javascript:void(0)" data-id="' . $row->id . '">Activate</a>';
+                    }
+                    // $btn = $btn . '<a class="dropdown-item delete deleteUsersBtn" data-id="' . $row->id . '" href="javascript:void(0)">Delete</a>';
+                    $btn = $btn . '</div>';
+                    $btn = $btn . '</div>';
+                    return $btn;
+                })
+                ->rawColumns(['action', 'full_names', 'status'])
+                ->make(true);
+        }
+
         $patients = $clinic->patient->count();
         $page_title = trans('pages.users');
         return view('admin.users.index', [
-            'admin' => $admin,
             'clinic' => $clinic,
-            'organization' => $organization,
             'patients' => $patients,
             'page_title' => $page_title,
         ]);
@@ -98,7 +147,7 @@ class UsersController extends Controller
             'role_id' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -173,17 +222,16 @@ class UsersController extends Controller
     {
         //
         $user = User::findOrFail($user_id);
-        
+
         $data = $request->except("_token");
 
         $user->update([
             'status' => $data['status']
         ]);
 
-        if($data['status'] == 1)
-        {
+        if ($data['status'] == 1) {
             $message = 'You have successfully activated current account';
-        }else {
+        } else {
             $message = 'You have successfully deactivated current account';
         }
 
@@ -210,7 +258,7 @@ class UsersController extends Controller
             'user_id' => 'required|integer|exists:users,id'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
@@ -223,5 +271,5 @@ class UsersController extends Controller
         $response['status'] = true;
         $response['message'] = 'You have successfully removed the current doctor';
         return response()->json($response, 200);
-     }
+    }
 }

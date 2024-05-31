@@ -67,37 +67,101 @@
 
             <div class="row">
                 <div class="col-12">
+                    <!-- Custom Tabs -->
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-tools">
-                                <a href="{{ route("admin.hq.frames.report.export") }}">
-                                    <button type="button" class="btn btn-primary">
-                                        Export Excel
-                                    </button>
-                                </a>
-                                
+                        <div class="card-header d-flex p-0">
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">
+                                        Frames Consumption
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
+                                        Frames Transfered
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
+                                        Frames Purchased
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href="{{ route('admin.hq.frames.report.export') }}">
+                                                <button type="button" class="btn btn-outline-primary fcleloat-right">
+                                                    <i class="fas fa-file-excel"></i> Export Excel
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12 table-responsive">
+                                            <table id="reportsData" class="table table-sm table-bordered table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Frame Code</th>
+                                                        <th>Gender</th>
+                                                        <th>Color</th>
+                                                        <th>Shape</th>
+                                                        <th>Opening</th>
+                                                        <th>Transfered</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!--/.col -->
+                                    </div>
+                                    <!--/.row -->
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12 table-responsive">
+                                            <table class="table">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12 table-responsive">
+                                            <table class="table">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
                             </div>
-                        </div>
-                        <!--/.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="reportsData" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Frame Code</th>
-                                        <th>Gender</th>
-                                        <th>Color</th>
-                                        <th>Shape</th>
-                                        <th>Opening</th>
-                                        <th>Transfered</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <!-- /.tab-content -->
                         </div><!-- /.card-body -->
-                    </div><!-- /.card -->
+                    </div>
+                    <!-- ./card -->
                 </div><!-- /.col -->
             </div>
             <!-- /.row -->

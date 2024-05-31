@@ -1,7 +1,7 @@
 <?php
 // Admin Auth Group
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Lens\LensController;
+
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Admins\AdminsController;
 use App\Http\Controllers\Admin\Assets\AssetsController;
@@ -11,13 +11,9 @@ use App\Http\Controllers\Admin\Status\StatusController;
 use App\Http\Controllers\Admin\Cases\CaseSizesController;
 use App\Http\Controllers\Admin\Clinics\ClinicsController;
 use App\Http\Controllers\Admin\Coating\CoatingController;
-use App\Http\Controllers\Admin\Doctors\DoctorsController;
 use App\Http\Controllers\Admin\Vendors\VendorsController;
-use App\Http\Controllers\Admin\Cases\CaseStocksController;
 use App\Http\Controllers\Admin\Cases\FrameCasesController;
 use App\Http\Controllers\Admin\Frames\FrameTypeController;
-use App\Http\Controllers\Admin\HQ\Lens\HQLensesController;
-use App\Http\Controllers\Admin\Lens\ContactLensController;
 use App\Http\Controllers\Admin\Lens\LensIndicesController;
 use App\Http\Controllers\Admin\Lens\LensRequestController;
 use App\Http\Controllers\Admin\Medicine\MedcineController;
@@ -25,14 +21,10 @@ use App\Http\Controllers\Admin\Assets\AssetTypesController;
 use App\Http\Controllers\Admin\Cases\CasesColorsController;
 use App\Http\Controllers\Admin\Cases\CasesShapesController;
 use App\Http\Controllers\Admin\Frames\FrameSizesController;
-use App\Http\Controllers\Admin\Lens\LensReceivesController;
 use App\Http\Controllers\Admin\LensType\LensTypeController;
 use App\Http\Controllers\Admin\Patients\PatientsController;
-use App\Http\Controllers\Admin\Payments\PaymentsController;
 use App\Http\Controllers\Admin\Settings\SettingsController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
-use App\Http\Controllers\Admin\Cases\CaseReceivedController;
-use App\Http\Controllers\Admin\Cases\CaseRequestsController;
 use App\Http\Controllers\Admin\Frames\FrameBrandsController;
 use App\Http\Controllers\Admin\Frames\FrameColorsController;
 use App\Http\Controllers\Admin\Frames\FrameShapesController;
@@ -43,49 +35,27 @@ use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Sales\WorkshopSalesController;
 use App\Http\Controllers\Admin\Workshops\WorkshopsController;
 use App\Http\Controllers\Admin\Assets\AssetTransferController;
-use App\Http\Controllers\Admin\Frames\FrameReceivedController;
-use App\Http\Controllers\Admin\Frames\FrameRequestsController;
-use App\Http\Controllers\Admin\Payments\ClosedBillsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetsController;
 use App\Http\Controllers\Admin\ClientType\ClientTypeController;
 use App\Http\Controllers\Admin\Frames\FrameMaterialsController;
 use App\Http\Controllers\Admin\Frames\FramePurchasesController;
 use App\Http\Controllers\Admin\Frames\FrameTransfersController;
-use App\Http\Controllers\Admin\HQ\Cases\HqCaseStocksController;
 use App\Http\Controllers\Admin\Insurances\InsurancesController;
 use App\Http\Controllers\Admin\Orders\WorkshopOrdersController;
-use App\Http\Controllers\Admin\Reports\ClinicReportsController;
 use App\Http\Controllers\Admin\Assets\AssetConditionsController;
 use App\Http\Controllers\Admin\Cases\ClinicCasesStockController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesSizesController;
-use App\Http\Controllers\Admin\HQ\Frames\HQFrameStocksController;
-use App\Http\Controllers\Admin\HQ\Lens\HQLensPurchasesController;
-use App\Http\Controllers\Admin\HQ\Lens\HQLensTransfersController;
-use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
 use App\Http\Controllers\Admin\Reports\Clinics\ReportsController;
 use App\Http\Controllers\Admin\Technicians\TechniciansController;
-use App\Http\Controllers\Admin\Cases\WorkshopCaseStocksController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesColorsController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesShapesController;
 use App\Http\Controllers\Admin\Glasses\SunGlassesStocksController;
-use App\Http\Controllers\Admin\HQ\Cases\HQCasePurchasesController;
-use App\Http\Controllers\Admin\HQ\Cases\HQCaseTransfersController;
 use App\Http\Controllers\Admin\Inventory\ReceivedFramesController;
 use App\Http\Controllers\Admin\Appointments\AppointmentsController;
 use App\Http\Controllers\Admin\Organization\OrganizationController;
-use App\Http\Controllers\Admin\Cases\WorkshopCaseReceivedController;
-use App\Http\Controllers\Admin\Cases\WorkshopCaseRequestsController;
-use App\Http\Controllers\Admin\HQ\Frames\HQFramePurchasesController;
-use App\Http\Controllers\Admin\HQ\Frames\HQFrameTransfersController;
 use App\Http\Controllers\Admin\LensMaterial\LensMaterialsController;
 use App\Http\Controllers\Admin\Assets\WorkshopAssetTransferController;
-use App\Http\Controllers\Admin\Reports\Orders\OrdersReportsController;
-use App\Http\Controllers\Admin\Reports\TAT\ClinicsTATReportsController;
-use App\Http\Controllers\Admin\Reports\Payments\PaymentsReportController;
-use App\Http\Controllers\Admin\Settings\Clinics\ClinicSettingsController;
-use App\Http\Controllers\Admin\Users\UsersController as UsersUsersController;
 use App\Http\Controllers\Admin\Orders\OrdersController as OrdersOrdersController;
-use App\Http\Controllers\Admin\Payments\RemittanceController as PaymentsRemittanceController;
 use App\Http\Controllers\Admin\Lens\LensPrescriptionController as LensLensPrescriptionController;
 use App\Http\Controllers\Admin\Schedules\DoctorSchedulesController as SchedulesDoctorSchedulesController;
 
@@ -548,42 +518,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/{id}/delete', [PatientsController::class, 'destroy'])->name('delete');
     });
 
-    Route::prefix('payments')->name('payments.')->group(function () {
-
-        Route::prefix('bills')->name('bills.')->group(function () {
-
-            Route::get('/{id}', [PaymentsController::class, 'index'])->name('index');
-
-            Route::get('/{payment_id}/show', [PaymentsController::class, 'show'])->name('show');
-
-            Route::get('/{id}/{payment_id}/view', [PaymentsController::class, 'view'])->name('view');
-
-            Route::get('/{id}/{payment_id}/print', [PaymentsController::class, 'print'])->name('print');
-        });
-
-        Route::prefix('closed/bills')->name('closed.bills.')->group(function () {
-
-            Route::get('/{id}', [ClosedBillsController::class, 'index'])->name('index');
-
-            Route::get('/{paymentBill}/show', [ClosedBillsController::class, 'show'])->name('show');
-
-            Route::get('/{id}/view', [ClosedBillsController::class, 'view'])->name('view');
-
-            Route::get('/{id}/print', [ClosedBillsController::class, 'print'])->name('print');
-        });
-
-        Route::prefix('remittance')->name('remittance.')->group(function () {
-
-            Route::get('/{id}', [PaymentsRemittanceController::class, 'index'])->name('index');
-
-            Route::post('/show', [PaymentsRemittanceController::class, 'show'])->name('show');
-
-            Route::get('/{id}/view', [PaymentsRemittanceController::class, 'view'])->name('view');
-
-            Route::post('/close', [PaymentsRemittanceController::class, 'close'])->name('close');
-        });
-    });
-
     Route::prefix('orders')->name('orders.')->group(function () {
 
         Route::get('/{id}', [OrdersOrdersController::class, 'index'])->name('index');
@@ -591,11 +525,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::get('/{order_id}/show', [OrdersOrdersController::class, 'show'])->name('show');
 
         Route::get('/{id}/{order_id}/view', [OrdersOrdersController::class, 'view'])->name('view');
-    });
-
-    Route::prefix('payments/details')->name('payments.details.')->group(function () {
-
-        Route::post('/store', [PaymentDetailsController::class, 'store'])->name('store');
     });
     
     Route::prefix('appointments')->name('appointments.')->group(function () {
@@ -701,7 +630,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::delete('/delete', [FramesController::class, 'destroy'])->name('delete');
     });
 
-
     // frame purchases
     Route::prefix('frame/purchases')->name('frame.purchases.')->group(function () {
         Route::get('/{id}', [FramePurchasesController::class, 'index'])->name('index');
@@ -764,20 +692,6 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
         Route::post('/update', [SunGlassesStocksController::class, 'update'])->name('update');
 
         Route::delete('/delete', [SunGlassesStocksController::class, 'destroy'])->name('delete');
-    });
-
-    // users
-    Route::prefix('users')->name('users.')->group(function () {
-
-        Route::get('/{id}', [UsersUsersController::class, 'index'])->name('index');
-
-        Route::post('/store', [UsersUsersController::class, 'store'])->name('store');
-
-        Route::get('/{user_id}/show', [UsersUsersController::class, 'show'])->name('show');
-
-        Route::post('/{user_id}/update/status', [UsersUsersController::class, 'update_status'])->name('update.status');
-
-        Route::delete('/delete', [UsersUsersController::class, 'destroy'])->name('delete');
     });
 
     Route::prefix('reports/main')->name('reports.main.')->group(function () {

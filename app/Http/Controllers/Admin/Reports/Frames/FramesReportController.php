@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Reports\Frames;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Clinic;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\FramesReportRepository;
 
@@ -18,7 +19,7 @@ class FramesReportController extends Controller
         $this->framesReportRepository = $framesReportRepository;
     }
 
-    public function index(Request $request)
+    public function index(Request $request, Clinic $clinic)
     {
         if ($request->ajax()) {
             $admin_id = Auth::guard('admin')->user()->id;
@@ -67,6 +68,11 @@ class FramesReportController extends Controller
                 ->rawColumns(['brand', 'size', 'material', 'photo', 'status', 'action'])
                 ->make(true);
         }
+        $page_title = trans('menus.admins.sidebar.reports.frames');
+        return view('admin.reports.frames.index', [
+            'clinic' => $clinic,
+            'page_title' => $page_title
+        ]);
     }
 
     public function export()  
