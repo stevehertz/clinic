@@ -130,12 +130,6 @@ class Clinic extends Model
         return $this->hasMany(SunGlassStock::class, 'clinic_id', 'id');
     }
 
-    public function remittance()
-    {
-        # code...
-        return $this->hasMany(Remittance::class, 'clinic_id', 'id');
-    }
-
     public function report()
     {
         # code...

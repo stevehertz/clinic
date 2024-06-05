@@ -54,7 +54,7 @@
             </th>
 
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">
-                LPO Number
+                ETIMS/ VAT Number
             </th>
 
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">
@@ -158,7 +158,7 @@
                         </td>
 
                         <td>
-                            {{ $report->lpo_number }}
+                            {{ $report->kra_number }}
                         </td>
 
                         <td>

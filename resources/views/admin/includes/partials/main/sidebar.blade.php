@@ -63,20 +63,27 @@
                     </a>
                 </li>
                 
+                <li class="nav-header">@lang('menus.admins.sidebar.headers.billing')</li>
+
+                
+                <li class="nav-item">
+                    <a href="{{ route('admin.billing.index') }}"
+                        class="nav-link {{ Route::is('admin.billing.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-money-check"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.payments.billing')
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-header">
-                    @lang('admin.header.inventory')
+                    @lang('menus.admins.sidebar.headers.inventory')
                 </li>
 
                 <li class="nav-item has-treeview 
-                {{ Route::is('admin.hq.frame.stocks.index') ? 'menu-open' : '' }}
-                {{ Route::is('admin.hq.frame.purchases.index') ? 'menu-open' : '' }}
-                {{ Route::is('admin.hq.frame.transfers.index') ? 'menu-open' : '' }}
+                {{ Route::is('admin.hq.frame.stocks.index') || Route::is('admin.hq.frame.purchases.index') || Route::is('admin.hq.frame.transfers.index')  ? 'menu-open' : '' }}
                 ">
-                    <a href="#" class="nav-link
-                    {{ Route::is('admin.hq.frame.stocks.index') ? 'active' : '' }}
-                    {{ Route::is('admin.hq.frame.purchases.index') ? 'active' : '' }}
-                    {{ Route::is('admin.hq.frame.transfers.index') ? 'active' : '' }}
-                    ">
+                    <a href="#" class="nav-link {{ Route::is('admin.hq.frame.stocks.index') || Route::is('admin.hq.frame.purchases.index') || Route::is('admin.hq.frame.transfers.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-address-card"></i>
                         <p>
                             @lang('admin.page.frames.title')

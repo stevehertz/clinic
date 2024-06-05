@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\DocumentStatus;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -215,6 +216,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         // 'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'DocumentStatus' => DocumentStatus::class
     ])->toArray(),
 
 ];

@@ -92,7 +92,7 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">KSH {{ number_format($remittances, 2) }}</span>
+                                    <span class="text-bold text-lg">KSH 0.00</span>
                                     <span>Total Claimed Remittance</span>
                                 </p>
                             </div>

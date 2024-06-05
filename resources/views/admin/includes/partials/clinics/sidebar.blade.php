@@ -97,15 +97,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.billing.index', $clinic->id) }}"
-                        class="nav-link {{ Route::is('admin.billing.index') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-money-check"></i>
-                        <p>
-                            @lang('menus.admins.sidebar.payments.billing')
-                        </p>
-                    </a>
-                </li>
 
                 <li class="nav-item has-treeview">
                     <a href="{{ route('admin.orders.index', $clinic->id) }}"

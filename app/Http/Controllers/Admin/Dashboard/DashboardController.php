@@ -30,14 +30,13 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
         $payments = $clinic->payment_bill()->sum('paid_amount');
-        $remittances = $clinic->remittance()->sum('amount');
         $page_title = trans('pages.dashboard');
         $sub_page = 'dashboard';
         $patients = $clinic->patient->count();
 
         // $payments_report = PaymentBill::select('');
 
-        return view('admin.dashboard.clinics.index', compact('clinic', 'page_title', 'sub_page', 'patients', 'appointments', 'payments', 'remittances'));
+        return view('admin.dashboard.clinics.index', compact('clinic', 'page_title', 'sub_page', 'patients', 'appointments', 'payments'));
     }
 
     // Workshop Dashboard

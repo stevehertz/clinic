@@ -11,10 +11,11 @@ return [
             ],
 
             'headers' => [
-                'inventory' => 'Inventory',
-                'users' => 'Users Access',
+                'inventory' => 'INVENTORY',
+                'users' => 'USERS ACCESS',
                 'reports' => 'REPORTS',
-                'settings' => 'SETTINGS'
+                'settings' => 'SETTINGS',
+                'billing' => 'BILLING PORTAL'
             ],
 
             'inventory' => [

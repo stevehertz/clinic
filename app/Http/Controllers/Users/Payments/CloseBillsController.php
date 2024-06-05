@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users\Payments;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentBill;
 use App\Models\User;
+use App\Repositories\CloseBillsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,9 +13,12 @@ use Illuminate\Support\Facades\Validator;
 class CloseBillsController extends Controller
 {
     //
-    public function __construct()
+    private $closeBillRepository;
+
+    public function __construct(CloseBillsRepository $closeBillRepository)
     {
         $this->middleware('auth');
+        $this->closeBillRepository = $closeBillRepository;
     }
 
     public function index(Request $request)
@@ -23,7 +27,6 @@ class CloseBillsController extends Controller
         $user = User::find(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
-
             $data = $clinic->payment_bill()->where('bill_status', '=', 'CLOSED')->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -108,19 +111,16 @@ class CloseBillsController extends Controller
     {
         # code...
         $data = $request->except("_token");
-
         $validator = Validator::make($data, [
             'invoice_number' => 'required|numeric',
             'close_date' => 'required|date',
         ]);
-
         if ($validator->fails()) {
             $errors = $validator->errors();
             $response['status'] = false;
             $response['errors'] = $errors;
             return response()->json($response, 401);
         }
-
         $clinic = $paymentBill->clinic;
 
         $appointment = $paymentBill->appontment;
@@ -128,7 +128,7 @@ class CloseBillsController extends Controller
         $paymentBill->id = $paymentBill->id;
         $paymentBill->open_date = $paymentBill->open_date;
         $paymentBill->invoice_number = $clinic->initials . '/' . $data['invoice_number'];
-        $paymentBill->lpo_number = $data['lpo_number'];
+        $paymentBill->kra_number = $data['kra_number'];
         $paymentBill->bill_status = 'CLOSED';
         $paymentBill->close_date = $data['close_date'];
 
@@ -181,7 +181,7 @@ class CloseBillsController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'lpo_number' => 'required',
+            'kra_number' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -191,11 +191,11 @@ class CloseBillsController extends Controller
             return response()->json($response, 401);
         }
 
-        $paymentBill->lpo_number = $data['lpo_number'];
+        $paymentBill->kra_number = $data['kra_number'];
         $paymentBill->save();
 
         $response['status'] = true;
-        $response['message'] = 'You have updated the LPO number';
+        $response['message'] = 'You have updated the KRA ETIMS/ VAT number';
 
         return response()->json($response, 200);
     }
@@ -212,5 +212,16 @@ class CloseBillsController extends Controller
             'clinic' => $clinic,
             'payment_bill' => $paymentBill,
         ]);
+    }
+
+    public function sendPhysicalDocToHQ(PaymentBill $paymentBill)  
+    {
+        if($this->closeBillRepository->sendPhysicalDoc($paymentBill))
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully send document to HQ'
+            ]);
+        }
     }
 }

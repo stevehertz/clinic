@@ -20,7 +20,7 @@ class PaymentBill extends Model
         'consultation_fee',
         'consultation_receipt_number',
         'invoice_number',
-        'lpo_number',
+        'kra_number',
         'approval_number',
         'approval_status',
         'bill_status',
@@ -30,8 +30,9 @@ class PaymentBill extends Model
         'total_amount',
         'paid_amount',
         'balance',
-        'remittance_amount',
-        'remittance_balance',
+        'document_status',
+        'send_date',
+        'received_date',
         'remarks',
         'terms',
     ];
@@ -82,12 +83,6 @@ class PaymentBill extends Model
     {
         # code...
         return $this->hasOne(Order::class, 'payment_bill_id', 'id');
-    }
-
-    public function remittance()
-    {
-        # code...
-        return $this->hasOne(Remittance::class, 'bill_id', 'id');
     }
 
     public function report()

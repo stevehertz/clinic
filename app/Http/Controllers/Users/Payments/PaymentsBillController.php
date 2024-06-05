@@ -91,7 +91,6 @@ class PaymentsBillController extends Controller
         ]);
     }
 
-
     public function get_scheduled(Request $request)
     {
         $user = User::find(Auth::user()->id);
@@ -172,7 +171,6 @@ class PaymentsBillController extends Controller
     {
         # code...
         $data = $request->all();
-
         $validator = Validator::make($data, [
             'schedule_id' => 'required|integer|exists:doctor_schedules,id',
             'claimed_amount' => 'required|numeric|min:0',

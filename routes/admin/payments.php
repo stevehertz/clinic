@@ -31,7 +31,6 @@ Route::prefix('payments/details')->name('payments.details.')->group(function () 
 
 
 Route::prefix('billing')->name('billing.')->group(function(){
-
-    Route::get('/{clinic}', [BillingController::class, 'index'])->name('index');
-
+    Route::get('/', [BillingController::class, 'index'])->name('index');
+    Route::get('/export', [BillingController::class, 'export'])->name('export');
 });
