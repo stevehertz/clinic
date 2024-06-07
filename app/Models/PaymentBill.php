@@ -31,6 +31,7 @@ class PaymentBill extends Model
         'paid_amount',
         'balance',
         'document_status',
+        'remmittance_status',
         'send_date',
         'received_date',
         'remarks',
@@ -77,6 +78,11 @@ class PaymentBill extends Model
     {
         # code...
         return $this->hasMany(Billing::class, 'payment_bill_id', 'id');
+    }
+
+    public function remmittance()  
+    {
+        return $this->hasMany(Remmittance::class, 'payment_bill_id');    
     }
 
     public function order()

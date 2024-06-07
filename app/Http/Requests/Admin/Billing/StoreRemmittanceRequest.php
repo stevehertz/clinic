@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Billing;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOtherChargeRequest extends FormRequest
+class StoreRemmittanceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreOtherChargeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,8 @@ class StoreOtherChargeRequest extends FormRequest
     {
         return [
             //
+            'payment_bill_id' => ['required', 'array'],
+            'payment_bill_id.*' => ['exists:payment_bills,id']
         ];
     }
 }

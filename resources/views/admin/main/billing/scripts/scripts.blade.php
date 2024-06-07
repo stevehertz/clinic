@@ -1,73 +1,110 @@
 <script>
     $(document).ready(function() {
 
-        find_all_closed_bills();
+        $("#data").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "print", "colvis"],
+            "pageLength": 10
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        function find_all_closed_bills() {
-            let path = '{{ route('admin.billing.index') }}';
-            $('#data').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: path,
-                columns: [{
-                        data: "DT_RowIndex",
-                        name: "DT_RowIndex"
-                    },
-                    {
-                        data: 'clinic.clinic',
-                        name: 'clinic.clinic'
-                    },
-                    {
-                        data: 'appontment.lens_power.frame_prescription.receipt_number',
-                        name: 'appontment.lens_power.frame_prescription.receipt_number'
-                    },
-                    {
-                        data: 'patient',
-                        name: 'patient'
-                    },
-                    {
-                        data: 'invoice_number',
-                        name: 'invoice_number'
-                    },
-                    {
-                        data: 'appontment.patient.phone',
-                        name: 'appontment.patient.phone'
-                    },
-                    {
-                        data: 'insurance',
-                        name: 'insurance'
-                    },
-                    {
-                        data: 'payment_detail.scheme',
-                        name: 'payment_detail.scheme'
-                    },
-                    {
-                        data: 'appontment.patient.card_number',
-                        name: 'appontment.patient.card_number'
-                    },
-                    {
-                        data: 'close_date',
-                        name: 'close_date'
-                    },
-                    {
-                        data: 'paid_amount',
-                        name: 'paid_amount'
-                    },
-                    {
-                        data: 'document_status',
-                        name: 'document_status'
-                    },
-                    {
-                        data: 'actions',
-                        name: 'actions',
-                        orderable: false,
-                        searchable: false
+        $(document).on('click', '.receiveDocumentBtn', function(e) {
+            e.preventDefault();
+            let payment_id = $(this).data('id');
+            let path = '{{ route('admin.billing.receive', ':paymentBill') }}';
+            path = path.replace(':paymentBill', payment_id);
+            let token = "{{ csrf_token() }}";
+            $.ajax({
+                type: "POST",
+                url: path,
+                data: {
+                    _token: token
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('.receiveDocumentBtn').html(
+                        '<i class="fa fa-spinner fa-spin"></i>'
+                    );
+                    $('.receiveDocumentBtn').attr('disabled', true);
+                },
+                complete: function() {
+                    $('.receiveDocumentBtn').html(
+                        '<i class="fa fa-cog"></i> Receive Document'
+                    );
+                    $('.receiveDocumentBtn').attr('disabled', false);
+                },
+                success: function(data) {
+                    if (data['status']) {
+                        toastr.success(data['message']);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     }
-                ],
-                "autoWidth": false,
-                "responsive": true,
+                },
             });
-        }
+        });
+        $(document).on('change', 'input[type="checkbox"]', function(e) {
+            if ($('input[type="checkbox"]:checked').length > 0) {
+                $('.submitRemmittanceBtn').show();
+            } else {
+                $('.submitRemmittanceBtn').hide();
+            }
+        });
+        $('#createRemmittanceForm').submit(function(e) {
+            e.preventDefault();
+            let payment_bill_id = [];
+            $('input[type="checkbox"]:checked').each(function() {
+                payment_bill_id.push($(this).val());
+            });
+            if(payment_bill_id.length === 0)
+            {
+                toastr.error('Please select bill');
+                return
+            }
+            let path = '{{ route('admin.billing.store.remmittance') }}';
+            $.ajax({
+                type: "POST",
+                url: path,
+                data: {
+                    payment_bill_id: payment_bill_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: "json",
+                beforeSend:function(){
+                    $(this).find('button[type=submit]').html(
+                        '<i class="fa fa-spinner fa-spin"></i>'
+                    );
+                    $(this).find('button[type=submit]').attr('disabled', true);
+                },
+                complete:function()
+                {
+                    $(this).find('button[type=submit]').html(
+                        'Create Remmittance'
+                    );
+                    $(this).find('button[type=submit]').attr('disabled', false);
+                },
+                success: function (data) {
+                    if(data['status'])
+                    {
+                        toastr.success(data['message']);
+                        setTimeout(() => {
+                            window.location.href =
+                                '{{ route('admin.remmittance.index') }}';
+                        }, 1000);
+                    }
+                },
+                error: function(data) {
+                    var errors = data.responseJSON;
+                    var errorsHtml = '<ul>';
+                    $.each(errors['errors'], function(key, value) {
+                        errorsHtml += '<li>' + value + '</li>';
+                    });
+                    errorsHtml += '</ul>';
+                    toastr.error(errorsHtml);
+                }
+            });
+        });
 
     });
 </script>

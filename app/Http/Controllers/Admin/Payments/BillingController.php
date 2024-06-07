@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin\Payments;
 
 use App\Enums\DocumentStatus;
+use App\Enums\RemmittanceStatus;
 use App\Exports\Billing\ExportBilling;
 use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Billing\StoreRemmittanceRequest;
+use App\Models\PaymentBill;
+use App\Models\Remmittance;
 use App\Repositories\BillingRepository;
 
 class BillingController extends Controller
@@ -27,48 +31,28 @@ class BillingController extends Controller
     public function index(Request $request)
     {
         //
-        if ($request->ajax()) {
-            $data = $this->billingRepository->closed_bills();
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('patient', function($row){
-                    return $row->patient->first_name. ' ' . $row->patient->last_name; 
-                })
-                ->addColumn('insurance', function($row){
-                    if($row->payment_detail->insurance)
-                    {
-                        return $row->payment_detail->insurance->title;
-                    }
-                    
-                })
-                ->addColumn('document_status', function($row){
-                    return DocumentStatus::getName($row->document_status);
-                })
-                ->addColumn('actions', function ($row) {
-
-                })
-                ->rawColumns(['actions'])
-                ->make(true);
-        }
+        $data = $this->billingRepository->closed_bills();
+       
         $closedBills = $this->billingRepository->closed_bills();
         $sentToHQ = $this->billingRepository->sentToHq();
         $receivedDOC =  $this->billingRepository->receivedFromClinic();
         return view('admin.main.billing.index', [
             'closedBills' => $closedBills,
             'sentToHQ' => $sentToHQ,
-            'receivedDOC' => $receivedDOC
+            'receivedDOC' => $receivedDOC,
+            'data' => $data
         ]);
     }
 
 
-     /**
+    /**
      * Export the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function export() 
+    public function export()
     {
-        return (new ExportBilling())->download('billing-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);    
+        return (new ExportBilling())->download('billing-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -76,9 +60,15 @@ class BillingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function receiveDocument(PaymentBill $paymentBill)
     {
         //
+        if ($this->billingRepository->receiveDocument($paymentBill)) {
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully received document sent to HQ'
+            ]);
+        }
     }
 
     /**
@@ -87,9 +77,18 @@ class BillingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRemmittanceRequest $request)
     {
         //
+        $data = $request->except("_token");
+        $remmittance = $this->billingRepository->storeRemmittance($data);
+        if($remmittance)
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'Created new remmittance waiting for submision' 
+            ]);
+        }
     }
 
     /**

@@ -5,6 +5,14 @@
     .container-fluid {
 
         .card {
+            .card-header{
+                .submitRemmittanceBtn{
+                    display: none;
+                }
+                .submitCreatedRemmittanceBtn{
+                    display: none;
+                }
+            }
             .card-body {
                 .lensPowerDiv {
                     margin-bottom: 1rem;
@@ -19,6 +27,14 @@
                 .frameCodesDiv {
                     margin-bottom: 1rem;
                     display      : none;
+                }
+            }
+            .card-footer{
+                .submitRemmittanceBtn{
+                    display: none;
+                }
+                .submitCreatedRemmittanceBtn{
+                    display: none;
                 }
             }
         }

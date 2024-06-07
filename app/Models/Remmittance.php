@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Remmittance extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'payment_bill_id',
+        'date',
+        'status'
+    ];
+
+    public function paymentBill()  
+    {
+        return $this->belongsTo(PaymentBill::class, 'payment_bill_id');    
+    }
 }

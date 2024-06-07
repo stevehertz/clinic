@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\DocumentStatus;
+use App\Enums\RemmittanceStatus;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -198,7 +199,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-
     ],
 
     /*
@@ -214,9 +214,10 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        // 'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'DocumentStatus' => DocumentStatus::class
+        'DocumentStatus' => DocumentStatus::class,
+        'RemmittanceStatus' => RemmittanceStatus::class
     ])->toArray(),
 
 ];

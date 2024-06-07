@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Payments\PaymentsController;
 use App\Http\Controllers\Admin\Payments\ClosedBillsController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
+use App\Http\Controllers\Admin\Payments\RemmittanceController;
 
 Route::prefix('payments')->name('payments.')->group(function () {
 
@@ -33,4 +34,12 @@ Route::prefix('payments/details')->name('payments.details.')->group(function () 
 Route::prefix('billing')->name('billing.')->group(function(){
     Route::get('/', [BillingController::class, 'index'])->name('index');
     Route::get('/export', [BillingController::class, 'export'])->name('export');
+    Route::post('/{paymentBill}/receive', [BillingController::class, 'receiveDocument'])->name('receive');
+    Route::post('/store/remmittance', [BillingController::class, 'store'])->name('store.remmittance');
+});
+
+Route::prefix('remmittance')->name('remmittance.')->group(function(){
+    Route::get('/', [RemmittanceController::class, 'index'])->name('index');
+    Route::get('/export', [RemmittanceController::class, 'export'])->name('export');
+    Route::post('/submit/remmittance', [RemmittanceController::class, 'update'])->name('submit.remmittance');
 });

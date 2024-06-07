@@ -56,6 +56,7 @@ return [
                 'payments' => 'Payments/ Billing',
                 'closed' => 'Closed Bills',
                 'billing' => 'Billing',
+                'remmittance' => 'Remmittance'
             ],
             'settings' => 'Settings',
         ],

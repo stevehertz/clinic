@@ -76,6 +76,16 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.remmittance.index') }}"
+                        class="nav-link {{ Route::is('admin.remmittance.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-money-check"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.payments.remmittance')
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-header">
                     @lang('menus.admins.sidebar.headers.inventory')
                 </li>
