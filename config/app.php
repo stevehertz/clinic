@@ -1,6 +1,9 @@
 <?php
 
+use Carbon\Carbon;
+use App\Enums\BankingStatus;
 use App\Enums\DocumentStatus;
+use App\Enums\TransactionModes;
 use App\Enums\RemmittanceStatus;
 use Illuminate\Support\Facades\Facade;
 
@@ -217,7 +220,10 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'DocumentStatus' => DocumentStatus::class,
-        'RemmittanceStatus' => RemmittanceStatus::class
+        'RemmittanceStatus' => RemmittanceStatus::class,
+        'TransactionModes' => TransactionModes::class,
+        'Carbon' => Carbon::class,
+        'BankingStatus' => BankingStatus::class
     ])->toArray(),
 
 ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Payments\BankingController;
 use App\Http\Controllers\Admin\Payments\BillingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Payments\PaymentsController;
@@ -42,4 +43,8 @@ Route::prefix('remmittance')->name('remmittance.')->group(function(){
     Route::get('/', [RemmittanceController::class, 'index'])->name('index');
     Route::get('/export', [RemmittanceController::class, 'export'])->name('export');
     Route::post('/submit/remmittance', [RemmittanceController::class, 'update'])->name('submit.remmittance');
+});
+
+Route::prefix('banking')->name('banking.')->group(function(){
+    Route::get('/index', [BankingController::class, 'index'])->name('index');
 });

@@ -64,7 +64,6 @@
                 </li>
                 
                 <li class="nav-header">@lang('menus.admins.sidebar.headers.billing')</li>
-
                 
                 <li class="nav-item">
                     <a href="{{ route('admin.billing.index') }}"
@@ -86,13 +85,22 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.banking.index') }}"
+                        class="nav-link {{ Route::is('admin.banking.index') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-money-check"></i>
+                        <p>
+                            @lang('menus.admins.sidebar.payments.payments')
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-header">
                     @lang('menus.admins.sidebar.headers.inventory')
                 </li>
 
                 <li class="nav-item has-treeview 
-                {{ Route::is('admin.hq.frame.stocks.index') || Route::is('admin.hq.frame.purchases.index') || Route::is('admin.hq.frame.transfers.index')  ? 'menu-open' : '' }}
-                ">
+                {{ Route::is('admin.hq.frame.stocks.index') || Route::is('admin.hq.frame.purchases.index') || Route::is('admin.hq.frame.transfers.index')  ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ Route::is('admin.hq.frame.stocks.index') || Route::is('admin.hq.frame.purchases.index') || Route::is('admin.hq.frame.transfers.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-address-card"></i>
                         <p>

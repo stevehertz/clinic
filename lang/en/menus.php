@@ -53,10 +53,10 @@ return [
                 'technicians' => 'Technicians'
             ],
             'payments' => [
-                'payments' => 'Payments/ Billing',
+                'payments' => 'Payments',
                 'closed' => 'Closed Bills',
                 'billing' => 'Billing',
-                'remmittance' => 'Remmittance'
+                'remmittance' => 'Remmittance',
             ],
             'settings' => 'Settings',
         ],

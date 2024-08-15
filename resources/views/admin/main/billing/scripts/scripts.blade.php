@@ -9,6 +9,22 @@
             "pageLength": 10
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+        $("#sentToHqData").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "print", "colvis"],
+            "pageLength": 10
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $("#receivedData").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "print", "colvis"],
+            "pageLength": 10
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
         $(document).on('click', '.receiveDocumentBtn', function(e) {
             e.preventDefault();
             let payment_id = $(this).data('id');
@@ -44,6 +60,7 @@
                 },
             });
         });
+
         $(document).on('change', 'input[type="checkbox"]', function(e) {
             if ($('input[type="checkbox"]:checked').length > 0) {
                 $('.submitRemmittanceBtn').show();
@@ -51,6 +68,7 @@
                 $('.submitRemmittanceBtn').hide();
             }
         });
+        
         $('#createRemmittanceForm').submit(function(e) {
             e.preventDefault();
             let payment_bill_id = [];

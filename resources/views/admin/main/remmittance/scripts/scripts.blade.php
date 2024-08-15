@@ -8,6 +8,22 @@
             "pageLength": 10
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+        $("#pendingData").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "print", "colvis"],
+            "pageLength": 10
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $("#submittedData").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "print", "colvis"],
+            "pageLength": 10
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
         $(document).on('change', 'input[type="checkbox"]', function(e) {
             if ($('input[type="checkbox"]:checked').length > 0) {
                 $('.submitCreatedRemmittanceBtn').show();
@@ -43,6 +59,9 @@
                     link.href = window.URL.createObjectURL(blob);
                     link.download = 'remmittance.pdf';
                     link.click();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 },
                 error: function(data) {
                     var errors = data.responseJSON;

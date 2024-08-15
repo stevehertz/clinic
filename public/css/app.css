@@ -94,3 +94,6 @@
 .content .container-fluid .TATTwoReportsByStatusRow {
   display: none;
 }
+.content .container-fluid .receiveDocumentSpan {
+  display: none;
+}

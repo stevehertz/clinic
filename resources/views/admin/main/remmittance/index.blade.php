@@ -11,10 +11,10 @@
                     <div class="info-box bg-light">
                         <div class="info-box-content">
                             <span class="info-box-text text-center text-muted">
-                                {{ \RemmittanceStatus::getName(RemmittanceStatus::PENDING)  }}
+                                {{ \RemmittanceStatus::getName(RemmittanceStatus::PENDING) }}
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                0
+                                {{ count($pending) }}
                             </span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                                 {{ \RemmittanceStatus::getName(RemmittanceStatus::SUBMITTED) }}
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                0
+                                {{ count($submitted) }}
                             </span>
                         </div>
                     </div>
@@ -37,68 +37,246 @@
             <div class="row">
                 <div class="col-12 col-md-12">
                     <div class="card">
-                        <form id="submitRemmittanceForm">
-                            <div class="card-header">
-                                <div class="card-tools">
-                                    <a href="{{ route('admin.remmittance.export') }}" class="btn btn-outline-primary btn-sm">
-                                        Export
+                        <div class="card-header d-flex p-0">
+                            <h3 class="card-title p-3">Tabs</h3>
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">
+                                        All
                                     </a>
-                                    <button type="submit" class="btn btn-sm btn-outline-primary submitCreatedRemmittanceBtn">
-                                        Submit Remmittance
-                                    </button>
-                                </div>
-                                <!--/.card-tools -->
-                            </div>
-                            <div class="card-body table-responsive">
-                                <table id="data" class="table table-bordered table-striped table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th>Clinic</th>
-                                            <th>Receipt Number</th>
-                                            <th>Patient Names</th>
-                                            <th>Invoice Number</th>
-                                            <th>Phone Number</th>
-                                            <th>Insurance</th>
-                                            <th>Scheme Name</th>
-                                            <th>Card Number</th>
-                                            <th>Closed Date</th>
-                                            <th>Amount Billed</th>
-                                            <th>Remmittance Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $remmittance)
-                                            <tr>
-                                                <td><input type="checkbox" name="remmittance_id[]"
-                                                        value="{{ $remmittance->id }}"></td>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $remmittance->paymentBill->clinic->clinic }}</td>
-                                                <td>{{ $remmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
-                                                </td>
-                                                <td>{{ $remmittance->paymentBill->patient->first_name }} {{ $remmittance->paymentBill->patient->last_name }}</td>
-                                                <td>{{ $remmittance->paymentBill->invoice_number }}</td>
-                                                <td>{{ $remmittance->paymentBill->patient->phone }}</td>
-                                                <td>{{ $remmittance->paymentBill->payment_detail->insurance_id }}</td>
-                                                <td>{{ $remmittance->paymentBill->payment_detail->scheme }}</td>
-                                                <td>{{ $remmittance->paymentBill->patient->card_number }}</td>
-                                                <td>{{ $remmittance->paymentBill->close_date }}</td>
-                                                <td>{{ $remmittance->paymentBill->paid_amount }}</td>
-                                                <td>{{ \RemmittanceStatus::getName($remmittance->status) }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="card-footer clearfix submitRemmittanceCol">
-                                <button type="submit" class="btn btn-sm btn-outline-primary float-right submitCreatedRemmittanceBtn">
-                                    Submit Remmittance
-                                </button>
-                            </div>
-                        </form>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
+                                        {{ \RemmittanceStatus::getName(\RemmittanceStatus::PENDING) }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
+                                        {{ \RemmittanceStatus::getName(\RemmittanceStatus::SUBMITTED) }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href="{{ route('admin.billing.export') }}"
+                                                class="btn btn-outline-primary btn-sm">
+                                                Export
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="data" class="table table-bordered table-striped table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Clinic</th>
+                                                            <th>Receipt Number</th>
+                                                            <th>Patient Names</th>
+                                                            <th>Invoice Number</th>
+                                                            <th>Insurance</th>
+                                                            <th>Scheme Name</th>
+                                                            <th>Card Number</th>
+                                                            <th>Closed Date</th>
+                                                            <th>Amount Billed</th>
+                                                            <th>ETIMS Number</th>
+                                                            <th>Remmittance Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($data as $remmittance)
+                                                            <tr>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>{{ $remmittance->paymentBill->clinic->clinic }}</td>
+                                                                <td>{{ $remmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                                </td>
+                                                                <td>{{ $remmittance->paymentBill->patient->first_name }}
+                                                                    {{ $remmittance->paymentBill->patient->last_name }}
+                                                                </td>
+                                                                <td>{{ $remmittance->paymentBill->invoice_number }}</td>
+                                                                <td>{{ $remmittance->paymentBill->payment_detail->insurance->title }}
+                                                                </td>
+                                                                <td>{{ $remmittance->paymentBill->payment_detail->scheme }}
+                                                                </td>
+                                                                <td>{{ $remmittance->paymentBill->patient->card_number }}
+                                                                </td>
+                                                                <td>{{ $remmittance->paymentBill->close_date }}</td>
+                                                                <td>{{ $remmittance->paymentBill->paid_amount }}</td>
+                                                                <td>{{ $remmittance->paymentBill->kra_number }}</td>
+                                                                <td>{{ \RemmittanceStatus::getName($remmittance->status) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
 
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    <form id="submitRemmittanceForm">
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                            </div>
+                                            <div class="col-6 submitRemmittanceCol">
+                                                <button type="submit"
+                                                    class="btn btn-block btn-sm btn-outline-primary float-right submitCreatedRemmittanceBtn">
+                                                    Submit Remmittance
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table id="pendingData"
+                                                        class="table table-bordered table-striped table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>Clinic</th>
+                                                                <th>Receipt Number</th>
+                                                                <th>Patient Names</th>
+                                                                <th>Invoice Number</th>
+                                                                <th>Insurance</th>
+                                                                <th>Scheme Name</th>
+                                                                <th>Card Number</th>
+                                                                <th>Closed Date</th>
+                                                                <th>Amount Billed</th>
+                                                                <th>ETIMS Number</th>
+                                                                <th>Document Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($pending as $pendingRemmittance)
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" name="remmittance_id[]"
+                                                                            value="{{ $pendingRemmittance->id }}">
+                                                                    </td>
+                                                                    
+                                                                    <td>{{ $loop->iteration }}</td>
+
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->clinic->clinic }}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->patient->first_name }}
+                                                                        {{ $remmittance->paymentBill->patient->last_name }}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->invoice_number }}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->payment_detail->insurance->title }}
+                                                                    </td>
+                                                                    
+                                                                    <td>{{ $pendingRemmittance->paymentBill->payment_detail->scheme }}
+                                                                    </td>
+                                                                    <td>{{ $pendingRemmittance->paymentBill->patient->card_number }}
+                                                                    </td>
+                                                                    <td>{{ $pendingRemmittance->paymentBill->close_date }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->paid_amount }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $pendingRemmittance->paymentBill->kra_number }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ \RemmittanceStatus::getName($pendingRemmittance->status) }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-12 submitRemmittanceCol">
+                                                <button type="submit"
+                                                    class="btn btn-block btn-sm btn-outline-primary float-right submitCreatedRemmittanceBtn">
+                                                    Submit Remmittance
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    <div class="table-responsive">
+                                        <table id="submittedData" class="table table-bordered table-striped table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Clinic</th>
+                                                    <th>Receipt Number</th>
+                                                    <th>Patient Names</th>
+                                                    <th>Invoice Number</th>
+                                                    <th>Insurance</th>
+                                                    <th>Scheme Name</th>
+                                                    <th>Card Number</th>
+                                                    <th>Closed Date</th>
+                                                    <th>Amount Billed</th>
+                                                    <th>ETIMS Number</th>
+                                                    <th>Document Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($submitted as $submittedRemmittance)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->clinic->clinic }}</td>
+                                                        <td>
+                                                            {{ $submittedRemmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                        </td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->patient->first_name }}
+                                                            {{ $submittedRemmittance->paymentBill->patient->last_name }}</td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->invoice_number }}</td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->payment_detail->insurance->title }}
+                                                        </td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->payment_detail->scheme }}
+                                                        </td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->patient->card_number }}
+                                                        </td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->close_date }}</td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->paid_amount }}</td>
+                                                        <td>{{ $submittedRemmittance->paymentBill->kra_number }}</td>
+                                                        <td>{{ \RemmittanceStatus::getName($submittedRemmittance->status) }}
+                                                        </td>
+
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
                     </div>
+                    <!-- ./card -->
                 </div>
                 <!--/.col -->
             </div>

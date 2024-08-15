@@ -67,7 +67,8 @@ class RemmittanceController extends Controller
             $uniqueCode = uniqid();
             $date = Carbon::now()->format('d/m/Y');
             $remmittance_date = Carbon::now()->format('Y-m-d');
-            $remmittances = $this->remmittanceRepository->getSubmiitedByDate($remmittance_date);
+            $remmittance_id = $data['remmittance_id'];
+            $remmittances = Remmittance::whereIn('id', $remmittance_id)->get();
             $data = [
                 'title' => 'Submitted Remmittance',
                 'date' => $date,

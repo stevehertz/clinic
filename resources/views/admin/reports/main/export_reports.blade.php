@@ -54,7 +54,7 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Paid Amount</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Balance</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Invoice Number</th>
-            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">LPO Number</th>
+            <th style="background-color: #FFFF00; font-size:12px; padding:10px;">ETIMS/ VAT Number</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Approval Number</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Approval Status</th>
             <th style="background-color: #FFFF00; font-size:12px; padding:10px;">Closing Date</th>
@@ -237,7 +237,7 @@
                 </td>
                 <td>
                     @if ($report->payment_bill)
-                        {{ $report->payment_bill->lpo_number }}
+                        {{ $report->payment_bill->kra_number }}
                     @endif
                 </td>
                 <td>
