@@ -47,4 +47,6 @@ Route::prefix('remmittance')->name('remmittance.')->group(function(){
 
 Route::prefix('banking')->name('banking.')->group(function(){
     Route::get('/index', [BankingController::class, 'index'])->name('index');
+    Route::get('/{id}/get/remmittance', [BankingController::class, 'getRemmittanceForInsurance'])->name('get.remmittance');
+    Route::post('/store', [BankingController::class, 'store'])->name('store');
 });

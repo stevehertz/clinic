@@ -6,29 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Banking extends Model
+class ReceivedPayment extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'date_received',
-        'transaction_code',
-        'transaction_mode',
-        'insurance_id',
+        'banking_id',
+        'remmittance_id',
+        'paybill_id',
         'amount',
         'paid',
-        'balance',
-        'change',
-        'status',
-        'notes'
+        'balance'
     ];
 
     protected $dates = [
         'deleted_at'
     ];
 
-    public function insurance()  
+    public function banking()  
     {
-        return $this->belongsTo(Insurance::class);
+        return $this->belongsTo(Banking::class);
     }
 }

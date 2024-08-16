@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Payments;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBankingRequest;
+use App\Models\Insurance;
 use App\Repositories\BankingRepository;
 use App\Repositories\InsurancesRepository;
 use App\Repositories\RemmittanceRepository;
@@ -30,21 +32,29 @@ class BankingController extends Controller
         $data = $this->bankingRepository->getAllBanking();
         $submitted = $this->remmittanceRepository->getSubmiited();
         $insuranceData = $this->insurancesRepository->getAllInsurance();
+        $receivedRemmittanceData = $this->remmittanceRepository->getReceived();
         return view('admin.main.banking.index', [
             'data' => $data,
             'submitted' => $submitted,
-            'insuranceData' => $insuranceData
+            'insuranceData' => $insuranceData,
+            'rceivedRemmittanceData' => $receivedRemmittanceData
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Pill remmittances for insurance.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function getRemmittanceForInsurance($id)
     {
         //
+        $remmittanceData = $this->insurancesRepository->getRemmittanceForInsurance($id);
+        return response()->json([
+            'status' => true,
+            'data' => $remmittanceData
+        ]);
+
     }
 
     /**
@@ -53,9 +63,23 @@ class BankingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBankingRequest $request)
     {
         //
+        $data = $request->except("_token");
+        $banking = $this->bankingRepository->storeBanking($data);
+        if($banking)
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'Banking created successfully'
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'error' => 'Something went wrong'
+        ]);
     }
 
     /**

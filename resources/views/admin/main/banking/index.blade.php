@@ -149,8 +149,8 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $banking->date_received }}</td>
-                                                        <td>{{ $baking->transaction_code }}</td>
-                                                        <td>{{ $baking->transaction_mode }}</td>
+                                                        <td>{{ $banking->transaction_code }}</td>
+                                                        <td>{{ $banking->transaction_mode }}</td>
                                                         <td>{{ $banking->insurance->title }}</td>
                                                         <td>{{ $banking->amount }}</td>
                                                         <td>{{ $banking->paid }}</td>
@@ -182,6 +182,33 @@
                                                     <th>Document Status</th>
                                                 </tr>
                                             </thead>
+                                            <tbody>
+                                                @foreach ($rceivedRemmittanceData as $remmittanceData)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $remmittanceData->paymentBill->clinic->clinic }}</td>
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                        </td>
+                                                        <td>{{ $remmittanceData->paymentBill->patient->first_name }}
+                                                            {{ $remmittanceData->paymentBill->patient->last_name }}
+                                                        </td>
+                                                        <td>{{ $remmittanceData->paymentBill->invoice_number }}</td>
+                                                        <td>{{ $remmittanceData->paymentBill->payment_detail->insurance->title }}
+                                                        </td>
+                                                        <td>{{ $remmittanceData->paymentBill->payment_detail->scheme }}
+                                                        </td>
+                                                        <td>{{ $remmittanceData->paymentBill->patient->card_number }}
+                                                        </td>
+                                                        <td>{{ $remmittanceData->paymentBill->close_date }}</td>
+                                                        <td>{{ $remmittanceData->paymentBill->paid_amount }}</td>
+                                                        <td>{{ $remmittanceData->paymentBill->kra_number }}</td>
+                                                        <td>
+                                                            {{ \RemmittanceStatus::getName($remmittanceData->status) }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

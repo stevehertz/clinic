@@ -28,6 +28,11 @@ class RemmittanceRepository
         return Remmittance::with(['paymentBill'])->where('status', $status)->latest()->get();
     }
 
+    public function getReceived($status = RemmittanceStatus::RECEIVED)  
+    {
+        return Remmittance::with(['paymentBill'])->where('status', $status)->latest()->get();
+    }
+
     public function showRemmittance($id)  
     {
         return Remmittance::with(['paymentBill'])->findOrFail($id);
