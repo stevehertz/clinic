@@ -150,7 +150,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $banking->date_received }}</td>
                                                         <td>{{ $banking->transaction_code }}</td>
-                                                        <td>{{ $banking->transaction_mode }}</td>
+                                                        <td>{{ \TransactionModes::getName($banking->transaction_mode) }}</td>
                                                         <td>{{ $banking->insurance->title }}</td>
                                                         <td>{{ $banking->amount }}</td>
                                                         <td>{{ $banking->paid }}</td>
