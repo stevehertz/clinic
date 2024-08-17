@@ -91,6 +91,26 @@ class BankingController extends Controller
     public function show($id)
     {
         //
+        $banking = $this->bankingRepository->show($id);
+        return response()->json([
+            'status' => true,
+            'data' => $banking
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function view($id)  
+    {
+        $data =  $this->bankingRepository->show($id);
+        
+        return view('admin.main.banking.view', [
+            'data' => $data
+        ]);   
     }
 
     /**

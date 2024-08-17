@@ -68,4 +68,9 @@ class BankingRepository
 
         return $banking;
     }
+
+    public function show($id)  
+    {
+        return Banking::with(['insurance', 'receivedPayment'])->findOrFail($id);
+    }
 }

@@ -31,4 +31,9 @@ class Banking extends Model
     {
         return $this->belongsTo(Insurance::class);
     }
+
+    public function receivedPayment()  
+    {
+        return $this->hasMany(ReceivedPayment::class);
+    }
 }

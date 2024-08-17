@@ -150,12 +150,18 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $banking->date_received }}</td>
                                                         <td>{{ $banking->transaction_code }}</td>
-                                                        <td>{{ \TransactionModes::getName($banking->transaction_mode) }}</td>
+                                                        <td>
+                                                            {{ \TransactionModes::getName($banking->transaction_mode) }}
+                                                        </td>
                                                         <td>{{ $banking->insurance->title }}</td>
                                                         <td>{{ $banking->amount }}</td>
                                                         <td>{{ $banking->paid }}</td>
                                                         <td>{{ $banking->balance }}</td>
-                                                        <td></td>
+                                                        <td class="text-center">
+                                                            <a href="{{ route('admin.banking.view', $banking->id) }}" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-eye fa-sm"></i>
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -170,14 +176,17 @@
                                                 <tr>
                                                     <th></th>
                                                     <th>Clinic</th>
-                                                    <th>Receipt Number</th>
-                                                    <th>Patient Names</th>
-                                                    <th>Invoice Number</th>
+                                                    <th>Receipt #</th>
+                                                    <th>Patient</th>
+                                                    <th>Card #</th>
                                                     <th>Insurance</th>
                                                     <th>Scheme Name</th>
-                                                    <th>Card Number</th>
                                                     <th>Closed Date</th>
+                                                    <th>Date Received</th>
+                                                    <th>Transaction Code</th>
+                                                    <th>Transaction Mode</th>
                                                     <th>Amount Billed</th>
+                                                    <th>Paid Amount</th>
                                                     <th>ETIMS Number</th>
                                                     <th>Document Status</th>
                                                 </tr>
@@ -186,22 +195,42 @@
                                                 @foreach ($rceivedRemmittanceData as $remmittanceData)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $remmittanceData->paymentBill->clinic->clinic }}</td>
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->clinic->clinic }}</td>
                                                         <td>
                                                             {{ $remmittanceData->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
                                                         </td>
-                                                        <td>{{ $remmittanceData->paymentBill->patient->first_name }}
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->patient->first_name }}
                                                             {{ $remmittanceData->paymentBill->patient->last_name }}
                                                         </td>
-                                                        <td>{{ $remmittanceData->paymentBill->invoice_number }}</td>
-                                                        <td>{{ $remmittanceData->paymentBill->payment_detail->insurance->title }}
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->patient->card_number }}
                                                         </td>
-                                                        <td>{{ $remmittanceData->paymentBill->payment_detail->scheme }}
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->payment_detail->insurance->title }}
                                                         </td>
-                                                        <td>{{ $remmittanceData->paymentBill->patient->card_number }}
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->payment_detail->scheme }}
                                                         </td>
-                                                        <td>{{ $remmittanceData->paymentBill->close_date }}</td>
-                                                        <td>{{ $remmittanceData->paymentBill->paid_amount }}</td>
+                                                        <td>
+                                                            {{ $remmittanceData->paymentBill->close_date }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $remmittanceData->receivedPayment->banking->date_received }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $remmittanceData->receivedPayment->banking->transaction_code }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \TransactionModes::getName($remmittanceData->receivedPayment->banking->transaction_mode) }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $remmittanceData->receivedPayment->amount }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $remmittanceData->receivedPayment->paid }}
+                                                        </td>
                                                         <td>{{ $remmittanceData->paymentBill->kra_number }}</td>
                                                         <td>
                                                             {{ \RemmittanceStatus::getName($remmittanceData->status) }}

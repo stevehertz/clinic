@@ -19,4 +19,9 @@ class Remmittance extends Model
     {
         return $this->belongsTo(PaymentBill::class, 'payment_bill_id');    
     }
+
+    public function receivedPayment() 
+    {
+        return $this->hasOne(ReceivedPayment::class, 'remmittance_id');    
+    }
 }
