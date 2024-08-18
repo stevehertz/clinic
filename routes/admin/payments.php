@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Payments\PaymentsController;
 use App\Http\Controllers\Admin\Payments\ClosedBillsController;
 use App\Http\Controllers\Admin\Payments\PaymentDetailsController;
+use App\Http\Controllers\Admin\Payments\ReceivedPaymentController;
 use App\Http\Controllers\Admin\Payments\RemmittanceController;
 
 Route::prefix('payments')->name('payments.')->group(function () {
@@ -51,4 +52,9 @@ Route::prefix('banking')->name('banking.')->group(function(){
     Route::post('/store', [BankingController::class, 'store'])->name('store');
     Route::get('/{id}/show', [BankingController::class, 'show'])->name('show');
     Route::get('/{id}/view', [BankingController::class, 'view'])->name('view');
+});
+
+Route::prefix('received/payments')->name('received.payments.')->group(function(){
+    Route::post('/{receivedPayment}/update', [ReceivedPaymentController::class, 'update'])->name('update');
+    Route::get('/export', [ReceivedPaymentController::class, 'export'])->name('export');
 });

@@ -72,7 +72,8 @@ class BankingController extends Controller
         {
             return response()->json([
                 'status' => true,
-                'message' => 'Banking created successfully'
+                'message' => 'Banking created successfully',
+                'bank_id' => $banking->id
             ]);
         }
 

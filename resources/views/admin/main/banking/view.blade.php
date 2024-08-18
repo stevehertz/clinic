@@ -45,7 +45,7 @@
                         <!-- Table row -->
                         <div class="row">
                             <div class="col-12 table-responsive">
-                                <table class="table table-striped">
+                                <table id="receivePaymentsData" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>SN</th>
@@ -80,7 +80,7 @@
                                                 <td>
                                                     {{ $receivedPayments->amount }}
                                                 </td>
-                                                <td>
+                                                <td contenteditable="true" data-id="{{ $receivedPayments->id }}">
                                                     {{ $receivedPayments->paid }}
                                                 </td>
                                                 <td>
@@ -106,7 +106,8 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-6">
-                                <p class="lead">Received Date {{  \Carbon::parse($data->date_received)->format('d M, Y') }}</p>
+                                <p class="lead">Received Date
+                                    {{ \Carbon::parse($data->date_received)->format('d M, Y') }}</p>
 
                                 <div class="table-responsive">
                                     <table class="table">
@@ -159,7 +160,30 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
+            $('#receivePaymentsData').on('blur', '[contenteditable=true]', function(e) {
+                e.preventDefault();
+                let received_payments_id = $(this).data('id');
+                let paid = $(this).text();
+                let token = '{{ csrf_token() }}';
+                let path = '{{ route('admin.received.payments.update', ':receivedPayment') }}';
+                path = path.replace(':receivedPayment', received_payments_id);
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    data: {
+                        paid: paid,
+                        _token: token
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data['status']) 
+                        {
+                            toastr.success(data['message']);
+                            location.reload();
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endpush

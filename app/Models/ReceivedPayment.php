@@ -16,7 +16,8 @@ class ReceivedPayment extends Model
         'paybill_id',
         'amount',
         'paid',
-        'balance'
+        'balance',
+        'change'
     ];
 
     protected $dates = [

@@ -16,6 +16,11 @@
   margin-bottom: 1rem;
   display: none;
 }
+.content .container-fluid .card .card-body [contenteditable=true] {
+  border: 1px solid #ddd;
+  padding: 5px;
+  cursor: text;
+}
 .content .container-fluid .card .card-footer .submitRemmittanceBtn {
   display: none;
 }

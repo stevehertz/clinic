@@ -158,7 +158,8 @@
                                                         <td>{{ $banking->paid }}</td>
                                                         <td>{{ $banking->balance }}</td>
                                                         <td class="text-center">
-                                                            <a href="{{ route('admin.banking.view', $banking->id) }}" class="btn btn-primary btn-sm">
+                                                            <a href="{{ route('admin.banking.view', $banking->id) }}"
+                                                                class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-eye fa-sm"></i>
                                                             </a>
                                                         </td>
@@ -170,76 +171,93 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
-                                    <div class="table-responsive">
-                                        <table id="receivedData" class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Clinic</th>
-                                                    <th>Receipt #</th>
-                                                    <th>Patient</th>
-                                                    <th>Card #</th>
-                                                    <th>Insurance</th>
-                                                    <th>Scheme Name</th>
-                                                    <th>Closed Date</th>
-                                                    <th>Date Received</th>
-                                                    <th>Transaction Code</th>
-                                                    <th>Transaction Mode</th>
-                                                    <th>Amount Billed</th>
-                                                    <th>Paid Amount</th>
-                                                    <th>ETIMS Number</th>
-                                                    <th>Document Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($rceivedRemmittanceData as $remmittanceData)
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->clinic->clinic }}</td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->patient->first_name }}
-                                                            {{ $remmittanceData->paymentBill->patient->last_name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->patient->card_number }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->payment_detail->insurance->title }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->payment_detail->scheme }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->paymentBill->close_date }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->receivedPayment->banking->date_received }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->receivedPayment->banking->transaction_code }}
-                                                        </td>
-                                                        <td>
-                                                            {{ \TransactionModes::getName($remmittanceData->receivedPayment->banking->transaction_mode) }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->receivedPayment->amount }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $remmittanceData->receivedPayment->paid }}
-                                                        </td>
-                                                        <td>{{ $remmittanceData->paymentBill->kra_number }}</td>
-                                                        <td>
-                                                            {{ \RemmittanceStatus::getName($remmittanceData->status) }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6"></div>
+                                        <div class="col-12 col-md-6">
+                                            <a href="{{ route('admin.received.payments.export') }}" class="btn btn-block btn-outline-primary">
+                                                Export
+                                            </a>
+                                        </div>
                                     </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="table-responsive">
+                                                <table id="receivedData" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>SN</th>
+                                                            <th>Clinic</th>
+                                                            <th>Receipt #</th>
+                                                            <th>Patient</th>
+                                                            <th>Card #</th>
+                                                            <th>Insurance</th>
+                                                            <th>Scheme Name</th>
+                                                            <th>Closed Date</th>
+                                                            <th>Date Received</th>
+                                                            <th>Transaction Code</th>
+                                                            <th>Transaction Mode</th>
+                                                            <th>Amount Billed</th>
+                                                            <th>Paid Amount</th>
+                                                            <th>ETIMS Number</th>
+                                                            <th>Document Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($rceivedRemmittanceData as $remmittanceData)
+                                                            <tr>
+                                                                <td>
+                                                                    {{ $loop->iteration }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->clinic->clinic }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->patient->first_name }}
+                                                                    {{ $remmittanceData->paymentBill->patient->last_name }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->patient->card_number }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->payment_detail->insurance->title }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->payment_detail->scheme }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->paymentBill->close_date }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->receivedPayment->banking->date_received }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->receivedPayment->banking->transaction_code }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ \TransactionModes::getName($remmittanceData->receivedPayment->banking->transaction_mode) }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->receivedPayment->amount }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $remmittanceData->receivedPayment->paid }}
+                                                                </td>
+                                                                <td>{{ $remmittanceData->paymentBill->kra_number }}</td>
+                                                                <td>
+                                                                    {{ \RemmittanceStatus::getName($remmittanceData->status) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>

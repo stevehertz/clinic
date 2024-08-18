@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Admin\Payments;
 
+use App\Exports\Banking\ReceivedPaymentsExport;
 use App\Models\ReceivedPayment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReceivedPaymentRequest;
 use App\Http\Requests\UpdateReceivedPaymentRequest;
+use App\Repositories\ReceivedPaymentRepository;
 
 class ReceivedPaymentController extends Controller
 {
-    
-    public function __construct()
+
+    private $receivedPaymentRepository;
+
+    public function __construct(ReceivedPaymentRepository $receivedPaymentRepository)
     {
-        $this->middleware('auth:admin');   
+        $this->middleware('auth:admin');
+        $this->receivedPaymentRepository = $receivedPaymentRepository;
     }
 
     /**
@@ -23,6 +28,16 @@ class ReceivedPaymentController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Export a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()  
+    {
+        return (new ReceivedPaymentsExport())->download('received-payments-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -78,6 +93,15 @@ class ReceivedPaymentController extends Controller
     public function update(UpdateReceivedPaymentRequest $request, ReceivedPayment $receivedPayment)
     {
         //
+        $data = $request->except("_token");
+        $payments = $this->receivedPaymentRepository->updatePaidAmountReceivedPayments($data, $receivedPayment);
+        if($payments)
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully updated the paid amount'
+            ]);
+        }
     }
 
     /**

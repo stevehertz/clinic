@@ -5,14 +5,16 @@
     .container-fluid {
 
         .card {
-            .card-header{
-                .submitRemmittanceBtn{
+            .card-header {
+                .submitRemmittanceBtn {
                     display: none;
                 }
-                .submitCreatedRemmittanceBtn{
+
+                .submitCreatedRemmittanceBtn {
                     display: none;
                 }
             }
+
             .card-body {
                 .lensPowerDiv {
                     margin-bottom: 1rem;
@@ -28,12 +30,20 @@
                     margin-bottom: 1rem;
                     display      : none;
                 }
+
+                [contenteditable="true"] {
+                    border : 1px solid #ddd;
+                    padding: 5px;
+                    cursor : text;
+                }
             }
-            .card-footer{
-                .submitRemmittanceBtn{
+
+            .card-footer {
+                .submitRemmittanceBtn {
                     display: none;
                 }
-                .submitCreatedRemmittanceBtn{
+
+                .submitCreatedRemmittanceBtn {
                     display: none;
                 }
             }
@@ -117,35 +127,31 @@
             display: none;
         }
 
-        .fliterByDatesRow{
+        .fliterByDatesRow {
             display: none;
         }
 
-        .filterReportsByStatusRow
-        {
+        .filterReportsByStatusRow {
             display: none;
         }
 
-        .TATOneReportsByDateRow
-        {
+        .TATOneReportsByDateRow {
             display: none;
         }
 
-        .TATOneReportsByStatusRow{
+        .TATOneReportsByStatusRow {
             display: none;
         }
 
-        .TATTwoReportsByDateRow{
+        .TATTwoReportsByDateRow {
             display: none;
         }
 
-        .TATTwoReportsByStatusRow
-        {
+        .TATTwoReportsByStatusRow {
             display: none;
         }
 
-        .receiveDocumentSpan
-        {
+        .receiveDocumentSpan {
             display: none;
         }
     }
