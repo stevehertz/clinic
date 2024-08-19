@@ -125,56 +125,72 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
-                                    <button type="button" id="newBankingBtn" class="btn btn-outline-success btn-block">
-                                        New Payments Received
-                                    </button>
-                                    <br>
-                                    <div class="table-responsive">
-                                        <table id="paymentsData" class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Date received</th>
-                                                    <th>Transaction code</th>
-                                                    <th>Transaction mode</th>
-                                                    <th>Insurance</th>
-                                                    <th>Total amount</th>
-                                                    <th>Total paid</th>
-                                                    <th>Total balance</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($data as $banking)
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $banking->date_received }}</td>
-                                                        <td>{{ $banking->transaction_code }}</td>
-                                                        <td>
-                                                            {{ \TransactionModes::getName($banking->transaction_mode) }}
-                                                        </td>
-                                                        <td>{{ $banking->insurance->title }}</td>
-                                                        <td>{{ $banking->amount }}</td>
-                                                        <td>{{ $banking->paid }}</td>
-                                                        <td>{{ $banking->balance }}</td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('admin.banking.view', $banking->id) }}"
-                                                                class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-eye fa-sm"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <button type="button" id="newBankingBtn"
+                                                class="btn btn-outline-success btn-block">
+                                                New Payments Received
+                                            </button>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <a href="{{ route('admin.banking.export') }}" class="btn btn-outline-primary btn-block">
+                                                Export
+                                            </a>
+                                        </div>
                                     </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="paymentsData" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Date received</th>
+                                                            <th>Transaction code</th>
+                                                            <th>Transaction mode</th>
+                                                            <th>Insurance</th>
+                                                            <th>Total amount</th>
+                                                            <th>Total paid</th>
+                                                            <th>Total balance</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($data as $banking)
+                                                            <tr>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>{{ $banking->date_received }}</td>
+                                                                <td>{{ $banking->transaction_code }}</td>
+                                                                <td>
+                                                                    {{ \TransactionModes::getName($banking->transaction_mode) }}
+                                                                </td>
+                                                                <td>{{ $banking->insurance->title }}</td>
+                                                                <td>{{ $banking->amount }}</td>
+                                                                <td>{{ $banking->paid }}</td>
+                                                                <td>{{ $banking->balance }}</td>
+                                                                <td class="text-center">
+                                                                    <a href="{{ route('admin.banking.view', $banking->id) }}"
+                                                                        class="btn btn-primary btn-sm">
+                                                                        <i class="fas fa-eye fa-sm"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
                                     <div class="row">
                                         <div class="col-12 col-md-6"></div>
                                         <div class="col-12 col-md-6">
-                                            <a href="{{ route('admin.received.payments.export') }}" class="btn btn-block btn-outline-primary">
+                                            <a href="{{ route('admin.received.payments.export') }}"
+                                                class="btn btn-block btn-outline-primary">
                                                 Export
                                             </a>
                                         </div>

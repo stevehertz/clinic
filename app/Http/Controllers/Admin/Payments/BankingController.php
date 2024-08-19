@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Payments;
 
+use App\Exports\Banking\BankingPaymentsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankingRequest;
@@ -39,6 +40,16 @@ class BankingController extends Controller
             'insuranceData' => $insuranceData,
             'rceivedRemmittanceData' => $receivedRemmittanceData
         ]);
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()  
+    {
+        return (new BankingPaymentsExport())->download('payments-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
