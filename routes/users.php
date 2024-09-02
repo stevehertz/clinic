@@ -116,9 +116,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::delete('/{patient}/delete', [PatientsPatientsController::class, 'destroy'])->name('delete');
     });
-
-   
-
+    
     Route::prefix('doctor/schedules')->name('doctor.schedules.')->group(function () {
 
         Route::get('/index', [DoctorSchedulesController::class, 'index'])->name('index');

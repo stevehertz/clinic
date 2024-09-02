@@ -56,6 +56,8 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
             Route::post('/{paymentBill}/send/to/hq', [CloseBillsController::class, 'sendPhysicalDocToHQ'])->name('send.to.hq');
 
+            Route::post('/send-multiple-docs/to/hq', [CloseBillsController::class, 'sendMultipleDocsToHQ'])->name('send.multiple.hq');
+
             Route::get('/{paymentBill}/print', [CloseBillsController::class, 'print'])->name('print');
         });
 

@@ -86,7 +86,7 @@ class BillingController extends Controller
         {
             return response()->json([
                 'status' => true,
-                'message' => 'Created new remmittance waiting for submision' 
+                'message' => 'Remmittance for payments under client type insurance hve been created waiting for submision' 
             ]);
         }
     }

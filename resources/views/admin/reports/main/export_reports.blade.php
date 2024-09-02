@@ -61,8 +61,8 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Date</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Order Status</th>
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Workshop</th>
-            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Right Eye Lens</th>
-            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Lest Eye Lens</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Right Eye Lens Code</th>
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">Lest Eye Lens Code</th>
         </tr>
     </thead>
     <tbody>
@@ -274,12 +274,12 @@
                 </td>
                 <td>
                     @isset($report->order->right_eye_lens)
-                        {{ $report->order->right_eye_lens->hq_lens->power }}
+                        {{ $report->order->right_eye_lens->hq_lens->code }}
                     @endisset
                 </td>
                 <td>
                     @isset($report->order->left_eye_lens)
-                        {{ $report->order->left_eye_lens->hq_lens->power }}
+                        {{ $report->order->left_eye_lens->hq_lens->code }}
                     @endisset
                 </td>
             </tr>

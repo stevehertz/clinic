@@ -16,6 +16,11 @@
             }
 
             .card-body {
+                .sendToHQSpan
+                {
+                    display: none;
+                }
+
                 .lensPowerDiv {
                     margin-bottom: 1rem;
                     display      : none;

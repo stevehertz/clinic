@@ -4,6 +4,9 @@
 .content .container-fluid .card .card-header .submitCreatedRemmittanceBtn {
   display: none;
 }
+.content .container-fluid .card .card-body .sendToHQSpan {
+  display: none;
+}
 .content .container-fluid .card .card-body .lensPowerDiv {
   margin-bottom: 1rem;
   display: none;

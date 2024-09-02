@@ -213,7 +213,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th></th>
+                                                        <th>SN</th>
                                                         <th>Clinic</th>
                                                         <th>Receipt Number</th>
                                                         <th>Patient Names</th>

@@ -17,7 +17,7 @@ return new class extends Migration
             //
             $table->dropColumn('remittance_amount');
             $table->dropColumn('remittance_balance');
-            $table->tinyInteger('document_status')->nullable()->after('balance');
+            $table->tinyInteger('document_status')->nullable()->after('balance')->default(0);
             $table->date('send_date')->nullable()->after('document_status');
             $table->date('received_date')->nullable()->after('send_date');
         });

@@ -34,47 +34,15 @@
                                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
                                         href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
                                         aria-selected="true">
-                                        My Scheduled Closed Bills
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
-                                        href="#custom-tabs-four-profile" role="tab"
-                                        aria-controls="custom-tabs-four-profile" aria-selected="false">
                                         All Closed Bills
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
-
                                 <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-home-tab">
-                                    <div class="table-responsive">
-                                        <table id="scheduledClosedBillsData" class="table table-bordered table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Invoice Number</th>
-                                                    <th>Patient Names</th>
-                                                    <th>Open Date</th>
-                                                    <th>Total Amount</th>
-                                                    <th>Total Paid</th>
-                                                    <th>Closed Date</th>
-                                                    <th>Doctor/ Optimetrist</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
-                                    aria-labelledby="custom-tabs-four-profile-tab">
                                     <div class="table-responsive">
                                         <table id="closedBillsData" class="table table-bordered table-striped table-hover">
                                             <thead>
@@ -161,58 +129,6 @@
                 });
             }
 
-            find_scheduled_closed_bills();
-            function find_scheduled_closed_bills() {
-                var path = '{{ route('users.payments.close.bills.scheduled') }}';
-                $('#scheduledClosedBillsData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: path,
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'invoice_number',
-                            name: 'invoice_number'
-                        },
-                        {
-                            data: 'full_names',
-                            name: 'full_names'
-                        },
-                        {
-                            data: 'open_date',
-                            name: 'open_date'
-                        },
-                        {
-                            data: 'total_amount',
-                            name: 'total_amount'
-                        },
-                        {
-                            data: 'total_paid',
-                            name: 'total_paid'
-                        },
-                        {
-                            data: 'close_date',
-                            name: 'close_date'
-                        },
-                        {
-                            data: 'doctor',
-                            name: 'doctor'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ],
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-            }
-
-
             $(document).on('click', '.viewBtn', function(e) {
                 e.preventDefault();
                 let bill_id = $(this).data('id');
@@ -224,7 +140,8 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data['status']) {
-                            let url = '{{ route('users.payments.close.bills.view', ':paymentBill') }}';
+                            let url =
+                                '{{ route('users.payments.close.bills.view', ':paymentBill') }}';
                             url = url.replace(':paymentBill', data['data']['id']);
                             setTimeout(() => {
                                 window.location.href = url;

@@ -167,56 +167,40 @@
                     </ul>
                 </li>
 
-                <li
-                    class="nav-item has-treeview 
-                @if (Route::is('users.payments.bills.index')) menu-open @endif
-                @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view')) menu-open @endif
-                @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.edit')) menu-open @endif
-                @if (Route::is('users.payments.close.bills.index')) menu-open @endif
-                @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) menu-open @endif
-                ">
-                    <a href="#"
-                        class="nav-link
-                    @if (Route::is('users.payments.bills.index')) active @endif
-                    @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view')) active @endif
-                    @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.edit')) active @endif
-                    @if (Route::is('users.payments.close.bills.index')) active @endif
-                    @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) active @endif
-                    ">
+                <li class="nav-item">
+                    <a href="{{ route('users.payments.bills.index') }}"
+                        class="nav-link @if (Route::is('users.payments.bills.index')) active @endif">
                         <i class="nav-icon fa fa-money"></i>
                         <p>
                             @lang('users.page.payments.title')
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item has-treeview @if (Route::is('users.payments.close.bills.index') || Route::is('users.payments.close.bills.scheduled')) menu-open @endif">
+                    <a href="#"
+                        class="nav-link 
+                    @if (Route::is('users.payments.close.bills.index') || Route::is('users.payments.close.bills.scheduled')) active @endif">
+                        <i class="nav-icon fa fa-money"></i>
+                        <p>
+                            @lang('users.page.payments.sub_page.closed')
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.bills.index') }}"
-                                class="nav-link
-                            @if (Route::is('users.payments.bills.index')) active @endif
-                            @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view')) active @endif
-                            @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.edit')) active @endif
-                            ">
+                            <a href="{{ route('users.payments.close.bills.index') }}" class="nav-link @if (Route::is('users.payments.close.bills.index')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('users.page.payments.sub_page.payments')</p>
+                                <p>All Closed Bills</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.close.bills.index') }}"
-                                class="nav-link
-                            @if (Route::is('users.payments.close.bills.index')) active @endif
-                            @if (isset($page_title) && $page_title == trans('users.page.payments.sub_page.view_closed')) active @endif
-                            ">
+                            <a href="{{ route('users.payments.close.bills.scheduled') }}" class="nav-link @if (Route::is('users.payments.close.bills.scheduled')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('users.page.payments.sub_page.closed')</p>
+                                <p>My Scheduled Closed Bills</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('users.payments.remittance.index') }}" class="nav-link">
-                                <i class="fa fa-circle nav-icon"></i>
-                                <p>@lang('users.page.payments.sub_page.remittance')</p>
-                            </a>
-                        </li> --}}
                     </ul>
                 </li>
 
@@ -239,7 +223,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('users.frame.stocks.index') }}" class="nav-link
+                    <a href="{{ route('users.frame.stocks.index') }}"
+                        class="nav-link
                     {{ Route::is('users.frame.stocks.index') ? 'active' : '' }}
                     ">
                         <i class="nav-icon fas fa-chart-area"></i>
@@ -248,10 +233,11 @@
                         </p>
                     </a>
                 </li>
-                
+
 
                 <li class="nav-item">
-                    <a href="{{ route('users.case.stock.index') }}" class="nav-link
+                    <a href="{{ route('users.case.stock.index') }}"
+                        class="nav-link
                     {{ Route::is('users.case.stock.index') ? 'active' : '' }}
                     ">
                         <i class="nav-icon fas fa-chart-bar"></i>

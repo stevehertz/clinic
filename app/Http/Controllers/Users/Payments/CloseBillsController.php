@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Users\Payments;
 
-use App\Http\Controllers\Controller;
-use App\Models\PaymentBill;
 use App\Models\User;
-use App\Repositories\CloseBillsRepository;
+use App\Models\PaymentBill;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\CloseBillsRepository;
+use App\Http\Requests\Users\Payments\SendMultipleDocToHQRequest;
 
 class CloseBillsController extends Controller
 {
@@ -60,10 +61,12 @@ class CloseBillsController extends Controller
                 ->rawColumns(['action', 'full_names', 'total_amount', 'total_paid', 'close_date', 'doctor'])
                 ->make(true);
         }
+        $scheduledClosedPaymentsData = $user->payment_bill()->where('bill_status', 'CLOSED')->latest()->get();
         $page_title = 'Close Bills';
         return view('users.closed.index', [
             'page_title' => $page_title,
             'clinic' => $clinic,
+            'scheduledClosedPaymentsData' => $scheduledClosedPaymentsData
         ]);
     }
 
@@ -105,6 +108,18 @@ class CloseBillsController extends Controller
                 ->rawColumns(['action', 'full_names', 'total_amount', 'total_paid', 'close_date', 'doctor'])
                 ->make(true);
         }
+        $page_title = 'Close Bills';
+        $scheduledClosedPaymentsData = $user->payment_bill()->where('bill_status', 'CLOSED')->latest()->get();
+        $scheduledNotSentToHQClosedPaymentsData = $this->closeBillRepository->getScheduledClosedBillsWhereDocumentHasNotBeenSendToHQ($user);
+        $scheduledSentToHQClosedPaymentsData = $this->closeBillRepository->getScheduledClosedBillsWhereDocumentHasBeenSendToHQ($user);
+        
+        return view('users.closed.my_scheduled', [
+            'clinic' => $clinic,
+            'page_title' => $page_title,
+            'scheduledClosedPaymentsData' => $scheduledClosedPaymentsData,
+            'scheduledNotSentToHQClosedPaymentsData' => $scheduledNotSentToHQClosedPaymentsData,
+            'scheduledSentToHQClosedPaymentsData' => $scheduledSentToHQClosedPaymentsData,  
+        ]);
     }
 
     public function store(PaymentBill $paymentBill, Request $request)
@@ -221,6 +236,19 @@ class CloseBillsController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'You have successfully send document to HQ'
+            ]);
+        }
+    }
+
+    public function sendMultipleDocsToHQ(SendMultipleDocToHQRequest $request)  
+    {
+        $data = $request->except("_token");
+        $sendDocuments = $this->closeBillRepository->sendMultiplePhysicalDoc($data);
+        if($sendDocuments)
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully send documents to HQ'
             ]);
         }
     }

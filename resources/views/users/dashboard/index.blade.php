@@ -153,9 +153,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer clearfix">
+                        {{-- <div class="card-footer clearfix">
                             {!! $schedules->links() !!}
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- /.card -->
                 </div>

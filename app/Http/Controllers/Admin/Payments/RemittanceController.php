@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Payments;
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
 use App\Models\Remittance;
+use App\Models\Remmittance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -97,7 +98,7 @@ class RemittanceController extends Controller
         $patients = $clinic->patient->count();
         if($request->session()->has('remittance_id')){
             $remittance_id = $request->session()->get('remittance_id');
-            $remittance = Remittance::findOrFail($remittance_id);
+            $remittance = Remmittance::findOrFail($remittance_id);
             $payment_bill = $remittance->payment_bill;
             $page_title = "Remittance Bill";
             return view('admin.remittance.view', [
