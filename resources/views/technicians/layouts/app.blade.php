@@ -9,6 +9,12 @@
 
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Favicon -->
+    <link href="{{ asset(config('app.favicon')) }}" rel="icon">
+
     <title>{{ config('app.name') }} | Admin</title>
 
     @include('technicians.components.styles')
