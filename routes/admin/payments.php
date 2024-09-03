@@ -37,6 +37,7 @@ Route::prefix('billing')->name('billing.')->group(function(){
     Route::get('/', [BillingController::class, 'index'])->name('index');
     Route::get('/export', [BillingController::class, 'export'])->name('export');
     Route::post('/{paymentBill}/receive', [BillingController::class, 'receiveDocument'])->name('receive');
+    Route::post('/receive/multiple/docs', [BillingController::class, 'receiveMultipleDocuments'])->name('receive.multiple.docs');
     Route::post('/store/remmittance', [BillingController::class, 'store'])->name('store.remmittance');
 });
 

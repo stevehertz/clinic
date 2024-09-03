@@ -8,6 +8,7 @@ use App\Exports\Billing\ExportBilling;
 use App\Models\Clinic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Billing\ReceiveMultipleDocumentsRequest;
 use App\Http\Requests\Admin\Billing\StoreRemmittanceRequest;
 use App\Models\PaymentBill;
 use App\Models\Remmittance;
@@ -32,7 +33,6 @@ class BillingController extends Controller
     {
         //
         $data = $this->billingRepository->closed_bills();
-       
         $closedBills = $this->billingRepository->closed_bills();
         $sentToHQ = $this->billingRepository->sentToHq();
         $receivedDOC =  $this->billingRepository->receivedFromClinic();
@@ -52,7 +52,8 @@ class BillingController extends Controller
      */
     public function export()
     {
-        return (new ExportBilling())->download('billing-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        return (new ExportBilling())
+            ->download('billing-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -82,11 +83,28 @@ class BillingController extends Controller
         //
         $data = $request->except("_token");
         $remmittance = $this->billingRepository->storeRemmittance($data);
-        if($remmittance)
-        {
+        if ($remmittance) {
             return response()->json([
                 'status' => true,
-                'message' => 'Remmittance for payments under client type insurance hve been created waiting for submision' 
+                'message' => 'Remmittance for payments under client type insurance hve been created waiting for submision'
+            ]);
+        }
+    }
+
+    /**
+     * Receive multiple documents a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function receiveMultipleDocuments(ReceiveMultipleDocumentsRequest $request)
+    {
+        $data = $request->except("_token");
+        $receiveDocuments = $this->billingRepository->receiveMultipleDocuments($data);
+        if ($receiveDocuments) {
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully received multiple documents sent to HQ'
             ]);
         }
     }

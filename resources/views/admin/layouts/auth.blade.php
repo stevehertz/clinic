@@ -8,6 +8,9 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicon -->
+    <link href="{{ asset(config('app.favicon')) }}" rel="icon">
+
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
     <!-- Font Awesome -->

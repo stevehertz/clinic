@@ -77,7 +77,7 @@
                                         <table id="data" class="table table-bordered table-striped table-sm">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th>SN</th>
                                                     <th>Clinic</th>
                                                     <th>Receipt Number</th>
                                                     <th>Patient Names</th>
@@ -115,13 +115,12 @@
                                                     </tr>
                                                 @endforeach
                                             </tbody>
-
                                         </table>
                                     </div>
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
-                                    <form>
+                                    <form id="receiveDocumentsForm"> 
                                         <div class="table-responsive">
                                             <span class="receiveDocumentSpan">
                                                 <button type="submit" class="btn btn-outline-primary btn-block">
@@ -129,24 +128,22 @@
                                                 </button>
                                             </span>
                                             <br>
-                                            
                                             <table id="sentToHqData" class="table table-bordered table-striped table-sm">
                                                 <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th></th>
+                                                        <th>SN</th>
                                                         <th>Clinic</th>
                                                         <th>Receipt Number</th>
                                                         <th>Patient Names</th>
                                                         <th>Invoice Number</th>
-                                                        <th>Phone Number</th>
                                                         <th>Insurance</th>
                                                         <th>Scheme Name</th>
                                                         <th>Card Number</th>
                                                         <th>Closed Date</th>
                                                         <th>Amount Billed</th>
+                                                        <th>Date Doc Was Send</th>
                                                         <th>Document Status</th>
-                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -165,7 +162,6 @@
                                                             <td>{{ $bill->patient->first_name }}
                                                                 {{ $bill->patient->last_name }}</td>
                                                             <td>{{ $bill->invoice_number }}</td>
-                                                            <td>{{ $bill->patient->phone }}</td>
                                                             <td>
                                                                 @isset($bill->payment_detail->insurance)
                                                                     {{ $bill->payment_detail->insurance->title }}
@@ -175,21 +171,14 @@
                                                             <td>{{ $bill->patient->card_number }}</td>
                                                             <td>{{ $bill->close_date }}</td>
                                                             <td>{{ $bill->paid_amount }}</td>
-                                                            <td>{{ \DocumentStatus::getName($bill->document_status) }}</td>
+                                                            <td>{{ $bill->send_date  }}</td>
                                                             <td>
-                                                                @if ($bill->document_status == \DocumentStatus::PHYSICAL_DOCUMENT)
-                                                                    <a href="javascript:void(0)"
-                                                                        data-id="{{ $bill->id }}"
-                                                                        class="btn btn-outline-primary btn-xs receiveDocumentBtn">
-                                                                        <i class="fa fa-cog"></i> Receive Document
-                                                                    </a>
-                                                                @endif
+                                                                {{ \DocumentStatus::getName($bill->document_status) }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
                                             </table>
-
                                             <br>
                                             <span class="receiveDocumentSpan">
                                                 <button type="submit" class="btn btn-outline-primary btn-block">

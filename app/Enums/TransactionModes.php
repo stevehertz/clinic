@@ -15,7 +15,7 @@ class TransactionModes
         return [
             self::CASH => 'Cash',
             self::MPESA => 'M-Pesa',
-            self::BANK => 'Bank',
+            self::BANK => 'Bank/RTGS',
             self::CHEQUE => 'Cheque',
         ];
     }
@@ -28,7 +28,7 @@ class TransactionModes
             case self::MPESA:
                 return 'M-Pesa';
             case self::BANK:
-                return 'Bank';
+                return 'Bank/RTGS';
             case self::CHEQUE:
                 return 'Cheque';
             default:

@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
-use App\Models\PaymentBill; 
+use App\Models\PaymentBill;
 use App\Models\Remmittance;
 use App\Models\Organization;
 use App\Enums\DocumentStatus;
@@ -13,17 +13,28 @@ class BillingRepository
 {
     public function closed_bills()
     {
-        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])->where('bill_status', 'CLOSED')->where('remmittance_status', '=', null)->latest()->get();
+        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])
+            ->where('bill_status', 'CLOSED')
+            ->where('remmittance_status', '=', null)
+            ->latest()->get();
     }
 
     public function sentToHq($status = DocumentStatus::PHYSICAL_DOCUMENT)
     {
-        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])->where('bill_status', 'CLOSED')->where('document_status', $status)->where('remmittance_status', '=', null)->latest()->get();
+        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])
+            ->where('bill_status', 'CLOSED')
+            ->where('document_status', $status)
+            ->where('remmittance_status', '=', null)
+            ->latest()->get();
     }
 
     public function receivedFromClinic($status = DocumentStatus::RECEIVED_DOCUMENT)
     {
-        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])->where('bill_status', 'CLOSED')->where('document_status', $status)->where('remmittance_status', '=', null)->latest()->get();
+        return PaymentBill::with(['clinic', 'appontment', 'appontment.patient', 'appontment.lens_power', 'appontment.lens_power.frame_prescription', 'payment_detail', 'payment_detail.insurance'])
+            ->where('bill_status', 'CLOSED')
+            ->where('document_status', $status)
+            ->where('remmittance_status', '=', null)
+            ->latest()->get();
     }
     public function receiveDocument(PaymentBill $paymentBill, $status = DocumentStatus::RECEIVED_DOCUMENT)
     {
@@ -33,6 +44,20 @@ class BillingRepository
             'received_date' => $date
         ]);
         return $paymentBill;
+    }
+    public function receiveMultipleDocuments(array $attributes, $status = DocumentStatus::RECEIVED_DOCUMENT)  
+    {
+        $payment_bill_id = data_get($attributes, 'payment_bill_id');  
+        $date = Carbon::now()->format('Y-m-d');
+        foreach($payment_bill_id as $payBillId)
+        {
+            $paymentBill = PaymentBill::findOrFail($payBillId);
+            $paymentBill->update([
+                'document_status' => $status,
+                'send_date' => $date
+            ]);
+        }
+        return true; 
     }
     public function storeRemmittance(array $attributes)
     {
@@ -54,7 +79,6 @@ class BillingRepository
                         'remmittance_status' => $status
                     ]);
                 }
-                
             }
         }
         return true;

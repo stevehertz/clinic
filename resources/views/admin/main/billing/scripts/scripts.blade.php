@@ -62,53 +62,51 @@
         });
 
         $(document).on('change', 'input[type="checkbox"]', function(e) {
+            e.preventDefault();
             if ($('input[type="checkbox"]:checked').length > 0) {
-                $('.submitRemmittanceBtn').show();
+                $('.receiveDocumentSpan').fadeIn();
             } else {
-                $('.submitRemmittanceBtn').hide();
+                $('.receiveDocumentSpan').fadeOut();;
             }
         });
-        
-        $('#createRemmittanceForm').submit(function(e) {
+
+        $('#receiveDocumentsForm').submit(function(e) {
             e.preventDefault();
             let payment_bill_id = [];
             $('input[type="checkbox"]:checked').each(function() {
                 payment_bill_id.push($(this).val());
             });
-            if(payment_bill_id.length === 0)
-            {
+            if (payment_bill_id.length === 0) {
                 toastr.error('Please select bill');
                 return
             }
-            let path = '{{ route('admin.billing.store.remmittance') }}';
+            let path = '{{ route('admin.billing.receive.multiple.docs') }}';
+            let token = "{{ csrf_token() }}";
             $.ajax({
                 type: "POST",
                 url: path,
                 data: {
                     payment_bill_id: payment_bill_id,
-                    _token: '{{ csrf_token() }}'
+                    _token: token
                 },
                 dataType: "json",
-                beforeSend:function(){
+                beforeSend: function() {
                     $(this).find('button[type=submit]').html(
                         '<i class="fa fa-spinner fa-spin"></i>'
                     );
                     $(this).find('button[type=submit]').attr('disabled', true);
                 },
-                complete:function()
-                {
+                complete: function() {
                     $(this).find('button[type=submit]').html(
-                        'Create Remmittance'
+                        ' Receive Document'
                     );
                     $(this).find('button[type=submit]').attr('disabled', false);
                 },
-                success: function (data) {
-                    if(data['status'])
-                    {
+                success: function(data) {
+                    if (data['status']) {
                         toastr.success(data['message']);
                         setTimeout(() => {
-                            window.location.href =
-                                '{{ route('admin.remmittance.index') }}';
+                            location.reload();
                         }, 1000);
                     }
                 },

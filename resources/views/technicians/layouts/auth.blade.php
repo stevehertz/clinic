@@ -10,6 +10,9 @@
 
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
+    <!-- Favicon -->
+    <link href="{{ asset(config('app.favicon')) }}" rel="icon">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('fonts/font-awesome/css/font-awesome.min.css') }}">
     <!-- Ionicons -->
@@ -29,7 +32,9 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="{{ route('home') }}"><b>Clinic </b>APP</a>
+            <a href="{{ route('home') }}">
+                <b>Clinic </b>APP
+            </a>
         </div>
 
         <!-- /.login-logo -->
