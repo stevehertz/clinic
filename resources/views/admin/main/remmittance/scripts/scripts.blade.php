@@ -24,11 +24,12 @@
             "pageLength": 10
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        $(document).on('change', 'input[type="checkbox"]', function(e) {
+        $(document).on('change', '.submitRemmittanceCheckBox', function(e) {
+            e.preventDefault();
             if ($('input[type="checkbox"]:checked').length > 0) {
-                $('.submitCreatedRemmittanceBtn').show();
+                $('.submitRemmittanceSpan').fadeIn();
             } else {
-                $('.submitCreatedRemmittanceBtn').hide();
+                $('.submitRemmittanceSpan').fadeOut();
             }
         });
         $('#submitRemmittanceForm').submit(function(e) {

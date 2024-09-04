@@ -1,7 +1,4 @@
-.content .container-fluid .card .card-header .submitRemmittanceBtn {
-  display: none;
-}
-.content .container-fluid .card .card-header .submitCreatedRemmittanceBtn {
+.content .container-fluid .card .card-body .submitRemmittanceSpan {
   display: none;
 }
 .content .container-fluid .card .card-body .sendToHQSpan {
@@ -23,12 +20,6 @@
   border: 1px solid #ddd;
   padding: 5px;
   cursor: text;
-}
-.content .container-fluid .card .card-footer .submitRemmittanceBtn {
-  display: none;
-}
-.content .container-fluid .card .card-footer .submitCreatedRemmittanceBtn {
-  display: none;
 }
 .content .container-fluid .approvalCard {
   display: none;

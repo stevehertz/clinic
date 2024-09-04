@@ -44,6 +44,8 @@ Route::prefix('billing')->name('billing.')->group(function(){
 Route::prefix('remmittance')->name('remmittance.')->group(function(){
     Route::get('/', [RemmittanceController::class, 'index'])->name('index');
     Route::get('/export', [RemmittanceController::class, 'export'])->name('export');
+    Route::get('/export/pending/submission', [RemmittanceController::class, 'exportPendingSubmission'])->name('export.pending.submission');
+    Route::get('/export/submitted/submission', [RemmittanceController::class, 'exportSubmittedSubmission'])->name('export.submitted.submission');
     Route::post('/submit/remmittance', [RemmittanceController::class, 'update'])->name('submit.remmittance');
 });
 

@@ -120,7 +120,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
-                                    <form id="receiveDocumentsForm"> 
+                                    <form id="receiveDocumentsForm">
                                         <div class="table-responsive">
                                             <span class="receiveDocumentSpan">
                                                 <button type="submit" class="btn btn-outline-primary btn-block">
@@ -151,7 +151,8 @@
                                                         <tr>
                                                             <td>
                                                                 <input type="checkbox" name="payment_bill_id[]"
-                                                                    value="{{ $bill->id }}">
+                                                                    value="{{ $bill->id }}"
+                                                                    class="receivedDocumentsCheckBox">
                                                             </td>
                                                             <td>
                                                                 {{ $loop->iteration }}
@@ -171,7 +172,7 @@
                                                             <td>{{ $bill->patient->card_number }}</td>
                                                             <td>{{ $bill->close_date }}</td>
                                                             <td>{{ $bill->paid_amount }}</td>
-                                                            <td>{{ $bill->send_date  }}</td>
+                                                            <td>{{ $bill->send_date }}</td>
                                                             <td>
                                                                 {{ \DocumentStatus::getName($bill->document_status) }}
                                                             </td>
@@ -192,10 +193,12 @@
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
                                     <form id="createRemmittanceForm">
-                                        <button type="submit"
-                                            class="btn btn-block btn-sm btn-outline-primary submitRemmittanceBtn">
-                                            Create Remmittance
-                                        </button>
+                                        <span class="submitRemmittanceSpan">
+                                            <button type="submit"
+                                                class="btn btn-block btn-sm btn-outline-primary">
+                                                Create Remmittance
+                                            </button>
+                                        </span>
                                         <br>
                                         <div class="table-responsive">
                                             <table id="receivedData" class="table table-bordered table-striped table-sm">
@@ -221,7 +224,7 @@
                                                         <tr>
                                                             <td>
                                                                 <input type="checkbox" name="payment_bill_id[]"
-                                                                    value="{{ $bill->id }}">
+                                                                    value="{{ $bill->id }}" class="createRemmittanceCheckBox">
                                                             </td>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $bill->clinic->clinic }}</td>
@@ -246,6 +249,13 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <br>
+                                        <span class="submitRemmittanceSpan">
+                                            <button type="submit"
+                                                class="btn btn-block btn-sm btn-outline-primary">
+                                                Create Remmittance
+                                            </button>
+                                        </span>
                                     </form>
                                 </div>
                                 <!-- /.tab-pane -->

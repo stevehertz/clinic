@@ -6,6 +6,8 @@ use App\Models\Remmittance;
 use App\Http\Controllers\Controller;
 use App\Repositories\RemmittanceRepository;
 use App\Exports\Remmittance\ExportRemmittance;
+use App\Exports\Remmittance\PendingSubmissionExport;
+use App\Exports\Remmittance\SubmittedRemmittanceExport;
 use App\Http\Requests\StoreRemmittanceRequest;
 use App\Http\Requests\Admin\Billing\UpdateRemmittanceRequest;
 use Carbon\Carbon;
@@ -51,6 +53,26 @@ class RemmittanceController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportPendingSubmission()  
+    {
+        return (new PendingSubmissionExport())->download('pending-submission-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportSubmittedSubmission()  
+    {
+        return (new SubmittedRemmittanceExport())->download('submitted-submission-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateRemmittanceRequest  $request
@@ -72,7 +94,7 @@ class RemmittanceController extends Controller
             $data = [
                 'title' => 'Submitted Remmittance',
                 'date' => $date,
-                'unique_code'=>$uniqueCode,
+                'unique_code' => $uniqueCode,
                 'remmittances' => $remmittances
             ];
 
