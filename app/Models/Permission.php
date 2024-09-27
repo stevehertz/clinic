@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
-use Laratrust\Models\LaratrustPermission;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends LaratrustPermission
+class Permission extends SpatiePermission
 {
-    public $guarded = [];
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
 }

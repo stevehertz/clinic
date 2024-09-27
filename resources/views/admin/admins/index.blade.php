@@ -41,6 +41,7 @@
                                         <th>Email</th>
                                         <th>Gender</th>
                                         <th>DOB</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                             </table>

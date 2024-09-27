@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('frame_stocks', function (Blueprint $table) {
+        Schema::table('clinics', function (Blueprint $table) {
             //
-            $table->integer('received')->after('opening_stock')->default(0);
+            $table->string('etims_number')->after('initials')->nullable();
         });
     }
 
@@ -26,9 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('frame_stocks', function (Blueprint $table) {
+        Schema::table('clinics', function (Blueprint $table) {
             //
-            $table->dropColumn('received');
+            $table->dropColumn('etims_number');
         });
     }
 };

@@ -80,7 +80,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="newAdminGender">Gender</label>
-                                            <select id="newAdminGender" name="gender" class="form-control select2" style="width: 100%;">
+                                            <select id="newAdminGender" name="gender" class="form-control select2"
+                                                style="width: 100%;">
                                                 <option selected="selected" disabled="disabled">Choose Gender</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
@@ -93,9 +94,8 @@
 
                                         <div class="form-group">
                                             <label for="newAdminDOB">Date of Birth</label>
-                                            <input type="text" name="dob"
-                                                class="form-control datepicker" id="newAdminDOB"
-                                                placeholder="Enter Date of Birth">
+                                            <input type="text" name="dob" class="form-control datepicker"
+                                                id="newAdminDOB" placeholder="Enter Date of Birth">
                                         </div>
 
                                     </div>
@@ -111,7 +111,8 @@
                                             <label for="newAdminImage">Profile</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input type="file" name="profile" class="custom-file-input" id="newAdminImage">
+                                                    <input type="file" name="profile" class="custom-file-input"
+                                                        id="newAdminImage">
                                                     <label class="custom-file-label" for="newAdminImage">Choose file</label>
                                                 </div>
                                             </div>
@@ -122,6 +123,22 @@
 
                                 </div>
                                 <!--/.row -->
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="newAdminGender">Roles</label>
+                                            <select id="newAdminGender" name="role_id" class="form-control select2"
+                                                style="width: 100%;">
+                                                <option selected="selected" disabled="disabled">Choose Role</option>
+                                                @foreach ($roles as $role)
+                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-body -->
 
@@ -145,7 +162,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#newAdminForm').submit(function (e) { 
+            $('#newAdminForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);
                 let formData = new FormData(form[0]);
@@ -156,7 +173,7 @@
                     data: formData,
                     dataType: "json",
                     contentType: false,
-                    processData:false,
+                    processData: false,
                     beforeSend: function() {
                         form.find('button[type=submit]').html(
                             '<i class="fa fa-spinner fa-spin"></i>'
@@ -167,12 +184,12 @@
                         form.find('button[type=submit]').html('Save');
                         form.find('button[type=submit]').attr('disabled', false);
                     },
-                    success: function (data) {
-                        if(data['status'])
-                        {
+                    success: function(data) {
+                        if (data['status']) {
                             toastr.success(data['message']);
                             setTimeout(() => {
-                                window.location.href = '{{ route('admin.admins.index') }}';
+                                window.location.href =
+                                    '{{ route('admin.admins.index') }}';
                             }, 1000);
                         }
                     },

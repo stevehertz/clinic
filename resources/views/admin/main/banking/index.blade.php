@@ -11,7 +11,7 @@
                     <div class="info-box bg-light">
                         <div class="info-box-content">
                             <span class="info-box-text text-center text-muted">
-                                Submitted Remmittance
+                                Total Amount Submitted
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
                                 {{ count($submitted) }}
@@ -23,7 +23,7 @@
                     <div class="info-box bg-light">
                         <div class="info-box-content">
                             <span class="info-box-text text-center text-muted">
-                                Documents Sent To HQ
+                                Total Amount Received
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
                                 0
@@ -35,7 +35,7 @@
                     <div class="info-box bg-light">
                         <div class="info-box-content">
                             <span class="info-box-text text-center text-muted">
-                                Documents Received From Clinic
+                                Total Balances
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
                                 0
@@ -75,53 +75,115 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
-                                    <div class="table-responsive">
-                                        <table id="submittedData" class="table table-bordered table-striped table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Clinic</th>
-                                                    <th>Receipt Number</th>
-                                                    <th>Patient Names</th>
-                                                    <th>Invoice Number</th>
-                                                    <th>Insurance</th>
-                                                    <th>Scheme Name</th>
-                                                    <th>Card Number</th>
-                                                    <th>Closed Date</th>
-                                                    <th>Amount Billed</th>
-                                                    <th>ETIMS Number</th>
-                                                    <th>Document Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($submitted as $submittedRemmittance)
-                                                    <tr>
-                                                        <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->clinic->clinic }}</td>
-                                                        <td>
-                                                            {{ $submittedRemmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
-                                                        </td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->patient->first_name }}
-                                                            {{ $submittedRemmittance->paymentBill->patient->last_name }}
-                                                        </td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->invoice_number }}</td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->payment_detail->insurance->title }}
-                                                        </td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->payment_detail->scheme }}
-                                                        </td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->patient->card_number }}
-                                                        </td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->close_date }}</td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->paid_amount }}</td>
-                                                        <td>{{ $submittedRemmittance->paymentBill->kra_number }}</td>
-                                                        <td>
-                                                            {{ \RemmittanceStatus::getName($submittedRemmittance->status) }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label>Clinics</label>
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option disabled="disabled" selected="selected">
+                                                        Select a clinic
+                                                    </option>
+                                                    <option>Alaska</option>
+                                                    <option>California</option>
+                                                    <option>Delaware</option>
+                                                    <option>Tennessee</option>
+                                                    <option>Texas</option>
+                                                    <option>Washington</option>
+                                                </select>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label>Insurances</label>
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option disabled="disabled" selected="selected">
+                                                        Select an insurance
+                                                    </option>
+                                                    <option>Alaska</option>
+                                                    <option>California</option>
+                                                    <option>Delaware</option>
+                                                    <option>Tennessee</option>
+                                                    <option>Texas</option>
+                                                    <option>Washington</option>
+                                                </select>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+
+                                        <div class="col-12 col-md-2">
+                                            <label>&nbsp;</label>
+                                            <button type="" class="btn btn-block btn-outline-primary">
+                                                <i class="fas fa-search"></i> filter
+                                            </button>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table id="submittedData"
+                                                    class="table table-bordered table-striped table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>SN</th>
+                                                            <th>Clinic</th>
+                                                            <th>Receipt Number</th>
+                                                            <th>Patient Names</th>
+                                                            <th>Invoice Number</th>
+                                                            <th>Insurance</th>
+                                                            <th>Scheme Name</th>
+                                                            <th>Card Number</th>
+                                                            <th>Closed Date</th>
+                                                            <th>Amount Billed</th>
+                                                            <th>ETIMS Number</th>
+                                                            <th>Document Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($submitted as $submittedRemmittance)
+                                                            <tr>
+
+                                                                <td>
+                                                                    <input type="checkbox" name="payment_bill_id[]"
+                                                                        value="{{ $submittedRemmittance->id }}"
+                                                                        class="submitRemmittanceCheckBox">
+                                                                </td>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->clinic->clinic }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $submittedRemmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->patient->first_name }}
+                                                                    {{ $submittedRemmittance->paymentBill->patient->last_name }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->invoice_number }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->payment_detail->insurance->title }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->payment_detail->scheme }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->patient->card_number }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->close_date }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->paid_amount }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->kra_number }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ \RemmittanceStatus::getName($submittedRemmittance->status) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
@@ -133,7 +195,8 @@
                                             </button>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <a href="{{ route('admin.banking.export') }}" class="btn btn-outline-primary btn-block">
+                                            <a href="{{ route('admin.banking.export') }}"
+                                                class="btn btn-outline-primary btn-block">
                                                 Export
                                             </a>
                                         </div>
@@ -145,7 +208,7 @@
                                                 <table id="paymentsData" class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th></th>
+                                                            <th>SN</th>
                                                             <th>Date received</th>
                                                             <th>Transaction code</th>
                                                             <th>Transaction mode</th>

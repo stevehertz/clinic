@@ -60,15 +60,62 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <a href="{{ route('admin.remmittance.export') }}"
-                                                class="btn btn-outline-primary btn-sm float-right">
-                                                Export
-                                            </a>
+                                    <form action="">
+                                        @csrf
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <select name="clinic_id" class="form-control select2"
+                                                        style="width: 100%;">
+                                                        <option selected="selected" disabled="disabled">Select Clinic
+                                                        </option>
+                                                        @foreach ($clinics as $selectClinic)
+                                                            <option value="{{ $selectClinic->id }}">
+                                                                {{ $selectClinic->clinic }}
+                                                            </option>
+                                                        @endforeach
+
+                                                    </select>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <select name="insurance_id" class="form-control select2" style="width: 100%;">
+                                                        <option selected="selected" disabled="disabled">Select Insurance
+                                                        </option>
+                                                        @forelse ($insurances as $selectedInsurances)
+                                                            <option value="{{ $selectedInsurances->id }}">
+                                                                {{ $selectedInsurances->title }}
+                                                            </option>
+                                                        @empty
+                                                        @endforelse
+                                                    </select>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </div>
+                                            <div class="col-12 col-md-2">
+                                                <button type="submit" class="btn btn-block btn-outline-primary">
+                                                    <i class="fas fa-search"></i> filter
+                                                </button>
+                                            </div>
+
+                                            <div class="col-12 col-md-2">
+                                                <button type="button" class="btn btn-outline-primary">
+                                                    <a href="{{ route('admin.remmittance.index') }}">
+                                                        <i class="fas fa-refresh"></i>
+                                                    </a>
+                                                </button>
+
+                                                <button type="button" class="btn btn-outline-primary">
+                                                    <a href="{{ route('admin.remmittance.export') }}">
+                                                        Export
+                                                    </a>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <br>
+                                    </form>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -171,7 +218,8 @@
                                                                 <tr>
                                                                     <td>
                                                                         <input type="checkbox" name="remmittance_id[]"
-                                                                            value="{{ $pendingRemmittance->id }}" class="submitRemmittanceCheckBox">
+                                                                            value="{{ $pendingRemmittance->id }}"
+                                                                            class="submitRemmittanceCheckBox">
                                                                     </td>
 
                                                                     <td>{{ $loop->iteration }}</td>
@@ -247,7 +295,8 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
-                                                <table id="submittedData" class="table table-bordered table-striped table-sm">
+                                                <table id="submittedData"
+                                                    class="table table-bordered table-striped table-sm">
                                                     <thead>
                                                         <tr>
                                                             <th></th>
@@ -268,26 +317,31 @@
                                                         @foreach ($submitted as $submittedRemmittance)
                                                             <tr>
                                                                 <td>{{ $loop->iteration }}</td>
-                                                                <td>{{ $submittedRemmittance->paymentBill->clinic->clinic }}</td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->clinic->clinic }}
+                                                                </td>
                                                                 <td>
                                                                     {{ $submittedRemmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
                                                                 </td>
                                                                 <td>{{ $submittedRemmittance->paymentBill->patient->first_name }}
                                                                     {{ $submittedRemmittance->paymentBill->patient->last_name }}
                                                                 </td>
-                                                                <td>{{ $submittedRemmittance->paymentBill->invoice_number }}</td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->invoice_number }}
+                                                                </td>
                                                                 <td>{{ $submittedRemmittance->paymentBill->payment_detail->insurance->title }}
                                                                 </td>
                                                                 <td>{{ $submittedRemmittance->paymentBill->payment_detail->scheme }}
                                                                 </td>
                                                                 <td>{{ $submittedRemmittance->paymentBill->patient->card_number }}
                                                                 </td>
-                                                                <td>{{ $submittedRemmittance->paymentBill->close_date }}</td>
-                                                                <td>{{ $submittedRemmittance->paymentBill->paid_amount }}</td>
-                                                                <td>{{ $submittedRemmittance->paymentBill->kra_number }}</td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->close_date }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->paid_amount }}
+                                                                </td>
+                                                                <td>{{ $submittedRemmittance->paymentBill->kra_number }}
+                                                                </td>
                                                                 <td>{{ \RemmittanceStatus::getName($submittedRemmittance->status) }}
                                                                 </td>
-        
+
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -309,7 +363,6 @@
         <!--/.container-fluid -->
     </section>
     <!--/.content -->
-    
 @endsection
 
 @push('scripts')

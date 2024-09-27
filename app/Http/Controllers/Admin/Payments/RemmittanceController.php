@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers\Admin\Payments;
 
+use PDF;
+use Carbon\Carbon;
 use App\Models\Remmittance;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\ClinicsRepository;
+use App\Repositories\InsurancesRepository;
 use App\Repositories\RemmittanceRepository;
 use App\Exports\Remmittance\ExportRemmittance;
+use App\Http\Requests\StoreRemmittanceRequest;
 use App\Exports\Remmittance\PendingSubmissionExport;
 use App\Exports\Remmittance\SubmittedRemmittanceExport;
-use App\Http\Requests\StoreRemmittanceRequest;
 use App\Http\Requests\Admin\Billing\UpdateRemmittanceRequest;
-use Carbon\Carbon;
-use PDF;
 
 class RemmittanceController extends Controller
 {
 
-    private $remmittanceRepository;
-    public function __construct(RemmittanceRepository $remmittanceRepository)
-    {
+    private $remmittanceRepository, $clinicsRepository, $insurancesRepository;
+    public function __construct(
+        RemmittanceRepository $remmittanceRepository,
+        ClinicsRepository $clinicsRepository,
+        InsurancesRepository $insurancesRepository
+    ) {
         $this->middleware('auth:admin');
         $this->remmittanceRepository = $remmittanceRepository;
+        $this->clinicsRepository = $clinicsRepository;
+        $this->insurancesRepository = $insurancesRepository;
     }
 
     /**
@@ -28,16 +36,35 @@ class RemmittanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $filter_data = [];
+        if ($request->_token) {
+            $filter_data = $request->except('_token');
+            if (!empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id'])) {
+            } else if (!empty($filter_data['clinic_id']) && empty($filter_data['insurance_id'])) {
+            } else if (empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id'])) {
+            } else {
+                $data = $this->remmittanceRepository->getAll();
+                $pending = $this->remmittanceRepository->getPending();
+                $submitted = $this->remmittanceRepository->getSubmiited();
+                $clinics  = $this->clinicsRepository->getAllClinics();
+                $insurances = $this->insurancesRepository->getAllInsurance();
+            }
+        }
+
         $data = $this->remmittanceRepository->getAll();
         $pending = $this->remmittanceRepository->getPending();
         $submitted = $this->remmittanceRepository->getSubmiited();
+        $clinics  = $this->clinicsRepository->getAllClinics();
+        $insurances = $this->insurancesRepository->getAllInsurance();
         return view('admin.main.remmittance.index', [
             'data' => $data,
             'pending' => $pending,
-            'submitted' => $submitted
+            'submitted' => $submitted,
+            'clinics' => $clinics,
+            'insurances' => $insurances,
         ]);
     }
 
@@ -57,7 +84,7 @@ class RemmittanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportPendingSubmission()  
+    public function exportPendingSubmission()
     {
         return (new PendingSubmissionExport())->download('pending-submission-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
@@ -67,7 +94,7 @@ class RemmittanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportSubmittedSubmission()  
+    public function exportSubmittedSubmission()
     {
         return (new SubmittedRemmittanceExport())->download('submitted-submission-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }

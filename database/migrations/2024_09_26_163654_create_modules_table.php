@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('frame_stocks', function (Blueprint $table) {
-            //
-            $table->integer('received')->after('opening_stock')->default(0);
+        Schema::create('modules', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,9 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('frame_stocks', function (Blueprint $table) {
-            //
-            $table->dropColumn('received');
-        });
+        Schema::dropIfExists('modules');
     }
 };

@@ -36,6 +36,10 @@
             <th style="background-color: #FFFF00; font-size:14px; padding:10px;">
                 Change To Return
             </th>
+
+            <th style="background-color: #FFFF00; font-size:14px; padding:10px;">
+                Reason
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -76,6 +80,10 @@
 
                 <td>
                     {{ $report->change }}
+                </td>
+
+                <td>
+                    {{ $report->notes }}
                 </td>
             </tr>
         @empty

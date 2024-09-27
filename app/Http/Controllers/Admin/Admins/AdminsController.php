@@ -6,6 +6,7 @@ use App\Models\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\Admins\NewAdminMail;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Rules\MatchAdminOldPassword;
 use Illuminate\Support\Facades\Auth;
@@ -62,8 +63,10 @@ class AdminsController extends Controller
     public function create()
     {
         $page_title = "admins";
+        $roles = Role::all();
         return view('admin.admins.create', [
-            'page_title' => $page_title
+            'page_title' => $page_title,
+            'roles' => $roles
         ]);
     }
 
@@ -97,7 +100,7 @@ class AdminsController extends Controller
 
         Mail::to($data['email'])->send(new NewAdminMail($details));
 
-        $organization->admin()->create([
+        $admin = $organization->admin()->create([
 
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -109,6 +112,8 @@ class AdminsController extends Controller
             'username' =>  $data['first_name'] . ' ' . $data['last_name'],
             'password' => Hash::make($password)
         ]);
+        $roleId = 1;
+        $role = Role::findById($roleId, 'admin'); 
 
         $response['status'] = true;
         $response['message'] = 'You have successfully updated your profile';

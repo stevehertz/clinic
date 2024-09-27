@@ -82,7 +82,7 @@ class PaymentBill extends Model
 
     public function remmittance()  
     {
-        return $this->hasMany(Remmittance::class, 'payment_bill_id');    
+        return $this->hasOne(Remmittance::class, 'payment_bill_id');    
     }
 
     public function order()

@@ -67,6 +67,15 @@ class BillingRepository
             $paymentBill = PaymentBill::findOrFail($billId);
             $paymentDetail = $paymentBill->payment_detail;
             $client_type = $paymentDetail->client_type;
+            
+            // Check if remittance already exists
+            $checkRemmittanceForPayments = Remmittance::where('payment_bill_id',  $paymentBill->id)->first();
+            
+            // If remittance exists, skip to the next iteration
+            if($checkRemmittanceForPayments)
+            {
+                continue; // Skip this iteration
+            }
             if ($client_type->type == 'Insurance') {
 
                 if ($paymentBill->document_status == DocumentStatus::RECEIVED_DOCUMENT) {

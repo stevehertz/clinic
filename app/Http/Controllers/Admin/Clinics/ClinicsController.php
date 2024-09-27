@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Clinic as ResourcesClinic;
+use App\Repositories\ClinicsRepository;
 
 class ClinicsController extends Controller
 {
@@ -21,9 +22,12 @@ class ClinicsController extends Controller
 
     use FileUploadTrait;
 
-    public function __construct()
+    private $clinicsRepository;
+
+    public function __construct(ClinicsRepository $clinicsRepository)
     {
         $this->middleware('auth:admin');
+        $this->clinicsRepository = $clinicsRepository;
     }
 
     public function index(Request $request)
@@ -84,10 +88,6 @@ class ClinicsController extends Controller
 
         $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
         $organization = $admin->organization;
-        $clinics = new Clinic;
-
-        $clinics->organization_id = $organization->id;
-        $clinics->clinic = $data['clinic'];
 
         if ($request->hasFile('logo')) {
             $storagePath = 'public/clinics';
@@ -97,18 +97,13 @@ class ClinicsController extends Controller
             $logoNameToStore = 'noimage.png';
         }
 
-        $clinics->logo = $logoNameToStore;
-        $clinics->phone = $data['phone'];
-        $clinics->email = $data['email'];
-        $clinics->address = $data['address'];
-        $clinics->location = $data['location'];
-        $clinics->initials = $data['initials'];
+        $clinic = $this->clinicsRepository->storeClinic($data, $organization, $logoNameToStore);
 
-        $clinics->save();
-
-        $response['status'] = true;
-        $response['message'] = 'Clinic added successfully';
-        return response()->json($response, 200);
+        if ($clinic) {
+            $response['status'] = true;
+            $response['message'] = 'Clinic added successfully';
+            return response()->json($response, 200);
+        }
     }
 
     public function show(Clinic $clinic)
@@ -197,7 +192,7 @@ class ClinicsController extends Controller
         return response()->json($response, 200);
     }
 
-    public function restore($clinic)  
+    public function restore($clinic)
     {
         $clinic = Clinic::onlyTrashed()->find($clinic);
         $clinic->restore();

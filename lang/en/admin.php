@@ -58,7 +58,8 @@ return [
         'reports' => 'Reports',
         'settings' => 'Settings',
         'inventory' => 'Inventories',
-        'user_management' => 'User Management'
+        'user_management' => 'User Management',
+        'role' => 'Roles & Permissions Management'
     ],
 
     'clinics' => [

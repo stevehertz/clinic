@@ -317,6 +317,33 @@
                     </a>
                 </li>
 
+                <li class="nav-header">
+                    @lang('admin.header.role')
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.roles.index') }}"
+                        class="nav-link 
+                    {{ Route::is('admin.roles.index') ? 'active' : '' }}">
+                        <i class="nav-icon fa fa-cogs"></i>
+                        <p>
+                            Roles
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.organization.view') }}"
+                        class="nav-link 
+                    {{ Route::is('admin.organization.view') ? 'active' : '' }}">
+                        <i class="nav-icon fa fa-cogs"></i>
+                        <p>
+                            Permissions
+                        </p>
+                    </a>
+                </li>
+
+
                 <li class="nav-header">SETTINGS</li>
 
                 <li class="nav-item">

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Clinics;
+namespace App\Http\Requests\Admin\Roles;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClinicRequest extends FormRequest
+class StoreRolesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,9 @@ class StoreClinicRequest extends FormRequest
     {
         return [
             //
-            'clinic' => 'required|string|max:255',
-            'logo' => 'image|mimes:png,jpg,jpeg|nullable|max:2048',
-            'phone' => 'required|numeric',
-            'email' => 'required|string|email|max:255',
-            'location' => 'required|string|max:255',
-            'etims_number' => ['required', 'string'],
+            'role_name' => ['required', 'string', 'unique:roles,name', 'max:255'],
+            'permissions' => 'array', // Validate that permissions is an array
+            'permissions.*' => 'exists:permissions,id', // Each permission ID must exist in the permissions table
         ];
     }
 }

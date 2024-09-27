@@ -19,6 +19,7 @@ class Clinic extends Model
         'address',
         'location',
         'initials',
+        'etims_number',
     ];
 
     protected $dates = ['deleted_at'];
