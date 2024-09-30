@@ -41,6 +41,7 @@
                                         <th>Email</th>
                                         <th>Gender</th>
                                         <th>DOB</th>
+                                        <th>Role</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -97,17 +98,58 @@
                             data: 'dob',
                             name: 'dob',
                         },
-                        // {
-                        //     data: 'actions',
-                        //     name: 'actions',
-                        //     orderable: false,
-                        //     searchable: false,
-                        // },
+                        {
+                            data: 'role',
+                            name: 'role',
+                        },
+                        {
+                            data: 'actions',
+                            name: 'actions',
+                            orderable: false,
+                            searchable: false,
+                        }
                     ],
                     "autoWidth": false,
                     "responsive": true,
                 });
             }
+
+            $(document).on('click', '.deleteAdminBtn', function(e) {
+                e.preventDefault();
+                let admin_id = $(this).data('id');
+                let path = '{{ route('admin.admins.delete', ':admin') }}';
+                path = path.replace(":admin", admin_id);
+                let token = '{{ csrf_token() }}';
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to delete this admin',
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Delete',
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: path,
+                            data: {
+                                _token: token
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data['status']) {
+                                    toastr.success(data['message']);
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 500);
+                                }
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                    }
+                });
+            });
 
         });
     </script>

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Http\Requests\Admin\Admins\StoreAdminRequest;
+use App\Repositories\AdminsRepository;
 
 class AdminsController extends Controller
 {
@@ -22,9 +23,12 @@ class AdminsController extends Controller
 
     use FileUploadTrait;
 
-    public function __construct()
+    private $adminsRepository;
+    public function __construct(AdminsRepository $adminsRepository)
+
     {
         $this->middleware('auth:admin');
+        $this->adminsRepository = $adminsRepository;
     }
 
     public function index(Request $request)
@@ -43,14 +47,19 @@ class AdminsController extends Controller
                     $profile = '<img src="' . asset('storage/admin/' . $row->profile) . '" alt="Product 1" class="img-circle img-size-32 mr-2">';
                     return $profile;
                 })
+
+                ->addColumn('role', function ($row) {
+                    return $row->getRoleNames()->implode(', ');
+                })
+
                 ->addColumn('actions', function ($row) {
                     if (Auth::guard('admin')->user()->id != $row->id) {
-                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-tools btn-sm deactivateAdminBtn">';
-                        $btn = $btn . '<i class="fa fa-cogs"></i> DEACTIVATE</a>';
+                        $btn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-outline-danger btn-sm deleteAdminBtn">';
+                        $btn = $btn . '<i class="fa fa-trash"></i> DELETE</a>';
                         return $btn;
                     }
                 })
-                ->rawColumns(['actions', 'full_names', 'profile'])
+                ->rawColumns(['actions', 'full_names', 'profile', 'role'])
                 ->make(true);
         }
         $page_title = trans('admin.page.admins.title');
@@ -87,38 +96,14 @@ class AdminsController extends Controller
             $profileNameToStore = 'noimage.png';
         }
 
-        $password = Str::random(6);
+        $admin = $this->adminsRepository->storeAdmin($data, $organization, $profileNameToStore);
 
-        $login = route('admin.login');
-
-        $details = [
-            'name' => $data['first_name'] . ' ' . $data['last_name'],
-            'email' => $data['email'],
-            'password' => $password,
-            'login' => $login
-        ];
-
-        Mail::to($data['email'])->send(new NewAdminMail($details));
-
-        $admin = $organization->admin()->create([
-
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'profile' => $profileNameToStore,
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'gender' => $data['gender'],
-            'dob' => $data['dob'],
-            'username' =>  $data['first_name'] . ' ' . $data['last_name'],
-            'password' => Hash::make($password)
-        ]);
-        $roleId = 1;
-        $role = Role::findById($roleId, 'admin'); 
-
-        $response['status'] = true;
-        $response['message'] = 'You have successfully updated your profile';
-
-        return response()->json($response, 200);
+        if($admin)
+        {
+            $response['status'] = true;
+            $response['message'] = 'You have successfully updated your profile';
+            return response()->json($response, 200);
+        }
     }
 
     public function profile()
@@ -243,5 +228,16 @@ class AdminsController extends Controller
             'status' => true,
             'message' => 'Account has been successfully deactivated'
         ]);
+    }
+
+    public function destroy(Admin $admin)  
+    {
+        if($this->adminsRepository->deleteAdmin($admin))
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'Admin has been successfully deleted'
+            ]);
+        }
     }
 }

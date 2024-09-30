@@ -31,8 +31,7 @@ class StoreAdminRequest extends FormRequest
             'profile' => 'image|mimes:jpeg,png,jpg,gif,svg|nullable',
             'phone' => 'required|string|max:255|unique:admins,phone,' . Auth::guard('admin')->user()->id,
             'email' => 'required|string|email|max:255|unique:admins,email,' . Auth::guard('admin')->user()->id,
-            'gender' => 'required|string',
-            'dob' => 'required',
+            'role_id' => ['required', 'integer', 'exists:roles,id']
         ];
     }
 }

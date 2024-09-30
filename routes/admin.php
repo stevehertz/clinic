@@ -440,10 +440,11 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     Route::prefix('admins')->name('admins.')->group(function () {
 
         Route::get('/index', [AdminsController::class, 'index'])->name('index');
-
         Route::get('/create', [AdminsController::class, 'create'])->name('create');
-
         Route::post('/create', [AdminsController::class, 'store']);
+        Route::delete('/{admin}/delete', [AdminsController::class, 'destroy'])->name('delete');
+
+
     });
 
     Route::prefix('personal')->name('personal.')->group(function () {

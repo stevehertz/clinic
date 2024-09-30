@@ -43,20 +43,27 @@ class RemmittanceController extends Controller
         if ($request->_token) {
             $filter_data = $request->except('_token');
             if (!empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id'])) {
+                $data = $this->remmittanceRepository->getAllRemmittanceForClinicAndInsurance($filter_data);
+                $pending = $this->remmittanceRepository->getPendingForClinicAndInsurance($filter_data);
+                $submitted = $this->remmittanceRepository->getSubmittedForClinicAndInsurance($filter_data);
             } else if (!empty($filter_data['clinic_id']) && empty($filter_data['insurance_id'])) {
+                $data = $this->remmittanceRepository->getAllRemmittanceForClinic($filter_data);
+                $pending = $this->remmittanceRepository->getPendingRemmittanceForClinic($filter_data);
+                $submitted = $this->remmittanceRepository->getSubmittedRemmittanceForClinic($filter_data);
             } else if (empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id'])) {
+                $data = $this->remmittanceRepository->getAllRemmittanceForInsurance($filter_data);
+                $pending = $this->remmittanceRepository->getPendingRemmittanceForInsurance($filter_data);
+                $submitted = $this->remmittanceRepository->getSubmittedRemmittanceForInsurance($filter_data);
             } else {
                 $data = $this->remmittanceRepository->getAll();
                 $pending = $this->remmittanceRepository->getPending();
                 $submitted = $this->remmittanceRepository->getSubmiited();
-                $clinics  = $this->clinicsRepository->getAllClinics();
-                $insurances = $this->insurancesRepository->getAllInsurance();
             }
+        } else{
+            $data = $this->remmittanceRepository->getAll();
+            $pending = $this->remmittanceRepository->getPending();
+            $submitted = $this->remmittanceRepository->getSubmiited();
         }
-
-        $data = $this->remmittanceRepository->getAll();
-        $pending = $this->remmittanceRepository->getPending();
-        $submitted = $this->remmittanceRepository->getSubmiited();
         $clinics  = $this->clinicsRepository->getAllClinics();
         $insurances = $this->insurancesRepository->getAllInsurance();
         return view('admin.main.remmittance.index', [
@@ -65,6 +72,7 @@ class RemmittanceController extends Controller
             'submitted' => $submitted,
             'clinics' => $clinics,
             'insurances' => $insurances,
+            'filtered_data' => $filter_data,
         ]);
     }
 
