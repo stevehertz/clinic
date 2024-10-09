@@ -61,11 +61,17 @@
 
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="newBankingReceivedRemmittance">Received Remmittance</label>
-                                <select id="newBankingReceivedRemmittance" name="remmittance_id[]" class="select2"
-                                    multiple="multiple" data-placeholder="Select Remmittance Received"
-                                    style="width: 100%;">
-                                </select>
+                                <label>Date Received:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" name="date_received" data-inputmask-alias="datetime"
+                                        data-inputmask-inputformat="yyyy-mm-dd" data-mask>
+                                </div>
+                                <!-- /.input group -->
                             </div>
                         </div>
                     </div>
@@ -92,24 +98,6 @@
                             </div>
                             <!-- /.form-group -->
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label>Date Received:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control" name="date_received" data-inputmask-alias="datetime"
-                                        data-inputmask-inputformat="yyyy-mm-dd" data-mask>
-                                </div>
-                                <!-- /.input group -->
-                            </div>
-                        </div>
-                        <!--/.col -->
                     </div>
                     <!--/.row -->
                     <div class="row">

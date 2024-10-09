@@ -37,7 +37,8 @@ class AppointmentsController extends Controller
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = $clinic->appointment()->where('status', 1)->whereBetween('date', [$request->from_date, $request->to_date])->get();
             } else {
-                $data = $clinic->appointment()->where('status', 1)->latest()->get();
+                $date = Carbon::now();
+                $data = $clinic->appointment()->where('status', 1)->where('date', $date)->get();
             }
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -64,7 +65,7 @@ class AppointmentsController extends Controller
                 ->rawColumns(['full_names', 'type', 'appointment_status', 'action'])
                 ->make(true);
         }
-        $doctors = User::where('clinic_id', $clinic->id)->whereRoleIs('doctor')->latest()->get();
+        $doctors = User::where('clinic_id', $clinic->id)->latest()->get();
         $page_title = trans('users.page.appointments.sub_page.appointment');
         return view('users.appointments.index', [
             'user' => $user,

@@ -25,6 +25,7 @@ use App\Http\Controllers\Users\Lens\LensPrescriptionController;
 use App\Http\Controllers\Users\Payments\PaymentsBillController;
 use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
 use App\Http\Controllers\Users\Schedule\DoctorSchedulesController;
+use App\Http\Controllers\Users\Patients\SelfRegistrationController;
 use App\Http\Controllers\Users\Payments\PaymentsAttachmentController;
 use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Users\Patients\PatientsController as PatientsPatientsController;
@@ -47,6 +48,11 @@ Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
     Route::get('/reset/password/{token}', [AuthResetPasswordController::class, 'index'])->name('reset.password');
 
     Route::post('reset/password/store', [AuthResetPasswordController::class, 'store'])->name('reset.password.store');
+
+    // patient self registration link 
+    Route::get('/{clinic}/self/registration', [SelfRegistrationController::class, 'register'])->name('self.registration');
+
+    Route::post('/{clinic}/self/registration/store', [SelfRegistrationController::class, 'store'])->name('self.registration.store');
 });
 
 Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
@@ -115,6 +121,10 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
         Route::post('/{patient}/edit', [PatientsPatientsController::class, 'update']);
 
         Route::delete('/{patient}/delete', [PatientsPatientsController::class, 'destroy'])->name('delete');
+
+        Route::get('/self/registration/link', [PatientsPatientsController::class, 'selfRegistration'])->name('self.registration.link');
+
+        Route::post('/self/registration/generate', [PatientsPatientsController::class, 'generate'])->name('self.registration.generate');
     });
     
     Route::prefix('doctor/schedules')->name('doctor.schedules.')->group(function () {

@@ -63,9 +63,19 @@
                     <input type="text" name="location" class="form-control" id="newClinicLocation"
                         placeholder="Enter Location" required>
                 </div>
-
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="newClinicETIMSNumber">ETIMS Number</label>
+                    <input type="text" name="etims_number" class="form-control" id="newClinicETIMSNumber"
+                        placeholder="Enter ETIMS Number" required>
+                </div>
+            </div>
+        </div>
+
         <br>
         <div class="row">
             <div class="col-12">

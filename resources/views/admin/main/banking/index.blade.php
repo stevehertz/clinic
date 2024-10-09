@@ -14,7 +14,7 @@
                                 Total Amount Submitted
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                {{ count($submitted) }}
+                                {{ $totalSubmittedAmount }}
                             </span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                                 Total Amount Received
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                0
+                                {{ $totalPaid }}
                             </span>
                         </div>
                     </div>
@@ -38,13 +38,64 @@
                                 Total Balances
                             </span>
                             <span class="info-box-number text-center text-muted mb-0">
-                                0
+                                {{ $totalBalance }}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/.row -->
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label>Clinics</label>
+                                        <select class="form-control select2" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">
+                                                Select a clinic
+                                            </option>
+                                            @foreach ($clinics as $clinic)
+                                                <option value="{{ $clinic->id }}">{{ $clinic->clinic }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label>Insurances</label>
+                                        <select class="form-control select2" style="width: 100%;">
+                                            <option disabled="disabled" selected="selected">
+                                                Select an insurance
+                                            </option>
+                                            @foreach ($insuranceData as $ins)
+                                                <option value="{{ $ins->id }}">{{ $ins->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+
+                                <div class="col-12 col-md-2">
+                                    <label>&nbsp;</label>
+                                    <button type="" class="btn btn-block btn-outline-primary">
+                                        <i class="fas fa-search"></i> filter
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
             <div class="row">
                 <div class="col-12 col-md-12">
@@ -75,50 +126,14 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
-                                    <div class="row">
-                                        <div class="col-12 col-md-4">
-                                            <div class="form-group">
-                                                <label>Clinics</label>
-                                                <select class="form-control select2" style="width: 100%;">
-                                                    <option disabled="disabled" selected="selected">
-                                                        Select a clinic
-                                                    </option>
-                                                    <option>Alaska</option>
-                                                    <option>California</option>
-                                                    <option>Delaware</option>
-                                                    <option>Tennessee</option>
-                                                    <option>Texas</option>
-                                                    <option>Washington</option>
-                                                </select>
-                                            </div>
-                                            <!-- /.form-group -->
-                                        </div>
-
-                                        <div class="col-12 col-md-4">
-                                            <div class="form-group">
-                                                <label>Insurances</label>
-                                                <select class="form-control select2" style="width: 100%;">
-                                                    <option disabled="disabled" selected="selected">
-                                                        Select an insurance
-                                                    </option>
-                                                    <option>Alaska</option>
-                                                    <option>California</option>
-                                                    <option>Delaware</option>
-                                                    <option>Tennessee</option>
-                                                    <option>Texas</option>
-                                                    <option>Washington</option>
-                                                </select>
-                                            </div>
-                                            <!-- /.form-group -->
-                                        </div>
-
-                                        <div class="col-12 col-md-2">
-                                            <label>&nbsp;</label>
-                                            <button type="" class="btn btn-block btn-outline-primary">
-                                                <i class="fas fa-search"></i> filter
+                                    <div class="row receivePaymentsBtnRow">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn"> 
+                                                Receive Payments
                                             </button>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -144,9 +159,8 @@
                                                     <tbody>
                                                         @foreach ($submitted as $submittedRemmittance)
                                                             <tr>
-
                                                                 <td>
-                                                                    <input type="checkbox" name="payment_bill_id[]"
+                                                                    <input type="checkbox" name="remmittance_id[]"
                                                                         value="{{ $submittedRemmittance->id }}"
                                                                         class="submitRemmittanceCheckBox">
                                                                 </td>
@@ -183,18 +197,20 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="tab_2">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <button type="button" id="newBankingBtn"
-                                                class="btn btn-outline-success btn-block">
-                                                New Payments Received
+                                    <br>
+                                    <div class="row receivePaymentsBtnRow">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn"> 
+                                                Receive Payments
                                             </button>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                
+                                <div class="tab-pane" id="tab_2">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
                                             <a href="{{ route('admin.banking.export') }}"
                                                 class="btn btn-outline-primary btn-block">
                                                 Export
@@ -248,6 +264,7 @@
 
                                 </div>
                                 <!-- /.tab-pane -->
+
                                 <div class="tab-pane" id="tab_3">
                                     <div class="row">
                                         <div class="col-12 col-md-6"></div>

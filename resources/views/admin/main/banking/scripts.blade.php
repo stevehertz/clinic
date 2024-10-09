@@ -104,7 +104,83 @@
                 });
             });
 
+            let selectedRemittanceIds = [];
+
+            $(document).on('change', '.submitRemmittanceCheckBox', function(e) {
+                e.preventDefault();
+                selectedRemittanceIds = [];
+                // Track checkbox selections
+                $('.submitRemmittanceCheckBox:checked').each(function() {
+                    selectedRemittanceIds.push($(this).val());
+                });
+                // Show or hide the submit button
+                if (selectedRemittanceIds.length > 0) {
+                    $('.receivePaymentsBtnRow').fadeIn();
+                } else {
+                    $('.receivePaymentsBtnRow').fadeOut();
+                }
+
+            });
+
+            // Open the modal when the submit button is clicked
+            $(document).on('click', '.receivePaymentsBtn', function(e) {
+                e.preventDefault();
+                $('#newBankingModal').modal('show');
+            });
+
+            $('#newBankingForm').submit(function(e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let formData = new FormData(form[0]);
+
+                // Append the selected remittance IDs
+                selectedRemittanceIds.forEach(function(id) {
+                    formData.append('remmittance_id[]',
+                        id); // Ensure `[]` is added to handle multiple IDs
+                });
+
+                // Debug: Log the FormData contents to ensure remmittance_id is being appended
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.banking.store') }}",
+                    data: formData,
+                    dataType: "json",
+                    processData: false, // Required for FormData
+                    contentType: false, // Required for FormData
+                    beforeSend: function() {
+                        $(this).find('button[type=submit]').html(
+                            '<i class="fa fa-spinner fa-spin"></i>'
+                        );
+                        $(this).find('button[type=submit]').attr('disabled', true);
+                    },
+                    complete: function() {
+                        $(this).find('button[type=submit]').html(
+                            'Save'
+                        );
+                        $(this).find('button[type=submit]').attr('disabled', false);
+                    },
+                    success: function(data) {
+                        if (data['status']) {
+
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        var errorsHtml = '<ul>';
+                        $.each(errors['errors'], function(key, value) {
+                            errorsHtml += '<li>' + value + '</li>';
+                        });
+                        errorsHtml += '</ul>';
+                        toastr.error(errorsHtml);
+                    }
+                });
+            });
+
         });
     </script>
 @endif
-

@@ -80,6 +80,14 @@
                             <p class="text-muted">
                                 {{ $clinic->location }}
                             </p>
+
+                            <hr>
+
+                            <strong><i class="fas fa-file-alt mr-1"></i> ETIMS Number</strong>
+
+                            <p class="text-muted">
+                                {{ $clinic->etims_number }}
+                            </p>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -145,13 +153,20 @@
 
                                         <div class="form-group">
                                             <label for="updateClinicAddress">Address</label>
-                                            <textarea name="address" id="updateClinicAddress" class="form-control" placeholder="Enter Clinic's Address">{{ $clinic->address }}</textarea>
+                                            <input type="text" name="address" id="updateClinicAddress" value="{{ $clinic->address }}" class="form-control" placeholder="Enter Clinic's Address">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="updateClinicLocation">Location</label>
                                             <input type="text" value="{{ $clinic->location }}" name="location"
                                                 class="form-control" id="updateClinicLocation">
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="updateClinicETIMSNumber">ETIMS Number</label>
+                                            <input type="text" value="{{ $clinic->etims_number }}" name="etims_number"
+                                                class="form-control" id="updateClinicETIMSNumber" placeholder="Enter ETIMS Number">
                                         </div>
 
                                         <div class="form-group">

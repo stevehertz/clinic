@@ -32,6 +32,11 @@
                     display      : none;
                 }
 
+                .receivePaymentsBtnRow
+                {
+                    display: none;
+                }
+
                 [contenteditable="true"] {
                     border : 1px solid #ddd;
                     padding: 5px;

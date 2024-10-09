@@ -8,19 +8,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankingRequest;
 use App\Models\Insurance;
 use App\Repositories\BankingRepository;
+use App\Repositories\ClinicsRepository;
 use App\Repositories\InsurancesRepository;
 use App\Repositories\RemmittanceRepository;
 
 class BankingController extends Controller
 {
 
-    private $bankingRepository, $remmittanceRepository, $insurancesRepository;
-    public function __construct(BankingRepository $bankingRepository, RemmittanceRepository $remmittanceRepository, InsurancesRepository $insurancesRepository)
+    private $bankingRepository, $remmittanceRepository, $insurancesRepository, $clinicsRepository;
+    public function __construct(
+        BankingRepository $bankingRepository, 
+        RemmittanceRepository $remmittanceRepository, 
+        InsurancesRepository $insurancesRepository,
+        ClinicsRepository $clinicsRepository
+    )
     {
         $this->middleware('auth:admin');  
         $this->bankingRepository = $bankingRepository;
         $this->remmittanceRepository = $remmittanceRepository;
         $this->insurancesRepository = $insurancesRepository;
+        $this->clinicsRepository = $clinicsRepository;
     }
     /**
      * Display a listing of the resource.
@@ -34,11 +41,19 @@ class BankingController extends Controller
         $submitted = $this->remmittanceRepository->getSubmiited();
         $insuranceData = $this->insurancesRepository->getAllInsurance();
         $receivedRemmittanceData = $this->remmittanceRepository->getReceived();
+        $clinics = $this->clinicsRepository->getAllClinics();
+        $totalSubmittedAmount = $this->remmittanceRepository->getSumSubmittedRemmittance();
+        $totalPaid = $this->bankingRepository->getSumAllPaidBanking();
+        $totalBalance = $this->bankingRepository->getSumAllBanlancesBanking();
         return view('admin.main.banking.index', [
             'data' => $data,
             'submitted' => $submitted,
             'insuranceData' => $insuranceData,
-            'rceivedRemmittanceData' => $receivedRemmittanceData
+            'rceivedRemmittanceData' => $receivedRemmittanceData,
+            'clinics' => $clinics,
+            'totalSubmittedAmount' => $totalSubmittedAmount,
+            'totalPaid' => $totalPaid,
+            'totalBalance' => $totalBalance,
         ]);
     }
 

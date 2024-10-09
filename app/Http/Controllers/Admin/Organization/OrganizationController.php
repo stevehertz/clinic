@@ -2,21 +2,32 @@
 
 namespace App\Http\Controllers\Admin\Organization;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Organization as ResourcesOrganization;
 use App\Models\Admin;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Repositories\BankingRepository;
+use App\Repositories\BillingRepository;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Repositories\RemmittanceRepository;
+use App\Http\Resources\Organization as ResourcesOrganization;
 
 class OrganizationController extends Controller
 {
     //
-    public function __construct()
+    private $billingRepository, $remmittanceRepository, $bankingRepository;
+    public function __construct(
+        BillingRepository $billingRepository,
+        RemmittanceRepository $remmittanceRepository,
+        BankingRepository $bankingRepository
+    )
     {
         $this->middleware('auth:admin');
+        $this->billingRepository = $billingRepository;
+        $this->remmittanceRepository = $remmittanceRepository;
+        $this->bankingRepository = $bankingRepository;
     }
 
     public function index(Request $request)
@@ -43,11 +54,32 @@ class OrganizationController extends Controller
         $page_title = 'Dashboard';
         $workshops = $organization->workshop()->latest()->get();
         $clinics = $organization->clinic()->latest()->get();
+
+        // Billing
+        $billings = $this->billingRepository->closed_bills();
+        $closedBills = $this->billingRepository->closed_bills();
+        $sentToHQ = $this->billingRepository->sentToHq();
+        $receivedDOC =  $this->billingRepository->receivedFromClinic();
+
+        // Banking
+        $totalSubmittedAmount = $this->remmittanceRepository->getSumSubmittedRemmittance();
+        $totalPaid = $this->bankingRepository->getSumAllPaidBanking();
+        $totalBalance = $this->bankingRepository->getSumAllBanlancesBanking();
+        $bankings = $this->bankingRepository->getAllBanking();
+
         return view('admin.organization.index', [
             'page_title' => $page_title,
             'organization' => $organization,
             'clinics' => $clinics,
-            'workshops' => $workshops
+            'workshops' => $workshops,
+            'billings' => $billings,
+            'closedBills' => $closedBills,
+            'sentToHQ' => $sentToHQ,
+            'receivedDOC' => $receivedDOC,
+            'totalSubmittedAmount' => $totalSubmittedAmount,
+            'totalPaid' => $totalPaid,
+            'totalBalance' => $totalBalance,
+            'bankings' => $bankings,
         ]);
     }
 

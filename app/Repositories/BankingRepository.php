@@ -14,6 +14,16 @@ class BankingRepository
         return Banking::with(['insurance'])->latest()->get();
     }
 
+    public function getSumAllPaidBanking()  
+    {
+        return Banking::sum('paid');    
+    }
+
+    public function getSumAllBanlancesBanking()  
+    {
+        return Banking::sum('balance');    
+    }
+
     public function storeBanking(array $attributes)
     {
         $notes = data_get($attributes, "notes") ?? "Fully Paid";

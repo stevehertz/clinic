@@ -23,7 +23,7 @@ class PatientsController extends Controller
     }
 
     public function index(Request $request)
-    {
+    {   
         # code..
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
@@ -79,6 +79,33 @@ class PatientsController extends Controller
             'clinic' => $clinic,
             'client_types' => $client_types,
             'insurances' => $insurances,
+        ]);
+    }
+
+    public function selfRegistration()  
+    {
+        $page_title = 'Patient Self Registration';
+        $user = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
+        return view('users.patients.selfRegistration', [
+            'page_title' => $page_title,
+            'clinic' => $clinic,
+        ]);
+    }
+
+    public function generate()  
+    {
+        $user = User::findOrFail(Auth::user()->id);
+        $clinic = $user->clinic;
+        $link = route('users.self.registration', $clinic->id);
+        $clinic->update([
+            'self_registration_link' => $link
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Self registration link generated successfully',
+            'link' => $link
         ]);
     }
 

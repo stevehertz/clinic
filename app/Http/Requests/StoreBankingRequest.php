@@ -29,8 +29,8 @@ class StoreBankingRequest extends FormRequest
             "transaction_code" => ['required'],
             "transaction_mode" => ['required', "integer"],
             "insurance_id" => ['required', 'integer', 'exists:insurances,id'],
-            "remmittance_id" => ['required', 'array'],
-            "remmittance_id.*" => ['exists:remmittances,id'],
+            // "remmittance_id" => ['required', 'array'],
+            // "remmittance_id.*" => ['exists:remmittances,id'],
             "paid" => ['required'],
             "notes" => ['nullable']
         ];

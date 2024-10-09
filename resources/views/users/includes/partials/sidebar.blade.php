@@ -82,6 +82,16 @@
                     </ul>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('users.patients.self.registration.link') }}"
+                        class="nav-link @if (Route::is('users.patients.self.registration.link')) active @endif">
+                        <i class="nav-icon fas fa-user-plus"></i>
+                        <p>
+                            Patient Self Registration
+                        </p>
+                    </a>
+                </li>
+
                 <li
                     class="nav-item has-treeview
                 {{ Route::is('users.appointments.index') ? 'menu-open' : '' }}
@@ -189,14 +199,16 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.close.bills.index') }}" class="nav-link @if (Route::is('users.payments.close.bills.index')) active @endif">
+                            <a href="{{ route('users.payments.close.bills.index') }}"
+                                class="nav-link @if (Route::is('users.payments.close.bills.index')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>All Closed Bills</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('users.payments.close.bills.scheduled') }}" class="nav-link @if (Route::is('users.payments.close.bills.scheduled')) active @endif">
+                            <a href="{{ route('users.payments.close.bills.scheduled') }}"
+                                class="nav-link @if (Route::is('users.payments.close.bills.scheduled')) active @endif">
                                 <i class="fa fa-circle nav-icon"></i>
                                 <p>My Scheduled Closed Bills</p>
                             </a>

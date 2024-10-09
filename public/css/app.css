@@ -16,6 +16,9 @@
   margin-bottom: 1rem;
   display: none;
 }
+.content .container-fluid .card .card-body .receivePaymentsBtnRow {
+  display: none;
+}
 .content .container-fluid .card .card-body [contenteditable=true] {
   border: 1px solid #ddd;
   padding: 5px;

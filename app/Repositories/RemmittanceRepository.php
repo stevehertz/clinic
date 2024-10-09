@@ -8,40 +8,50 @@ use App\Enums\RemmittanceStatus;
 
 class RemmittanceRepository
 {
-    public function getAll()
+    public function getAll($status = RemmittanceStatus::RECEIVED)
     {
-        return Remmittance::with(['paymentBill'])->latest()->get();
+        return Remmittance::with(['paymentBill'])->where('status', '!=', $status)->latest()->get();
     }
 
-    public function getAllRemmittanceForClinicAndInsurance(array $attributes)
+    public function getAllRemmittanceForClinicAndInsurance(array $attributes, $status = RemmittanceStatus::RECEIVED)
     {
         $clinicId = data_get($attributes, 'clinic_id');
         $insuranceId = data_get($attributes, 'insurance_id');
         return Remmittance::whereHas('paymentBill.payment_detail', function ($query) use ($clinicId, $insuranceId) {
             $query->where('clinic_id', $clinicId)
                 ->where('insurance_id', $insuranceId); // This acts as an AND condition
-        })->get();
+        })->where('status', '!=', $status)->get();
     }
 
-    public function getAllRemmittanceForClinic(array $attributes)
+    public function getAllRemmittanceForClinic(array $attributes, $status = RemmittanceStatus::RECEIVED)
     {
         $clinicId = data_get($attributes, 'clinic_id');
         return Remmittance::whereHas('paymentBill', function ($query) use ($clinicId) {
             $query->where('clinic_id', $clinicId);
-        })->get();
+        })->where('status', '!=', $status)->get();
     }
 
-    public function getAllRemmittanceForInsurance(array $attributes)
+    public function getAllRemmittanceForInsurance(array $attributes, $status = RemmittanceStatus::RECEIVED)
     {
         $insuranceId = data_get($attributes, 'insurance_id');
         return Remmittance::whereHas('paymentBill.payment_detail', function ($query) use ($insuranceId) {
             $query->where('insurance_id', $insuranceId);
-        })->get();
+        })->where('status', '!=', $status)->get();
     }
 
     public function getSubmiited($status = RemmittanceStatus::SUBMITTED)
     {
         return Remmittance::with(['paymentBill'])->where('status', $status)->latest()->get();
+    }
+
+    public function getSumSubmittedRemmittance($status = RemmittanceStatus::SUBMITTED)  
+    {
+        return Remmittance::where('status', $status)
+        ->with('paymentBill')
+        ->get()
+        ->sum(function($remmittance){
+            return $remmittance->paymentBill->total_amount;
+        });
     }
 
     public function getSubmiitedByDate($date, $status = RemmittanceStatus::SUBMITTED)

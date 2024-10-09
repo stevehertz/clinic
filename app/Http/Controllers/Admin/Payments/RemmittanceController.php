@@ -126,18 +126,22 @@ class RemmittanceController extends Controller
             $remmittance_date = Carbon::now()->format('Y-m-d');
             $remmittance_id = $data['remmittance_id'];
             $remmittances = Remmittance::whereIn('id', $remmittance_id)->get();
-            $data = [
-                'title' => 'Submitted Remmittance',
-                'date' => $date,
-                'unique_code' => $uniqueCode,
-                'remmittances' => $remmittances
-            ];
+            // $data = [
+            //     'title' => 'Submitted Remmittance',
+            //     'date' => $date,
+            //     'unique_code' => $uniqueCode,
+            //     'remmittances' => $remmittances
+            // ];
 
-            // Generate PDF
-            $pdf = PDF::loadView('admin/main/remmittance/pdf', $data);
+            // // Generate PDF
+            // $pdf = PDF::loadView('admin/main/remmittance/pdf', $data);
 
-            // Save or download the PDF
-            return $pdf->download('remmittance.pdf');
+            // // Save or download the PDF
+            // return $pdf->download('remmittance.pdf');
+            return response()->json([
+                'status' => true,
+                'message' => 'You have successfully submitted remittance'
+            ], 200);
         }
     }
 }

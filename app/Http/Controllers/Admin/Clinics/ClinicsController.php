@@ -136,6 +136,7 @@ class ClinicsController extends Controller
             'phone' => 'required|numeric',
             'email' => 'required|string|email|max:255',
             'location' => 'required|string|max:255',
+            'etims_number' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -175,6 +176,7 @@ class ClinicsController extends Controller
         $clinic->address = $data['address'];
         $clinic->location = $data['location'];
         $clinic->initials = $data['initials'];
+        $clinic->etims_number = $data['etims_number'];
 
         $clinic->save();
 

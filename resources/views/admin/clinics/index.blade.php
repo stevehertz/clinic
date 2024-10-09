@@ -114,6 +114,10 @@
                             name: 'phone'
                         },
                         {
+                            data: 'etims_number',
+                            name: 'etims_number'
+                        },
+                        {
                             data: 'actions',
                             name: 'actions',
                             orderable: false,

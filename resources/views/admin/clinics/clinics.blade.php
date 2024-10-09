@@ -8,6 +8,7 @@
                 <th>Logo</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>ETIMS Number</th>
                 <th>Actions</th>
             </tr>
         </thead>

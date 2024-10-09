@@ -32,6 +32,7 @@
                 $('.submitRemmittanceSpan').fadeOut();
             }
         });
+
         $('#submitRemmittanceForm').submit(function(e) {
             e.preventDefault();
             let remmittance_id = [];
@@ -55,14 +56,18 @@
                     responseType: 'blob'
                 },
                 success: function(response) {
-                    let blob = new Blob([response], {type:'application/pdf'});
-                    let link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = 'remmittance.pdf';
-                    link.click();
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
+                    if (response['status']) {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    }
+                    // let blob = new Blob([response], {
+                    //     type: 'application/pdf'
+                    // });
+                    // let link = document.createElement('a');
+                    // link.href = window.URL.createObjectURL(blob);
+                    // link.download = 'remmittance.pdf';
+                    // link.click();
                 },
                 error: function(data) {
                     var errors = data.responseJSON;
