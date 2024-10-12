@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Users\Patients;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\Patients\StorePatientRequest;
-use App\Models\Appointment;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Patient;
-use App\Models\User;
-use Carbon\Carbon;
+use Endroid\QrCode\QrCode;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Users\Patients\StorePatientRequest;
 
 class PatientsController extends Controller
 {
@@ -23,16 +28,16 @@ class PatientsController extends Controller
     }
 
     public function index(Request $request)
-    {   
+    {
         # code..
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         if ($request->ajax()) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = $clinic->patient()
-                ->where('status', 1)
-                ->whereBetween('date_in', [$request->from_date, $request->to_date])
-                ->latest()->get();
+                    ->where('status', 1)
+                    ->whereBetween('date_in', [$request->from_date, $request->to_date])
+                    ->latest()->get();
             } else {
                 $data = $clinic->patient()->where('status', 1)->latest()->get();
             }
@@ -82,7 +87,7 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function selfRegistration()  
+    public function selfRegistration()
     {
         $page_title = 'Patient Self Registration';
         $user = User::findOrFail(Auth::user()->id);
@@ -93,20 +98,61 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function generate()  
+    public function generate()
+    {
+        if($this-> generateQR())
+        {
+            return response()->json([
+                'status' => true,
+                'message' => 'Self registration link generated successfully',
+            ]);
+        }
+    }
+
+
+    private function generateQR()
     {
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
         $link = route('users.self.registration', $clinic->id);
-        $clinic->update([
-            'self_registration_link' => $link
-        ]);
+        try {
+            // Create a new QR Code instance
+            $qrCode = new QrCode($link);
+            $qrCode->setEncoding(new Encoding('UTF-8'));
+            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::High); // Use the correct constant
+            $qrCode->setSize(150);
+            // Create a writer
+            $writer = new PngWriter();
+            // Get QR code image as a binary string
+            $qrCodeData = $writer->write($qrCode);
+            // Define the path to save the QR code
+            // Define the directory path to storage
+            $directory = storage_path('app/public/qrcodes');
+            $relativePath = 'qrcodes/' . time() . '.png'; // Relative path to save in DB
+            $path = $directory . '/' . time() . '.png'; // Absolute path to save the file
+            // Make sure the 'qrcodes' directory exists
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+            // Write the QR code to a file
+            file_put_contents($path, $qrCodeData->getString());
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Self registration link generated successfully',
-            'link' => $link
-        ]);
+            // Convert the QR code to a base64-encoded string
+            $qrCodeBase64 = base64_encode($qrCodeData->getString());
+
+            // Save QR code data to the database
+            $clinic->update([
+                'self_registration_link' => $link,
+                'qr_code_path' => $relativePath  // Save the path of the QR code
+            ]);
+
+            return true;
+
+        } catch (\Exception $e) {
+            // Handle exception (log error or return a specific message)
+            Log::error('Error generating or storing QR code: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function store(StorePatientRequest $request)
@@ -164,7 +210,7 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function appointments($id) 
+    public function appointments($id)
     {
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;
@@ -183,7 +229,7 @@ class PatientsController extends Controller
         ]);
     }
 
-    public function schedules($id) 
+    public function schedules($id)
     {
         $user = User::findOrFail(Auth::user()->id);
         $clinic = $user->clinic;

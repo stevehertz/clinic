@@ -200,7 +200,7 @@ class AppointmentsController extends Controller
         $user = User::find(auth()->user()->id);
         $clinic = $appointment->clinic;
         $page_title = trans('users.page.appointments.sub_page.view');
-        $doctors = $clinic->user()->whereRoleIs('doctor')->latest()->get();
+        $doctors = $clinic->user()->latest()->get();
         return view('users.appointments.view', [
             'user' => $user,
             'clinic' => $clinic,

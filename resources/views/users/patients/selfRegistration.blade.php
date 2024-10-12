@@ -41,11 +41,29 @@
                                 {{ $clinic->self_registration_link }}
                             </p>
                             <hr>
+                            @if ($clinic->qr_code_path)
+                                <strong><i class="fas fa-qrcode mr-1"></i> QR Code</strong>
+
+                                <p class="text-muted">
+                                    <img src="{{ asset('storage/' . $clinic->qr_code_path) }}"
+                                        alt="QR Code for {{ $clinic->clinic }}" width="150">
+                                </p>
+                                <hr>
+                            @endif
+
                             @if (!isset($clinic->self_registration_link))
                                 <button type="button"
                                     class="btn btn-outline-success btn-block generateSelfRegistrationLinkBtn">
                                     Generate Self Registration Link
                                 </button>
+                            @endif
+
+                            <!-- Download Button -->
+                            @if ($clinic->qr_code_path)
+                                <a href="{{ asset('storage/' . $clinic->qr_code_path) }}"
+                                    download="QRCode-{{ $clinic->clinic }}.png" class="btn btn-outline-primary btn-block">
+                                    Download QR Code
+                                </a>
                             @endif
                         </div>
                     </div>
@@ -60,14 +78,14 @@
     <script>
         $(document).ready(function() {
 
-            $(document).on('click', '.generateSelfRegistrationLinkBtn', function(e){
+            $(document).on('click', '.generateSelfRegistrationLinkBtn', function(e) {
                 e.preventDefault();
                 var path = '{{ route('users.patients.self.registration.generate') }}';
                 var token = '{{ csrf_token() }}';
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this client type!",
-                    icon: "warning",
+                    text: "You're going to generate self registration link for patients",
+                    icon: "success",
                     buttons: true,
                     dangerMode: true,
                 }).then((result) => {

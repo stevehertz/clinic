@@ -20,7 +20,8 @@ class Clinic extends Model
         'location',
         'initials',
         'etims_number',
-        'self_registration_link'
+        'self_registration_link',
+        'qr_code_path'
     ];
 
     protected $dates = ['deleted_at'];
