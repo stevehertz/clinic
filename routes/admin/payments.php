@@ -56,6 +56,7 @@ Route::prefix('banking')->name('banking.')->group(function(){
     Route::get('/{id}/show', [BankingController::class, 'show'])->name('show');
     Route::get('/{id}/view', [BankingController::class, 'view'])->name('view');
     Route::get('/export', [BankingController::class, 'export'])->name('export');
+    Route::get('/{id}/export/individual', [BankingController::class, 'exportIndividual'])->name('export.individual');
 });
 
 Route::prefix('received/payments')->name('received.payments.')->group(function(){

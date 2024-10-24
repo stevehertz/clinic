@@ -135,19 +135,19 @@
                         <!-- /.row -->
 
                         <!-- this row will not appear when printing -->
-                        {{-- <div class="row no-print">
+                        <div class="row no-print">
                             <div class="col-12">
-                                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                                {{-- <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
                                         class="fas fa-print"></i> Print</a>
                                 <button type="button" class="btn btn-success float-right"><i
                                         class="far fa-credit-card"></i> Submit
                                     Payment
-                                </button>
-                                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                                    <i class="fas fa-download"></i> Generate PDF
-                                </button>
+                                </button> --}}
+                                <a href="{{ route('admin.banking.export.individual', $data->id) }}" class="btn btn-primary float-right" style="margin-right: 5px;">
+                                    <i class="fas fa-download"></i> Export
+                                </a>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <!-- /.invoice -->
                 </div><!-- /.col -->
@@ -176,7 +176,7 @@
                     },
                     dataType: "json",
                     success: function(data) {
-                        if (data['status']) 
+                        if (data['status'])
                         {
                             toastr.success(data['message']);
                             location.reload();

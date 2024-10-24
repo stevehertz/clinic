@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin\Payments;
 
 use App\Exports\Banking\BankingPaymentsExport;
+use App\Exports\Banking\PaymentExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBankingRequest;
-use App\Models\Insurance;
 use App\Repositories\BankingRepository;
 use App\Repositories\ClinicsRepository;
 use App\Repositories\InsurancesRepository;
@@ -17,13 +17,13 @@ class BankingController extends Controller
 
     private $bankingRepository, $remmittanceRepository, $insurancesRepository, $clinicsRepository;
     public function __construct(
-        BankingRepository $bankingRepository, 
-        RemmittanceRepository $remmittanceRepository, 
+        BankingRepository $bankingRepository,
+        RemmittanceRepository $remmittanceRepository,
         InsurancesRepository $insurancesRepository,
         ClinicsRepository $clinicsRepository
     )
     {
-        $this->middleware('auth:admin');  
+        $this->middleware('auth:admin');
         $this->bankingRepository = $bankingRepository;
         $this->remmittanceRepository = $remmittanceRepository;
         $this->insurancesRepository = $insurancesRepository;
@@ -62,7 +62,7 @@ class BankingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function export()  
+    public function export()
     {
         return (new BankingPaymentsExport())->download('payments-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
@@ -125,19 +125,24 @@ class BankingController extends Controller
         ]);
     }
 
+    public function exportIndividual($id)
+    {
+        $banking = $this->bankingRepository->show($id);
+        return  (new PaymentExport($banking->id))->download('individual-payments-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function view($id)  
+    public function view($id)
     {
         $data =  $this->bankingRepository->show($id);
-        
         return view('admin.main.banking.view', [
             'data' => $data
-        ]);   
+        ]);
     }
 
     /**
