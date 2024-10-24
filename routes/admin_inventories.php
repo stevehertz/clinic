@@ -81,6 +81,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HQLensesController::class, 'index'])->name('index');
 
+                Route::get('/export', [HQLensesController::class, 'export'])->name('export');
+
                 Route::post('/store', [HQLensesController::class, 'store'])->name('store');
 
                 Route::get('/{hqLens}/show', [HQLensesController::class, 'show'])->name('show');
@@ -94,6 +96,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HQLensPurchasesController::class, 'index'])->name('index');
 
+                Route::get('/export', [HQLensPurchasesController::class, 'export'])->name('export');
+
                 Route::post('/store', [HQLensPurchasesController::class, 'store'])->name('store');
 
                 Route::get('/{hqLensPurchase}/show', [HQLensPurchasesController::class, 'show'])->name('show');
@@ -106,6 +110,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::prefix('tranfers')->name('transfers.')->group(function () {
 
                 Route::get('/index', [HQLensTransfersController::class, 'index'])->name('index');
+
+                Route::get('/export', [HQLensTransfersController::class, 'export'])->name('export');
 
                 Route::post('/store', [HQLensTransfersController::class, 'store'])->name('store');
 

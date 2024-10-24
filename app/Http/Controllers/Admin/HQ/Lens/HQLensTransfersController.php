@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Lens;
 
+use App\Exports\Admin\HQ\Lenses\StocksTransfersExport;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -71,6 +72,11 @@ class HQLensTransfersController extends Controller
         ]);
     }
 
+    public function export()
+    {
+        return (new StocksTransfersExport())->download('lens-transfers-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -90,10 +96,10 @@ class HQLensTransfersController extends Controller
 
         $lens = $organization->hq_lens()->findOrFail($data['lens_id']);
 
-        // update hq frame stock 
+        // update hq frame stock
         $quantity = $data['quantity'];
 
-        // check if the quantity of frames asked for is available 
+        // check if the quantity of frames asked for is available
         if ($quantity > $lens->total) {
             $response['status'] = false;
             $response['errors'] = ["The quantity requested is not available at the moment"];

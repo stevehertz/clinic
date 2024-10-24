@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\Admin\HQ\Lenses\StocksExport;
 use App\Http\Requests\Admin\HQ\Lenses\StoreLensRequest;
 use App\Http\Requests\Admin\HQ\Lenses\UpdateLensRequest;
 
@@ -59,6 +60,11 @@ class HQLensesController extends Controller
             'organization' => $organization,
             'lenses' => $lenses
         ]);
+    }
+
+    public function export()
+    {
+        return (new StocksExport())->download('lens-stocks-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**

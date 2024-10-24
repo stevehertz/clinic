@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Lens;
 
+use App\Exports\Admin\HQ\Lenses\StocksPurchasedExport;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -65,6 +66,11 @@ class HQLensPurchasesController extends Controller
             'purchases' => $purchases,
             'page_title' => $page_title
         ]);
+    }
+
+    public function export()
+    {
+        return (new StocksPurchasedExport())->download('lens-purchases-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -159,7 +165,7 @@ class HQLensPurchasesController extends Controller
         //
         $lens = $hqLensPurchase->hq_lens;
 
-        // purchased stocks 
+        // purchased stocks
         $purchased = $lens->purchased;
 
         // quantity to delete
@@ -168,7 +174,7 @@ class HQLensPurchasesController extends Controller
         // remove the quantity from total purchased
         $remaining = $purchased - $quantity;
 
-        // update stock 
+        // update stock
         $opening = $lens->opening;
 
         $new_purchased = $remaining;
