@@ -47,6 +47,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="card-tools">
+                                <a href="{{ route('admin.hq.frame.transfers.export') }}" class="btn btn-outline-primary">
+                                    Export
+                                </a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="frameTransferData" class="table table-striped table-hover">
@@ -219,7 +226,7 @@
                                     setTimeout(() => {
                                         location.reload();
                                     }, 500);
-                                    
+
                                 }
                             }
                         });

@@ -48,6 +48,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="card-tools">
+                                <a href="#" class="btn btn-outline-primary">
+                                    Export
+                                </a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="caseStocksData" class="table table-striped table-hover">
@@ -260,14 +267,15 @@
                             $('#updateCaseStockCode').val(case_id).trigger('change');
                             $('#updateCaseStockOpening').val(data['data']['opening']);
                             $('#updateCaseStockSupplierPrice').val(data['data'][
-                                'supplier_price']);
+                                'supplier_price'
+                            ]);
                             $('#updateCaseStockPrice').val(data['data']['price']);
                         }
                     }
                 });
             });
 
-            // Post Edit For, 
+            // Post Edit For,
             $('#updateCaseStockForm').submit(function(e) {
                 e.preventDefault();
                 let form = $(this);

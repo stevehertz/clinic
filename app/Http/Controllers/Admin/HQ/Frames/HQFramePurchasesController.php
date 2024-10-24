@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Frames;
 
+use App\Exports\Admin\HQ\Frames\StocksPurchasedExport;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -63,6 +64,11 @@ class HQFramePurchasesController extends Controller
         ]);
     }
 
+    public function export()
+    {
+        return (new StocksPurchasedExport())->download('frame-puchases-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -78,7 +84,7 @@ class HQFramePurchasesController extends Controller
 
         $organization = $admin->organization;
 
-        //1. Get Stock 
+        //1. Get Stock
         $frame_stock = $organization->hq_frame_stock()->findOrFail($data['stock_id']);
 
         // Craeate a purchase
@@ -111,9 +117,9 @@ class HQFramePurchasesController extends Controller
 
             $purchased = $frame_stock->purchased + $data['quantity'];
 
-            $transfered = $frame_stock->transfered; 
+            $transfered = $frame_stock->transfered;
 
-            $total = ($opening + $purchased) - $transfered; 
+            $total = ($opening + $purchased) - $transfered;
 
             $frame_stock->update([
                 'opening' => $opening,
@@ -153,13 +159,13 @@ class HQFramePurchasesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function attachment(HqFramePurchase $hqFramePurchase)  
+    public function attachment(HqFramePurchase $hqFramePurchase)
     {
         $file = $hqFramePurchase->attachment;
         $storage_path = 'frame_purchases';
         return $this->openFile($file, $storage_path);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -171,7 +177,7 @@ class HQFramePurchasesController extends Controller
         //
         $frame_stock = $hqFramePurchase->hq_frame_stock;
 
-        // purchased stocks 
+        // purchased stocks
         $purchased = $frame_stock->purchased;
 
         // quantity to delete
@@ -180,7 +186,7 @@ class HQFramePurchasesController extends Controller
         // remove the quantity from total purchased
         $remaining = $purchased - $quantity;
 
-        // update stock 
+        // update stock
         $opening = $frame_stock->opening;
 
         $new_purchased = $remaining;

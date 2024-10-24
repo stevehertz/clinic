@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Frames;
 
+use App\Exports\Admin\HQ\Frames\StocksTransferedExport;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -76,6 +77,11 @@ class HQFrameTransfersController extends Controller
         ]);
     }
 
+    public function export()
+    {
+        return (new StocksTransferedExport())->download('frame-transfers-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -95,10 +101,10 @@ class HQFrameTransfersController extends Controller
 
         $frame_stock = $organization->hq_frame_stock()->findOrFail($data['stock_id']);
 
-        // update hq frame stock 
+        // update hq frame stock
         $quantity = $data['quantity'];
 
-        // check if the quantity of frames asked for is available 
+        // check if the quantity of frames asked for is available
         if ($quantity > $frame_stock->total) {
             $response['status'] = false;
             $response['errors'] = ["The quantity requested is not available at the moment"];

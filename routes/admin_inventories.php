@@ -35,6 +35,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HQFrameStocksController::class, 'index'])->name('index');
 
+                Route::get('/export', [HQFrameStocksController::class, 'export'])->name('export');
+
                 Route::post('/store', [HQFrameStocksController::class, 'store'])->name('store');
 
                 Route::get('/{hqFrameStock}/show', [HQFrameStocksController::class, 'show'])->name('show');
@@ -48,6 +50,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HQFrameTransfersController::class, 'index'])->name('index');
 
+                Route::get('/export', [HQFrameTransfersController::class, 'export'])->name('export');
+
                 Route::post('/store', [HQFrameTransfersController::class, 'store'])->name('store');
 
                 Route::get('/{hqFrameTransfer}/show', [HQFrameTransfersController::class, 'show'])->name('show');
@@ -58,6 +62,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::prefix('purchases')->name('purchases.')->group(function () {
 
                 Route::get('/index', [HQFramePurchasesController::class, 'index'])->name('index');
+
+                Route::get('/export', [HQFramePurchasesController::class, 'export'])->name('export');
 
                 Route::post('/store', [HQFramePurchasesController::class, 'store'])->name('store');
 
@@ -155,7 +161,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
     // Clinics inventory
     Route::prefix('clinic/inventory')->name('clinic.inventory.')->group(function () {
 
-        // frame stocks 
+        // frame stocks
         Route::prefix('frames')->name('frames.')->group(function () {
 
             Route::prefix('stocks')->name('stocks.')->group(function () {
@@ -193,7 +199,7 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             });
         });
 
-        // Cases Stocks 
+        // Cases Stocks
         Route::prefix('cases')->name('cases.')->group(function () {
 
             Route::prefix('stock')->name('stock.')->group(function () {

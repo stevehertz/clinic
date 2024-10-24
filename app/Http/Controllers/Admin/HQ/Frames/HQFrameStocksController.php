@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Frames;
 
+use App\Exports\Admin\HQ\Frames\StocksExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\HQ\Frames\StoreFramesRequest;
 use App\Http\Requests\Admin\HQ\Frames\UpdateFramesRequest;
@@ -10,6 +11,7 @@ use App\Models\HqFrameStock;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HQFrameStocksController extends Controller
 {
@@ -58,6 +60,16 @@ class HQFrameStocksController extends Controller
             'page_title' => $page_title,
             'stocks' => $frame_stocks
         ]);
+    }
+
+    /**
+     * Export a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export()
+    {
+        return (new StocksExport())->download('frame-stocks-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -181,7 +193,7 @@ class HQFrameStocksController extends Controller
             $response['status'] = true;
             $response['message'] = 'Frame Stock Deleted Successfully';
             $code = 200;
-          
+
         } catch (Exception $e) {
             $response['status'] = false;
             $response['message'] = 'Frame Stock could not be deleted';
