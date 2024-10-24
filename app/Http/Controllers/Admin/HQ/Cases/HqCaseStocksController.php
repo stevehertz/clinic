@@ -8,6 +8,7 @@ use App\Models\HqCaseStock;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\Admin\HQ\Cases\StocksExport;
 use App\Http\Requests\Admin\HQ\Cases\StoreCaseStockRequest;
 use App\Http\Requests\Admin\HQ\Cases\UpdateCaseStockRequest;
 
@@ -62,6 +63,11 @@ class HqCaseStocksController extends Controller
             'organization' => $organization,
             'cases' => $cases
         ]);
+    }
+
+    public function export()
+    {
+        return (new StocksExport())->download('case-stocks-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -163,7 +169,7 @@ class HqCaseStocksController extends Controller
             $response['status'] = true;
             $response['message'] = 'Case Stock Deleted Successfully';
             $code = 200;
-          
+
         } catch (Exception $e) {
             $response['status'] = false;
             $response['message'] = 'Frame Stock could not be deleted';

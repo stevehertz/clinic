@@ -127,6 +127,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HqCaseStocksController::class, 'index'])->name('index');
 
+                Route::get('/export', [HqCaseStocksController::class, 'export'])->name('export');
+
                 Route::post('/store', [HqCaseStocksController::class, 'store'])->name('store');
 
                 Route::get('/{hqCaseStock}/show', [HqCaseStocksController::class, 'show'])->name('show');
@@ -140,6 +142,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
 
                 Route::get('/index', [HQCaseTransfersController::class, 'index'])->name('index');
 
+                Route::get('/export', [HQCaseTransfersController::class, 'export'])->name('export');
+
                 Route::get('/workshop', [HQCaseTransfersController::class, 'get_for_workshops'])->name('workshop');
 
                 Route::post('/store', [HQCaseTransfersController::class, 'store'])->name('store');
@@ -152,6 +156,8 @@ Route::middleware(['auth:admin', 'preventBackHistory'])->group(function () {
             Route::prefix('purchases')->name('purchases.')->group(function () {
 
                 Route::get('/index', [HQCasePurchasesController::class, 'index'])->name('index');
+
+                Route::get('/export', [HQCasePurchasesController::class, 'export'])->name('export');
 
                 Route::post('/store', [HQCasePurchasesController::class, 'store'])->name('store');
 

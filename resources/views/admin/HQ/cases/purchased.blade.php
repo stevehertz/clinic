@@ -49,7 +49,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <div class="card-tools">
-                                <a href="#" class="btn btn-outline-primary">
+                                <a href="{{ route('admin.hq.cases.purchases.export') }}" class="btn btn-outline-primary">
                                     Export
                                 </a>
                             </div>

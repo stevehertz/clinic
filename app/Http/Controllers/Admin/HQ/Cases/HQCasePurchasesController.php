@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\HQ\Cases;
 
+use App\Exports\Admin\HQ\Cases\StocksPurchaseExport;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Http\Requests\Admin\HQ\Cases\StoreCasePurchaseRequest;
 use App\Models\HqCasePurchase;
-use App\Models\HqCaseStock;
 
 class HQCasePurchasesController extends Controller
 {
@@ -71,6 +71,12 @@ class HQCasePurchasesController extends Controller
         ]);
     }
 
+
+    public function export()
+    {
+        return (new StocksPurchaseExport())->download('case-purchases-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -86,7 +92,7 @@ class HQCasePurchasesController extends Controller
 
         $organization = $admin->organization;
 
-        //1. Get Stock 
+        //1. Get Stock
         $case_stock = $organization->hq_case_stock()->findOrFail($data['stock_id']);
 
         $opening =  $case_stock->opening;
@@ -98,7 +104,7 @@ class HQCasePurchasesController extends Controller
         $total = ($opening + $purchased) - $transfered;
 
         // Craeate a purchase
-        // upload receipt 
+        // upload receipt
         if ($request->hasFile('attachment')) {
             $storagePath = 'public/case_purchases';
             $fileName = 'attachment';
@@ -121,7 +127,7 @@ class HQCasePurchasesController extends Controller
             'attachment' => $caseAttachment,
         ]);
 
-        // update stock 
+        // update stock
         $case_stock->update([
             'opening' => $opening,
             'purchased' => $purchased,
@@ -176,7 +182,7 @@ class HQCasePurchasesController extends Controller
         //
         $case_stock = $hqCasePurchase->hq_case_stock;
 
-        // purchased stocks 
+        // purchased stocks
         $purchased = $case_stock->purchased;
 
         // quantity to delete
@@ -185,7 +191,7 @@ class HQCasePurchasesController extends Controller
         // remove the quantity from total purchased
         $remaining = $purchased - $quantity;
 
-        // update stock 
+        // update stock
         $opening = $case_stock->opening;
 
         $new_purchased = $remaining;
