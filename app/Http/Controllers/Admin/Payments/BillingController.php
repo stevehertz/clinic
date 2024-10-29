@@ -2,26 +2,34 @@
 
 namespace App\Http\Controllers\Admin\Payments;
 
-use App\Enums\DocumentStatus;
-use App\Enums\RemmittanceStatus;
-use App\Exports\Billing\ExportBilling;
 use App\Models\Clinic;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Billing\ReceiveMultipleDocumentsRequest;
-use App\Http\Requests\Admin\Billing\StoreRemmittanceRequest;
 use App\Models\PaymentBill;
 use App\Models\Remmittance;
+use Illuminate\Http\Request;
+use App\Enums\DocumentStatus;
+use App\Enums\RemmittanceStatus;
+use App\Http\Controllers\Controller;
+use App\Exports\Billing\ExportBilling;
 use App\Repositories\BillingRepository;
+use App\Repositories\ClinicsRepository;
+use App\Repositories\InsurancesRepository;
+use App\Http\Requests\Admin\Billing\StoreRemmittanceRequest;
+use App\Http\Requests\Admin\Billing\ReceiveMultipleDocumentsRequest;
 
 class BillingController extends Controller
 {
 
-    private $billingRepository;
+    private $billingRepository, $clinicsRepository, $insurancesRepository;
 
-    public function __construct(BillingRepository $billingRepository)
+    public function __construct(
+        InsurancesRepository $insurancesRepository,
+        ClinicsRepository $clinicsRepository,
+        BillingRepository $billingRepository
+    )
     {
         $this->middleware('auth:admin');
+        $this->insurancesRepository = $insurancesRepository;
+        $this->clinicsRepository = $clinicsRepository;
         $this->billingRepository = $billingRepository;
     }
     /**
@@ -32,15 +40,52 @@ class BillingController extends Controller
     public function index(Request $request)
     {
         //
-        $data = $this->billingRepository->closed_bills();
-        $closedBills = $this->billingRepository->closed_bills();
-        $sentToHQ = $this->billingRepository->sentToHq();
-        $receivedDOC =  $this->billingRepository->receivedFromClinic();
+        $filter_data = [];
+        if ($request->_token) {
+            $filter_data = $request->except('_token');
+            if (!empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id'])) {
+                $data = $this->billingRepository->closed_bills_for_clinic_and_insurance($filter_data);
+                $closedBills = $this->billingRepository->closed_bills_for_clinic_and_insurance($filter_data);
+                $sentToHQ = $this->billingRepository->sentToHqForClinicAndInsurance($filter_data);
+                $receivedDOC =  $this->billingRepository->receivedFromClinicForClinicAndInsurance($filter_data);
+            }
+            else if(!empty($filter_data['clinic_id']) && empty($filter_data['insurance_id']))
+            {
+                $data = $this->billingRepository->closed_bills_for_clinic($filter_data);
+                $closedBills = $this->billingRepository->closed_bills_for_clinic($filter_data);
+                $sentToHQ = $this->billingRepository->sentToHqForClinic($filter_data);
+                $receivedDOC =  $this->billingRepository->receivedFromClinicForClinic($filter_data);
+            }
+            else if(empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id']))
+            {
+                $data = $this->billingRepository->closed_bills_for_insurance($filter_data);
+                $closedBills = $this->billingRepository->closed_bills_for_insurance($filter_data);
+                $sentToHQ = $this->billingRepository->sentToHqForInsurance($filter_data);
+                $receivedDOC =  $this->billingRepository->receivedFromClinicForInsurance($filter_data);
+            }
+            else
+            {
+                $data = $this->billingRepository->closed_bills();
+                $closedBills = $this->billingRepository->closed_bills();
+                $sentToHQ = $this->billingRepository->sentToHq();
+                $receivedDOC =  $this->billingRepository->receivedFromClinic();
+            }
+        } else {
+            $data = $this->billingRepository->closed_bills();
+            $closedBills = $this->billingRepository->closed_bills();
+            $sentToHQ = $this->billingRepository->sentToHq();
+            $receivedDOC =  $this->billingRepository->receivedFromClinic();
+        }
+        $clinics = $this->clinicsRepository->getAllClinics();
+        $insuranceData = $this->insurancesRepository->getAllInsurance();
         return view('admin.main.billing.index', [
             'closedBills' => $closedBills,
             'sentToHQ' => $sentToHQ,
             'receivedDOC' => $receivedDOC,
-            'data' => $data
+            'data' => $data,
+            'clinics' => $clinics,
+            'insuranceData' => $insuranceData,
+            'filtered_data' => $filter_data
         ]);
     }
 

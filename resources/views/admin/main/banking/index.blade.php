@@ -94,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="row">
@@ -128,7 +127,7 @@
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="row receivePaymentsBtnRow">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn"> 
+                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn">
                                                 Receive Payments
                                             </button>
                                         </div>
@@ -200,14 +199,14 @@
                                     <br>
                                     <div class="row receivePaymentsBtnRow">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn"> 
+                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn">
                                                 Receive Payments
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- /.tab-pane -->
-                                
+
                                 <div class="tab-pane" id="tab_2">
                                     <div class="row">
                                         <div class="col-12 col-md-12">
