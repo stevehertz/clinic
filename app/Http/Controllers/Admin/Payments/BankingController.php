@@ -34,11 +34,33 @@ class BankingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $filter_data = [];
+        if ($request->_token) {
+            $filter_data = $request->except('_token');
+            if (!empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id']))
+            {
+                $submitted = $this->remmittanceRepository->getSubmittedForClinicAndInsurance($filter_data);
+            }
+            else if(!empty($filter_data['clinic_id']) && empty($filter_data['insurance_id']))
+            {
+                $submitted = $this->remmittanceRepository->getSubmittedRemmittanceForClinic($filter_data);
+            }
+            else if(empty($filter_data['clinic_id']) && !empty($filter_data['insurance_id']))
+            {
+                $submitted = $this->remmittanceRepository->getSubmittedRemmittanceForInsurance($filter_data);
+            }
+            else
+            {
+                $submitted = $this->remmittanceRepository->getSubmiited();
+            }
+
+        }else{
+            $submitted = $this->remmittanceRepository->getSubmiited();
+        }
         $data = $this->bankingRepository->getAllBanking();
-        $submitted = $this->remmittanceRepository->getSubmiited();
         $insuranceData = $this->insurancesRepository->getAllInsurance();
         $receivedRemmittanceData = $this->remmittanceRepository->getReceived();
         $clinics = $this->clinicsRepository->getAllClinics();
@@ -54,6 +76,7 @@ class BankingController extends Controller
             'totalSubmittedAmount' => $totalSubmittedAmount,
             'totalPaid' => $totalPaid,
             'totalBalance' => $totalBalance,
+            'filtered_data' => $filter_data
         ]);
     }
 

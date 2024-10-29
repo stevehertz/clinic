@@ -141,11 +141,6 @@
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="row">
                                         <div class="col-12">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
                                             <div class="table-responsive">
                                                 <table id="data" class="table table-bordered table-striped table-sm">
                                                     <thead>

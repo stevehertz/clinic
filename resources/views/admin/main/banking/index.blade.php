@@ -46,56 +46,6 @@
             </div>
             <!--/.row -->
 
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-
-                                <div class="col-12 col-md-4">
-                                    <div class="form-group">
-                                        <label>Clinics</label>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">
-                                                Select a clinic
-                                            </option>
-                                            @foreach ($clinics as $clinic)
-                                                <option value="{{ $clinic->id }}">{{ $clinic->clinic }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                    <div class="form-group">
-                                        <label>Insurances</label>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option disabled="disabled" selected="selected">
-                                                Select an insurance
-                                            </option>
-                                            @foreach ($insuranceData as $ins)
-                                                <option value="{{ $ins->id }}">{{ $ins->title }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <!-- /.form-group -->
-                                </div>
-
-                                <div class="col-12 col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="" class="btn btn-block btn-outline-primary">
-                                        <i class="fas fa-search"></i> filter
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-12 col-md-12">
                     <!-- Custom Tabs -->
@@ -127,12 +77,69 @@
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="row receivePaymentsBtnRow">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn">
+                                            <button type="button"
+                                                class="btn btn-outline-primary btn-block receivePaymentsBtn">
                                                 Receive Payments
                                             </button>
                                         </div>
                                     </div>
                                     <br>
+                                    <form>
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Clinics</label>
+                                                    <select name="clinic_id" class="form-control select2"
+                                                        style="width: 100%;">
+                                                        <option disabled="disabled" selected="selected">
+                                                            Select a clinic
+                                                        </option>
+                                                        @foreach ($clinics as $clinic)
+                                                            <option value="{{ $clinic->id }}"
+                                                                @if (!empty($filtered_data) && !empty($filtered_data['clinic_id']) && $filtered_data['clinic_id'] == $clinic->id) selected = "selected" @endif>
+                                                                {{ $clinic->clinic }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <label>Insurances</label>
+                                                    <select name="insurance_id" class="form-control select2"
+                                                        style="width: 100%;">
+                                                        <option disabled="disabled" selected="selected">
+                                                            Select an insurance
+                                                        </option>
+                                                        @foreach ($insuranceData as $ins)
+                                                            <option value="{{ $ins->id }}"
+                                                                @if (!empty($filtered_data) && !empty($filtered_data['insurance_id']) && $filtered_data['insurance_id'] == $ins->id) selected = "selected" @endif>
+                                                                {{ $ins->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </div>
+
+                                            <div class="col-12 col-md-2">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-block btn-outline-primary">
+                                                    <i class="fas fa-search"></i> filter
+                                                </button>
+                                            </div>
+                                            <div class="col-12 col-md-2">
+                                                <label>&nbsp;</label>
+                                                <a href="{{ route('admin.banking.index') }}"
+                                                    class="btn btn-block btn-outline-primary">
+                                                    <i class="fas fa-sync"></i> refresh
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
@@ -199,7 +206,8 @@
                                     <br>
                                     <div class="row receivePaymentsBtnRow">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-outline-primary btn-block receivePaymentsBtn">
+                                            <button type="button"
+                                                class="btn btn-outline-primary btn-block receivePaymentsBtn">
                                                 Receive Payments
                                             </button>
                                         </div>
