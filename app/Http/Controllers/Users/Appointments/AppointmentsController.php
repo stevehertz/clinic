@@ -37,7 +37,7 @@ class AppointmentsController extends Controller
             if (!empty($request->from_date) && !empty($request->to_date)) {
                 $data = $clinic->appointment()->where('status', 1)->whereBetween('date', [$request->from_date, $request->to_date])->get();
             } else {
-                $date = Carbon::now();
+                $date = Carbon::now()->format('Y-m-d');
                 $data = $clinic->appointment()->where('status', 1)->where('date', $date)->get();
             }
             return DataTables::of($data)

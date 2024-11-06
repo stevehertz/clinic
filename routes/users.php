@@ -7,33 +7,27 @@ use App\Http\Controllers\Users\Orders\OrdersController;
 use App\Http\Controllers\Users\Lens\LensPowerController;
 use App\Http\Controllers\Users\Doctors\DoctorsController;
 use App\Http\Controllers\Users\Cases\CaseStocksController;
-use App\Http\Controllers\Users\Payments\BillingController;
 use App\Http\Controllers\Users\Medicine\MedicineController;
 use App\Http\Controllers\Users\Cases\CaseRequestsController;
 use App\Http\Controllers\Users\Frames\FrameStocksController;
 use App\Http\Controllers\Users\Orders\OrderTracksController;
 use App\Http\Controllers\Users\Cases\CasesReceivedController;
 use App\Http\Controllers\Users\Diagnosis\DiagnosisController;
-use App\Http\Controllers\Users\Payments\CloseBillsController;
-use App\Http\Controllers\Users\Payments\RemittanceController;
 use App\Http\Controllers\Users\Procedure\ProcedureController;
 use App\Http\Controllers\Users\Treatment\TreatmentController;
 use App\Http\Controllers\Users\Frames\FrameRequestsController;
 use App\Http\Controllers\Users\ClientType\ClientTypeController;
 use App\Http\Controllers\Users\Frames\FramesReceivedController;
 use App\Http\Controllers\Users\Lens\LensPrescriptionController;
-use App\Http\Controllers\Users\Payments\PaymentsBillController;
 use App\Http\Controllers\Users\Lens\FramePrescriptionsController;
 use App\Http\Controllers\Users\Schedule\DoctorSchedulesController;
+use App\Http\Controllers\Users\Appointments\AppointmentsController;
 use App\Http\Controllers\Users\Patients\SelfRegistrationController;
-use App\Http\Controllers\Users\Payments\PaymentsAttachmentController;
 use App\Http\Controllers\Users\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Users\Patients\PatientsController as PatientsPatientsController;
 use App\Http\Controllers\Users\Auth\ResetPasswordController as AuthResetPasswordController;
 use App\Http\Controllers\Users\Auth\ForgotPasswordController as AuthForgotPasswordController;
 use App\Http\Controllers\Users\Dashboard\DashboardController as DashboardDashboardController;
-use App\Http\Controllers\Users\Payments\PaymentDetailsController as PaymentsPaymentDetailsController;
-use App\Http\Controllers\Users\Appointments\AppointmentsController as AppointmentsAppointmentsController;
 
 Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
 
@@ -49,10 +43,12 @@ Route::middleware(['guest:web', 'preventBackHistory'])->group(function () {
 
     Route::post('reset/password/store', [AuthResetPasswordController::class, 'store'])->name('reset.password.store');
 
-    // patient self registration link 
+    // patient self registration link
     Route::get('/{clinic}/self/registration', [SelfRegistrationController::class, 'register'])->name('self.registration');
 
     Route::post('/{clinic}/self/registration/store', [SelfRegistrationController::class, 'store'])->name('self.registration.store');
+
+    Route::get('/{id}/self/client/type', [SelfRegistrationController::class, 'findClientTypeById'])->name('self.client.type');
 });
 
 Route::middleware(['auth:web', 'preventBackHistory'])->group(function () {
@@ -70,20 +66,20 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
         Route::get('/index', [DashboardDashboardController::class, 'index'])->name('index');
-        
+
     });
 
     Route::prefix('appointments')->name('appointments.')->group(function () {
 
-        Route::get('/index', [AppointmentsAppointmentsController::class, 'index'])->name('index');
+        Route::get('/index', [AppointmentsController::class, 'index'])->name('index');
 
-        Route::get('/create', [AppointmentsAppointmentsController::class, 'create'])->name('create');
+        Route::get('/create', [AppointmentsController::class, 'create'])->name('create');
 
-        Route::post('/store', [AppointmentsAppointmentsController::class, 'store'])->name('store');
+        Route::post('/store', [AppointmentsController::class, 'store'])->name('store');
 
-        Route::get('/{appointment}/show', [AppointmentsAppointmentsController::class, 'show'])->name('show');
+        Route::get('/{appointment}/show', [AppointmentsController::class, 'show'])->name('show');
 
-        Route::get('/{appointment}/view', [AppointmentsAppointmentsController::class, 'view'])->name('view');
+        Route::get('/{appointment}/view', [AppointmentsController::class, 'view'])->name('view');
     });
 
     Route::prefix('client/type')->name('client.type.')->group(function () {
@@ -126,7 +122,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         Route::post('/self/registration/generate', [PatientsPatientsController::class, 'generate'])->name('self.registration.generate');
     });
-    
+
     Route::prefix('doctor/schedules')->name('doctor.schedules.')->group(function () {
 
         Route::get('/index', [DoctorSchedulesController::class, 'index'])->name('index');
@@ -277,7 +273,7 @@ Route::middleware(['auth:web', 'preventBackHistory', 'AccountStatus'])->group(fu
 
         });
 
-        
+
     });
 
     Route::prefix('doctors')->name('doctors.')->group(function () {

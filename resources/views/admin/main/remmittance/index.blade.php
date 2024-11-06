@@ -107,16 +107,11 @@
                             <ul class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="#tab_1" data-toggle="tab">
-                                        All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
                                         {{ \RemmittanceStatus::getName(\RemmittanceStatus::PENDING) }}
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#tab_3" data-toggle="tab">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">
                                         {{ \RemmittanceStatus::getName(\RemmittanceStatus::SUBMITTED) }}
                                     </a>
                                 </li>
@@ -125,59 +120,6 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table id="data" class="table table-bordered table-striped table-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Clinic</th>
-                                                            <th>Receipt Number</th>
-                                                            <th>Patient Names</th>
-                                                            <th>Invoice Number</th>
-                                                            <th>Insurance</th>
-                                                            <th>Scheme Name</th>
-                                                            <th>Card Number</th>
-                                                            <th>Closed Date</th>
-                                                            <th>Amount Billed</th>
-                                                            <th>ETIMS Number</th>
-                                                            <th>Remmittance Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($data as $remmittance)
-                                                            <tr>
-                                                                <td>{{ $loop->iteration }}</td>
-                                                                <td>{{ $remmittance->paymentBill->clinic->clinic }}</td>
-                                                                <td>{{ $remmittance->paymentBill->appontment->lens_power->frame_prescription->receipt_number }}
-                                                                </td>
-                                                                <td>{{ $remmittance->paymentBill->patient->first_name }}
-                                                                    {{ $remmittance->paymentBill->patient->last_name }}
-                                                                </td>
-                                                                <td>{{ $remmittance->paymentBill->invoice_number }}</td>
-                                                                <td>{{ $remmittance->paymentBill->payment_detail->insurance->title }}
-                                                                </td>
-                                                                <td>{{ $remmittance->paymentBill->payment_detail->scheme }}
-                                                                </td>
-                                                                <td>{{ $remmittance->paymentBill->patient->card_number }}
-                                                                </td>
-                                                                <td>{{ $remmittance->paymentBill->close_date }}</td>
-                                                                <td>{{ $remmittance->paymentBill->paid_amount }}</td>
-                                                                <td>{{ $remmittance->paymentBill->kra_number }}</td>
-                                                                <td>{{ \RemmittanceStatus::getName($remmittance->status) }}
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="tab_2">
                                     <div class="row">
                                         <div class="col-12">
                                             <a href="{{ route('admin.remmittance.export.pending.submission') }}"
@@ -291,7 +233,7 @@
                                     </form>
                                 </div>
                                 <!-- /.tab-pane -->
-                                <div class="tab-pane" id="tab_3">
+                                <div class="tab-pane" id="tab_2">
                                     <div class="row">
                                         <div class="col-12">
                                             <a href="{{ route('admin.remmittance.export.submitted.submission') }}"

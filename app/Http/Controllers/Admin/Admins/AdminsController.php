@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin\Admins;
 
 use App\Models\Admin;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Mail\Admins\NewAdminMail;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Rules\MatchAdminOldPassword;
@@ -13,16 +11,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Http\Requests\Admin\Admins\StoreAdminRequest;
 use App\Repositories\AdminsRepository;
 
 class AdminsController extends Controller
 {
     //
-
-    use FileUploadTrait;
-
     private $adminsRepository;
     public function __construct(AdminsRepository $adminsRepository)
 
@@ -89,9 +83,19 @@ class AdminsController extends Controller
 
         if ($request->hasFile('profile')) {
 
-            $storagePath = 'public/admin';
-            $fileName = 'profile';
-            $profileNameToStore = $this->uploadFile($request, $fileName, $storagePath);
+            // $storagePath = 'public/admin';
+            // $fileName = 'profile';
+            // $profileNameToStore = $this->uploadFile($request, $fileName, $storagePath);
+             // file name with extension
+             $profileNameWithExt = $request->file('profile')->getClientOriginalName();
+             // Get Filename
+             $profileName = pathinfo($profileNameWithExt, PATHINFO_FILENAME);
+             // Get just Extension
+             $extension = $request->file('profile')->getClientOriginalExtension();
+             // Filename To store
+             $profileNameToStore = $profileName . '_' . time() . '.' . $extension;
+             // Upload Image
+             $path = $request->file('profile')->storeAs('public/admin', $profileNameToStore);
         } else {
             $profileNameToStore = 'noimage.png';
         }
@@ -221,16 +225,16 @@ class AdminsController extends Controller
             'status' => 0
         ]);
 
-        // Mail user 
+        // Mail user
 
-        // 
+        //
         return response()->json([
             'status' => true,
             'message' => 'Account has been successfully deactivated'
         ]);
     }
 
-    public function destroy(Admin $admin)  
+    public function destroy(Admin $admin)
     {
         if($this->adminsRepository->deleteAdmin($admin))
         {
